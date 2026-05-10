@@ -128,15 +128,22 @@ export default function EnergyBanner() {
 
       {/* Signe du jour phrase */}
       {signe?.phrase && (
-        <motion.p
-          className="text-center text-white/35 text-xs italic mt-8 max-w-md mx-auto leading-relaxed"
+        <motion.div
+          className="mt-8 max-w-md mx-auto rounded-2xl p-4"
+          style={{
+            background: 'linear-gradient(135deg, rgba(124,58,237,0.1), rgba(59,130,246,0.06))',
+            border: '1px solid rgba(124,58,237,0.18)',
+          }}
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5, duration: 0.8 }}
         >
-          {signe.phrase}
-        </motion.p>
+          <p className="text-white/35 text-xs uppercase tracking-widest mb-1.5">
+            Signe du jour
+          </p>
+          <p className="text-white/45 text-xs leading-relaxed italic">{signe.phrase}</p>
+        </motion.div>
       )}
 
       <motion.div
