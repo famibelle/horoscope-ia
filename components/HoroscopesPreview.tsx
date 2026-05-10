@@ -26,11 +26,13 @@ export default function HoroscopesPreview() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
     const edition = detectEdition();
 
     fetch(`/api/horoscopes-preview?edition=${edition}`)
       .then((r) => (r.ok ? r.json() : []))
       .then(async (data: SignPreview[]) => {
+        if (cancelled) return;
         if (data.length > 0) {
           // Prod : cache Blobs disponible, affichage immédiat
           setPreviews(data);
@@ -39,22 +41,26 @@ export default function HoroscopesPreview() {
           // Dev local : pas de Blobs, chargement séquentiel pour ne pas saturer Mistral
           setLoading(false);
           for (const sign of signs) {
+            if (cancelled) break;
             try {
               const res = await fetch(`/api/horoscope/${sign.id}?edition=${edition}`);
               if (!res.ok) continue;
               const horoscope = await res.json();
               const text = horoscope.teaser || horoscope.ouverture;
               if (text && horoscope.source !== 'raw') {
-                setPreviews((prev) => [
-                  ...prev,
-                  { signId: sign.id, name: sign.name, emoji: sign.emoji, ouverture: text },
-                ]);
+                setPreviews((prev) =>
+                  prev.some((p) => p.signId === sign.id)
+                    ? prev
+                    : [...prev, { signId: sign.id, name: sign.name, emoji: sign.emoji, ouverture: text }],
+                );
               }
             } catch { /* skip */ }
           }
         }
       })
-      .catch(() => setLoading(false));
+      .catch(() => { if (!cancelled) setLoading(false); });
+
+    return () => { cancelled = true; };
   }, []);
 
   return (
@@ -97,23 +103,25 @@ export default function HoroscopesPreview() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.04, duration: 0.4 }}
-              className="rounded-2xl p-5"
-              style={{
-                background: 'linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)',
-                border: '1px solid rgba(255,255,255,0.07)',
-              }}
+              whileHover={{ y: -3, scale: 1.02 }}
             >
-              <p className="text-white/80 text-sm font-semibold mb-2">
-                {p.emoji} {p.name}
-              </p>
-              <p className="text-white/45 text-sm leading-relaxed mb-3">
-                {truncate(p.ouverture)}
-              </p>
               <Link
                 href={`/horoscope/${p.signId}`}
-                className="text-violet-400/70 hover:text-violet-300 text-xs font-medium transition-colors"
+                className="block rounded-2xl p-5 h-full transition-colors"
+                style={{
+                  background: 'linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)',
+                  border: '1px solid rgba(255,255,255,0.07)',
+                }}
               >
-                lire la suite →
+                <p className="text-white/80 text-sm font-semibold mb-2">
+                  {p.emoji} {p.name}
+                </p>
+                <p className="text-white/45 text-sm leading-relaxed mb-3">
+                  {truncate(p.ouverture)}
+                </p>
+                <span className="text-violet-400/70 text-xs font-medium">
+                  lire la suite →
+                </span>
               </Link>
             </motion.div>
           ))}

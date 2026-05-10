@@ -136,7 +136,8 @@ export default function Hero() {
         >
           <motion.div
             className="w-px h-14 bg-gradient-to-b from-violet-400/50 to-transparent"
-            animate={{ scaleY: [0, 1, 0], originY: 'top' }}
+            style={{ originY: 'top' }}
+            animate={{ scaleY: [0, 1, 0] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
           />
         </motion.div>
