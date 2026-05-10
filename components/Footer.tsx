@@ -75,10 +75,10 @@ export default function Footer() {
           style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
         >
           <p className="text-white/20 text-xs">
-            © 2026 Horoscope Karukera. Tous droits réservés.
+            © 2026 Horoscope Botiran. Tous droits réservés.
           </p>
           <p className="text-white/15 text-xs">
-            🤖 Prédictions générées par IA · à titre de divertissement uniquement
+            🤖 Prédictions générées par Maryse CondAI · à titre de divertissement uniquement
           </p>
         </div>
       </div>

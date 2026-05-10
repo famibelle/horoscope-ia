@@ -22,7 +22,7 @@ export default function Articles() {
           📰 Explorer l&apos;univers astrologique
         </h2>
         <p className="text-white/35 text-sm sm:text-base max-w-sm mx-auto">
-          Six textes ancrés dans la culture de Karukera, écrits en voix Maryse Condé
+          Six textes ancrés dans la culture de Karukera, écrits en voix Maryse CondAI
         </p>
       </motion.div>
 

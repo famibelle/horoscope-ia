@@ -134,7 +134,7 @@ export default async function ArticlePage(
           <p className="text-violet-300/80 text-sm sm:text-base leading-relaxed italic font-display">
             &ldquo;{content.conclusion}&rdquo;
           </p>
-          <p className="text-white/20 text-xs mt-3 text-right">— Maryse Condé · Mistral IA</p>
+          <p className="text-white/20 text-xs mt-3 text-right">— Maryse CondAI · Mistral IA</p>
         </div>
 
         {/* Back to home */}
