@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import { MARYSE_SIGNE_SYSTEM, buildSigneDuJourUserPrompt } from '@/lib/maryse-prompt';
+import { MARYSE_SIGNE_SYSTEM, buildSigneDuJourUserPrompt } from '@/private/maryse-prompt';
 import { detectEdition } from '@/lib/edition';
-import type { Edition } from '@/lib/maryse-prompt';
-import signeData from '@/lib/signe-du-jour-data.json';
+import type { Edition } from '@/private/maryse-prompt';
+import signeData from '@/private/signe-du-jour-data.json';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 

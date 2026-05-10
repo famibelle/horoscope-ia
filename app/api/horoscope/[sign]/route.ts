@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signs } from '@/lib/signs-data';
-import { MARYSE_SYSTEM, buildHoroscopeUserPrompt } from '@/lib/maryse-prompt';
+import { MARYSE_SYSTEM, buildHoroscopeUserPrompt } from '@/private/maryse-prompt';
 import { detectEdition } from '@/lib/edition';
-import type { Edition } from '@/lib/maryse-prompt';
+import type { Edition } from '@/private/maryse-prompt';
 
 const HOROSCOPE_API = 'https://freehoroscopeapi.com/api/v1/get-horoscope/daily';
 const MISTRAL_URL   = 'https://api.mistral.ai/v1/chat/completions';

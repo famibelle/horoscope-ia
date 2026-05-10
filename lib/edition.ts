@@ -1,4 +1,4 @@
-import type { Edition } from './maryse-prompt';
+import type { Edition } from '@/private/maryse-prompt';
 
 export function detectEdition(): Edition {
   const h = new Date().getHours();
