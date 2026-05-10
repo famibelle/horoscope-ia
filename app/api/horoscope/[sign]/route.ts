@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signs } from '@/lib/signs-data';
 import { MARYSE_SYSTEM, buildHoroscopeUserPrompt } from '@/lib/maryse-prompt';
+import { detectEdition } from '@/lib/edition';
+import type { Edition } from '@/lib/maryse-prompt';
 
 const HOROSCOPE_API = 'https://freehoroscopeapi.com/api/v1/get-horoscope/daily';
 const MISTRAL_URL   = 'https://api.mistral.ai/v1/chat/completions';
@@ -63,6 +65,7 @@ async function rewriteWithMistral(
   signId: string,
   rawText: string,
   weather: string,
+  edition: Edition,
 ): Promise<Record<string, string> | null> {
   const apiKey = process.env.MISTRAL_API_KEY;
   if (!apiKey) return null;
@@ -83,7 +86,7 @@ async function rewriteWithMistral(
       response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: MARYSE_SYSTEM },
-        { role: 'user',   content: buildHoroscopeUserPrompt(sign, rawText, weather) },
+        { role: 'user',   content: buildHoroscopeUserPrompt(sign, rawText, weather, edition) },
       ],
     }),
     // No cache here — the raw horoscope already has its own TTL
@@ -106,7 +109,7 @@ async function rewriteWithMistral(
 }
 
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   context: { params: Promise<{ sign: string }> },
 ) {
   const { sign: signId } = await context.params;
@@ -116,6 +119,12 @@ export async function GET(
   if (!signEn || !sign) {
     return NextResponse.json({ error: 'Signe inconnu' }, { status: 404 });
   }
+
+  const editionParam = req.nextUrl.searchParams.get('edition') as Edition | null;
+  const edition: Edition =
+    editionParam === 'matin' || editionParam === 'soir'
+      ? editionParam
+      : detectEdition();
 
   try {
     const [rawText, weather] = await Promise.all([
@@ -130,7 +139,7 @@ export async function GET(
       );
     }
 
-    const structured = await rewriteWithMistral(signId, rawText, weather);
+    const structured = await rewriteWithMistral(signId, rawText, weather, edition);
 
     if (
       structured &&
@@ -148,6 +157,7 @@ export async function GET(
           prediction: structured.prediction ?? '',
           signFr:     sign.name,
           weather,
+          edition,
           source:     'mistral',
         },
         {
@@ -166,6 +176,7 @@ export async function GET(
         amitie:     '', prediction: '',
         signFr: sign.name,
         weather,
+        edition,
         source: 'raw',
       },
       {

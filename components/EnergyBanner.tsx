@@ -11,6 +11,13 @@ interface WeatherData {
   summary: string;
 }
 
+interface SigneDuJour {
+  type: 'flore' | 'faune';
+  nomCreole: string;
+  nomCommun: string;
+  phrase: string;
+}
+
 const PHASE_EMOJI = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'];
 
 function lunarPhase(): { emoji: string; label: string } {
@@ -27,7 +34,8 @@ function lunarPhase(): { emoji: string; label: string } {
 }
 
 export default function EnergyBanner() {
-  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [weather, setWeather]   = useState<WeatherData | null>(null);
+  const [signe, setSigne]       = useState<SigneDuJour | null>(null);
   const moon = lunarPhase();
 
   useEffect(() => {
@@ -35,7 +43,14 @@ export default function EnergyBanner() {
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => { if (d && !d.error) setWeather(d); })
       .catch(() => {});
+
+    fetch('/api/signe-du-jour')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (d && !d.error) setSigne(d); })
+      .catch(() => {});
   }, []);
+
+  const signeEmoji = signe?.type === 'faune' ? '🦎' : '🌿';
 
   const energies = [
     {
@@ -56,14 +71,9 @@ export default function EnergyBanner() {
       value: weather ? `${weather.wind} km/h` : '…',
     },
     {
-      icon: '⚡',
-      label: 'Énergie globale',
-      value: 'Expansive',
-    },
-    {
-      icon: '🌺',
-      label: 'Fleur du jour',
-      value: 'Balizié',
+      icon: signeEmoji,
+      label: 'Signe du jour',
+      value: signe ? signe.nomCreole : '…',
     },
   ];
 
@@ -115,6 +125,19 @@ export default function EnergyBanner() {
           </motion.div>
         ))}
       </div>
+
+      {/* Signe du jour phrase */}
+      {signe?.phrase && (
+        <motion.p
+          className="text-center text-white/35 text-xs italic mt-8 max-w-md mx-auto leading-relaxed"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+        >
+          {signe.phrase}
+        </motion.p>
+      )}
 
       <motion.div
         className="mt-12 h-px mx-auto max-w-xs"

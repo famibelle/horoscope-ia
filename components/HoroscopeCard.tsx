@@ -1,14 +1,17 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Briefcase, Coins, Users, Sparkles, Eye, Cloud, RefreshCw } from 'lucide-react';
 import { signs } from '@/lib/signs-data';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
-import { formatDate, todayISO } from '@/lib/horoscope-data';
+import { formatDate } from '@/lib/horoscope-data';
 
 interface HoroscopeCardProps {
-  signId: string;
+  sign: ReturnType<typeof signs.find>;
+  data: HoroscopeResponse | null;
+  loading: boolean;
+  error: string | null;
+  onRetry: () => void;
 }
 
 /* ── Sections config ───────────────────────────────────────────────────────── */
@@ -59,43 +62,16 @@ function CardSkeleton({ sign }: { sign: ReturnType<typeof signs.find> }) {
 
 /* ── Main card ─────────────────────────────────────────────────────────────── */
 
-export default function HoroscopeCard({ signId }: HoroscopeCardProps) {
-  const sign = signs.find((s) => s.id === signId);
-  const [data, setData]       = useState<HoroscopeResponse | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState<string | null>(null);
-
-  const fetchHoroscope = useCallback(async () => {
-    if (!sign) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch(`/api/horoscope/${signId}?date=${todayISO()}`);
-      if (!res.ok) throw new Error(`${res.status}`);
-      const json = await res.json();
-      setData(json as HoroscopeResponse);
-    } catch (e) {
-      setError("L'horoscope est temporairement indisponible.");
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  }, [signId, sign]);
-
-  useEffect(() => {
-    setData(null);
-    fetchHoroscope();
-  }, [fetchHoroscope]);
-
+export default function HoroscopeCard({ sign, data, loading, error, onRetry }: HoroscopeCardProps) {
   if (!sign) return null;
 
   const date = formatDate();
 
   return (
-    <section className="px-4 pb-20 max-w-2xl mx-auto">
+    <section className="px-4 pb-8 max-w-2xl mx-auto">
       <AnimatePresence mode="wait">
         <motion.div
-          key={signId}
+          key={sign.id + (loading ? '-loading' : data ? '-data' : '-error')}
           initial={{ opacity: 0, y: 24, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -16, scale: 0.97 }}
@@ -104,7 +80,7 @@ export default function HoroscopeCard({ signId }: HoroscopeCardProps) {
           {loading ? (
             <CardSkeleton sign={sign} />
           ) : error ? (
-            <ErrorCard sign={sign} error={error} onRetry={fetchHoroscope} />
+            <ErrorCard sign={sign} error={error} onRetry={onRetry} />
           ) : data ? (
             <FilledCard sign={sign} data={data} date={date} />
           ) : null}

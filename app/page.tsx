@@ -2,7 +2,6 @@ import StarField from '@/components/StarField';
 import Hero from '@/components/Hero';
 import InteractiveHoroscope from '@/components/InteractiveHoroscope';
 import EnergyBanner from '@/components/EnergyBanner';
-import AudioPlayer from '@/components/AudioPlayer';
 import ShareButtons from '@/components/ShareButtons';
 import AdSpace from '@/components/AdSpace';
 import Articles from '@/components/Articles';
@@ -49,7 +48,6 @@ export default function Home() {
         <AdSpace variant="banner" />
         <InteractiveHoroscope />
         <EnergyBanner />
-        <AudioPlayer />
         <ShareButtons />
         <AdSpace variant="square" />
         <Articles />
