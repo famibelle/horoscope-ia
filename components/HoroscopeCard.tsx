@@ -273,7 +273,7 @@ function FilledCard({
         )}
         {data.source === 'mistral' && (
           <p className="text-white/15 text-[10px] text-right -mt-1">
-            Rédigé par Maryse · Mistral IA
+            Rédigé par Maryse CondAI
           </p>
         )}
       </div>
