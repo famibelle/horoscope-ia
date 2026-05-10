@@ -1,0 +1,9 @@
+[build]
+  command = "git config --global url.\"https://${GITHUB_PAT}@github.com/\".insteadOf \"https://github.com/\" && git submodule update --init --recursive && npm run build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  NODE_VERSION = "20"
