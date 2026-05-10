@@ -70,18 +70,6 @@ export default function Hero() {
           </span>
         </motion.h1>
 
-        {/* Subtitle */}
-        <motion.p
-          className="text-white/40 text-base sm:text-lg max-w-sm mx-auto mb-14 leading-relaxed"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.65 }}
-        >
-          Découvrez votre énergie cosmique personnalisée,{' '}
-          <em className="text-violet-300/60 not-italic">
-            À l&apos;ombre du flamboyant, là où les esprits parlent, Maryse CondAI lit ce que vos ancêtres ont semé pour vous
-          </em>
-        </motion.p>
 
         {/* CTA */}
         <motion.button
