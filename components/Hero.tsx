@@ -49,7 +49,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
         >
-          Sagesse ancestrale & Cosmos
+          Sous le flamboyant
         </motion.p>
 
         {/* Title */}
@@ -79,7 +79,7 @@ export default function Hero() {
         >
           Découvrez votre énergie cosmique personnalisée,{' '}
           <em className="text-violet-300/60 not-italic">
-            Les ancêtres parlent à travers les astres — Maryse CondAI vous écoute
+            À l&apos;ombre du flamboyant, là où les esprits parlent, Maryse CondAI lit ce que vos ancêtres ont semé pour vous
           </em>
         </motion.p>
 
