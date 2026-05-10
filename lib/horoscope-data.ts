@@ -7,7 +7,7 @@ export interface HoroscopeResponse {
   prediction: string;
   signFr: string;
   weather: string;
-  edition?: 'matin' | 'soir';
+  edition?: 'matin' | 'midi' | 'soir';
   source: 'mistral' | 'raw' | 'fallback';
 }
 

@@ -57,7 +57,7 @@ export default function InteractiveHoroscope() {
     <>
       {/* Edition toggle */}
       <div className="flex justify-center gap-2 px-4 mb-2">
-        {(['matin', 'soir'] as Edition[]).map((ed) => {
+        {(['matin', 'midi', 'soir'] as Edition[]).map((ed) => {
           const { label, emoji } = EDITION_LABELS[ed];
           const active = edition === ed;
           return (

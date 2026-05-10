@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signs } from '@/lib/signs-data';
 import { MARYSE_SYSTEM, buildHoroscopeUserPrompt } from '@/private/maryse-prompt';
-import { detectEdition } from '@/lib/edition';
+import { detectEdition, todayGuadeloupe } from '@/lib/edition';
 import type { Edition } from '@/private/maryse-prompt';
+import type { HoroscopeResponse } from '@/lib/horoscope-data';
 
 const HOROSCOPE_API = 'https://freehoroscopeapi.com/api/v1/get-horoscope/daily';
 const MISTRAL_URL   = 'https://api.mistral.ai/v1/chat/completions';
@@ -14,19 +15,38 @@ const SIGN_EN: Record<string, string> = {
   capricorne: 'capricorn', verseau: 'aquarius', poissons: 'pisces',
 };
 
+/* ── Netlify Blobs helpers ─────────────────────────────────────────────────── */
+
+async function getCached(key: string): Promise<HoroscopeResponse | null> {
+  try {
+    const { getStore } = await import('@netlify/blobs');
+    const store = getStore('horoscopes');
+    return await store.get(key, { type: 'json' });
+  } catch {
+    return null;
+  }
+}
+
+async function setCached(key: string, data: HoroscopeResponse): Promise<void> {
+  try {
+    const { getStore } = await import('@netlify/blobs');
+    const store = getStore('horoscopes');
+    await store.set(key, JSON.stringify(data));
+  } catch {
+    // silently fail in local dev
+  }
+}
+
+/* ── External fetches ──────────────────────────────────────────────────────── */
+
 async function fetchRawHoroscope(signEn: string): Promise<string> {
   const res = await fetch(`${HOROSCOPE_API}?sign=${signEn}`, {
-    headers: { 'User-Agent': 'HoroscopeIA/1.0' },
+    headers: { 'User-Agent': 'HoroscopeKarukera/1.0' },
     next: { revalidate: 3600 },
   });
   if (!res.ok) throw new Error(`horoscope API ${res.status}`);
   const data = await res.json();
-  return (
-    data.horoscope ||
-    data?.data?.horoscope ||
-    data.description ||
-    ''
-  );
+  return data.horoscope || data?.data?.horoscope || data.description || '';
 }
 
 async function fetchWeather(): Promise<string> {
@@ -51,10 +71,7 @@ async function fetchWeather(): Promise<string> {
       : rain < 5  ? 'légère pluie'
       : rain < 20 ? 'pluie modérée'
       : 'fortes pluies';
-    const windLabel =
-      wind < 20 ? 'vent faible'
-      : wind < 40 ? 'vent modéré'
-      : 'vent fort';
+    const windLabel = wind < 20 ? 'vent faible' : wind < 40 ? 'vent modéré' : 'vent fort';
     return `${tmin}–${tmax}°C, ${rainLabel}, ${windLabel} (${wind} km/h)`;
   } catch {
     return '';
@@ -69,16 +86,12 @@ async function rewriteWithMistral(
 ): Promise<Record<string, string> | null> {
   const apiKey = process.env.MISTRAL_API_KEY;
   if (!apiKey) return null;
-
   const sign = signs.find((s) => s.id === signId);
   if (!sign) return null;
 
   const res = await fetch(MISTRAL_URL, {
     method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: 'mistral-large-latest',
       temperature: 0.75,
@@ -89,24 +102,14 @@ async function rewriteWithMistral(
         { role: 'user',   content: buildHoroscopeUserPrompt(sign, rawText, weather, edition) },
       ],
     }),
-    // No cache here — the raw horoscope already has its own TTL
   });
-
-  if (!res.ok) {
-    console.error('Mistral error', res.status, await res.text());
-    return null;
-  }
-
+  if (!res.ok) return null;
   const data = await res.json();
   const content: string = data.choices?.[0]?.message?.content ?? '';
-  if (!content) return null;
-
-  try {
-    return JSON.parse(content) as Record<string, string>;
-  } catch {
-    return null;
-  }
+  try { return JSON.parse(content); } catch { return null; }
 }
+
+/* ── Route ─────────────────────────────────────────────────────────────────── */
 
 export async function GET(
   req: NextRequest,
@@ -122,15 +125,21 @@ export async function GET(
 
   const editionParam = req.nextUrl.searchParams.get('edition') as Edition | null;
   const edition: Edition =
-    editionParam === 'matin' || editionParam === 'soir'
+    editionParam === 'matin' || editionParam === 'midi' || editionParam === 'soir'
       ? editionParam
       : detectEdition();
 
+  // Check Blobs cache first
+  const blobKey = `${todayGuadeloupe()}|${signId}|${edition}`;
+  const cached = await getCached(blobKey);
+  if (cached) {
+    return NextResponse.json(cached, {
+      headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300' },
+    });
+  }
+
   try {
-    const [rawText, weather] = await Promise.all([
-      fetchRawHoroscope(signEn),
-      fetchWeather(),
-    ]);
+    const [rawText, weather] = await Promise.all([fetchRawHoroscope(signEn), fetchWeather()]);
 
     if (!rawText) {
       return NextResponse.json(
@@ -141,49 +150,29 @@ export async function GET(
 
     const structured = await rewriteWithMistral(signId, rawText, weather, edition);
 
-    if (
-      structured &&
-      structured.ouverture &&
-      structured.amour &&
-      structured.travail
-    ) {
-      return NextResponse.json(
-        {
-          ouverture:  structured.ouverture,
-          amour:      structured.amour,
-          travail:    structured.travail,
-          argent:     structured.argent ?? '',
-          amitie:     structured.amitie ?? '',
-          prediction: structured.prediction ?? '',
-          signFr:     sign.name,
-          weather,
-          edition,
-          source:     'mistral',
-        },
-        {
-          headers: {
-            'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300',
-          },
-        },
-      );
-    }
-
-    // Fallback : texte brut en guise d'ouverture, sections vides
-    return NextResponse.json(
-      {
-        ouverture:  rawText,
-        amour:      '', travail:    '', argent:     '',
-        amitie:     '', prediction: '',
-        signFr: sign.name,
+    if (structured?.ouverture && structured?.amour && structured?.travail) {
+      const response: HoroscopeResponse = {
+        ouverture:  structured.ouverture,
+        amour:      structured.amour,
+        travail:    structured.travail,
+        argent:     structured.argent ?? '',
+        amitie:     structured.amitie ?? '',
+        prediction: structured.prediction ?? '',
+        signFr:     sign.name,
         weather,
         edition,
-        source: 'raw',
-      },
-      {
-        headers: {
-          'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300',
-        },
-      },
+        source:     'mistral',
+      };
+      await setCached(blobKey, response);
+      return NextResponse.json(response, {
+        headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300' },
+      });
+    }
+
+    return NextResponse.json(
+      { ouverture: rawText, amour: '', travail: '', argent: '', amitie: '', prediction: '',
+        signFr: sign.name, weather, edition, source: 'raw' },
+      { headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300' } },
     );
   } catch (err) {
     console.error('Horoscope route error:', err);
