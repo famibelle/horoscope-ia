@@ -17,12 +17,13 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: 'Horoscope Karukera — Votre énergie cosmique personnalisée',
   description:
-    "Découvrez votre horoscope IA du jour. Prédictions personnalisées pour l'amour, le travail et la spiritualité. Votre guide astrologique quotidien alimenté par l'intelligence artificielle.",
+    "Découvrez votre horoscope du jour avec Maryse CondAI. Prédictions personnalisées pour l'amour, le travail et la spiritualité, ancrées dans la sagesse ancestrale de Karukera.",
   keywords: [
     'horoscope',
     'astrologie',
     'horoscope du jour',
-    'intelligence artificielle',
+    'Maryse CondAI',
+    'sagesse ancestrale',
     'signes astrologiques',
     'bélier',
     'taureau',
@@ -40,7 +41,7 @@ export const metadata: Metadata = {
   authors: [{ name: 'Horoscope Karukera' }],
   openGraph: {
     title: 'Horoscope Karukera — Votre énergie cosmique personnalisée',
-    description: "Découvrez votre horoscope IA du jour. Guidé par l'intelligence artificielle.",
+    description: "Découvrez votre horoscope du jour avec Maryse CondAI, ancrée dans la sagesse ancestrale de Karukera.",
     type: 'website',
     locale: 'fr_FR',
     siteName: 'Horoscope Karukera',
@@ -48,7 +49,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Horoscope Karukera',
-    description: "Découvrez votre horoscope IA du jour. Guidé par l'intelligence artificielle.",
+    description: "Découvrez votre horoscope du jour avec Maryse CondAI, ancrée dans la sagesse ancestrale de Karukera.",
   },
   robots: {
     index: true,

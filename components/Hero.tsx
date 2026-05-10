@@ -49,7 +49,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
         >
-          Intelligence Artificielle & Cosmos
+          Sagesse ancestrale & Cosmos
         </motion.p>
 
         {/* Title */}
@@ -63,7 +63,7 @@ export default function Hero() {
             🌙 Horoscope
           </span>
           <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-gradient">
-            IA
+            Maryse
           </span>
           <span className="block text-white/70 text-2xl sm:text-3xl md:text-4xl font-light mt-3">
             du jour
@@ -79,7 +79,7 @@ export default function Hero() {
         >
           Découvrez votre énergie cosmique personnalisée,{' '}
           <em className="text-violet-300/60 not-italic">
-            guidée par l&apos;intelligence artificielle
+            Les ancêtres parlent à travers les astres — Maryse CondAI vous écoute
           </em>
         </motion.p>
 
@@ -115,7 +115,7 @@ export default function Hero() {
         >
           {[
             { value: '12', label: 'signes' },
-            { value: 'IA', label: 'Fait par Maryse' },
+            { value: '✨', label: 'Maryse CondAI' },
             { value: '∞', label: 'énergies' },
           ].map((stat) => (
             <div key={stat.label} className="flex flex-col items-center gap-1">
