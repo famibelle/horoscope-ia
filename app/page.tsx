@@ -48,9 +48,9 @@ export default function Home() {
         <Hero />
         <AdSpace variant="banner" />
         <InteractiveHoroscope />
+        <HoroscopesPreview />
         <EnergyBanner />
         <ShareButtons />
-        <HoroscopesPreview />
         <AdSpace variant="square" />
         <Articles />
         <Footer />

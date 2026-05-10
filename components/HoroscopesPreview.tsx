@@ -76,7 +76,7 @@ export default function HoroscopesPreview() {
           Maryse CondAI
         </p>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
-          🔮 Votre horoscope en quelques lignes…
+          🔮 Les autres signes en quelques lignes…
         </h2>
       </motion.div>
 
