@@ -11,13 +11,44 @@ interface AudioPlayerProps {
 
 type PlayerState = 'idle' | 'generating' | 'ready' | 'playing' | 'paused';
 
+const LOADING_MESSAGES = [
+  "L'igwann observe le ciel ce matin…",
+  "Consultation de la Soufrière…",
+  "Le colibri consulte les fleurs…",
+  "Lecture des vents alizés…",
+  "La mangrove écoute…",
+  "Interrogation des ancêtres…",
+  "La frégate scrute l'horizon…",
+  "Lecture de la météo de Pointe-à-Pitre…",
+  "Le gwoka résonne dans la nuit…",
+  "Maryse pose sa plume…",
+  "Le lamantin remonte vers la surface…",
+  "Elle choisit ses mots…",
+  "La mer des Caraïbes parle…",
+  "Le souffle se prépare…",
+];
+
 export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
-  const [state, setState]       = useState<PlayerState>('idle');
-  const [progress, setProgress] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [error, setError]       = useState<string | null>(null);
-  const audioRef  = useRef<HTMLAudioElement | null>(null);
+  const [state, setState]         = useState<PlayerState>('idle');
+  const [progress, setProgress]   = useState(0);
+  const [duration, setDuration]   = useState(0);
+  const [error, setError]         = useState<string | null>(null);
+  const [loadingMsg, setLoadingMsg] = useState(LOADING_MESSAGES[0]);
+  const audioRef   = useRef<HTMLAudioElement | null>(null);
   const blobUrlRef = useRef<string | null>(null);
+  const msgIndexRef = useRef(0);
+
+  // Cycle through loading messages during generation
+  useEffect(() => {
+    if (state !== 'generating') return;
+    msgIndexRef.current = 0;
+    setLoadingMsg(LOADING_MESSAGES[0]);
+    const interval = setInterval(() => {
+      msgIndexRef.current = (msgIndexRef.current + 1) % LOADING_MESSAGES.length;
+      setLoadingMsg(LOADING_MESSAGES[msgIndexRef.current]);
+    }, 2200);
+    return () => clearInterval(interval);
+  }, [state]);
 
   // Reset when sign/text changes
   useEffect(() => {
@@ -208,13 +239,26 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
             <p className="text-white/80 font-semibold text-base sm:text-lg">
               {signName ? `Horoscope ${signName}` : 'Horoscope audio'}
             </p>
-            <p className="text-white/35 text-sm mt-1">
-              {isGenerating
-                ? 'Génération en cours…'
-                : hasAudio && duration > 0
+            <AnimatePresence mode="wait">
+              {isGenerating ? (
+                <motion.p
+                  key={loadingMsg}
+                  className="text-violet-300/60 text-sm mt-1 italic"
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  {loadingMsg}
+                </motion.p>
+              ) : (
+              <p className="text-white/35 text-sm mt-1">
+              {hasAudio && duration > 0
                   ? `Narration IA · ${formatTime(duration)}`
                   : 'Votre signe lu par Maryse'}
-            </p>
+              </p>
+              )}
+            </AnimatePresence>
             {error && <p className="text-rose-400/70 text-xs mt-1">{error}</p>}
 
             {/* Progress bar */}
