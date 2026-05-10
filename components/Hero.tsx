@@ -60,13 +60,13 @@ export default function Hero() {
           transition={{ duration: 1, delay: 0.4 }}
         >
           <span className="block text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-1">
-            🌙 Horoscope
+            🌳 Sous le flamboyant
           </span>
           <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-gradient">
             Maryse
           </span>
           <span className="block text-white/70 text-2xl sm:text-3xl md:text-4xl font-light mt-3">
-            du jour
+            vous guide
           </span>
         </motion.h1>
 
