@@ -39,7 +39,7 @@ export default function Footer() {
         {/* Brand */}
         <div className="text-center mb-14">
           <div className="font-display text-2xl font-bold text-white mb-2">
-            🌙 Horoscope IA
+            🌙 Horoscope Karukera
           </div>
           <p className="text-white/30 text-sm max-w-xs mx-auto leading-relaxed">
             Votre guide astrologique quotidien, propulsé par l&apos;intelligence artificielle
@@ -75,7 +75,7 @@ export default function Footer() {
           style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
         >
           <p className="text-white/20 text-xs">
-            © 2026 Horoscope IA. Tous droits réservés.
+            © 2026 Horoscope Karukera. Tous droits réservés.
           </p>
           <p className="text-white/15 text-xs">
             🤖 Prédictions générées par IA · à titre de divertissement uniquement

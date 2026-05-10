@@ -15,7 +15,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: 'Horoscope IA — Votre énergie cosmique personnalisée',
+  title: 'Horoscope Karukera — Votre énergie cosmique personnalisée',
   description:
     "Découvrez votre horoscope IA du jour. Prédictions personnalisées pour l'amour, le travail et la spiritualité. Votre guide astrologique quotidien alimenté par l'intelligence artificielle.",
   keywords: [
@@ -37,17 +37,17 @@ export const metadata: Metadata = {
     'verseau',
     'poissons',
   ],
-  authors: [{ name: 'Horoscope IA' }],
+  authors: [{ name: 'Horoscope Karukera' }],
   openGraph: {
-    title: 'Horoscope IA — Votre énergie cosmique personnalisée',
+    title: 'Horoscope Karukera — Votre énergie cosmique personnalisée',
     description: "Découvrez votre horoscope IA du jour. Guidé par l'intelligence artificielle.",
     type: 'website',
     locale: 'fr_FR',
-    siteName: 'Horoscope IA',
+    siteName: 'Horoscope Karukera',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Horoscope IA',
+    title: 'Horoscope Karukera',
     description: "Découvrez votre horoscope IA du jour. Guidé par l'intelligence artificielle.",
   },
   robots: {

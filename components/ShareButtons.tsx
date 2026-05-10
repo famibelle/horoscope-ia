@@ -51,7 +51,7 @@ const platforms = [
 ];
 
 const SHARE_TEXT =
-  '🌙 Mon horoscope IA du jour — Lion · "Votre énergie attire naturellement les bonnes opportunités." ✨ Découvrez le vôtre sur Horoscope IA';
+  '🌙 Mon horoscope IA du jour — Lion · "Votre énergie attire naturellement les bonnes opportunités." ✨ Découvrez le vôtre sur Horoscope Karukera';
 
 export default function ShareButtons() {
   const [copied, setCopied] = useState(false);

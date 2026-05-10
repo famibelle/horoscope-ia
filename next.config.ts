@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
+  watchOptions: {
+    followSymlinks: false,
+  },
 };
 
 export default nextConfig;
