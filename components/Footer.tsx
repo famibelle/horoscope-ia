@@ -39,11 +39,8 @@ export default function Footer() {
         {/* Brand */}
         <div className="text-center mb-14">
           <div className="font-display text-2xl font-bold text-white mb-2">
-            🌙 Horoscope Karukera
+            🌙 Votre voyage quotidien dans le savoir de nos ancètres
           </div>
-          <p className="text-white/30 text-sm max-w-xs mx-auto leading-relaxed">
-            Votre guide astrologique quotidien, propulsé par l&apos;intelligence artificielle
-          </p>
         </div>
 
         {/* Links grid */}

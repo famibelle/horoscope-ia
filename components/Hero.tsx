@@ -42,16 +42,6 @@ export default function Hero() {
       />
 
       <div className="relative z-10 max-w-2xl mx-auto">
-        {/* Eyebrow */}
-        <motion.p
-          className="text-violet-300/60 text-xs sm:text-sm uppercase tracking-[0.35em] mb-8 font-medium"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
-        >
-          Sous le flamboyant
-        </motion.p>
-
         {/* Title */}
         <motion.h1
           className="font-display font-bold leading-[1.05] mb-8"
@@ -59,9 +49,6 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.4 }}
         >
-          <span className="block text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-1">
-            🌳 Sous le flamboyant
-          </span>
           <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-gradient">
             Maryse
           </span>
