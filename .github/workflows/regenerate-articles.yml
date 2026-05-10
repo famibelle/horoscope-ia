@@ -1,0 +1,42 @@
+name: Régénérer les articles mensuels
+
+on:
+  schedule:
+    - cron: '0 4 1 * *'   # 1er du mois à 4h UTC (minuit Guadeloupe)
+  workflow_dispatch:       # déclenchement manuel si besoin
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Configurer SSH pour le sous-module privé
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SUBMODULE_DEPLOY_KEY }}
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Régénérer les articles via Mistral
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+        run: npx tsx private/generate-articles.ts
+
+      - name: Commit et push si des articles ont changé
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add lib/articles-content.json
+          git diff --staged --quiet || git commit -m "chore: régénération mensuelle des articles ($(date +%Y-%m))"
+          git push

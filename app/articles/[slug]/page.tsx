@@ -14,6 +14,7 @@ interface ArticleContent {
   introduction: string;
   sections: Section[];
   conclusion: string;
+  generatedAt?: string;
 }
 
 type ArticlesContent = Record<string, ArticleContent>;
@@ -134,7 +135,19 @@ export default async function ArticlePage(
           <p className="text-violet-300/80 text-sm sm:text-base leading-relaxed italic font-display">
             &ldquo;{content.conclusion}&rdquo;
           </p>
-          <p className="text-white/20 text-xs mt-3 text-right">— Maryse CondAI · Mistral IA</p>
+          <p className="text-white/20 text-xs mt-3 text-right">
+            — Maryse CondAI · Mistral IA
+            {content.generatedAt && (
+              <span className="block mt-0.5">
+                Généré le{' '}
+                {new Date(content.generatedAt).toLocaleDateString('fr-FR', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}
+              </span>
+            )}
+          </p>
         </div>
 
         {/* Back to home */}
