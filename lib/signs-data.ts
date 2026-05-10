@@ -1,0 +1,168 @@
+export type Element = 'Feu' | 'Terre' | 'Air' | 'Eau';
+
+export interface Sign {
+  id: string;
+  name: string;
+  emoji: string;
+  tagline: string;
+  dateRange: string;
+  element: Element;
+  planet: string;
+  gradientFrom: string;
+  gradientTo: string;
+  glowColor: string;
+}
+
+export const signs: Sign[] = [
+  {
+    id: 'belier',
+    name: 'Bélier',
+    emoji: '♈',
+    tagline: 'courage & pionnière',
+    dateRange: '21 mars – 19 avril',
+    element: 'Feu',
+    planet: 'Mars',
+    gradientFrom: '#ef4444',
+    gradientTo: '#f97316',
+    glowColor: 'rgba(239, 68, 68, 0.4)',
+  },
+  {
+    id: 'taureau',
+    name: 'Taureau',
+    emoji: '♉',
+    tagline: 'sensualité & ancrage',
+    dateRange: '20 avril – 20 mai',
+    element: 'Terre',
+    planet: 'Vénus',
+    gradientFrom: '#22c55e',
+    gradientTo: '#10b981',
+    glowColor: 'rgba(34, 197, 94, 0.4)',
+  },
+  {
+    id: 'gemeaux',
+    name: 'Gémeaux',
+    emoji: '♊',
+    tagline: 'curiosité & vivacité',
+    dateRange: '21 mai – 20 juin',
+    element: 'Air',
+    planet: 'Mercure',
+    gradientFrom: '#f59e0b',
+    gradientTo: '#fbbf24',
+    glowColor: 'rgba(245, 158, 11, 0.4)',
+  },
+  {
+    id: 'cancer',
+    name: 'Cancer',
+    emoji: '♋',
+    tagline: 'intuition & tendresse',
+    dateRange: '21 juin – 22 juillet',
+    element: 'Eau',
+    planet: 'Lune',
+    gradientFrom: '#38bdf8',
+    gradientTo: '#818cf8',
+    glowColor: 'rgba(56, 189, 248, 0.4)',
+  },
+  {
+    id: 'lion',
+    name: 'Lion',
+    emoji: '♌',
+    tagline: 'leadership & rayonnement',
+    dateRange: '23 juillet – 22 août',
+    element: 'Feu',
+    planet: 'Soleil',
+    gradientFrom: '#f59e0b',
+    gradientTo: '#ef4444',
+    glowColor: 'rgba(245, 158, 11, 0.5)',
+  },
+  {
+    id: 'vierge',
+    name: 'Vierge',
+    emoji: '♍',
+    tagline: 'précision & sagesse',
+    dateRange: '23 août – 22 septembre',
+    element: 'Terre',
+    planet: 'Mercure',
+    gradientFrom: '#14b8a6',
+    gradientTo: '#22c55e',
+    glowColor: 'rgba(20, 184, 166, 0.4)',
+  },
+  {
+    id: 'balance',
+    name: 'Balance',
+    emoji: '♎',
+    tagline: 'harmonie & élégance',
+    dateRange: '23 septembre – 22 octobre',
+    element: 'Air',
+    planet: 'Vénus',
+    gradientFrom: '#ec4899',
+    gradientTo: '#f472b6',
+    glowColor: 'rgba(236, 72, 153, 0.4)',
+  },
+  {
+    id: 'scorpion',
+    name: 'Scorpion',
+    emoji: '♏',
+    tagline: 'profondeur & intensité',
+    dateRange: '23 octobre – 21 novembre',
+    element: 'Eau',
+    planet: 'Pluton',
+    gradientFrom: '#7c3aed',
+    gradientTo: '#be123c',
+    glowColor: 'rgba(124, 58, 237, 0.5)',
+  },
+  {
+    id: 'sagittaire',
+    name: 'Sagittaire',
+    emoji: '♐',
+    tagline: 'liberté & aventure',
+    dateRange: '22 novembre – 21 décembre',
+    element: 'Feu',
+    planet: 'Jupiter',
+    gradientFrom: '#f97316',
+    gradientTo: '#a855f7',
+    glowColor: 'rgba(249, 115, 22, 0.4)',
+  },
+  {
+    id: 'capricorne',
+    name: 'Capricorne',
+    emoji: '♑',
+    tagline: 'ambition & discipline',
+    dateRange: '22 décembre – 19 janvier',
+    element: 'Terre',
+    planet: 'Saturne',
+    gradientFrom: '#64748b',
+    gradientTo: '#94a3b8',
+    glowColor: 'rgba(100, 116, 139, 0.4)',
+  },
+  {
+    id: 'verseau',
+    name: 'Verseau',
+    emoji: '♒',
+    tagline: 'originalité & vision',
+    dateRange: '20 janvier – 18 février',
+    element: 'Air',
+    planet: 'Uranus',
+    gradientFrom: '#3b82f6',
+    gradientTo: '#06b6d4',
+    glowColor: 'rgba(59, 130, 246, 0.4)',
+  },
+  {
+    id: 'poissons',
+    name: 'Poissons',
+    emoji: '♓',
+    tagline: 'rêve & compassion',
+    dateRange: '19 février – 20 mars',
+    element: 'Eau',
+    planet: 'Neptune',
+    gradientFrom: '#8b5cf6',
+    gradientTo: '#3b82f6',
+    glowColor: 'rgba(139, 92, 246, 0.4)',
+  },
+];
+
+export const elementEmoji: Record<Element, string> = {
+  Feu: '🔥',
+  Terre: '🌍',
+  Air: '💨',
+  Eau: '💧',
+};
