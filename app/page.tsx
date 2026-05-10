@@ -46,8 +46,8 @@ export default function Home() {
 
       <div className="relative z-10">
         <Hero />
-        <AdSpace variant="banner" />
         <InteractiveHoroscope />
+        <AdSpace variant="banner" />
         <HoroscopesPreview />
         <EnergyBanner />
         <ShareButtons />
