@@ -115,7 +115,7 @@ export default function Hero() {
         >
           {[
             { value: '12', label: 'signes' },
-            { value: 'IA', label: 'powered' },
+            { value: 'IA', label: 'Fait par Maryse' },
             { value: '∞', label: 'énergies' },
           ].map((stat) => (
             <div key={stat.label} className="flex flex-col items-center gap-1">
