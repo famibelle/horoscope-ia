@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Briefcase, Coins, Users, Sparkles, Eye, Cloud, RefreshCw } from 'lucide-react';
+import Link from 'next/link';
 import { signs } from '@/lib/signs-data';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
 import { formatDate } from '@/lib/horoscope-data';
@@ -135,8 +136,9 @@ function FilledCard({
   date: string;
 }) {
   return (
-    <div
-      className="relative rounded-3xl overflow-hidden"
+    <Link
+      href={`/horoscope/${sign.id}`}
+      className="block relative rounded-3xl overflow-hidden transition-shadow duration-300"
       style={{
         background:
           'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)',
@@ -285,6 +287,6 @@ function FilledCard({
           background: `linear-gradient(90deg, transparent, ${sign.gradientTo}40, transparent)`,
         }}
       />
-    </div>
+    </Link>
   );
 }
