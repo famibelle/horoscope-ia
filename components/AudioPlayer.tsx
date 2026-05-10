@@ -116,7 +116,7 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
           🎧 Horoscope audio
         </h2>
         <p className="text-white/30 text-sm mt-2">
-          La voix de Maryse, par Voxtral
+          Écoutez Maryse
         </p>
       </motion.div>
 
