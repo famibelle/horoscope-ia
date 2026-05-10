@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signs } from '@/lib/signs-data';
 import { detectEdition, todayGuadeloupe } from '@/lib/edition';
+import { getCulturalContext } from '@/lib/cultural-context';
+import { computeScores } from '@/lib/scores';
+import type { WeatherData } from '@/app/api/weather/route';
 import type { Edition } from '@/private/maryse-prompt';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
@@ -45,27 +48,42 @@ export async function GET(
   }
 
   const lunarPhase = lunarPhaseLabel();
+  const today = todayGuadeloupe();
   const otherSigns = signs.filter((s) => s.id !== signId).map((s) => s.id);
+  const culturalContext = getCulturalContext(signId, today);
+
+  // Récupère la météo de Pointe-à-Pitre pour le calcul des scores
+  let weather: WeatherData;
+  try {
+    const wRes = await fetch(
+      `${req.nextUrl.origin}/api/weather`,
+      { next: { revalidate: 3600 } },
+    );
+    weather = wRes.ok ? await wRes.json() : { tmin: 24, tmax: 30, rain: 0, wind: 20, code: 1, label: 'Partiellement nuageux', summary: '' };
+  } catch {
+    weather = { tmin: 24, tmax: 30, rain: 0, wind: 20, code: 1, label: 'Partiellement nuageux', summary: '' };
+  }
+
+  const scores = computeScores(signId, today, weather);
 
   const prompt = `Tu es Maryse CondAI, voix astrologique de Karukera (Guadeloupe).
 Génère l'ambiance astrale du jour pour le ${sign.name} (édition ${edition}).
 
 Signe : ${sign.name} · Planète : ${sign.planet} · Élément : ${sign.element}
 Phase lunaire : ${lunarPhase}
+Météo à Pointe-à-Pitre : ${weather.summary}
 
-Ancre tes réponses dans la culture guadeloupéenne : mer des Caraïbes, Soufrière, mangrove, alizés, gwo-ka, fruits tropicaux, plantes locales.
+${culturalContext}
+
+Scores énergétiques du jour (FIXES — calculés depuis les cycles planétaires, la météo et le calendrier guadeloupéen) :
+Amour ${scores.amour}% · Travail ${scores.travail}% · Bien-être ${scores.bienetre}% · Vie sociale ${scores.vieSociale}% · Finances ${scores.finances}%
+
+Tiens compte de ces scores dans ton ambiance : commente brièvement les domaines forts (>75) et faibles (<50).
 
 Réponds avec un objet JSON valide et ces clés exactes :
 {
-  "ambiance": "2-3 phrases sur l'énergie du jour : aspects planétaires, ton Maryse CondAI, ancré Karukera",
-  "scores": {
-    "amour": <entier 30-95>,
-    "travail": <entier 30-95>,
-    "bienetre": <entier 30-95>,
-    "vieSociale": <entier 30-95>,
-    "finances": <entier 30-95>
-  },
-  "chiffrePorteBonheur": <entier 1-99, de préférence un nombre premier (2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97) — utilise un non-premier seulement occasionnellement>,
+  "ambiance": "2-3 phrases sur l'énergie du jour, ancrées dans les références culturelles ci-dessus et cohérentes avec les scores",
+  "chiffrePorteBonheur": <entier 1-99, de préférence un nombre premier (2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97)>,
   "compatibilite": ["<signId1>", "<signId2>"],
   "lune": {
     "bienetre": "conseil bien-être lié à la ${lunarPhase}, ancré Karukera, 2 phrases",
@@ -97,7 +115,7 @@ Sans markdown dans les valeurs JSON.`;
   const content = mistralData.choices?.[0]?.message?.content ?? '{}';
 
   try {
-    const data = JSON.parse(content);
+    const data = { ...JSON.parse(content), scores };
     _cache.set(cacheKey, { data, ts: Date.now() });
     return NextResponse.json(data, {
       headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300' },
