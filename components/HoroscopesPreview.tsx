@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { signs } from '@/lib/signs-data';
 import { detectEdition } from '@/lib/edition';
-import { todayISO } from '@/lib/horoscope-data';
 
 interface SignPreview {
   signId: string;
@@ -20,10 +20,6 @@ function truncate(text: string) {
   return text.slice(0, PREVIEW_LENGTH).trimEnd() + '…';
 }
 
-function selectSign(signId: string) {
-  document.getElementById('signs')?.scrollIntoView({ behavior: 'smooth' });
-  window.dispatchEvent(new CustomEvent('select-sign', { detail: signId }));
-}
 
 export default function HoroscopesPreview() {
   const [previews, setPreviews] = useState<SignPreview[]>([]);
@@ -31,28 +27,34 @@ export default function HoroscopesPreview() {
 
   useEffect(() => {
     const edition = detectEdition();
-    const date = todayISO();
 
-    Promise.all(
-      signs.map(async (sign) => {
-        try {
-          const res = await fetch(`/api/horoscope/${sign.id}?date=${date}&edition=${edition}`);
-          if (!res.ok) return null;
-          const data = await res.json();
-          return {
-            signId: sign.id,
-            name: sign.name,
-            emoji: sign.emoji,
-            ouverture: data.ouverture ?? '',
-          };
-        } catch {
-          return null;
+    fetch(`/api/horoscopes-preview?edition=${edition}`)
+      .then((r) => (r.ok ? r.json() : []))
+      .then(async (data: SignPreview[]) => {
+        if (data.length > 0) {
+          // Prod : cache Blobs disponible, affichage immédiat
+          setPreviews(data);
+          setLoading(false);
+        } else {
+          // Dev local : pas de Blobs, chargement séquentiel pour ne pas saturer Mistral
+          setLoading(false);
+          for (const sign of signs) {
+            try {
+              const res = await fetch(`/api/horoscope/${sign.id}?edition=${edition}`);
+              if (!res.ok) continue;
+              const horoscope = await res.json();
+              const text = horoscope.teaser || horoscope.ouverture;
+              if (text && horoscope.source !== 'raw') {
+                setPreviews((prev) => [
+                  ...prev,
+                  { signId: sign.id, name: sign.name, emoji: sign.emoji, ouverture: text },
+                ]);
+              }
+            } catch { /* skip */ }
+          }
         }
-      }),
-    ).then((results) => {
-      setPreviews(results.filter(Boolean) as SignPreview[]);
-      setLoading(false);
-    });
+      })
+      .catch(() => setLoading(false));
   }, []);
 
   return (
@@ -107,12 +109,12 @@ export default function HoroscopesPreview() {
               <p className="text-white/45 text-sm leading-relaxed mb-3">
                 {truncate(p.ouverture)}
               </p>
-              <button
-                onClick={() => selectSign(p.signId)}
+              <Link
+                href={`/horoscope/${p.signId}`}
                 className="text-violet-400/70 hover:text-violet-300 text-xs font-medium transition-colors"
               >
                 lire la suite →
-              </button>
+              </Link>
             </motion.div>
           ))}
         </div>

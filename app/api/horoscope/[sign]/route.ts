@@ -78,6 +78,38 @@ async function fetchWeather(): Promise<string> {
   }
 }
 
+async function generateTeaser(
+  signName: string,
+  structured: Record<string, string>,
+): Promise<string> {
+  const apiKey = process.env.MISTRAL_API_KEY;
+  if (!apiKey) return '';
+  const fullText = [
+    structured.ouverture, structured.amour, structured.travail,
+    structured.argent, structured.amitie, structured.prediction,
+  ].filter(Boolean).join(' ');
+
+  const res = await fetch(MISTRAL_URL, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'mistral-small-latest',
+      temperature: 0.8,
+      max_tokens: 120,
+      messages: [
+        {
+          role: 'system',
+          content: `Tu es Maryse CondAI. Rédige une accroche de 2 phrases maximum à partir de l'horoscope du ${signName}, en voix directe et sensuelle, qui donne envie de lire la suite sans tout révéler. Pas de titre, pas de ponctuation finale superflue.`,
+        },
+        { role: 'user', content: fullText },
+      ],
+    }),
+  });
+  if (!res.ok) return '';
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content?.trim() ?? '';
+}
+
 async function rewriteWithMistral(
   signId: string,
   rawText: string,
@@ -151,6 +183,7 @@ export async function GET(
     const structured = await rewriteWithMistral(signId, rawText, weather, edition);
 
     if (structured?.ouverture && structured?.amour && structured?.travail) {
+      const teaser = await generateTeaser(sign.name, structured as Record<string, string>);
       const response: HoroscopeResponse = {
         ouverture:  structured.ouverture,
         amour:      structured.amour,
@@ -161,6 +194,7 @@ export async function GET(
         signFr:     sign.name,
         weather,
         edition,
+        teaser:     teaser || undefined,
         source:     'mistral',
       };
       await setCached(blobKey, response);

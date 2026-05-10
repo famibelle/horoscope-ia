@@ -1,0 +1,108 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { signs } from '@/lib/signs-data';
+import { detectEdition, todayGuadeloupe } from '@/lib/edition';
+import type { Edition } from '@/private/maryse-prompt';
+
+const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
+
+/* ── Simple in-memory cache (local dev) ────────────────────────────────────── */
+const _cache = new Map<string, { data: unknown; ts: number }>();
+const TTL = 3_600_000;
+
+function lunarPhaseLabel(): string {
+  const known = new Date('2000-01-06').getTime();
+  const days = (Date.now() - known) / 86_400_000;
+  const cycle = ((days % 29.53) + 29.53) % 29.53;
+  const idx = Math.floor((cycle / 29.53) * 8) % 8;
+  return [
+    'Nouvelle lune', 'Croissant naissant', 'Premier quartier', 'Croissant gibbeuse',
+    'Pleine lune', 'Gibbeuse décroissante', 'Dernier quartier', 'Croissant décroissant',
+  ][idx];
+}
+
+export async function GET(
+  req: NextRequest,
+  context: { params: Promise<{ sign: string }> },
+) {
+  const { sign: signId } = await context.params;
+  const sign = signs.find((s) => s.id === signId);
+  if (!sign) return NextResponse.json({ error: 'Signe inconnu' }, { status: 404 });
+
+  const apiKey = process.env.MISTRAL_API_KEY;
+  if (!apiKey) return NextResponse.json({ error: 'API key manquante' }, { status: 500 });
+
+  const editionParam = req.nextUrl.searchParams.get('edition') as Edition | null;
+  const edition: Edition =
+    editionParam === 'matin' || editionParam === 'midi' || editionParam === 'soir'
+      ? editionParam : detectEdition();
+
+  const cacheKey = `${todayGuadeloupe()}|${signId}|${edition}`;
+  const hit = _cache.get(cacheKey);
+  if (hit && Date.now() - hit.ts < TTL) {
+    return NextResponse.json(hit.data, {
+      headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300' },
+    });
+  }
+
+  const lunarPhase = lunarPhaseLabel();
+  const otherSigns = signs.filter((s) => s.id !== signId).map((s) => s.id);
+
+  const prompt = `Tu es Maryse CondAI, voix astrologique de Karukera (Guadeloupe).
+Génère l'ambiance astrale du jour pour le ${sign.name} (édition ${edition}).
+
+Signe : ${sign.name} · Planète : ${sign.planet} · Élément : ${sign.element}
+Phase lunaire : ${lunarPhase}
+
+Ancre tes réponses dans la culture guadeloupéenne : mer des Caraïbes, Soufrière, mangrove, alizés, gwo-ka, fruits tropicaux, plantes locales.
+
+Réponds avec un objet JSON valide et ces clés exactes :
+{
+  "ambiance": "2-3 phrases sur l'énergie du jour : aspects planétaires, ton Maryse CondAI, ancré Karukera",
+  "scores": {
+    "amour": <entier 30-95>,
+    "travail": <entier 30-95>,
+    "bienetre": <entier 30-95>,
+    "vieSociale": <entier 30-95>,
+    "finances": <entier 30-95>
+  },
+  "chiffrePorteBonheur": <entier 1-99>,
+  "compatibilite": ["<signId1>", "<signId2>"],
+  "lune": {
+    "bienetre": "conseil bien-être lié à la ${lunarPhase}, ancré Karukera, 2 phrases",
+    "beaute": "conseil beauté/soin naturel caribéen, 2 phrases",
+    "esprit": "conseil mental ou spirituel, lié à la phase lunaire, 2 phrases",
+    "maison": "conseil maison/espace de vie créole, 2 phrases",
+    "jardinage": "conseil jardinage créole (igname, christophine, balisier, canne…), 2 phrases"
+  }
+}
+
+Pour "compatibilite" choisis exactement 2 valeurs parmi : ${otherSigns.join(', ')}.
+Sans markdown dans les valeurs JSON.`;
+
+  const res = await fetch(MISTRAL_URL, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'mistral-small-latest',
+      temperature: 0.8,
+      max_tokens: 900,
+      response_format: { type: 'json_object' },
+      messages: [{ role: 'user', content: prompt }],
+    }),
+  });
+
+  if (!res.ok) return NextResponse.json({ error: 'Mistral error' }, { status: 500 });
+
+  const mistralData = await res.json();
+  const content = mistralData.choices?.[0]?.message?.content ?? '{}';
+
+  try {
+    const data = JSON.parse(content);
+    _cache.set(cacheKey, { data, ts: Date.now() });
+    return NextResponse.json(data, {
+      headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300' },
+    });
+  } catch {
+    return NextResponse.json({ error: 'Parse error' }, { status: 500 });
+  }
+}
