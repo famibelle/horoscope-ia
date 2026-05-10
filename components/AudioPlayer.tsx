@@ -213,7 +213,7 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
                 ? 'Génération en cours…'
                 : hasAudio && duration > 0
                   ? `Narration IA · ${formatTime(duration)}`
-                  : 'Cliquez pour générer'}
+                  : 'Votre signe lu par Maryse'}
             </p>
             {error && <p className="text-rose-400/70 text-xs mt-1">{error}</p>}
 
