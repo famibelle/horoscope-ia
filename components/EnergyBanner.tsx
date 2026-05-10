@@ -142,7 +142,7 @@ export default function EnergyBanner() {
           <p className="text-white/35 text-xs uppercase tracking-widest mb-1.5">
             Signe du jour
           </p>
-          <p className="text-white/45 text-xs leading-relaxed italic">{signe.phrase}</p>
+          <p className="text-white/60 text-sm sm:text-base leading-relaxed italic">{signe.phrase}</p>
         </motion.div>
       )}
 
