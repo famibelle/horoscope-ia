@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import SignSelector from './SignSelector';
 import HoroscopeCard from './HoroscopeCard';
@@ -17,6 +17,7 @@ export default function InteractiveHoroscope() {
   const [data, setData]       = useState<HoroscopeResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState<string | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setEdition(detectEdition());
@@ -84,8 +85,15 @@ export default function InteractiveHoroscope() {
         })}
       </div>
 
-      <SignSelector selected={selectedSignId} onSelect={setSelectedSignId} />
+      <SignSelector
+        selected={selectedSignId}
+        onSelect={(id) => {
+          setSelectedSignId(id);
+          cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }}
+      />
 
+      <div ref={cardRef} />
       <HoroscopeCard
         sign={sign}
         data={data}
