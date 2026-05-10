@@ -23,6 +23,16 @@ export default function InteractiveHoroscope() {
     setEdition(detectEdition());
   }, []);
 
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const signId = (e as CustomEvent<string>).detail;
+      setSelectedSignId(signId);
+      setTimeout(() => cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+    };
+    window.addEventListener('select-sign', handler);
+    return () => window.removeEventListener('select-sign', handler);
+  }, []);
+
   const fetchHoroscope = useCallback(async (signId: string, ed: Edition) => {
     setLoading(true);
     setError(null);
