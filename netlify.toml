@@ -7,6 +7,3 @@
 
 [build.environment]
   NODE_VERSION = "20"
-  # Désactive le clonage des submodules privés (problème d'accès)
-  NPM_FLAGS = "--ignore-scripts"
-  GIT_SUBMODULE_STRATEGY = "none"
