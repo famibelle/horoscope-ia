@@ -45,13 +45,40 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Dark mode pour l'édition "Soir" */
+/* Thèmes par édition */
+
+/* Matin - Lever du soleil, énergie naissante */
+.matin-mode {
+  background-color: #1a120b;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% -10%, rgba(255, 215, 0, 0.25) 0%, rgba(245, 245, 220, 0.1) 60%, transparent 80%),
+    radial-gradient(ellipse 60% 50% at 80% 10%, rgba(255, 165, 0, 0.2) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 80%, rgba(210, 105, 30, 0.15) 0%, transparent 50%);
+}
+
+/* Midi - Soleil au zénith, énergie */
+.midi-mode {
+  background-color: #5C4033;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% -10%, rgba(210, 105, 30, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 10%, rgba(139, 69, 19, 0.1) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 80%, rgba(85, 64, 40, 0.08) 0%, transparent 50%);
+}
+
+/* Soir - Nuit, repos */
 .soir-mode {
   background-color: #020617;
   background-image:
     radial-gradient(ellipse 80% 60% at 20% -10%, rgba(210, 105, 30, 0.25) 0%, transparent 70%),
     radial-gradient(ellipse 60% 50% at 80% 10%, rgba(255, 215, 0, 0.1) 0%, transparent 60%),
     radial-gradient(ellipse 50% 40% at 50% 80%, rgba(85, 64, 40, 0.15) 0%, transparent 50%);
+}
+
+/* Cartes adaptées à chaque thème */
+.matin-mode .rounded-3xl,
+.midi-mode .rounded-3xl {
+  background: rgba(245, 245, 220, 0.06) !important;
+  border-color: rgba(245, 245, 220, 0.12) !important;
 }
 
 .soir-mode .rounded-3xl {

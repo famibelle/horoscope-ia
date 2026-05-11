@@ -25,9 +25,18 @@ export default function InteractiveHoroscope() {
     setMoonEmoji(getMoonPhaseEmoji());
   }, []);
 
-  // Toggle dark mode for "soir" edition
+  // Toggle theme classes for each edition
   useEffect(() => {
-    document.body.classList.toggle('soir-mode', edition === 'soir');
+    // Remove all edition classes first
+    document.body.classList.remove('matin-mode', 'midi-mode', 'soir-mode');
+    // Add the current edition class
+    if (edition === 'matin') {
+      document.body.classList.add('matin-mode');
+    } else if (edition === 'midi') {
+      document.body.classList.add('midi-mode');
+    } else if (edition === 'soir') {
+      document.body.classList.add('soir-mode');
+    }
   }, [edition]);
 
   useEffect(() => {
