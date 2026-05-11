@@ -1,13 +1,6 @@
 import Link from 'next/link';
 
 const links = {
-  Signes: [
-    { label: 'Bélier · Taureau', href: '#' },
-    { label: 'Gémeaux · Cancer', href: '#' },
-    { label: 'Lion · Vierge', href: '#' },
-    { label: 'Balance · Scorpion', href: '#' },
-    { label: 'Sagittaire → Poissons', href: '#' },
-  ],
   Légal: [
     { label: 'Mentions légales', href: '#' },
     { label: 'Politique de confidentialité', href: '#' },
