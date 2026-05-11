@@ -6,11 +6,20 @@ interface CulturalEntry {
   culture: string;
 }
 
+interface MedicinalEntry {
+  nomCreole: string;
+  nomFr: string;
+  usage: string;
+}
+
 type SignPool = {
   faune: CulturalEntry[];
   flore: CulturalEntry[];
   lieux: CulturalEntry[];
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const typedData = data as unknown as { medicinal: MedicinalEntry[] } & Record<string, SignPool>;
 
 function hash(str: string): number {
   let h = 5381;
@@ -30,8 +39,14 @@ function shorten(text: string, max = 120): string {
   return cut > 40 ? text.slice(0, cut + 1) : text.slice(0, max) + '…';
 }
 
+export function getMedicinalPlant(signId: string, date: string): MedicinalEntry {
+  const pool = typedData.medicinal;
+  const seed = hash(`${signId}|${date}|med`);
+  return pool[seed % pool.length];
+}
+
 export function getCulturalContext(signId: string, date: string): string {
-  const pool = (data as Record<string, SignPool>)[signId];
+  const pool = typedData[signId];
   if (!pool) return '';
 
   const seed = hash(`${signId}|${date}`);

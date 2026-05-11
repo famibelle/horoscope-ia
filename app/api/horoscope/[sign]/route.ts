@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signs } from '@/lib/signs-data';
 import { MARYSE_SYSTEM, buildHoroscopeUserPrompt } from '@/private/maryse-prompt';
+import { getMedicinalPlant } from '@/lib/cultural-context';
 import { detectEdition, todayGuadeloupe } from '@/lib/edition';
 import type { Edition } from '@/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
@@ -115,6 +116,7 @@ async function rewriteWithMistral(
   rawText: string,
   weather: string,
   edition: Edition,
+  medicinal?: { nomCreole: string; nomFr: string; usage: string },
 ): Promise<Record<string, string> | null> {
   const apiKey = process.env.MISTRAL_API_KEY;
   if (!apiKey) return null;
@@ -131,7 +133,7 @@ async function rewriteWithMistral(
       response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: MARYSE_SYSTEM },
-        { role: 'user',   content: buildHoroscopeUserPrompt(sign, rawText, weather, edition) },
+        { role: 'user',   content: buildHoroscopeUserPrompt(sign, rawText, weather, edition, medicinal) },
       ],
     }),
   });
@@ -171,6 +173,8 @@ export async function GET(
   }
 
   try {
+    const today = todayGuadeloupe();
+    const medicinal = getMedicinalPlant(signId, today);
     const [rawText, weather] = await Promise.all([fetchRawHoroscope(signEn), fetchWeather()]);
 
     if (!rawText) {
@@ -180,7 +184,7 @@ export async function GET(
       );
     }
 
-    const structured = await rewriteWithMistral(signId, rawText, weather, edition);
+    const structured = await rewriteWithMistral(signId, rawText, weather, edition, medicinal);
 
     if (structured?.ouverture && structured?.amour && structured?.travail) {
       const teaser = await generateTeaser(sign.name, structured as Record<string, string>);

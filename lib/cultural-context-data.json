@@ -6919,5 +6919,157 @@
         "culture": "Bras de mer séparant Basse-Terre et Grande-Terre. Symbole de division et de réunion. Cœur géographique et spirituel de l'archipel. Lieu du dualisme guadeloupéen."
       }
     ]
-  }
+  },
+  "medicinal": [
+    {
+      "nomCreole": "Chadon béni",
+      "nomFr": "Chardon béni / Coriandre longue",
+      "usage": "Plante anti-fièvre, digestive. Utilisée aussi en cuisine créole (acras, boudin). Présente dans tout jardin créole."
+    },
+    {
+      "nomCreole": "Brizée / Plante 3 tasses",
+      "nomFr": "Brizée",
+      "usage": "Tisane sédative et anti-stress. Très populaire dans la tradition créole pour le sommeil."
+    },
+    {
+      "nomCreole": "Sitwonèl",
+      "nomFr": "Citronnelle",
+      "usage": "Anti-inflammatoire, digestive, répulsive. Infusion calmante de maux de tête."
+    },
+    {
+      "nomCreole": "Gwo tim / Thym Gros Sèf",
+      "nomFr": "Gros Thym créole",
+      "usage": "Contre la toux, le rhume et la grippe. Plante du jardin créole incontournable."
+    },
+    {
+      "nomCreole": "Alowes / Zavwil",
+      "nomFr": "Aloès vera",
+      "usage": "Gel contre brûlures, cicatrisation. Jus détoxifiant. Très utilisé en médecine créole."
+    },
+    {
+      "nomCreole": "Dartrier / Ti-baume",
+      "nomFr": "Dartrier",
+      "usage": "Feuilles contre les dermatoses, teigne et dartres. Plante purifiante de la peau."
+    },
+    {
+      "nomCreole": "Verven",
+      "nomFr": "Verveine",
+      "usage": "Tisane digestive et calmante. Très répandue dans les jardins créoles."
+    },
+    {
+      "nomCreole": "Korosòl (feuilles)",
+      "nomFr": "Feuilles de corossol",
+      "usage": "Tisane sédative forte. Utilisée contre l'insomnie et les douleurs articulaires."
+    },
+    {
+      "nomCreole": "Zeb a femme",
+      "nomFr": "Herbe à femme / Armoise",
+      "usage": "Utilisée en gynécologie créole. Plante des femmes, régulatrice du cycle."
+    },
+    {
+      "nomCreole": "Zeb kabrit",
+      "nomFr": "Herbe à cabri",
+      "usage": "Tisane pour les douleurs et la fièvre. Plante sauvage des bords de route."
+    },
+    {
+      "nomCreole": "Malomé",
+      "nomFr": "Malnommée",
+      "usage": "Odeur forte (ail). Plante de protection spirituelle et de guérison dans le quimbois."
+    },
+    {
+      "nomCreole": "Woucou / Roucou",
+      "nomFr": "Roucou / Annatto",
+      "usage": "Graines rouges utilisées comme colorant alimentaire (peau du poulet boucané) et en médecine créole. Plante des Arawaks."
+    },
+    {
+      "nomCreole": "Zeb a pik",
+      "nomFr": "Herbe à pique",
+      "usage": "Plante sensitive (se referme au toucher). Utilisée en tisane calmante."
+    },
+    {
+      "nomCreole": "Patchouli péyi",
+      "nomFr": "Patchouli antillais",
+      "usage": "Parfum intense. Utilisé dans les baumes, les bains rituels et la protection spirituelle."
+    },
+    {
+      "nomCreole": "Zeb a vers",
+      "nomFr": "Herbe à vers",
+      "usage": "Utilisée contre les parasites intestinaux. Plante de purification interne."
+    },
+    {
+      "nomCreole": "Chadon béni",
+      "nomFr": "Chardon béni",
+      "usage": "Plante de sol omniprésente. Anti-fièvre, digestive. Aussi utilisée en cuisine (acras)."
+    },
+    {
+      "nomCreole": "Sitwonèl",
+      "nomFr": "Citronnelle",
+      "usage": "Plante en touffes. Tisane calmante, répulsive anti-moustiques. Incontournable."
+    },
+    {
+      "nomCreole": "Brizée",
+      "nomFr": "Brizée / Plante 3 tasses",
+      "usage": "Tisane anti-stress et sédative. Feuilles citronnées. Très répandue."
+    },
+    {
+      "nomCreole": "Gwo tim",
+      "nomFr": "Gros thym créole",
+      "usage": "Grandes feuilles charnues. Contre toux, rhume, grippe. Cuisine et médecine."
+    },
+    {
+      "nomCreole": "Basilik péyi",
+      "nomFr": "Basilic créole",
+      "usage": "Antispasmodique et digestif. Dans les accras, bouillons et marinades."
+    },
+    {
+      "nomCreole": "Malomé",
+      "nomFr": "Malnommée",
+      "usage": "Odeur forte d'ail. Plante de protection spirituelle du quimbois. Plantée aux angles de la case."
+    },
+    {
+      "nomCreole": "Zeb a femme",
+      "nomFr": "Herbe à femme / Armoise",
+      "usage": "Plante gynécologique créole. Régularise le cycle. Réservée aux femmes."
+    },
+    {
+      "nomCreole": "Dartrier",
+      "nomFr": "Dartrier / Sene",
+      "usage": "Feuilles anti-dermatoses. Traite dartres, teigne et infections cutanées."
+    },
+    {
+      "nomCreole": "Zeb a vers",
+      "nomFr": "Herbe à vers",
+      "usage": "Anti-parasitaire intestinal. Plante de purification interne."
+    },
+    {
+      "nomCreole": "Verven",
+      "nomFr": "Verveine des Antilles",
+      "usage": "Tisane digestive et calmante. Très commune dans les jardins créoles."
+    },
+    {
+      "nomCreole": "Zeb kabrit",
+      "nomFr": "Herbe à cabri",
+      "usage": "Plante sauvage des bords du jardin. Tisane contre douleurs et fièvre."
+    },
+    {
+      "nomCreole": "Patchouli péyi",
+      "nomFr": "Patchouli antillais",
+      "usage": "Parfum intense. Bains rituels et protection spirituelle du quimbois."
+    },
+    {
+      "nomCreole": "Woucou",
+      "nomFr": "Roucou / Annatto",
+      "usage": "Arbuste de bordure. Graines rouges = colorant alimentaire (poulet boucané) et médicinal. Héritage arawak."
+    },
+    {
+      "nomCreole": "Zeb a pik / Sensitive",
+      "nomFr": "Sensitive / Herbe à pique",
+      "usage": "Plante sensitive (se referme au toucher). Tisane calmante. Plante des enfants."
+    },
+    {
+      "nomCreole": "Bwa d'Ind (feuilles)",
+      "nomFr": "Feuilles de bois d'inde",
+      "usage": "Feuilles aromatiques des haies. Bouillons, bains rituels du quimbois."
+    }
+  ]
 }

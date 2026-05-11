@@ -68,7 +68,22 @@ function parseLieux(categories: string[]): CulturalEntry[] {
     .filter(e => e.nomCreole && e.culture.length > 20);
 }
 
-const result: Record<string, { faune: CulturalEntry[]; flore: CulturalEntry[]; lieux: CulturalEntry[] }> = {};
+interface MedicinalEntry {
+  nomCreole: string;
+  nomFr: string;
+  usage: string;
+}
+
+function parseMedicinal(): MedicinalEntry[] {
+  const content = readFileSync(`${INDEX_CULTUREL}/flore_guadeloupe_ref.md`, 'utf-8');
+  return parseMarkdownRows(content)
+    .filter(cols => cols[0].includes('Rimèd razié') && cols.length >= 5)
+    .map(cols => ({ nomCreole: cols[1], nomFr: cols[2], usage: cols[4] }))
+    .filter(e => e.nomCreole && e.usage.length > 20);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const result: Record<string, any> = {};
 
 for (const [signId, element] of Object.entries(SIGN_ELEMENTS)) {
   result[signId] = {
@@ -79,8 +94,12 @@ for (const [signId, element] of Object.entries(SIGN_ELEMENTS)) {
   console.log(`${signId} (${element}): ${result[signId].faune.length} faune, ${result[signId].flore.length} flore, ${result[signId].lieux.length} lieux`);
 }
 
+const medicinal = parseMedicinal();
+result.medicinal = medicinal;
+console.log(`\nmedicinal (Rimèd razié) : ${medicinal.length} entrées`);
+
 writeFileSync(
   '/home/medhi/SourceCode/horoscope-ia/lib/cultural-context-data.json',
   JSON.stringify(result, null, 2),
 );
-console.log('\nFichier généré : lib/cultural-context-data.json');
+console.log('Fichier généré : lib/cultural-context-data.json');
