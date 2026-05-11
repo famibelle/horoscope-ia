@@ -7215,5 +7215,476 @@
       "nomFr": "Cimetière des esclaves",
       "dimension": "Lieu de mémoire et de rituels pour honorer les ancêtres. Symbole de la résistance par la mémoire (Boucher 2008)."
     }
+  ],
+  "resistanceMaison": [
+    {
+      "nomCreole": "Tambou ka",
+      "nomFr": "Tambour de peau",
+      "dimension": "Instrument africain interdit par le Code Noir (1685). Fabriqué en secret avec des peaux de chèvre et du bois de gaïac. Vecteur de transmission de la mémoire africaine (Bangou 1992, archives coloniales)."
+    },
+    {
+      "nomCreole": "Banjo",
+      "nomFr": "Banjo",
+      "dimension": "Instrument fabriqué à partir de calebasses et de cordes de boyau. Utilisé pour les veillées interdites. Symbole de la résistance musicale (Simpson 1970)."
+    },
+    {
+      "nomCreole": "Chapeau paille",
+      "nomFr": "Chapeau de paille",
+      "dimension": "Tressé en secret pour remplacer les chapeaux imposés par les maîtres. Symbole de la résistance vestimentaire (Wiltgen 1994)."
+    },
+    {
+      "nomCreole": "Flûte en bambou",
+      "nomFr": "Flûte",
+      "dimension": "Instrument fabriqué en secret pour jouer des mélodies africaines. Symbole de la résistance musicale (Bangou 1992)."
+    },
+    {
+      "nomCreole": "Maracas",
+      "nomFr": "Maracas",
+      "dimension": "Instrument fabriqué avec des graines et des calebasses. Utilisé lors des cérémonies interdites. Symbole de la résistance musicale (Simpson 1970)."
+    },
+    {
+      "nomCreole": "Kont",
+      "nomFr": "Conte traditionnel",
+      "dimension": "Récits transmis oralement pour préserver l'histoire africaine. Symbole de la résistance par la mémoire (Hurbon 1972)."
+    },
+    {
+      "nomCreole": "Bèlé",
+      "nomFr": "Danse traditionnelle",
+      "dimension": "Danse interdite, pratiquée en secret lors des veillées. Symbole de la résistance par la tradition (Bangou 1992)."
+    },
+    {
+      "nomCreole": "Chanté mas",
+      "nomFr": "Chant masqué",
+      "dimension": "Chants codés utilisés pour transmettre des messages de révolte. Symbole de la résistance par la musique (Simpson 1970)."
+    },
+    {
+      "nomCreole": "Jwé ka",
+      "nomFr": "Jeu de ka",
+      "dimension": "Jeu de société traditionnel, pratiqué en secret pour préserver les liens sociaux. Symbole de la résistance par la cohésion (Bangou 1992)."
+    }
+  ],
+  "floreBeaute": [
+    {
+      "nomCreole": "Balizié",
+      "nomFr": "Balisier",
+      "culture": "Fleur emblème de la Guadeloupe. Inflorescence rouge en forme de bec. Présente dans le Parc National."
+    },
+    {
+      "nomCreole": "Lavand wouj",
+      "nomFr": "Alpinia / Lavande rouge",
+      "culture": "Plante ornementale des jardins créoles. Fleur rose-rouge dressée."
+    },
+    {
+      "nomCreole": "Ti-bòm",
+      "nomFr": "Fleur de porcelaine",
+      "culture": "Grande fleur exotique des jardins créoles. Très présente dans les marchés."
+    },
+    {
+      "nomCreole": "Zanno",
+      "nomFr": "Jasmin de nuit",
+      "culture": "Fleur au parfum nocturne intense. Associée aux esprits de la nuit dans la tradition créole."
+    },
+    {
+      "nomCreole": "Antwiriyòm",
+      "nomFr": "Anthurium",
+      "culture": "Fleur tropicale rouge-cœur. Très cultivée et exportée. Ornement des autels et cérémonies."
+    },
+    {
+      "nomCreole": "Flè d'awanj",
+      "nomFr": "Fleur d'oranger",
+      "culture": "Eau de fleur d'oranger utilisée dans les gâteaux et les prières créoles."
+    },
+    {
+      "nomCreole": "Kokotye",
+      "nomFr": "Coquelicot des Antilles",
+      "culture": "Fleur jaune des bords de route. Plante médicinale contre les inflammations."
+    },
+    {
+      "nomCreole": "Pié manyòk (fleur)",
+      "nomFr": "Fleur de manioc",
+      "culture": "La plante sacrée des Arawaks fleurit toute l'année dans les jardins créoles."
+    }
+  ],
+  "floreJardinage": [
+    {
+      "nomCreole": "Mango / Mango péyi",
+      "nomFr": "Mangue locale",
+      "culture": "20+ variétés locales. Fruit symbole de l'été guadeloupéen. Festival de la mangue en juillet."
+    },
+    {
+      "nomCreole": "Korosòl",
+      "nomFr": "Corossol",
+      "culture": "Fruit épineux vert, chair laiteuse. Jus incontournable. Les feuilles sont utilisées en tisane sédative."
+    },
+    {
+      "nomCreole": "Marakoudja",
+      "nomFr": "Fruit de la passion / Maracuja",
+      "culture": "Acide et sucré. Fruit identitaire de la Guadeloupe. Très présent en jus et sorbets."
+    },
+    {
+      "nomCreole": "Gwayav",
+      "nomFr": "Goyave",
+      "culture": "Chair rose fondante. Très parfumée. Transformée en gelée, pâte, jus. Arbre du jardin créole."
+    },
+    {
+      "nomCreole": "Papayi",
+      "nomFr": "Papaye",
+      "culture": "Chair orange vif. Consommée verte en salade (ti-ti), mûre en dessert. Enzyme digestive."
+    },
+    {
+      "nomCreole": "Ananas péyi",
+      "nomFr": "Ananas",
+      "culture": "Ananas local plus petit et plus sucré que les variétés industrielles."
+    },
+    {
+      "nomCreole": "Sitwèl / Prune sitwèl",
+      "nomFr": "Prune de Cythère / Pomme cythère",
+      "culture": "Fruit vert à chair crème. Consommé en jus, sorbet, confiture."
+    },
+    {
+      "nomCreole": "Sapotiy",
+      "nomFr": "Sapotille",
+      "culture": "Peau brune, chair caramélisée et fondante. Arôme unique."
+    },
+    {
+      "nomCreole": "Karanbol",
+      "nomFr": "Carambole",
+      "culture": "Forme d'étoile à la coupe. Chair rafraîchissante et juteuse."
+    },
+    {
+      "nomCreole": "Pomme-kannèl",
+      "nomFr": "Pomme cannelle / Cachiman",
+      "culture": "Fruit vert bosselé, chair blanche sucrée autour de pépins noirs."
+    },
+    {
+      "nomCreole": "Kenèt",
+      "nomFr": "Quenette / Chenette",
+      "culture": "Grappes de petites coques vertes, chair jaune tirant sur le litchi. Fruit de saison populaire."
+    },
+    {
+      "nomCreole": "Abwiko péyi",
+      "nomFr": "Abricot pays",
+      "culture": "Fine écorce brune, noyau unique. Confondu parfois avec l'abricot tropical."
+    },
+    {
+      "nomCreole": "Sèriz péyi",
+      "nomFr": "Cerise pays / Acérola",
+      "culture": "Très riche en vitamine C. Consommée en jus. Petit fruit rouge acidulé."
+    },
+    {
+      "nomCreole": "Koko / Kokoye",
+      "nomFr": "Noix de coco",
+      "culture": "Eau de coco vendue sur le bord des routes. Chair râpée en gâteaux créoles (tablette coco)."
+    },
+    {
+      "nomCreole": "Pomdó / Pomme-liane",
+      "nomFr": "Pomme d'or / Grenadille",
+      "culture": "Ressemble au maracuja, peau jaune lisse. Saveur douce différente."
+    },
+    {
+      "nomCreole": "Figye / Figue banane",
+      "nomFr": "Banane dessert",
+      "culture": "Banane classique. Transformée en flambée, confitures, chips."
+    },
+    {
+      "nomCreole": "Banann pòm",
+      "nomFr": "Banane pomme",
+      "culture": "Plus petite, plus sucrée. Très appréciée des locaux."
+    },
+    {
+      "nomCreole": "Pwayo / Poyo",
+      "nomFr": "Banane plantain",
+      "culture": "Banane verte cuisinée en légume : frite, bouillie, en gratin. Base de la cuisine créole."
+    },
+    {
+      "nomCreole": "Kalbas",
+      "nomFr": "Calebasse",
+      "culture": "Fruit non comestible. Utilisé comme récipient, instrument de musique (ka) et objet rituel du quimbois."
+    },
+    {
+      "nomCreole": "Friyapen",
+      "nomFr": "Fruit à pain",
+      "culture": "Gros fruit vert cuisiné comme une fécule. Frites, baguette, gratin. Héritage amérindien."
+    },
+    {
+      "nomCreole": "Grenad péyi",
+      "nomFr": "Grenade",
+      "culture": "Fruit d'ornement et de sirop. Les Arawaks le cultivaient déjà."
+    },
+    {
+      "nomCreole": "Tamaren",
+      "nomFr": "Tamarin",
+      "culture": "Gousse brun-rouge. Sirop rafraîchissant. Utilisé en médecine créole pour le transit."
+    },
+    {
+      "nomCreole": "Awoka",
+      "nomFr": "Avocat",
+      "culture": "Très présent dans la cuisine créole. Consommé cru avec citron et piment."
+    },
+    {
+      "nomCreole": "Pòm malaka / Malaka",
+      "nomFr": "Pomme malacca / Pomme d'eau",
+      "culture": "Fruit en forme de petite poire, peau rouge pourpre luisante, chair blanche croquante et parfumée, très désaltérante. Consommé cru, en jus ou en gelée. Fructification de mars à juin. Arbre ornemental aux fleurs fuchsia spectaculaires. Fleurs comestibles ajoutées aux salades. Usage médicinal : fleurs astringentes contre la diarrhée."
+    },
+    {
+      "nomCreole": "Pòm sirèt / Girembèl",
+      "nomFr": "Pomme surette / Groseille pays",
+      "culture": "Petit fruit jaune citron très acidulé, chair croquante autour d'un noyau. Consommé en confiture, punch ou nature. Se ramasse en grappes."
+    },
+    {
+      "nomCreole": "Pròn mombin / Mombin jaune",
+      "nomFr": "Prune mombin",
+      "culture": "Fruit oblong à chair jaune et sucrée autour d'un noyau fibreux. Jus, sorbet, liqueur. Arbre sauvage des mornes."
+    },
+    {
+      "nomCreole": "Dachine",
+      "nomFr": "Dachine / Taro",
+      "culture": "Tubercule fondant. Héritage amérindien. Consommé bouilli, en gratin ou en purée."
+    },
+    {
+      "nomCreole": "Ziyam",
+      "nomFr": "Igname",
+      "culture": "Grande racine tropicale. Nombreuses variétés locales. Base de la cuisine créole."
+    },
+    {
+      "nomCreole": "Manyòk",
+      "nomFr": "Manioc",
+      "culture": "Racine sacrée des Arawaks. Transformée en farine, cassave (galette), ou bouillie."
+    },
+    {
+      "nomCreole": "Madè",
+      "nomFr": "Madère",
+      "culture": "Tubercule à texture ferme. Absorbe bien les sauces créoles."
+    },
+    {
+      "nomCreole": "Jiramòn / Giraumon",
+      "nomFr": "Giraumon",
+      "culture": "Courge locale. Soupe, purée, gratin. Proche de la citrouille."
+    },
+    {
+      "nomCreole": "Christofen / Chayote",
+      "nomFr": "Christophine",
+      "culture": "Aussi appelée chouchou. Gratinée ou en gratin, très répandue en cuisine créole."
+    },
+    {
+      "nomCreole": "Pwa dangow / Pois d'angole",
+      "nomFr": "Pois d'Angole",
+      "culture": "Légumineuse du repas de Noël en Guadeloupe. Préparé en colombo ou en ragoût."
+    },
+    {
+      "nomCreole": "Gombo",
+      "nomFr": "Gombo / Okra",
+      "culture": "Légume hérité des esclaves africains. Utilisé pour épaissir les soupes et ragoûts créoles."
+    },
+    {
+      "nomCreole": "Bred chouk / Chou caraïbe",
+      "nomFr": "Chou caraïbe",
+      "culture": "Feuilles du dachine. Utilisées en court-bouillon de poisson."
+    },
+    {
+      "nomCreole": "Manguié",
+      "nomFr": "Manguier",
+      "culture": "Arbre tuteur du jardin. Ombrage pour les autres plants. 20+ variétés locales."
+    },
+    {
+      "nomCreole": "Bananié / Figié",
+      "nomFr": "Bananier",
+      "culture": "Trio fondateur du jardin créole avec manguier et ananas. Feuilles utilisées pour cuisson et emballage."
+    },
+    {
+      "nomCreole": "Kokotié",
+      "nomFr": "Cocotier",
+      "culture": "Arbre de protection et de subsistance. Eau, chair, huile, feuilles tressées."
+    },
+    {
+      "nomCreole": "Friyapen / Châtaignié péyi",
+      "nomFr": "Arbre à pain / Châtaignier",
+      "culture": "Arbre nourricier par excellence. Le fruit à pain peut nourrir 5 personnes. Héritage amérindien."
+    },
+    {
+      "nomCreole": "Gwayavié",
+      "nomFr": "Goyavier",
+      "culture": "Arbre semi-sauvage très présent dans les mornes. Fruits, gelée, bois de chauffe."
+    },
+    {
+      "nomCreole": "Korossolié",
+      "nomFr": "Corossolier",
+      "culture": "Ombre et fruit. Feuilles récoltées pour tisane sédative."
+    },
+    {
+      "nomCreole": "Malakié / Pòm malaka",
+      "nomFr": "Pommier malacca",
+      "culture": "Arbre ornemental et fruitier à fleurs fuchsia spectaculaires. Ombrage."
+    },
+    {
+      "nomCreole": "Karanbolié",
+      "nomFr": "Carambolier",
+      "culture": "Arbre de taille moyenne. Fruit étoilé désaltérant. Ombre légère."
+    },
+    {
+      "nomCreole": "Sapotiyié",
+      "nomFr": "Sapotillier",
+      "culture": "Grand arbre lent à croître. Fruit très sucré. Latex utilisé comme gomme naturelle."
+    },
+    {
+      "nomCreole": "Sitwèlié / Mombiné",
+      "nomFr": "Prunier cythère / Mombin",
+      "culture": "Arbre caduc marquant les saisons. Jus et sorbets locaux."
+    },
+    {
+      "nomCreole": "Tamariné",
+      "nomFr": "Tamarinier",
+      "culture": "Grand arbre de case. Gousses acidulées. Sirop rafraîchissant. Médecine créole."
+    },
+    {
+      "nomCreole": "Zakasié / Jacquier",
+      "nomFr": "Jacquier",
+      "culture": "Arbre géant à fruits énormes. Fruit mangé mûr ou vert en légume."
+    },
+    {
+      "nomCreole": "Kalbasi",
+      "nomFr": "Calebassier",
+      "culture": "Fruit non comestible. Calebasses utilisées comme récipients, instruments, objets rituels."
+    },
+    {
+      "nomCreole": "Pòm kajou",
+      "nomFr": "Pommier cajou / Anacardier",
+      "culture": "Fruit rouge-jaune juteux + noix de cajou. Double récolte."
+    },
+    {
+      "nomCreole": "Nèflié",
+      "nomFr": "Néflier du Japon",
+      "culture": "Petit arbre des jardins créoles. Fruits sucrés-acidulés en grappes."
+    },
+    {
+      "nomCreole": "Grennadié",
+      "nomFr": "Grenadier",
+      "culture": "Arbre ornemental et fruitier. Jus de grenade et sirop."
+    },
+    {
+      "nomCreole": "Orangié / Sitwonié",
+      "nomFr": "Oranger / Citronnier",
+      "culture": "Agrumes incontournables. Jus, zestes, fleurs d'oranger pour pâtisserie."
+    },
+    {
+      "nomCreole": "Chadékié",
+      "nomFr": "Chadéquier / Pomélo",
+      "culture": "Grand agrume. Zeste utilisé en cuisine et en médecine créole."
+    },
+    {
+      "nomCreole": "Awokasié",
+      "nomFr": "Avocatier",
+      "culture": "Arbre semi-sauvage dans les jardins. Fruit gras consommé cru avec citron et sel."
+    },
+    {
+      "nomCreole": "Papayié",
+      "nomFr": "Papayer",
+      "culture": "Croissance rapide. Fruit toute l'année. Feuilles et latex aux vertus médicinales."
+    },
+    {
+      "nomCreole": "Ikanié / Icaquier",
+      "nomFr": "Icaquier / Prunier pays",
+      "culture": "Petit arbre de haie. Fruit violet-rouge en confiture. Arbre de bordure du jardin."
+    },
+    {
+      "nomCreole": "Kanaié / Kannié",
+      "nomFr": "Cannier / Canne à sucre",
+      "culture": "Bordure protectrice du jardin créole. Canne à mâcher et production de rhum-pays."
+    },
+    {
+      "nomCreole": "Piman (toutes variétés)",
+      "nomFr": "Piments antillais",
+      "culture": "Arbuste pérenne omniprésent. Du piment végétarien au bonda man jak. Base de tout assaisonnement."
+    },
+    {
+      "nomCreole": "Kowosol / Christofen",
+      "nomFr": "Christophine",
+      "culture": "Liane grimpante sur les haies. Fruit léger en gratin ou sauté."
+    },
+    {
+      "nomCreole": "Tomato péyi",
+      "nomFr": "Tomate locale",
+      "culture": "Variété locale plus petite et plus acide que les variétés industrielles."
+    },
+    {
+      "nomCreole": "Bèlizèl / Balisié",
+      "nomFr": "Balisier",
+      "culture": "Emblème de la Guadeloupe. Fleur rouge en bec. Délimite les zones du jardin."
+    },
+    {
+      "nomCreole": "Ibiskis / Zòsèy",
+      "nomFr": "Hibiscus / Oseille pays",
+      "culture": "Calices rouges en jus (bissap). Anti-cholestérol. Plante de haie ornementale."
+    },
+    {
+      "nomCreole": "Gombo",
+      "nomFr": "Gombo / Okra",
+      "culture": "Légume africain. Épaissit les soupes et ragoûts. Floraison ornementale."
+    },
+    {
+      "nomCreole": "Jenjanm",
+      "nomFr": "Gingembre",
+      "culture": "Rhizome aromatique et médicinal. Tisanes, marinades, boissons rafraîchissantes."
+    },
+    {
+      "nomCreole": "Lavand wouj / Alpinia",
+      "nomFr": "Alpinia / Lavande rouge",
+      "culture": "Grande plante ornementale (3-4 m). Délimite et embellit le jardin."
+    },
+    {
+      "nomCreole": "Antwiriyòm",
+      "nomFr": "Anthurium",
+      "culture": "Fleur tropicale rouge en cœur. Ornement des cérémonies et autels."
+    },
+    {
+      "nomCreole": "Ti-bòm / Flè porslèn",
+      "nomFr": "Fleur de porcelaine",
+      "culture": "Grande fleur exotique. Vendue sur les marchés. Ornement du jardin."
+    },
+    {
+      "nomCreole": "Zanno / Jasmin nwit",
+      "nomFr": "Jasmin de nuit",
+      "culture": "Arbuste au parfum nocturne intense. Planté aux abords de la case pour la fraîcheur."
+    },
+    {
+      "nomCreole": "Alowes",
+      "nomFr": "Aloès vera",
+      "culture": "Arbuste succulent en bordure. Gel cicatrisant. Plante médecine de premier secours."
+    },
+    {
+      "nomCreole": "Vaniy",
+      "nomFr": "Vanilier",
+      "culture": "Liane épiphyte sur les troncs. Gousses parfumées. Cultivée à Pointe-Noire."
+    },
+    {
+      "nomCreole": "Kakaoye",
+      "nomFr": "Cacaoyer",
+      "culture": "Arbre mi-ombre des sous-bois du jardin. Cabosse transformée en chocolat artisanal."
+    },
+    {
+      "nomCreole": "Manyòk",
+      "nomFr": "Manioc",
+      "culture": "Racine sacrée arawak. Transformée en cassave (galette), farine, ou bouillie."
+    },
+    {
+      "nomCreole": "Iyam",
+      "nomFr": "Igname",
+      "culture": "Nombreuses variétés locales. Tubercule bouillie ou en purée. Culture en buttes."
+    },
+    {
+      "nomCreole": "Dachine",
+      "nomFr": "Dachine / Taro",
+      "culture": "Tubercule fondant. Feuilles (brede chouk) cuisinées en court-bouillon de poisson."
+    },
+    {
+      "nomCreole": "Madè",
+      "nomFr": "Madère",
+      "culture": "Tubercule ferme absorbant les sauces créoles. Souvent mélangé à l'igname."
+    },
+    {
+      "nomCreole": "Patàt douce",
+      "nomFr": "Patate douce",
+      "culture": "Racine sucrée. Desserts, gratins, beignets. Feuilles comestibles en légume vert."
+    }
   ]
 }

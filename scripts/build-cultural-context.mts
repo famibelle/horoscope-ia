@@ -112,15 +112,30 @@ const medicinal = parseMedicinal();
 result.medicinal = medicinal;
 console.log(`\nmedicinal (Rimèd razié) : ${medicinal.length} entrées`);
 
-// Pratiques collectives → amitié
+// Pratiques collectives → amitié (horoscope)
 const resistancePratiques = parseResistance(['Pratique']);
 result.resistancePratiques = resistancePratiques;
 console.log(`resistancePratiques : ${resistancePratiques.length} entrées`);
 
-// Objets rituels + lieux spirituels de résistance → prédiction
+// Objets rituels + lieux spirituels → prédiction (horoscope) + esprit (ambiance)
 const resistanceObjets = parseResistance(['Objet', 'Lieu / Résistance spirituelle']);
 result.resistanceObjets = resistanceObjets;
 console.log(`resistanceObjets : ${resistanceObjets.length} entrées`);
+
+// Objets + pratiques de résistance culturelle → maison (ambiance)
+const resistanceMaison = parseResistance(['Objet / Résistance culturelle', 'Pratique / Résistance culturelle']);
+result.resistanceMaison = resistanceMaison;
+console.log(`resistanceMaison : ${resistanceMaison.length} entrées`);
+
+// Flore ornementale/sacrée → beauté (ambiance)
+const floreBeaute = parseFlore(['Ornementale / Sacrée']);
+result.floreBeaute = floreBeaute;
+console.log(`floreBeaute : ${floreBeaute.length} entrées`);
+
+// Flore alimentaire/jardin créole → jardinage (ambiance)
+const floreJardinage = parseFlore(['Légume / Racine', 'Fruit', 'Arbre fruitier', 'Plante racine', 'Arbuste / Culture']);
+result.floreJardinage = floreJardinage;
+console.log(`floreJardinage : ${floreJardinage.length} entrées`);
 
 writeFileSync(
   '/home/medhi/SourceCode/horoscope-ia/lib/cultural-context-data.json',

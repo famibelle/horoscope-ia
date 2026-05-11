@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signs } from '@/lib/signs-data';
 import { detectEdition, todayGuadeloupe } from '@/lib/edition';
-import { getCulturalContext } from '@/lib/cultural-context';
+import {
+  getCulturalContext,
+  getAmbianceBienetre,
+  getAmbianceBeaute,
+  getAmbianceEsprit,
+  getAmbianceMaison,
+  getAmbianceJardinage,
+} from '@/lib/cultural-context';
 import { computeScores } from '@/lib/scores';
 import type { WeatherData } from '@/app/api/weather/route';
 import type { Edition } from '@/private/maryse-prompt';
@@ -52,6 +59,12 @@ export async function GET(
   const otherSigns = signs.filter((s) => s.id !== signId).map((s) => s.id);
   const culturalContext = getCulturalContext(signId, today);
 
+  const luneBienetre  = getAmbianceBienetre(signId, today);
+  const luneBeaute    = getAmbianceBeaute(signId, today);
+  const luneEsprit    = getAmbianceEsprit(signId, today);
+  const luneMaison    = getAmbianceMaison(signId, today);
+  const luneJardinage = getAmbianceJardinage(signId, today);
+
   // Récupère la météo de Pointe-à-Pitre pour le calcul des scores
   let weather: WeatherData;
   try {
@@ -86,11 +99,11 @@ Réponds avec un objet JSON valide et ces clés exactes :
   "chiffrePorteBonheur": <entier 1-99, de préférence un nombre premier (2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97)>,
   "compatibilite": ["<signId1>", "<signId2>"],
   "lune": {
-    "bienetre": "conseil bien-être lié à la ${lunarPhase}, ancré Karukera, 2 phrases",
-    "beaute": "conseil beauté/soin naturel caribéen, 2 phrases",
-    "esprit": "conseil mental ou spirituel, lié à la phase lunaire, 2 phrases",
-    "maison": "conseil maison/espace de vie créole, 2 phrases",
-    "jardinage": "conseil jardinage créole (igname, christophine, balisier, canne…), 2 phrases"
+    "bienetre": "conseil bien-être ancré sur le rimèd razié du jour : ${luneBienetre.nomCreole} (${luneBienetre.nomFr}) — ${luneBienetre.usage}. Mentionne le nom créole et son usage pour le corps. 2 phrases.",
+    "beaute": "conseil beauté/soin naturel ancré sur la plante du jour : ${luneBeaute.nomCreole} (${luneBeaute.nomFr}) — ${luneBeaute.culture}. Mentionne le nom créole et son usage beauté ou soin. 2 phrases.",
+    "esprit": "conseil mental ou spirituel ancré sur l'objet ou lieu de résistance du jour : ${luneEsprit.nomCreole} (${luneEsprit.nomFr}) — ${luneEsprit.dimension}. Lié aussi à la ${lunarPhase}. 2 phrases.",
+    "maison": "conseil maison/espace de vie créole ancré sur l'objet ou pratique du jour : ${luneMaison.nomCreole} (${luneMaison.nomFr}) — ${luneMaison.dimension}. 2 phrases.",
+    "jardinage": "conseil jardinage créole ancré sur la plante du jour : ${luneJardinage.nomCreole} (${luneJardinage.nomFr}) — ${luneJardinage.culture}. Mentionne le nom créole et comment la cultiver ou l'utiliser selon la ${lunarPhase}. 2 phrases."
   }
 }
 

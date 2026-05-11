@@ -29,6 +29,9 @@ const typedData = data as unknown as {
   medicinal: MedicinalEntry[];
   resistancePratiques: ResistanceEntry[];
   resistanceObjets: ResistanceEntry[];
+  resistanceMaison: ResistanceEntry[];
+  floreBeaute: CulturalEntry[];
+  floreJardinage: CulturalEntry[];
 } & Record<string, SignPool>;
 
 /* ── Commemorations annuelles (MM-DD) ──────────────────────────────────────── */
@@ -110,6 +113,38 @@ export function getSignLieu(signId: string, date: string): CulturalEntry {
   if (!pool?.lieux?.length) return { nomCreole: '', nomFr: '', culture: '' };
   const seed = hash(`${signId}|${date}|lieu`);
   return pick(pool.lieux, seed, 0);
+}
+
+/* ── Ambiance lune pickers ──────────────────────────────────────────────────── */
+
+export function getAmbianceBienetre(signId: string, date: string): MedicinalEntry {
+  const pool = typedData.medicinal;
+  const seed = hash(`${signId}|${date}|ambiance-bienetre`);
+  return pool[seed % pool.length];
+}
+
+export function getAmbianceBeaute(signId: string, date: string): CulturalEntry {
+  const pool = typedData.floreBeaute;
+  const seed = hash(`${signId}|${date}|ambiance-beaute`);
+  return pick(pool, seed, 0);
+}
+
+export function getAmbianceEsprit(signId: string, date: string): ResistanceEntry {
+  const pool = typedData.resistanceObjets;
+  const seed = hash(`${signId}|${date}|ambiance-esprit`);
+  return pool[seed % pool.length];
+}
+
+export function getAmbianceMaison(signId: string, date: string): ResistanceEntry {
+  const pool = typedData.resistanceMaison;
+  const seed = hash(`${signId}|${date}|ambiance-maison`);
+  return pool[seed % pool.length];
+}
+
+export function getAmbianceJardinage(signId: string, date: string): CulturalEntry {
+  const pool = typedData.floreJardinage;
+  const seed = hash(`${signId}|${date}|ambiance-jardinage`);
+  return pick(pool, seed, 0);
 }
 
 /* ── Ambiance context block (unchanged) ────────────────────────────────────── */
