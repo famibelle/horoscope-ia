@@ -12,20 +12,60 @@ interface AudioPlayerProps {
 type PlayerState = 'idle' | 'generating' | 'ready' | 'playing' | 'paused';
 
 const LOADING_MESSAGES = [
-  "L'igwann observe le ciel ce matin…",
-  "Consultation de la Soufrière…",
-  "Le colibri consulte les fleurs…",
-  "Lecture des vents alizés…",
-  "La mangrove écoute…",
-  "Interrogation des ancêtres…",
-  "La frégate scrute l'horizon…",
-  "Lecture de la météo de Pointe-à-Pitre…",
-  "Le gwoka résonne dans la nuit…",
-  "Maryse pose sa plume…",
-  "Le lamantin remonte vers la surface…",
-  "Elle choisit ses mots…",
-  "La mer des Caraïbes parle…",
-  "Le souffle se prépare…",
+  "Je consulte l’igwann qui scrute le ciel de Karukera…",
+  "J’écoute la Soufrière murmurer ses secrets…",
+  "Je demande au colibri ce qu’il a vu dans les fleurs…",
+  "Je lis les vents alizés qui traversent l’archipel…",
+  "La mangrove me chuchote ce que la mer ne dit pas…",
+  "J’interroge les ancêtres, ils alignent les mots…",
+  "La frégate me montre l’horizon de ton destin…",
+  "Je décrypte la météo de Pointe-à-Pitre comme un présage…",
+  "Le gwoka me dicte le rythme de ta journée…",
+  "Je pose ma plume, les esprits prennent la main…",
+  "Le lamantin me remonte des profondeurs ce que tu dois savoir…",
+  "Je pèse chaque syllabe avant de te les offrir…",
+  "La mer des Caraïbes me parle en langues anciennes…",
+  "Je rassemble mon souffle pour te livrer l’oracle…",
+  "Je tends l’oreille aux vagues de Deshaies…",
+  "Le flamboyant m’éblouit de ses feuilles en feu…",
+  "J’invoque les esprits de Matouba, ils veillent sur toi…",
+  "Le pélican me trace dans le ciel les lignes de ta vie…",
+  "Je me penche sur la rivière Salée, elle me murmure ton avenir…",
+  "Les tambours du Carnaval battent dans mes tempes pour toi…",
+  "Je suis le cabri qui escalade les mornes de ton signe…",
+  "La vanille parfume les mots que je prépare…",
+  "J’écoute les alizés porter les voix de ceux qui savent…",
+  "Le manguier m’offre ses fruits lourds de sagesse…",
+  "Je sens la Soufrière gronder doucement sous mes pieds…",
+  "Le zandoli me montre comment changer de couleur avec le destin…",
+  "Les chutes du Carbet chantent la mélodie de ta semaine…",
+  "Je me balance avec le kokoye au rythme de ton horoscope…",
+  "Les étoiles de Pointe Allègre s’alignent pour ton signe…",
+  "Le balisier rouge s’ouvre et me révèle ton intention…",
+  "Je vois les mains de Solitude tisser les fils de ton destin…",
+  "Le quimbois protège mes paroles avant qu’elles ne t’atteignent…",
+  "Les crabes rouges dansent sur la plage en ton honneur…",
+  "Le gommier me murmure les secrets que la forêt cache…",
+  "Je noue les madras qui colorieront ton chemin…",
+  "Le lambi sonne l’appel de ton signe à travers les mornes…",
+  "Je suis la tortue karet qui nage vers ton futur…",
+  "Les fleurs de corossol s’ouvrent à la nuit pour t’éclairer…",
+  "Je saupoudre ton jour de colombo, épice de chance…",
+  "Je vois les pirogues glisser vers ton destin comme sur l’eau…",
+  "Le morne veille sur mes pas pendant que je prépare ton oracle…",
+  "Les fleurs d’hibiscus parfument l’air de tes possibilités…",
+  "Je laisse le rhum arrangé infuser de patience dans mes mots…",
+  "Je pèse ton destin dans les cases à peser de mon esprit…",
+  "Le son du ka bat le rythme de ta vie dans ma tête…",
+  "Je suis les lucioles qui éclairent ton chemin dans l’obscurité…",
+  "Je purifie mon discours avec le sel de la mer…",
+  "Les herbes de la savane me guident vers les bons conseils…",
+  "J’attends que le vent de l’est m’apporte tes nouvelles…",
+  "Les grains de café réveillent mon intuition pour toi…",
+  "Je remplis la calebasse des mots sacrés à te transmettre…",
+  "Je marche avec les ombres de la nuit qui protègent ton âme…",
+  "Je sens le soleil de Grande-Terre réchauffer mon cœur et mes mots…",
+  "Les vagues de la Pointe des Châteaux sculptent ton destin sous mes yeux…",
 ];
 
 export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
@@ -33,22 +73,29 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
   const [progress, setProgress]   = useState(0);
   const [duration, setDuration]   = useState(0);
   const [error, setError]         = useState<string | null>(null);
-  const [loadingMsg, setLoadingMsg] = useState(LOADING_MESSAGES[0]);
+  const [loadingMsg, setLoadingMsg] = useState(() =>
+    LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)]
+  );
+  const [showLoading, setShowLoading] = useState(false);
   const audioRef   = useRef<HTMLAudioElement | null>(null);
   const blobUrlRef = useRef<string | null>(null);
-  const msgIndexRef = useRef(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isGenerating = state === 'generating';
+  const isPlaying    = state === 'playing';
+  const hasAudio     = state === 'ready' || state === 'playing' || state === 'paused';
 
   // Cycle through loading messages during generation
   useEffect(() => {
-    if (state !== 'generating') return;
-    msgIndexRef.current = 0;
-    setLoadingMsg(LOADING_MESSAGES[0]);
+    if (!showLoading) return;
+
+    // Démarrer le défilement (toutes les 1000ms)
     const interval = setInterval(() => {
-      msgIndexRef.current = (msgIndexRef.current + 1) % LOADING_MESSAGES.length;
-      setLoadingMsg(LOADING_MESSAGES[msgIndexRef.current]);
-    }, 2200);
+      const newIndex = Math.floor(Math.random() * LOADING_MESSAGES.length);
+      setLoadingMsg(LOADING_MESSAGES[newIndex]);
+    }, 1000);
+
     return () => clearInterval(interval);
-  }, [state]);
+  }, [showLoading]);
 
   // Reset when sign/text changes
   useEffect(() => {
@@ -60,17 +107,37 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
       URL.revokeObjectURL(blobUrlRef.current);
       blobUrlRef.current = null;
     }
-    setState('idle');
     setProgress(0);
     setDuration(0);
     setError(null);
   }, [text]);
 
   async function generate() {
-    if (!text) return;
+    // Nettoyer l'ancien audio si présent
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    if (blobUrlRef.current) {
+      URL.revokeObjectURL(blobUrlRef.current);
+      blobUrlRef.current = null;
+    }
+    
+    // Afficher un message de loading immédiat
+    const initialMsgIndex = Math.floor(Math.random() * LOADING_MESSAGES.length);
+    setLoadingMsg(LOADING_MESSAGES[initialMsgIndex]);
+    
     setState('generating');
+    setShowLoading(true);
     setError(null);
+
     try {
+      if (!text) {
+        setError('Aucun texte à narrer');
+        // NE PAS mettre setShowLoading(false) pour garder les messages
+        return;
+      }
+
       const res = await fetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -98,12 +165,13 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
       });
 
       setState('ready');
-      // Auto-play after generation
       audio.play();
       setState('playing');
+      setShowLoading(false);
     } catch (e) {
-      console.error(e);
       setError('Génération audio indisponible.');
+      clearInterval(interval);
+      setShowLoading(false);
       setState('idle');
     }
   }
@@ -119,10 +187,6 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
       setState('playing');
     }
   }
-
-  const isGenerating = state === 'generating';
-  const isPlaying    = state === 'playing';
-  const hasAudio     = state === 'ready' || state === 'playing' || state === 'paused';
 
   const formatTime = (sec: number) => {
     if (!sec || !isFinite(sec)) return '—';
@@ -198,7 +262,7 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
           {/* Play/Generate button */}
           <motion.button
             onClick={hasAudio ? togglePlay : generate}
-            disabled={isGenerating || !text}
+            disabled={showLoading}
             className="relative flex-shrink-0 w-16 h-16 rounded-full flex items-center justify-center focus:outline-none disabled:opacity-40"
             style={{
               background: 'linear-gradient(135deg, #7c3aed, #3b82f6)',
@@ -210,7 +274,7 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
             whileTap={!isGenerating ? { scale: 0.95 } : {}}
           >
             <AnimatePresence mode="wait">
-              {isGenerating ? (
+              {showLoading ? (
                 <motion.div key="loading" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
                   <Loader2 size={22} className="text-white animate-spin" />
                 </motion.div>
@@ -240,7 +304,7 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
               {signName ? `Horoscope ${signName}` : 'Horoscope audio'}
             </p>
             <AnimatePresence mode="wait">
-              {isGenerating ? (
+              {showLoading ? (
                 <motion.p
                   key={loadingMsg}
                   className="text-violet-300/60 text-sm mt-1 italic"
