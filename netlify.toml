@@ -2,6 +2,9 @@
   command = "npm run build"
   publish = ".next"
 
+[build.processing.git]
+  submodules = false
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 

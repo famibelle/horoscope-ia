@@ -1,0 +1,2 @@
+# Netlify build configuration
+# This file forces Netlify to skip submodule initialization
