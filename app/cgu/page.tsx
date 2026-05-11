@@ -6,11 +6,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'CGU - Horoscope Karukera | Conditions d\'Utilisation de l\'Horoscope en Ligne',
     description: 'Lisez les CGU de Horoscope Karukera : règles d\'utilisation, droits et obligations pour profiter de nos horoscopes gratuits.',
-    url: 'https://horoscope-karukera.com/cgu',
+    url: 'https://horoscope-karukera.botiran.news/cgu',
     type: 'website',
   },
   alternates: {
-    canonical: 'https://horoscope-karukera.com/cgu',
+    canonical: 'https://horoscope-karukera.botiran.news/cgu',
   },
 };
 
@@ -19,7 +19,7 @@ export default function CGUPage() {
     <main className="max-w-4xl mx-auto px-4 py-12">
       <header className="mb-8">
         <h1 className="text-3xl font-bold text-ancestral-cream mb-2">Conditions Générales d&apos;Utilisation (CGU)</h1>
-        <p className="text-ancestral-cream/60 italic"><em>Dernière mise à jour : [Date]</em></p>
+        <p className="text-ancestral-cream/60 italic"><em>Dernière mise à jour : 11 mai 2026</em></p>
       </header>
 
       <section className="mb-8">

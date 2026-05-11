@@ -25,11 +25,16 @@ export default function MentionsLegalesPage() {
         <h2 className="text-2xl font-semibold text-ancestral-cream mb-4">Éditeur du Site</h2>
         <p className="text-ancestral-cream/80 leading-relaxed">
           Le site <strong className="text-ancestral-cream">Horoscope Karukera</strong> (ci-après « le Site ») est édité par :<br />
-          <strong className="text-ancestral-cream">[Ton Nom ou Raison Sociale]</strong><br />
-          [Adresse postale complète]<br />
-          [Code postal, Ville, Pays]<br />
-          Email : <a href="mailto:[ton-email]" className="text-ancestral-gold hover:underline">[ton-email]</a><br />
-          <em className="text-ancestral-cream/60">Pour les professionnels :</em> SIRET [XXX XXX XXX] – RCS [Ville]
+          <strong className="text-ancestral-cream">Botiran News</strong><br />
+          Paris, France<br />
+          Email : <a href="mailto:contact@botiran.news" className="text-ancestral-gold hover:underline">contact@botiran.news</a>
+        </p>
+      </section>
+
+      <section className="mb-8">
+        <h2 className="text-2xl font-semibold text-ancestral-cream mb-4">Directeur de la Publication</h2>
+        <p className="text-ancestral-cream/80 leading-relaxed">
+          Botiran News
         </p>
       </section>
 
@@ -37,9 +42,9 @@ export default function MentionsLegalesPage() {
         <h2 className="text-2xl font-semibold text-ancestral-cream mb-4">Hébergement</h2>
         <p className="text-ancestral-cream/80 leading-relaxed">
           Le Site est hébergé par :<br />
-          <strong className="text-ancestral-cream">[Nom de l&apos;hébergeur, ex: Vercel, OVH, Hostinger]</strong><br />
-          [Adresse de l&apos;hébergeur]<br />
-          Site web : <a href="[lien-hebergeur]" target="_blank" rel="noopener noreferrer" className="text-ancestral-gold hover:underline">[lien-hebergeur]</a>
+          <strong className="text-ancestral-cream">Netlify</strong><br />
+          2325 3rd Street, Suite 296, San Francisco, California 94107, États-Unis<br />
+          Site web : <a href="https://www.netlify.com" target="_blank" rel="noopener noreferrer" className="text-ancestral-gold hover:underline">https://www.netlify.com</a>
         </p>
       </section>
 
@@ -77,7 +82,7 @@ export default function MentionsLegalesPage() {
       <section className="mb-8">
         <h2 className="text-2xl font-semibold text-ancestral-cream mb-4">Droit Applicable</h2>
         <p className="text-ancestral-cream/80 leading-relaxed">
-          Les présentes mentions légales sont régies par le droit français. Tout litige sera soumis aux tribunaux compétents de [Ville].
+          Les présentes mentions légales sont régies par le droit français. Tout litige sera soumis aux tribunaux compétents de Paris.
         </p>
       </section>
 
@@ -85,6 +90,13 @@ export default function MentionsLegalesPage() {
         <h2 className="text-2xl font-semibold text-ancestral-cream mb-4">Contact</h2>
         <p className="text-ancestral-cream/80 leading-relaxed">
           Pour toute question : <a href="/contact" className="text-ancestral-gold hover:underline">nous contacter</a>.
+        </p>
+      </section>
+
+      <section className="mb-8">
+        <h2 className="text-2xl font-semibold text-ancestral-cream mb-4">Date de Mise à Jour</h2>
+        <p className="text-ancestral-cream/80 leading-relaxed">
+          Ces mentions légales ont été mises à jour le <strong className="text-ancestral-cream">11 mai 2026</strong>.
         </p>
       </section>
     </main>
