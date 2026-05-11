@@ -317,7 +317,7 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
               ) : (
               <p className="text-white/35 text-sm mt-1">
               {hasAudio && duration > 0
-                  ? `Narration IA · ${formatTime(duration)}`
+                  ? `Maryse parle · ${formatTime(duration)}`
                   : 'Votre signe lu par Maryse'}
               </p>
               )}
