@@ -141,13 +141,13 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
         className="text-center mb-8"
       >
         <p className="text-violet-300/45 text-xs uppercase tracking-[0.35em] mb-3">
-          Expérience immersive
+          La Voix des Ancêtres
         </p>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
-          🎧 Horoscope audio
+          Écoutez Maryse
         </h2>
         <p className="text-white/30 text-sm mt-2">
-          Écoutez Maryse
+          🎧 Horoscope audio
         </p>
       </motion.div>
 

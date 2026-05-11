@@ -278,6 +278,9 @@ function FilledCard({
             Rédigé par Maryse CondAI
           </p>
         )}
+        <p className="text-violet-300/70 text-xs mt-3 text-right">
+          lire la suite →
+        </p>
       </div>
 
       {/* Bottom glow bar */}

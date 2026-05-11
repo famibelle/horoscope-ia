@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Heart, Briefcase, Coins, Users, Sparkles, Eye, Activity } from 'lucide-react';
 import { signs } from '@/lib/signs-data';
 import { detectEdition, EDITION_LABELS } from '@/lib/edition';
+import AudioPlayer from '@/components/AudioPlayer';
 import type { Edition } from '@/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
 
@@ -392,6 +393,23 @@ export default function HoroscopeSignPage() {
                   </div>
                 </div>
               </motion.section>
+            )}
+            
+            {/* Horoscope audio */}
+            {horoscope && (
+              <div className="mt-16">
+                <AudioPlayer
+                  signName={sign.name}
+                  text={[
+                    horoscope.ouverture,
+                    horoscope.amour,
+                    horoscope.travail,
+                    horoscope.argent,
+                    horoscope.amitie,
+                    horoscope.prediction,
+                  ].filter(Boolean).join(' ')}
+                />
+              </div>
             )}
           </>
         )}
