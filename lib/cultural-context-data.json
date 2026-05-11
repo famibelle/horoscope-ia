@@ -7071,5 +7071,149 @@
       "nomFr": "Feuilles de bois d'inde",
       "usage": "Feuilles aromatiques des haies. Bouillons, bains rituels du quimbois."
     }
+  ],
+  "resistancePratiques": [
+    {
+      "nomCreole": "Langaj tanbou",
+      "nomFr": "Langage tambour",
+      "dimension": "Système de communication à distance utilisant les tambours pour transmettre des messages entre plantations. Permettait d'organiser des révoltes (Simpson 1970, LESC-CNRS)."
+    },
+    {
+      "nomCreole": "Kwèyòl",
+      "nomFr": "Créole guadeloupéen",
+      "dimension": "Langue créée par les esclaves pour communiquer sans être compris des maîtres. Symbole de la résistance linguistique (Bangou 1992)."
+    },
+    {
+      "nomCreole": "Gadèzafé",
+      "nomFr": "Guérisseur",
+      "dimension": "Praticien du quimbois, soignant les esclaves avec des plantes interdites. Symbole de la résistance médicale (Boucher 2008)."
+    },
+    {
+      "nomCreole": "Kominion",
+      "nomFr": "Commerce clandestin",
+      "dimension": "Échange de biens entre esclaves pour contourner l'économie de la plantation. Symbole de la résistance par l'autonomie (Wiltgen 1994)."
+    },
+    {
+      "nomCreole": "Kont",
+      "nomFr": "Conte traditionnel",
+      "dimension": "Récits transmis oralement pour préserver l'histoire africaine. Symbole de la résistance par la mémoire (Hurbon 1972)."
+    },
+    {
+      "nomCreole": "Bèlé",
+      "nomFr": "Danse traditionnelle",
+      "dimension": "Danse interdite, pratiquée en secret lors des veillées. Symbole de la résistance par la tradition (Bangou 1992)."
+    },
+    {
+      "nomCreole": "Kouskous",
+      "nomFr": "Couscous local",
+      "dimension": "Plat préparé avec des ingrédients locaux pour remplacer les rations imposées. Symbole de la résistance culinaire (archives ADG)."
+    },
+    {
+      "nomCreole": "Vèvè",
+      "nomFr": "Symbole rituel",
+      "dimension": "Dessin tracé sur le sol lors des cérémonies vaudou. Symbole de la connexion avec les loas (Boucher 2008)."
+    },
+    {
+      "nomCreole": "Chanté mas",
+      "nomFr": "Chant masqué",
+      "dimension": "Chants codés utilisés pour transmettre des messages de révolte. Symbole de la résistance par la musique (Simpson 1970)."
+    },
+    {
+      "nomCreole": "Pèch la mer",
+      "nomFr": "Pêche côtière",
+      "dimension": "Pratique clandestine pour compléter l'alimentation. Symbole de la résistance par l'autosuffisance (archives DASSA)."
+    },
+    {
+      "nomCreole": "Bwa bandé (rituel)",
+      "nomFr": "Rituel du bois bandé",
+      "dimension": "Cérémonie secrète pour renforcer la virilité et la protection. Symbole de la résistance par la tradition (Giberti 1989)."
+    },
+    {
+      "nomCreole": "Jwé ka",
+      "nomFr": "Jeu de ka",
+      "dimension": "Jeu de société traditionnel, pratiqué en secret pour préserver les liens sociaux. Symbole de la résistance par la cohésion (Bangou 1992)."
+    }
+  ],
+  "resistanceObjets": [
+    {
+      "nomCreole": "Tambou ka",
+      "nomFr": "Tambour de peau",
+      "dimension": "Instrument africain interdit par le Code Noir (1685). Fabriqué en secret avec des peaux de chèvre et du bois de gaïac. Vecteur de transmission de la mémoire africaine (Bangou 1992, archives coloniales)."
+    },
+    {
+      "nomCreole": "Banjo",
+      "nomFr": "Banjo",
+      "dimension": "Instrument fabriqué à partir de calebasses et de cordes de boyau. Utilisé pour les veillées interdites. Symbole de la résistance musicale (Simpson 1970)."
+    },
+    {
+      "nomCreole": "Zémis",
+      "nomFr": "Statuette sacrée",
+      "dimension": "Objet rituel taïno réapproprié par les esclaves pour les autels vaudou. Symbole de la connexion entre les cultures amérindiennes et africaines (Giberti 1989)."
+    },
+    {
+      "nomCreole": "Pwen",
+      "nomFr": "Point (objet rituel)",
+      "dimension": "Objet chargé d'énergie spirituelle, utilisé pour protéger les cases des esclaves. Symbole de la résistance par la magie (Boucher 2008)."
+    },
+    {
+      "nomCreole": "Panier tressé",
+      "nomFr": "Panier en latanier",
+      "dimension": "Fabriqué avec des feuilles de latanier, vendu clandestinement aux marchés. Symbole de l'autonomie artisanale (archives ADG)."
+    },
+    {
+      "nomCreole": "Chapeau paille",
+      "nomFr": "Chapeau de paille",
+      "dimension": "Tressé en secret pour remplacer les chapeaux imposés par les maîtres. Symbole de la résistance vestimentaire (Wiltgen 1994)."
+    },
+    {
+      "nomCreole": "Gade zafe",
+      "nomFr": "Bouteille rituelle",
+      "dimension": "Récipient en verre rempli d'objets sacrés (herbes, coquillages). Utilisé pour chasser les mauvais esprits. Symbole de la résistance par le quimbois (Hurbon 1972)."
+    },
+    {
+      "nomCreole": "Flûte en bambou",
+      "nomFr": "Flûte",
+      "dimension": "Instrument fabriqué en secret pour jouer des mélodies africaines. Symbole de la résistance musicale (Bangou 1992)."
+    },
+    {
+      "nomCreole": "Filet de pêche",
+      "nomFr": "Filet",
+      "dimension": "Fabriqué avec des fibres végétales pour pêcher en cachette. Symbole de la résistance par l'autosuffisance (archives DASSA)."
+    },
+    {
+      "nomCreole": "Miroir rituel",
+      "nomFr": "Miroir",
+      "dimension": "Utilisé dans les rituels vaudou pour communiquer avec les esprits. Symbole de la résistance par la divination (Boucher 2008)."
+    },
+    {
+      "nomCreole": "Maracas",
+      "nomFr": "Maracas",
+      "dimension": "Instrument fabriqué avec des graines et des calebasses. Utilisé lors des cérémonies interdites. Symbole de la résistance musicale (Simpson 1970)."
+    },
+    {
+      "nomCreole": "Pot en terre",
+      "nomFr": "Poterie",
+      "dimension": "Fabriqué en secret pour stocker les récoltes. Symbole de l'autonomie artisanale (INAO)."
+    },
+    {
+      "nomCreole": "Grot Dlo",
+      "nomFr": "Grotte d'eau",
+      "dimension": "Lieu sacré des Arawaks, utilisé par les marrons pour les rituels de protection. Symbole de la résistance par la spiritualité (INAO, archives ADG)."
+    },
+    {
+      "nomCreole": "Carrefour",
+      "nomFr": "Carrefour",
+      "dimension": "Lieu de rencontre des esprits dans le vaudou. Symbole de la résistance par la connexion avec l'invisible (Boucher 2008)."
+    },
+    {
+      "nomCreole": "Source",
+      "nomFr": "Source sacrée",
+      "dimension": "Lieu de rituels de purification. Symbole de la résistance par la spiritualité (Giberti 1989)."
+    },
+    {
+      "nomCreole": "Cimetière",
+      "nomFr": "Cimetière des esclaves",
+      "dimension": "Lieu de mémoire et de rituels pour honorer les ancêtres. Symbole de la résistance par la mémoire (Boucher 2008)."
+    }
   ]
 }

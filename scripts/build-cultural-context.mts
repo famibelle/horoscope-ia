@@ -82,6 +82,20 @@ function parseMedicinal(): MedicinalEntry[] {
     .filter(e => e.nomCreole && e.usage.length > 20);
 }
 
+interface ResistanceEntry {
+  nomCreole: string;
+  nomFr: string;
+  dimension: string;
+}
+
+function parseResistance(familleKeywords: string[]): ResistanceEntry[] {
+  const content = readFileSync(`${INDEX_CULTUREL}/kreyol_resistance_symbol_ref.md`, 'utf-8');
+  return parseMarkdownRows(content)
+    .filter(cols => familleKeywords.some(k => cols[0].includes(k)) && cols.length >= 6)
+    .map(cols => ({ nomCreole: cols[1], nomFr: cols[2], dimension: cols[5] }))
+    .filter(e => e.nomCreole && e.dimension.length > 20 && e.nomCreole !== 'N/A');
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const result: Record<string, any> = {};
 
@@ -97,6 +111,16 @@ for (const [signId, element] of Object.entries(SIGN_ELEMENTS)) {
 const medicinal = parseMedicinal();
 result.medicinal = medicinal;
 console.log(`\nmedicinal (Rimèd razié) : ${medicinal.length} entrées`);
+
+// Pratiques collectives → amitié
+const resistancePratiques = parseResistance(['Pratique']);
+result.resistancePratiques = resistancePratiques;
+console.log(`resistancePratiques : ${resistancePratiques.length} entrées`);
+
+// Objets rituels + lieux spirituels de résistance → prédiction
+const resistanceObjets = parseResistance(['Objet', 'Lieu / Résistance spirituelle']);
+result.resistanceObjets = resistanceObjets;
+console.log(`resistanceObjets : ${resistanceObjets.length} entrées`);
 
 writeFileSync(
   '/home/medhi/SourceCode/horoscope-ia/lib/cultural-context-data.json',

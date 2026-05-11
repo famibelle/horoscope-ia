@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signs } from '@/lib/signs-data';
 import { MARYSE_SYSTEM, buildHoroscopeUserPrompt } from '@/private/maryse-prompt';
-import { getMedicinalPlant } from '@/lib/cultural-context';
+import { getMedicinalPlant, getResistancePratique, getResistanceObjet } from '@/lib/cultural-context';
 import { detectEdition, todayGuadeloupe } from '@/lib/edition';
 import type { Edition } from '@/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
@@ -117,6 +117,8 @@ async function rewriteWithMistral(
   weather: string,
   edition: Edition,
   medicinal?: { nomCreole: string; nomFr: string; usage: string },
+  pratique?: { nomCreole: string; nomFr: string; dimension: string },
+  objet?: { nomCreole: string; nomFr: string; dimension: string },
 ): Promise<Record<string, string> | null> {
   const apiKey = process.env.MISTRAL_API_KEY;
   if (!apiKey) return null;
@@ -133,7 +135,7 @@ async function rewriteWithMistral(
       response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: MARYSE_SYSTEM },
-        { role: 'user',   content: buildHoroscopeUserPrompt(sign, rawText, weather, edition, medicinal) },
+        { role: 'user',   content: buildHoroscopeUserPrompt(sign, rawText, weather, edition, medicinal, pratique, objet) },
       ],
     }),
   });
@@ -175,6 +177,8 @@ export async function GET(
   try {
     const today = todayGuadeloupe();
     const medicinal = getMedicinalPlant(signId, today);
+    const pratique  = getResistancePratique(signId, today);
+    const objet     = getResistanceObjet(signId, today);
     const [rawText, weather] = await Promise.all([fetchRawHoroscope(signEn), fetchWeather()]);
 
     if (!rawText) {
@@ -184,7 +188,7 @@ export async function GET(
       );
     }
 
-    const structured = await rewriteWithMistral(signId, rawText, weather, edition, medicinal);
+    const structured = await rewriteWithMistral(signId, rawText, weather, edition, medicinal, pratique, objet);
 
     if (structured?.ouverture && structured?.amour && structured?.travail) {
       const teaser = await generateTeaser(sign.name, structured as Record<string, string>);

@@ -12,6 +12,12 @@ interface MedicinalEntry {
   usage: string;
 }
 
+export interface ResistanceEntry {
+  nomCreole: string;
+  nomFr: string;
+  dimension: string;
+}
+
 type SignPool = {
   faune: CulturalEntry[];
   flore: CulturalEntry[];
@@ -19,7 +25,11 @@ type SignPool = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const typedData = data as unknown as { medicinal: MedicinalEntry[] } & Record<string, SignPool>;
+const typedData = data as unknown as {
+  medicinal: MedicinalEntry[];
+  resistancePratiques: ResistanceEntry[];
+  resistanceObjets: ResistanceEntry[];
+} & Record<string, SignPool>;
 
 function hash(str: string): number {
   let h = 5381;
@@ -42,6 +52,18 @@ function shorten(text: string, max = 120): string {
 export function getMedicinalPlant(signId: string, date: string): MedicinalEntry {
   const pool = typedData.medicinal;
   const seed = hash(`${signId}|${date}|med`);
+  return pool[seed % pool.length];
+}
+
+export function getResistancePratique(signId: string, date: string): ResistanceEntry {
+  const pool = typedData.resistancePratiques;
+  const seed = hash(`${signId}|${date}|pratique`);
+  return pool[seed % pool.length];
+}
+
+export function getResistanceObjet(signId: string, date: string): ResistanceEntry {
+  const pool = typedData.resistanceObjets;
+  const seed = hash(`${signId}|${date}|objet`);
   return pool[seed % pool.length];
 }
 
