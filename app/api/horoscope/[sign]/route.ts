@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signs } from '@/lib/signs-data';
 import { MARYSE_SYSTEM, buildHoroscopeUserPrompt } from '@/private/maryse-prompt';
-import { getMedicinalPlant, getResistancePratique, getResistanceObjet } from '@/lib/cultural-context';
+import {
+  getMedicinalPlant,
+  getResistancePratique,
+  getResistanceObjet,
+  getSignFaune,
+  getSignFlore,
+  getSignLieu,
+  getHistoricalResonance,
+} from '@/lib/cultural-context';
 import { detectEdition, todayGuadeloupe } from '@/lib/edition';
 import type { Edition } from '@/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
@@ -119,6 +127,10 @@ async function rewriteWithMistral(
   medicinal?: { nomCreole: string; nomFr: string; usage: string },
   pratique?: { nomCreole: string; nomFr: string; dimension: string },
   objet?: { nomCreole: string; nomFr: string; dimension: string },
+  faune?: { nomCreole: string; nomFr: string; culture: string },
+  flore?: { nomCreole: string; nomFr: string; culture: string },
+  lieu?: { nomCreole: string; nomFr: string; culture: string },
+  historicalResonance?: string,
 ): Promise<Record<string, string> | null> {
   const apiKey = process.env.MISTRAL_API_KEY;
   if (!apiKey) return null;
@@ -135,7 +147,12 @@ async function rewriteWithMistral(
       response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: MARYSE_SYSTEM },
-        { role: 'user',   content: buildHoroscopeUserPrompt(sign, rawText, weather, edition, medicinal, pratique, objet) },
+        { role: 'user',   content: buildHoroscopeUserPrompt(
+          sign, rawText, weather, edition,
+          medicinal, pratique, objet,
+          faune, flore, lieu,
+          historicalResonance,
+        ) },
       ],
     }),
   });
@@ -175,10 +192,14 @@ export async function GET(
   }
 
   try {
-    const today = todayGuadeloupe();
-    const medicinal = getMedicinalPlant(signId, today);
-    const pratique  = getResistancePratique(signId, today);
-    const objet     = getResistanceObjet(signId, today);
+    const today             = todayGuadeloupe();
+    const medicinal         = getMedicinalPlant(signId, today);
+    const pratique          = getResistancePratique(signId, today);
+    const objet             = getResistanceObjet(signId, today);
+    const faune             = getSignFaune(signId, today);
+    const flore             = getSignFlore(signId, today);
+    const lieu              = getSignLieu(signId, today);
+    const historicalResonance = getHistoricalResonance(today);
     const [rawText, weather] = await Promise.all([fetchRawHoroscope(signEn), fetchWeather()]);
 
     if (!rawText) {
@@ -188,7 +209,12 @@ export async function GET(
       );
     }
 
-    const structured = await rewriteWithMistral(signId, rawText, weather, edition, medicinal, pratique, objet);
+    const structured = await rewriteWithMistral(
+      signId, rawText, weather, edition,
+      medicinal, pratique, objet,
+      faune, flore, lieu,
+      historicalResonance ?? undefined,
+    );
 
     if (structured?.ouverture && structured?.amour && structured?.travail) {
       const teaser = await generateTeaser(sign.name, structured as Record<string, string>);

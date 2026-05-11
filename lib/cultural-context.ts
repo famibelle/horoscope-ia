@@ -18,7 +18,7 @@ export interface ResistanceEntry {
   dimension: string;
 }
 
-type SignPool = {
+export type SignPool = {
   faune: CulturalEntry[];
   flore: CulturalEntry[];
   lieux: CulturalEntry[];
@@ -30,6 +30,26 @@ const typedData = data as unknown as {
   resistancePratiques: ResistanceEntry[];
   resistanceObjets: ResistanceEntry[];
 } & Record<string, SignPool>;
+
+/* ── Commemorations annuelles (MM-DD) ──────────────────────────────────────── */
+
+const COMMEMORATIONS: Record<string, string> = {
+  '05-27': "Journée des mémoires de l'esclavage en Guadeloupe — 27 mai 1848, Delgrès à Matouba, Solitude, les 87 000 affranchis.",
+  '05-10': "Journée nationale des mémoires de l'esclavage et de leurs abolitions (France).",
+  '04-27': "Anniversaire du décret Schœlcher (27 avril 1848) — l'abolition signée à Paris avant d'atteindre Karukera.",
+  '08-15': "Fête des Cuisinières de Pointe-à-Pitre — rituels, robes madras, messe et banquet créole.",
+  '07-14': "14 juillet — fête nationale mais aussi mémoire des Guadeloupéens morts dans les tranchées de 1914-1918.",
+  '11-11': "Armistice — les soldats guadeloupéens revenaient du front portant la Croix de Guerre et un statut toujours colonial.",
+  '02-06': "Lundi Gras — Guadeloupe en carnaval, les rues appartiennent aux vidés et aux masques.",
+  '03-03': "Mardi Gras — apogée du carnaval, Vaval brûle ce soir.",
+};
+
+export function getHistoricalResonance(date: string): string | null {
+  const mmdd = date.slice(5); // 'YYYY-MM-DD' → 'MM-DD'
+  return COMMEMORATIONS[mmdd] ?? null;
+}
+
+/* ── Helpers ────────────────────────────────────────────────────────────────── */
 
 function hash(str: string): number {
   let h = 5381;
@@ -49,6 +69,8 @@ function shorten(text: string, max = 120): string {
   return cut > 40 ? text.slice(0, cut + 1) : text.slice(0, max) + '…';
 }
 
+/* ── Global pools ───────────────────────────────────────────────────────────── */
+
 export function getMedicinalPlant(signId: string, date: string): MedicinalEntry {
   const pool = typedData.medicinal;
   const seed = hash(`${signId}|${date}|med`);
@@ -66,6 +88,31 @@ export function getResistanceObjet(signId: string, date: string): ResistanceEntr
   const seed = hash(`${signId}|${date}|objet`);
   return pool[seed % pool.length];
 }
+
+/* ── Per-sign pools (different seeds from ambiance to avoid duplicate picks) ── */
+
+export function getSignFaune(signId: string, date: string): CulturalEntry {
+  const pool = typedData[signId];
+  if (!pool?.faune?.length) return { nomCreole: '', nomFr: '', culture: '' };
+  const seed = hash(`${signId}|${date}|faune`);
+  return pick(pool.faune, seed, 0);
+}
+
+export function getSignFlore(signId: string, date: string): CulturalEntry {
+  const pool = typedData[signId];
+  if (!pool?.flore?.length) return { nomCreole: '', nomFr: '', culture: '' };
+  const seed = hash(`${signId}|${date}|flore`);
+  return pick(pool.flore, seed, 0);
+}
+
+export function getSignLieu(signId: string, date: string): CulturalEntry {
+  const pool = typedData[signId];
+  if (!pool?.lieux?.length) return { nomCreole: '', nomFr: '', culture: '' };
+  const seed = hash(`${signId}|${date}|lieu`);
+  return pick(pool.lieux, seed, 0);
+}
+
+/* ── Ambiance context block (unchanged) ────────────────────────────────────── */
 
 export function getCulturalContext(signId: string, date: string): string {
   const pool = typedData[signId];
