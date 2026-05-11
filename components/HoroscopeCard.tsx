@@ -118,7 +118,7 @@ function ErrorCard({
       }}
     >
       <div className="text-4xl mb-4">{sign.emoji}</div>
-      <p className="text-ancestral-cream/40 text-sm mb-6">{error}</p>
+      <p className="text-ancestral-cream/80 text-sm mb-6">{error}</p>
       <button
         onClick={onRetry}
         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm text-ancestral-cream/60 hover:text-ancestral-cream/80 transition-colors"
@@ -176,7 +176,7 @@ function FilledCard({
               >
                 {sign.name}
               </h2>
-              <p className="text-ancestral-cream/30 text-xs uppercase tracking-widest mt-0.5">
+              <p className="text-ancestral-cream/80 text-xs uppercase tracking-widest mt-0.5">
                 {sign.planet} · {sign.element}
               </p>
             </div>
@@ -193,11 +193,11 @@ function FilledCard({
             <p className="text-xs font-semibold text-ancestral-gold">
               {sign.nomKreyol}
             </p>
-            <p className="text-ancestral-cream/25 text-[10px] uppercase tracking-wider mt-0.5">totem</p>
+            <p className="text-ancestral-cream/70 text-[10px] uppercase tracking-wider mt-0.5">totem</p>
           </div>
         </div>
 
-        <p className="text-ancestral-cream/35 text-sm capitalize mt-3">{date}</p>
+        <p className="text-ancestral-cream/80 text-sm capitalize mt-3">{date}</p>
 
         {/* Lieu + plante */}
         <div className="flex flex-wrap gap-2 mt-3">
@@ -207,7 +207,7 @@ function FilledCard({
           ].map((tag) => (
             <span
               key={tag.label}
-              className="inline-flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full text-ancestral-cream/40"
+              className="inline-flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full text-ancestral-cream/80"
               style={{ background: 'rgba(245,245,220,0.05)', border: '1px solid rgba(245,245,220,0.07)' }}
             >
               {tag.emoji} {tag.label}
@@ -266,23 +266,23 @@ function FilledCard({
           animate={{ opacity: 1 }}
           transition={{ delay: 0.45, duration: 0.5 }}
         >
-          <p className="text-ancestral-cream/35 text-xs uppercase tracking-widest mb-1.5">
+          <p className="text-ancestral-cream/80 text-xs uppercase tracking-widest mb-1.5">
             Dimension spirituelle
           </p>
-          <p className="text-ancestral-cream/45 text-xs leading-relaxed italic">{sign.spirituel}</p>
+          <p className="text-ancestral-cream/80 text-xs leading-relaxed italic">{sign.spirituel}</p>
         </motion.div>
 
         {/* Météo + source */}
         {data.weather && (
           <div className="flex items-center gap-1.5 pt-2">
-            <Cloud size={11} className="text-ancestral-cream/20 flex-shrink-0" />
-            <span className="text-ancestral-cream/20 text-[10px]">
+            <Cloud size={11} className="text-ancestral-cream/60 flex-shrink-0" />
+            <span className="text-ancestral-cream/60 text-[10px]">
               Pointe-à-Pitre · {data.weather}
             </span>
           </div>
         )}
         {data.source === 'mistral' && (
-          <p className="text-ancestral-cream/15 text-[10px] text-right -mt-1">
+          <p className="text-ancestral-cream/50 text-[10px] text-right -mt-1">
             Paroles transmises par Maryse
           </p>
         )}
