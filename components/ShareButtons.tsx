@@ -51,7 +51,7 @@ const platforms = [
 ];
 
 const SHARE_TEXT =
-  '🌿 Mon horoscope ancestral — Découvrez la sagesse de Karukera et les paroles de Maryse Condé. Explorez votre totem sur Horoscope Karukera';
+  '🌿 Mon horoscope ancestral — Découvrez la sagesse de Karukera et les paroles de Maryse CondAI. Explorez votre totem sur Horoscope Karukera';
 
 export default function ShareButtons() {
   const [copied, setCopied] = useState(false);

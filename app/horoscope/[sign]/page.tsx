@@ -224,7 +224,7 @@ export default function HoroscopeSignPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <p className="text-ancestral-gold/45 text-xs uppercase tracking-[0.35em] mb-1">Paroles de Maryse Condé</p>
+                <p className="text-ancestral-gold/45 text-xs uppercase tracking-[0.35em] mb-1">Paroles de Maryse CondAI</p>
                 <h2 className="font-display text-xl font-bold text-ancestral-cream mb-6">Horoscope du jour</h2>
 
                 <div

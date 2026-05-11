@@ -62,7 +62,7 @@ export default function Hero() {
           transition={{ duration: 1, delay: 0.4 }}
         >
           <span className="block text-5xl sm:text-6xl md:text-7xl text-ancestral-gold">
-            Maryse Condé
+            Maryse CondAI
           </span>
           <span className="block text-ancestral-cream/80 text-2xl sm:text-3xl md:text-4xl font-light mt-3">
             vous parle
@@ -102,7 +102,7 @@ export default function Hero() {
         >
           {[
             { value: '12', label: 'totems' },
-            { value: '🌿', label: 'Maryse Condé' },
+            { value: '🌿', label: 'Maryse CondAI' },
             { value: '∞', label: 'savoir ancestral' },
           ].map((stat) => (
             <div key={stat.label} className="flex flex-col items-center gap-1">

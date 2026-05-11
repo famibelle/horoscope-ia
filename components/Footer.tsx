@@ -75,7 +75,7 @@ export default function Footer() {
             © 2026 Horoscope Karukera. Tous droits réservés.
           </p>
           <p className="text-ancestral-cream/15 text-xs">
-            🌿 Paroles inspirées par Maryse Condé · pour honorer nos traditions
+            🌿 Paroles inspirées par Maryse CondAI · pour honorer nos traditions
           </p>
         </div>
       </div>

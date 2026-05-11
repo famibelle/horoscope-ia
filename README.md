@@ -35,7 +35,7 @@
 
 ## 🎯 À propos du projet
 
-**Horoscope Karukera** est une plateforme d'astrologie unique qui fusionne la sagesse ancestrale guadeloupéenne (Karukera) avec l'intelligence artificielle moderne. Le site propose des horoscopes quotidiens personnalisés, rédigés dans la voix de **Maryse Condé** (romancière guadeloupéenne, prix Nobel alternatif de littérature 2018), et ancrés dans la culture créole.
+**Horoscope Karukera** est une plateforme d'astrologie unique qui fusionne la sagesse ancestrale guadeloupéenne (Karukera) avec l'intelligence artificielle moderne. Le site propose des horoscopes quotidiens personnalisés, rédigés dans la voix de **Maryse CondAI** (romancière guadeloupéenne, prix Nobel alternatif de littérature 2018), et ancrés dans la culture créole.
 
 ### 🎨 Concept Clé
 
@@ -82,7 +82,7 @@
 
 - **6 Articles thématiques** : Lune, Quimbois, Soufrière, Signes d'eau, Vénus, Mercure
 - **Génération mensuelle** : Contenu frais via GitHub Actions
-- **Style Maryse Condé** : Écriture littéraire et culturelle
+- **Style Maryse CondAI** : Écriture littéraire et culturelle
 
 ### 💫 Fonctionnalités UI/UX
 
@@ -338,7 +338,7 @@ git push origin gh-pages
 
 ### 📝 Persona
 
-Maryse Condé est une romancière guadeloupéenne, prix Nobel alternatif de littérature 2018. Sa voix est :
+Maryse CondAI est une romancière guadeloupéenne, prix Nobel alternatif de littérature 2018. Sa voix est :
 
 - **Libre et sans concession**
 - **Ancrée dans la culture guadeloupéenne** (mots créoles, références locales)
@@ -408,7 +408,7 @@ Chaque signe (`lib/signs-data.ts`) contient :
 ### Génération des Horoscopes
 
 1. **Récupération source** : FreeHoroscopeAPI (anglais)
-2. **Traduction/Adaptation** : Mistral Large avec persona Maryse Condé
+2. **Traduction/Adaptation** : Mistral Large avec persona Maryse CondAI
 3. **Enrichissement** : Intégration météo, lieu, symbole du signe
 4. **Cache** : Stockage dans Netlify Blobs (24h)
 
@@ -673,7 +673,7 @@ GH_TOKEN=VOTRE_CLE_ICI
 npx tsx private/generate-articles.ts
 
 # Résultat : lib/articles-content.json mis à jour
-# 6 articles générés avec voix Maryse Condé
+# 6 articles générés avec voix Maryse CondAI
 ```
 
 ---
@@ -728,7 +728,7 @@ refactor: refactorisation de code
 
 ## 🙏 Remerciements
 
-- **Maryse Condé** - Pour l'inspiration littéraire et culturelle
+- **Maryse CondAI** - Pour l'inspiration littéraire et culturelle
 - **Mistral AI** - Pour les modèles de langage puissants
 - **Next.js** - Pour le framework réactif et performant
 - **Netlify** - Pour l'hébergement sans friction

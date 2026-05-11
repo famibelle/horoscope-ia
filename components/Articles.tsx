@@ -22,7 +22,7 @@ export default function Articles() {
           📜 Contes et sagesse de Karukera
         </h2>
         <p className="text-ancestral-cream/35 text-sm sm:text-base max-w-sm mx-auto">
-          Histoires et enseignements transmises par Maryse Condé
+          Histoires et enseignements transmises par Maryse CondAI
         </p>
       </motion.div>
 
