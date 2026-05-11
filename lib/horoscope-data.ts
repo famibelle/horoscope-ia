@@ -4,6 +4,7 @@ export interface HoroscopeResponse {
   travail: string;
   argent: string;
   amitie: string;
+  sante: string;
   prediction: string;
   signFr: string;
   weather: string;

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Heart, Briefcase, Coins, Users, Sparkles, Eye } from 'lucide-react';
+import { ArrowLeft, Heart, Briefcase, Coins, Users, Sparkles, Eye, Activity } from 'lucide-react';
 import { signs } from '@/lib/signs-data';
 import { detectEdition, EDITION_LABELS } from '@/lib/edition';
 import type { Edition } from '@/private/maryse-prompt';
@@ -29,11 +29,12 @@ interface AmbianceData {
 /* ── Constants ─────────────────────────────────────────────────────────────── */
 
 const HOROSCOPE_SECTIONS = [
-  { key: 'ouverture',  label: 'Message cosmique', Icon: Sparkles,  colorClass: 'text-violet-300' },
+  { key: 'ouverture',  label: 'Message des ancètres', Icon: Sparkles,  colorClass: 'text-violet-300' },
   { key: 'amour',      label: 'Amour',            Icon: Heart,     colorClass: 'text-rose-300' },
   { key: 'travail',    label: 'Travail',           Icon: Briefcase, colorClass: 'text-blue-300' },
   { key: 'argent',     label: 'Argent',            Icon: Coins,     colorClass: 'text-amber-300' },
   { key: 'amitie',     label: 'Amitié',            Icon: Users,     colorClass: 'text-emerald-300' },
+  { key: 'sante',      label: 'Santé',             Icon: Activity,  colorClass: 'text-teal-300' },
   { key: 'prediction', label: 'Présage',           Icon: Eye,       colorClass: 'text-purple-300' },
 ] as const;
 

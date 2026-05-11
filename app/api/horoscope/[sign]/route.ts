@@ -190,6 +190,7 @@ export async function GET(
         travail:    structured.travail,
         argent:     structured.argent ?? '',
         amitie:     structured.amitie ?? '',
+        sante:      structured.sante ?? '',
         prediction: structured.prediction ?? '',
         signFr:     sign.name,
         weather,
