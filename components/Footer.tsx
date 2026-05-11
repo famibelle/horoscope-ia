@@ -1,13 +1,6 @@
 import Link from 'next/link';
 
 const links = {
-  Navigation: [
-    { label: 'Horoscope du jour', href: '#signs' },
-    { label: 'Compatibilité', href: '#' },
-    { label: 'Horoscope amour', href: '#' },
-    { label: 'Horoscope travail', href: '#' },
-    { label: 'Horoscope lunaire', href: '#' },
-  ],
   Signes: [
     { label: 'Bélier · Taureau', href: '#' },
     { label: 'Gémeaux · Cancer', href: '#' },
