@@ -31,15 +31,15 @@ export default function Footer() {
         className="absolute top-0 left-0 right-0 h-px"
         style={{
           background:
-            'linear-gradient(90deg, transparent, rgba(124,58,237,0.3), rgba(59,130,246,0.2), transparent)',
+            'linear-gradient(90deg, transparent, rgba(210,105,30,0.3), rgba(255,215,0,0.2), transparent)',
         }}
       />
 
       <div className="max-w-5xl mx-auto pt-14">
         {/* Brand */}
         <div className="text-center mb-14">
-          <div className="font-display text-2xl font-bold text-white mb-2">
-            🌙 Votre voyage quotidien dans le savoir de nos ancètres
+          <div className="font-display text-2xl font-bold text-ancestral-cream mb-2">
+            🌿 Votre voyage ancestral dans la sagesse de Karukera
           </div>
         </div>
 
@@ -47,7 +47,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-10 mb-14">
           {Object.entries(links).map(([category, items]) => (
             <div key={category}>
-              <h3 className="text-white/50 text-xs uppercase tracking-[0.25em] font-semibold mb-4">
+              <h3 className="text-ancestral-cream/50 text-xs uppercase tracking-[0.25em] font-semibold mb-4">
                 {category}
               </h3>
               <ul className="space-y-2.5">
@@ -55,7 +55,7 @@ export default function Footer() {
                   <li key={item.label}>
                     <Link
                       href={item.href}
-                      className="text-white/30 text-sm hover:text-violet-300 transition-colors duration-200"
+                      className="text-ancestral-cream/30 text-sm hover:text-ancestral-gold transition-colors duration-200"
                     >
                       {item.label}
                     </Link>
@@ -69,13 +69,13 @@ export default function Footer() {
         {/* Bottom bar */}
         <div
           className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
+          style={{ borderTop: '1px solid rgba(245,245,220,0.06)' }}
         >
-          <p className="text-white/20 text-xs">
-            © 2026 Horoscope Botiran. Tous droits réservés.
+          <p className="text-ancestral-cream/20 text-xs">
+            © 2026 Horoscope Karukera. Tous droits réservés.
           </p>
-          <p className="text-white/15 text-xs">
-            🤖 Prédictions générées par Maryse CondAI · à titre de divertissement uniquement
+          <p className="text-ancestral-cream/15 text-xs">
+            🌿 Paroles inspirées par Maryse Condé · pour honorer nos traditions
           </p>
         </div>
       </div>

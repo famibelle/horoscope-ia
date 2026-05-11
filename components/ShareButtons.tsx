@@ -51,7 +51,7 @@ const platforms = [
 ];
 
 const SHARE_TEXT =
-  '🌙 Mon horoscope IA du jour — Lion · "Votre énergie attire naturellement les bonnes opportunités." ✨ Découvrez le vôtre sur Horoscope Karukera';
+  '🌿 Mon horoscope ancestral — Découvrez la sagesse de Karukera et les paroles de Maryse Condé. Explorez votre totem sur Horoscope Karukera';
 
 export default function ShareButtons() {
   const [copied, setCopied] = useState(false);
@@ -84,11 +84,11 @@ export default function ShareButtons() {
         transition={{ duration: 0.8 }}
         className="text-center mb-8"
       >
-        <p className="text-violet-300/45 text-xs uppercase tracking-[0.35em] mb-3">
-          Partager l&apos;énergie
+        <p className="text-ancestral-gold/45 text-xs uppercase tracking-[0.35em] mb-3">
+          Transmettre la sagesse
         </p>
-        <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
-          📲 Partager mon horoscope
+        <h2 className="font-display text-2xl sm:text-3xl font-bold text-ancestral-cream">
+          📲 Partager les paroles des ancêtres
         </h2>
       </motion.div>
 
@@ -103,13 +103,13 @@ export default function ShareButtons() {
             transition={{ delay: i * 0.08, duration: 0.5 }}
             whileHover={{ scale: 1.04, y: -3 }}
             whileTap={{ scale: 0.96 }}
-            className={`flex flex-col items-center gap-3 p-4 rounded-2xl bg-gradient-to-br ${platform.bgGradient} transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400`}
+            className={`flex flex-col items-center gap-3 p-4 rounded-2xl bg-gradient-to-br ${platform.bgGradient} transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ancestral-gold`}
             style={{
               border: `1px solid ${platform.borderColor}`,
             }}
           >
             <span className="text-2xl">{platform.emoji}</span>
-            <span className="text-white/70 text-xs font-medium text-center leading-tight">
+            <span className="text-ancestral-cream/70 text-xs font-medium text-center leading-tight">
               {platform.name}
             </span>
           </motion.button>
@@ -126,16 +126,16 @@ export default function ShareButtons() {
       >
         <button
           onClick={handleCopy}
-          className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-white/50 text-sm transition-all duration-200 hover:text-white/70 focus:outline-none"
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-ancestral-cream/50 text-sm transition-all duration-200 hover:text-ancestral-cream/70 focus:outline-none"
           style={{
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.07)',
+            background: 'rgba(245,245,220,0.04)',
+            border: '1px solid rgba(245,245,220,0.07)',
           }}
         >
           {copied ? (
             <>
-              <Check size={14} className="text-green-400" />
-              <span className="text-green-300">Copié !</span>
+              <Check size={14} className="text-ancestral-gold" />
+              <span className="text-ancestral-gold">Copié !</span>
             </>
           ) : (
             <>

@@ -30,21 +30,21 @@ interface AmbianceData {
 /* ── Constants ─────────────────────────────────────────────────────────────── */
 
 const HOROSCOPE_SECTIONS = [
-  { key: 'ouverture',  label: 'Message des ancètres', Icon: Sparkles,  colorClass: 'text-violet-300' },
-  { key: 'amour',      label: 'Amour',            Icon: Heart,     colorClass: 'text-rose-300' },
-  { key: 'travail',    label: 'Travail',           Icon: Briefcase, colorClass: 'text-blue-300' },
-  { key: 'argent',     label: 'Argent',            Icon: Coins,     colorClass: 'text-amber-300' },
-  { key: 'amitie',     label: 'Amitié',            Icon: Users,     colorClass: 'text-emerald-300' },
-  { key: 'sante',      label: 'Santé',             Icon: Activity,  colorClass: 'text-teal-300' },
-  { key: 'prediction', label: 'Présage',           Icon: Eye,       colorClass: 'text-purple-300' },
+  { key: 'ouverture',  label: 'Parole des ancêtres', Icon: Sparkles,  colorClass: 'text-ancestral-gold' },
+  { key: 'amour',      label: 'Cœur créole',        Icon: Heart,     colorClass: 'text-ancestral-terracotta' },
+  { key: 'travail',    label: 'Labeur sacré',       Icon: Briefcase, colorClass: 'text-ancestral-forest' },
+  { key: 'argent',     label: 'Riches de la terre', Icon: Coins,     colorClass: 'text-ancestral-gold' },
+  { key: 'amitie',     label: 'Solidarité',         Icon: Users,     colorClass: 'text-ancestral-cream' },
+  { key: 'sante',      label: 'Santé',              Icon: Activity,  colorClass: 'text-ancestral-forest' },
+  { key: 'prediction', label: 'Présage ancestral',  Icon: Eye,       colorClass: 'text-ancestral-gold' },
 ] as const;
 
 const SCORE_ITEMS = [
-  { key: 'amour',      label: 'Amour',       color: '#f43f5e' },
-  { key: 'travail',    label: 'Travail',     color: '#3b82f6' },
-  { key: 'bienetre',   label: 'Bien-être',   color: '#10b981' },
-  { key: 'vieSociale', label: 'Vie sociale', color: '#8b5cf6' },
-  { key: 'finances',   label: 'Finances',    color: '#f59e0b' },
+  { key: 'amour',      label: 'Amour',       color: '#CD5C5C' },
+  { key: 'travail',    label: 'Travail',     color: '#228B22' },
+  { key: 'bienetre',   label: 'Bien-être',   color: '#FFD700' },
+  { key: 'vieSociale', label: 'Vie sociale', color: '#8B4513' },
+  { key: 'finances',   label: 'Finances',    color: '#D2691E' },
 ] as const;
 
 const LUNE_ITEMS = [
@@ -73,25 +73,25 @@ function Skeleton({ gradientFrom }: { gradientFrom: string }) {
     <div className="animate-pulse space-y-6">
       <div
         className="rounded-3xl p-6 space-y-5"
-        style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${gradientFrom}15` }}
+        style={{ background: 'rgba(245,245,220,0.03)', border: `1px solid rgba(210,105,30,0.15)` }}
       >
         {Array.from({ length: 6 }).map((_, i) => (
           <div key={i} className="space-y-2">
-            <div className="h-3 w-20 rounded bg-white/8" />
-            <div className="h-4 w-full rounded bg-white/5" />
-            <div className="h-4 w-4/5 rounded bg-white/5" />
+            <div className="h-3 w-20 rounded bg-ancestral-cream/8" />
+            <div className="h-4 w-full rounded bg-ancestral-cream/5" />
+            <div className="h-4 w-4/5 rounded bg-ancestral-cream/5" />
           </div>
         ))}
       </div>
-      <div className="rounded-2xl p-5 space-y-3" style={{ background: 'rgba(255,255,255,0.03)' }}>
-        <div className="h-4 w-full rounded bg-white/5" />
-        <div className="h-4 w-3/4 rounded bg-white/5" />
+      <div className="rounded-2xl p-5 space-y-3" style={{ background: 'rgba(245,245,220,0.03)' }}>
+        <div className="h-4 w-full rounded bg-ancestral-cream/5" />
+        <div className="h-4 w-3/4 rounded bg-ancestral-cream/5" />
       </div>
       {Array.from({ length: 5 }).map((_, i) => (
         <div key={i} className="flex items-center gap-3">
-          <div className="h-3 w-20 rounded bg-white/5 flex-shrink-0" />
-          <div className="flex-1 h-2 rounded-full bg-white/5" />
-          <div className="h-3 w-8 rounded bg-white/5" />
+          <div className="h-3 w-20 rounded bg-ancestral-cream/5 flex-shrink-0" />
+          <div className="flex-1 h-2 rounded-full bg-ancestral-cream/5" />
+          <div className="h-3 w-8 rounded bg-ancestral-cream/5" />
         </div>
       ))}
     </div>
@@ -145,7 +145,7 @@ export default function HoroscopeSignPage() {
         <div
           className="absolute top-[-10%] left-[15%] w-[600px] h-[600px] rounded-full"
           style={{
-            background: `radial-gradient(circle, ${sign.glowColor}18 0%, transparent 70%)`,
+            background: `radial-gradient(circle, rgba(210,105,30,0.18) 0%, transparent 70%)`,
             filter: 'blur(60px)',
           }}
         />
@@ -156,7 +156,7 @@ export default function HoroscopeSignPage() {
         {/* Back link */}
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-white/35 text-sm hover:text-white/70 transition-colors mb-10"
+          className="inline-flex items-center gap-2 text-ancestral-cream/35 text-sm hover:text-ancestral-cream/70 transition-colors mb-10"
         >
           <ArrowLeft size={14} />
           Retour
@@ -172,15 +172,14 @@ export default function HoroscopeSignPage() {
           <span className="text-6xl sm:text-7xl">{sign.emoji}</span>
           <div>
             <h1
-              className="font-display text-4xl sm:text-5xl font-bold leading-tight"
-              style={{ color: sign.gradientFrom }}
+              className="font-display text-4xl sm:text-5xl font-bold leading-tight text-ancestral-gold"
             >
               {sign.name}
             </h1>
-            <p className="text-white/30 text-sm uppercase tracking-widest mt-1">
+            <p className="text-ancestral-cream/30 text-sm uppercase tracking-widest mt-1">
               {sign.planet} · {sign.element}
             </p>
-            <p className="text-xs mt-1 font-semibold" style={{ color: `${sign.gradientFrom}99` }}>
+            <p className="text-xs mt-1 font-semibold text-ancestral-gold/90">
               {sign.nomKreyol}
             </p>
           </div>
@@ -200,10 +199,10 @@ export default function HoroscopeSignPage() {
                 className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium transition-colors"
                 style={{
                   background: active
-                    ? 'linear-gradient(135deg, rgba(124,58,237,0.35), rgba(59,130,246,0.25))'
-                    : 'rgba(255,255,255,0.05)',
-                  border: active ? '1px solid rgba(124,58,237,0.5)' : '1px solid rgba(255,255,255,0.08)',
-                  color: active ? '#e2d9f3' : 'rgba(255,255,255,0.35)',
+                    ? 'linear-gradient(135deg, rgba(210,105,30,0.35), rgba(255,215,0,0.25))'
+                    : 'rgba(245,245,220,0.05)',
+                  border: active ? '1px solid rgba(210,105,30,0.5)' : '1px solid rgba(245,245,220,0.08)',
+                  color: active ? '#F5F5DC' : 'rgba(245,245,220,0.35)',
                 }}
               >
                 <span>{edEmoji}</span>
@@ -225,18 +224,18 @@ export default function HoroscopeSignPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <p className="text-violet-300/45 text-xs uppercase tracking-[0.35em] mb-1">Maryse CondAI</p>
-                <h2 className="font-display text-xl font-bold text-white mb-6">Horoscope du jour</h2>
+                <p className="text-ancestral-gold/45 text-xs uppercase tracking-[0.35em] mb-1">Paroles de Maryse Condé</p>
+                <h2 className="font-display text-xl font-bold text-ancestral-cream mb-6">Horoscope du jour</h2>
 
                 <div
                   className="rounded-3xl overflow-hidden"
                   style={{
-                    background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)',
-                    border: `1px solid ${sign.gradientFrom}25`,
-                    boxShadow: `0 0 60px ${sign.glowColor}20, 0 20px 60px rgba(0,0,0,0.3)`,
+                    background: 'linear-gradient(145deg, rgba(245,245,220,0.06) 0%, rgba(139,69,19,0.02) 100%)',
+                    border: `1px solid rgba(210,105,30,0.25)`,
+                    boxShadow: `0 0 60px rgba(210,105,30,0.2), 0 20px 60px rgba(0,0,0,0.3)`,
                   }}
                 >
-                  <div className="h-px" style={{ background: `linear-gradient(90deg, transparent, ${sign.gradientFrom}80, transparent)` }} />
+                  <div className="h-px" style={{ background: `linear-gradient(90deg, transparent, rgba(210,105,30,0.8), transparent)` }} />
                   <div className="px-6 py-6 space-y-5">
                     {HOROSCOPE_SECTIONS.map(({ key, label, Icon, colorClass }) => {
                       const text = horoscope[key as keyof HoroscopeResponse] as string;
@@ -248,26 +247,26 @@ export default function HoroscopeSignPage() {
                             <Icon size={13} className={`${colorClass} flex-shrink-0`} />
                             <span className={`text-xs font-semibold uppercase tracking-widest ${colorClass}`}>{label}</span>
                           </div>
-                          <p className={`text-sm leading-relaxed pl-5 ${isPrediction ? 'italic text-white/60' : 'text-white/70'}`}>
+                          <p className={`text-sm leading-relaxed pl-5 ${isPrediction ? 'italic text-ancestral-cream/60' : 'text-ancestral-cream/70'}`}>
                             {isPrediction ? `"${text}"` : text}
                           </p>
                         </div>
                       );
                     })}
                   </div>
-                  <div className="h-px" style={{ background: `linear-gradient(90deg, transparent, ${sign.gradientTo}40, transparent)` }} />
+                  <div className="h-px" style={{ background: `linear-gradient(90deg, transparent, rgba(255,215,0,0.4), transparent)` }} />
                 </div>
 
                 {/* Dimension spirituelle */}
                 <div
                   className="mt-4 rounded-2xl p-4"
                   style={{
-                    background: `linear-gradient(135deg, ${sign.gradientFrom}10, ${sign.gradientTo}08)`,
-                    border: `1px solid ${sign.gradientFrom}18`,
+                    background: `linear-gradient(135deg, rgba(210,105,30,0.10), rgba(255,215,0,0.08))`,
+                    border: `1px solid rgba(210,105,30,0.18)`,
                   }}
                 >
-                  <p className="text-white/35 text-xs uppercase tracking-widest mb-1.5">Dimension spirituelle</p>
-                  <p className="text-white/45 text-xs leading-relaxed italic">{sign.spirituel}</p>
+                  <p className="text-ancestral-cream/35 text-xs uppercase tracking-widest mb-1.5">Dimension spirituelle</p>
+                  <p className="text-ancestral-cream/45 text-xs leading-relaxed italic">{sign.spirituel}</p>
                 </div>
               </motion.section>
             )}
@@ -279,18 +278,18 @@ export default function HoroscopeSignPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.15 }}
               >
-                <p className="text-violet-300/45 text-xs uppercase tracking-[0.35em] mb-1">Cosmologie du jour</p>
-                <h2 className="font-display text-xl font-bold text-white mb-6">✦ Ambiance Astrale</h2>
+                <p className="text-ancestral-gold/45 text-xs uppercase tracking-[0.35em] mb-1">Sagesse du jour</p>
+                <h2 className="font-display text-xl font-bold text-ancestral-cream mb-6">✦ Énergie de Karukera</h2>
 
                 {/* Ambiance text */}
                 <div
                   className="rounded-2xl p-5 mb-8"
                   style={{
-                    background: 'linear-gradient(135deg, rgba(124,58,237,0.1), rgba(59,130,246,0.06))',
-                    border: '1px solid rgba(124,58,237,0.18)',
+                    background: 'linear-gradient(135deg, rgba(210,105,30,0.1), rgba(255,215,0,0.06))',
+                    border: '1px solid rgba(210,105,30,0.18)',
                   }}
                 >
-                  <p className="text-white/65 text-sm sm:text-base leading-relaxed italic">
+                  <p className="text-ancestral-cream/65 text-sm sm:text-base leading-relaxed italic">
                     {ambiance.ambiance}
                   </p>
                 </div>
@@ -301,8 +300,8 @@ export default function HoroscopeSignPage() {
                     const score = ambiance.scores?.[key as keyof AmbianceScores] ?? 0;
                     return (
                       <div key={key} className="flex items-center gap-3">
-                        <span className="text-white/40 text-xs w-24 flex-shrink-0">{label}</span>
-                        <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                        <span className="text-ancestral-cream/40 text-xs w-24 flex-shrink-0">{label}</span>
+                        <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'rgba(245,245,220,0.06)' }}>
                           <motion.div
                             className="h-full rounded-full"
                             style={{ background: `linear-gradient(90deg, ${color}60, ${color})` }}
@@ -311,7 +310,7 @@ export default function HoroscopeSignPage() {
                             transition={{ duration: 1, delay: 0.3 + i * 0.1, ease: 'easeOut' }}
                           />
                         </div>
-                        <span className="text-white/50 text-xs w-9 text-right font-medium">{score}%</span>
+                        <span className="text-ancestral-cream/50 text-xs w-9 text-right font-medium">{score}%</span>
                       </div>
                     );
                   })}
@@ -322,14 +321,14 @@ export default function HoroscopeSignPage() {
                   <div
                     className="rounded-2xl p-5 flex flex-col items-center justify-center text-center"
                     style={{
-                      background: 'linear-gradient(135deg, rgba(245,158,11,0.12), rgba(251,191,36,0.06))',
-                      border: '1px solid rgba(245,158,11,0.22)',
+                      background: 'linear-gradient(135deg, rgba(210,105,30,0.12), rgba(255,215,0,0.06))',
+                      border: '1px solid rgba(210,105,30,0.22)',
                     }}
                   >
-                    <p className="text-amber-400/60 text-[10px] uppercase tracking-widest mb-2">
-                      Chiffre porte-bonheur
+                    <p className="text-ancestral-gold/60 text-[10px] uppercase tracking-widest mb-2">
+                      Chiffre sacré
                     </p>
-                    <span className="font-display text-5xl font-bold text-amber-300">
+                    <span className="font-display text-5xl font-bold text-ancestral-gold">
                       {ambiance.chiffrePorteBonheur}
                     </span>
                   </div>
@@ -337,12 +336,12 @@ export default function HoroscopeSignPage() {
                   <div
                     className="rounded-2xl p-5"
                     style={{
-                      background: 'linear-gradient(135deg, rgba(139,92,246,0.12), rgba(59,130,246,0.06))',
-                      border: '1px solid rgba(139,92,246,0.22)',
+                      background: 'linear-gradient(135deg, rgba(228,196,144,0.12), rgba(255,215,0,0.06))',
+                      border: '1px solid rgba(228,196,144,0.22)',
                     }}
                   >
-                    <p className="text-violet-400/60 text-[10px] uppercase tracking-widest mb-3">
-                      Compatibilité du jour
+                    <p className="text-ancestral-gold/60 text-[10px] uppercase tracking-widest mb-3">
+                      Totems alliés
                     </p>
                     <div className="flex flex-col gap-2.5">
                       {(ambiance.compatibilite ?? []).slice(0, 2).map((compId) => {
@@ -355,7 +354,7 @@ export default function HoroscopeSignPage() {
                             className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                           >
                             <span className="text-xl">{compSign.emoji}</span>
-                            <span className="text-white/65 text-sm">{compSign.name}</span>
+                            <span className="text-ancestral-cream/65 text-sm">{compSign.name}</span>
                           </Link>
                         );
                       })}
@@ -365,8 +364,8 @@ export default function HoroscopeSignPage() {
 
                 {/* Lunar sections */}
                 <div>
-                  <p className="text-white/30 text-[10px] uppercase tracking-widest mb-0.5">Phase lunaire</p>
-                  <p className="text-white/50 text-sm mb-5">🌙 {moonLabel}</p>
+                  <p className="text-ancestral-cream/30 text-[10px] uppercase tracking-widest mb-0.5">Phase lunaire</p>
+                  <p className="text-ancestral-cream/50 text-sm mb-5">🌕 {moonLabel}</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {LUNE_ITEMS.map(({ key, label, emoji: luneEmoji }) => {
                       const text = ambiance.lune?.[key as keyof AmbianceLune];
@@ -376,17 +375,17 @@ export default function HoroscopeSignPage() {
                           key={key}
                           className="rounded-2xl p-4"
                           style={{
-                            background: 'linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)',
-                            border: '1px solid rgba(255,255,255,0.07)',
+                            background: 'linear-gradient(145deg, rgba(245,245,220,0.04) 0%, rgba(139,69,19,0.02) 100%)',
+                            border: '1px solid rgba(245,245,220,0.07)',
                           }}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.4 }}
                         >
-                          <p className="text-white/50 text-xs font-semibold uppercase tracking-wider mb-2">
+                          <p className="text-ancestral-cream/50 text-xs font-semibold uppercase tracking-wider mb-2">
                             {luneEmoji} {label}
                           </p>
-                          <p className="text-white/45 text-xs leading-relaxed">{text}</p>
+                          <p className="text-ancestral-cream/45 text-xs leading-relaxed">{text}</p>
                         </motion.div>
                       );
                     })}
@@ -415,11 +414,11 @@ export default function HoroscopeSignPage() {
         )}
 
         {/* Footer nav */}
-        <div className="text-center mt-16 pt-8 border-t border-white/5">
+        <div className="text-center mt-16 pt-8 border-t border-ancestral-cream/5">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm text-white/50 hover:text-white/80 transition-colors border border-white/10 hover:border-violet-400/30"
-            style={{ background: 'rgba(255,255,255,0.03)' }}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm text-ancestral-cream/50 hover:text-ancestral-cream/80 transition-colors border border-ancestral-cream/10 hover:border-ancestral-gold/30"
+            style={{ background: 'rgba(245,245,220,0.03)' }}
           >
             ← Retour à l&apos;accueil
           </Link>

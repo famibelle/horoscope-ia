@@ -15,14 +15,14 @@ export default function Articles() {
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
       >
-        <p className="text-violet-300/45 text-xs uppercase tracking-[0.35em] mb-4">
-          Savoir &amp; découverte
+        <p className="text-ancestral-gold/45 text-xs uppercase tracking-[0.35em] mb-4">
+          Savoir ancestral
         </p>
-        <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
-          📰 Explorer l&apos;univers astrologique
+        <h2 className="font-display text-3xl sm:text-4xl font-bold text-ancestral-cream mb-4">
+          📜 Contes et sagesse de Karukera
         </h2>
-        <p className="text-white/35 text-sm sm:text-base max-w-sm mx-auto">
-          Six textes ancrés dans la culture de Karukera, écrits en voix Maryse CondAI
+        <p className="text-ancestral-cream/35 text-sm sm:text-base max-w-sm mx-auto">
+          Histoires et enseignements transmises par Maryse Condé
         </p>
       </motion.div>
 
@@ -41,10 +41,10 @@ export default function Articles() {
               className="relative block rounded-2xl p-5 sm:p-6 group overflow-hidden h-full"
               style={{
                 background:
-                  'linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)',
+                  'linear-gradient(145deg, rgba(245,245,220,0.08) 0%, rgba(139,69,19,0.04) 100%)',
                 backdropFilter: 'blur(20px)',
                 WebkitBackdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255,255,255,0.08)',
+                border: '1px solid rgba(245,245,220,0.08)',
               }}
             >
               {/* Hover shimmer */}
@@ -54,11 +54,11 @@ export default function Articles() {
                 {/* Tag + read time */}
                 <div className="flex items-center justify-between mb-4">
                   <span
-                    className={`inline-flex items-center px-2.5 py-1 rounded-full text-white text-[10px] font-semibold uppercase tracking-wider bg-gradient-to-r ${article.tagColor}`}
+                    className={`inline-flex items-center px-2.5 py-1 rounded-full text-ancestral-earth text-[10px] font-semibold uppercase tracking-wider bg-gradient-to-r ${article.tagColor}`}
                   >
                     {article.tag}
                   </span>
-                  <span className="text-white/25 text-[10px] uppercase tracking-wider">
+                  <span className="text-ancestral-cream/25 text-[10px] uppercase tracking-wider">
                     {article.readTime}
                   </span>
                 </div>
@@ -67,17 +67,17 @@ export default function Articles() {
                 <div className="text-3xl mb-3">{article.emoji}</div>
 
                 {/* Title */}
-                <h3 className="font-display font-bold text-white text-base sm:text-lg leading-snug mb-3 group-hover:text-violet-200 transition-colors duration-200">
+                <h3 className="font-display font-bold text-ancestral-cream text-base sm:text-lg leading-snug mb-3 group-hover:text-ancestral-gold transition-colors duration-200">
                   {article.title}
                 </h3>
 
                 {/* Excerpt */}
-                <p className="text-white/40 text-sm leading-relaxed mb-5 line-clamp-3 flex-1">
+                <p className="text-ancestral-cream/40 text-sm leading-relaxed mb-5 line-clamp-3 flex-1">
                   {article.excerpt}
                 </p>
 
                 {/* CTA */}
-                <div className="flex items-center gap-1.5 text-violet-300/60 text-xs font-medium group-hover:text-violet-300 transition-colors duration-200">
+                <div className="flex items-center gap-1.5 text-ancestral-gold/60 text-xs font-medium group-hover:text-ancestral-gold transition-colors duration-200">
                   <span>Lire l&apos;article</span>
                   <ArrowRight
                     size={12}

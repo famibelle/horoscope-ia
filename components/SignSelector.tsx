@@ -18,14 +18,14 @@ export default function SignSelector({ selected, onSelect }: SignSelectorProps) 
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
       >
-        <p className="text-violet-300/45 text-xs uppercase tracking-[0.35em] mb-4">
-          Cosmologie
+        <p className="text-ancestral-gold/45 text-xs uppercase tracking-[0.35em] mb-4">
+          Sagesse de Karukera
         </p>
-        <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
-          Choisissez votre signe
+        <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-ancestral-cream mb-4">
+          Découvrez votre totem
         </h2>
-        <p className="text-white/35 text-sm sm:text-base max-w-xs mx-auto leading-relaxed">
-          Sélectionnez votre constellation pour révéler votre destinée cosmique du jour
+        <p className="text-ancestral-cream/35 text-sm sm:text-base max-w-xs mx-auto leading-relaxed">
+          Les esprits de la Guadeloupe vous guident vers votre destin ancestral
         </p>
       </motion.div>
 
@@ -37,7 +37,7 @@ export default function SignSelector({ selected, onSelect }: SignSelectorProps) 
             <motion.button
               key={sign.id}
               onClick={() => onSelect(sign.id)}
-              className="relative flex flex-col items-center gap-2 p-3 sm:p-4 rounded-2xl border transition-colors duration-300 group focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+              className="relative flex flex-col items-center gap-2 p-3 sm:p-4 rounded-2xl border transition-colors duration-300 group focus:outline-none focus-visible:ring-2 focus-visible:ring-ancestral-gold"
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -47,13 +47,13 @@ export default function SignSelector({ selected, onSelect }: SignSelectorProps) 
               style={
                 isSelected
                   ? {
-                      background: `linear-gradient(135deg, ${sign.gradientFrom}18, ${sign.gradientTo}12)`,
-                      borderColor: `${sign.gradientFrom}50`,
-                      boxShadow: `0 0 28px ${sign.glowColor}, 0 0 60px ${sign.glowColor}40`,
+                      background: `linear-gradient(135deg, rgba(210,105,30,0.18), rgba(255,215,0,0.12))`,
+                      borderColor: `rgba(210,105,30,0.5)`,
+                      boxShadow: `0 0 28px rgba(210,105,30,0.4), 0 0 60px rgba(210,105,30,0.2)`,
                     }
                   : {
-                      background: 'rgba(255,255,255,0.04)',
-                      borderColor: 'rgba(255,255,255,0.08)',
+                      background: 'rgba(245,245,220,0.04)',
+                      borderColor: 'rgba(245,245,220,0.08)',
                     }
               }
               aria-pressed={isSelected}
@@ -61,22 +61,22 @@ export default function SignSelector({ selected, onSelect }: SignSelectorProps) 
             >
               <span className="text-2xl sm:text-3xl leading-none">{sign.emoji}</span>
               <span
-                className="text-xs font-medium leading-tight text-center transition-colors duration-200"
-                style={{ color: isSelected ? sign.gradientFrom : 'rgba(255,255,255,0.65)' }}
+                className="text-xs font-medium leading-tight text-center transition-colors duration-200 text-ancestral-gold"
+                style={{ color: isSelected ? '#FFD700' : 'rgba(245,245,220,0.65)' }}
               >
                 {sign.name}
               </span>
-              <span className="text-white/25 text-[10px] leading-tight text-center hidden sm:block">
+              <span className="text-ancestral-cream/25 text-[10px] leading-tight text-center hidden sm:block">
                 {elementEmoji[sign.element]} {sign.element}
               </span>
 
               {isSelected && (
                 <motion.div
-                  className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 rounded-full border-2 border-[#020617]"
+                  className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 rounded-full border-2 border-ancestral-earth"
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-                  style={{ background: sign.gradientFrom }}
+                  style={{ background: '#FFD700' }}
                 />
               )}
             </motion.button>
@@ -100,16 +100,16 @@ export default function SignSelector({ selected, onSelect }: SignSelectorProps) 
               <div
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm"
                 style={{
-                  background: `linear-gradient(135deg, ${sign.gradientFrom}20, ${sign.gradientTo}15)`,
-                  border: `1px solid ${sign.gradientFrom}35`,
-                  color: sign.gradientFrom,
+                  background: `linear-gradient(135deg, rgba(210,105,30,0.20), rgba(255,215,0,0.15))`,
+                  border: `1px solid rgba(210,105,30,0.35)`,
+                  color: '#FFD700',
                 }}
               >
                 <span>{sign.emoji}</span>
                 <span className="font-semibold">{sign.name}</span>
-                <span className="text-white/40">·</span>
-                <span className="text-white/50 text-xs">{sign.tagline}</span>
-                <span className="text-white/30 text-xs">· {sign.planet}</span>
+                <span className="text-ancestral-cream/40">·</span>
+                <span className="text-ancestral-cream/50 text-xs">{sign.tagline}</span>
+                <span className="text-ancestral-cream/30 text-xs">· {sign.planet}</span>
               </div>
             );
           })()}

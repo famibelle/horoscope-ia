@@ -36,15 +36,18 @@ function pickEntry(
   weatherTags: string[],
   edition: Edition,
 ): SigneEntry | null {
+  // Fallback pour 'midi' qui n'existe pas dans les données (seulement matin/soir)
+  const effectiveEdition = edition === 'midi' ? 'matin' : edition;
+  
   const matching = pool.filter((e) => {
-    const editionOk = e.editions.length === 0 || e.editions.includes(edition);
+    const editionOk = e.editions.length === 0 || e.editions.includes(effectiveEdition);
     const condOk =
       e.conditions.length === 0 ||
       e.conditions.some((c) => weatherTags.includes(c));
     return editionOk && condOk;
   });
   const source = matching.length > 0 ? matching : pool.filter((e) =>
-    e.editions.length === 0 || e.editions.includes(edition),
+    e.editions.length === 0 || e.editions.includes(effectiveEdition),
   );
   if (source.length === 0) return null;
   return source[Math.floor(Math.random() * source.length)];

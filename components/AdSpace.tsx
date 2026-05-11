@@ -23,8 +23,8 @@ export default function AdSpace({ variant }: AdSpaceProps) {
         }`}
         style={{
           background:
-            'linear-gradient(145deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0.01) 100%)',
-          border: '1px dashed rgba(255,255,255,0.08)',
+            'linear-gradient(145deg, rgba(245,245,220,0.025) 0%, rgba(139,69,19,0.01) 100%)',
+          border: '1px dashed rgba(245,245,220,0.08)',
         }}
       >
         {/* Corner markers */}
@@ -34,13 +34,13 @@ export default function AdSpace({ variant }: AdSpaceProps) {
               key={pos}
               className={`absolute ${pos} w-3 h-3`}
               style={{
-                borderTop: pos.includes('top') ? '2px solid rgba(124,58,237,0.25)' : undefined,
+                borderTop: pos.includes('top') ? '2px solid rgba(210,105,30,0.25)' : undefined,
                 borderBottom: pos.includes('bottom')
-                  ? '2px solid rgba(124,58,237,0.25)'
+                  ? '2px solid rgba(210,105,30,0.25)'
                   : undefined,
-                borderLeft: pos.includes('left') ? '2px solid rgba(124,58,237,0.25)' : undefined,
+                borderLeft: pos.includes('left') ? '2px solid rgba(210,105,30,0.25)' : undefined,
                 borderRight: pos.includes('right')
-                  ? '2px solid rgba(124,58,237,0.25)'
+                  ? '2px solid rgba(210,105,30,0.25)'
                   : undefined,
               }}
             />
@@ -48,11 +48,11 @@ export default function AdSpace({ variant }: AdSpaceProps) {
         )}
 
         <div className="flex flex-col items-center gap-1.5 text-center px-4">
-          <span className="text-white/15 text-[10px] uppercase tracking-[0.3em]">
-            Espace publicitaire
+          <span className="text-ancestral-cream/15 text-[10px] uppercase tracking-[0.3em]">
+            Espace partenaire
           </span>
-          <span className="text-white/8 text-[9px] font-mono">
-            {isBanner ? 'AdSense — 728×90 · 320×50 mobile' : 'AdSense — 300×250'}
+          <span className="text-ancestral-cream/8 text-[9px] font-mono">
+            {isBanner ? 'Espace — 728×90 · 320×50 mobile' : 'Espace — 300×250'}
           </span>
         </div>
       </div>

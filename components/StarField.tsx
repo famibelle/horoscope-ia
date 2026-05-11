@@ -28,19 +28,24 @@ export default function StarField() {
     setStars(generated);
   }, []);
 
+  if (stars.length === 0) {
+    return null; // Évite le rendu côté serveur avant l'initialisation client
+  }
+
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
       {stars.map((star) => (
         <div
           key={star.id}
-          className="absolute rounded-full bg-white"
+          className="absolute rounded-full bg-ancestral-gold"
           style={{
             left: `${star.x}%`,
             top: `${star.y}%`,
             width: `${star.size}px`,
             height: `${star.size}px`,
-            opacity: star.opacity,
-            animation: `twinkle ${star.duration}s ease-in-out ${star.delay}s infinite`,
+            opacity: star.opacity * 0.7,
+            animation: `twinkle ${star.duration.toFixed(1)}s ease-in-out ${star.delay.toFixed(1)}s infinite`,
+            boxShadow: `0 0 ${Math.round(star.size * 4)}px rgba(210,105,30,${star.opacity.toFixed(2)})`,
           }}
         />
       ))}

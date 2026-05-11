@@ -13,7 +13,7 @@ export default function Home() {
     <main className="relative min-h-screen overflow-x-hidden">
       <StarField />
 
-      {/* Ambient background glows */}
+      {/* Ambient background glows - Thème ancestral */}
       <div
         aria-hidden
         className="fixed top-0 left-0 w-full h-full pointer-events-none z-0"
@@ -22,7 +22,7 @@ export default function Home() {
           className="absolute top-[-10%] left-[15%] w-[700px] h-[700px] rounded-full"
           style={{
             background:
-              'radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%)',
+              'radial-gradient(circle, rgba(210,105,30,0.12) 0%, transparent 70%)',
             filter: 'blur(60px)',
           }}
         />
@@ -30,7 +30,7 @@ export default function Home() {
           className="absolute top-[40%] right-[10%] w-[500px] h-[500px] rounded-full"
           style={{
             background:
-              'radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%)',
+              'radial-gradient(circle, rgba(139,69,19,0.08) 0%, transparent 70%)',
             filter: 'blur(60px)',
           }}
         />
@@ -38,7 +38,7 @@ export default function Home() {
           className="absolute bottom-[10%] left-[30%] w-[400px] h-[400px] rounded-full"
           style={{
             background:
-              'radial-gradient(circle, rgba(139,92,246,0.07) 0%, transparent 70%)',
+              'radial-gradient(circle, rgba(85,64,40,0.07) 0%, transparent 70%)',
             filter: 'blur(60px)',
           }}
         />

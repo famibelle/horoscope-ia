@@ -14,10 +14,15 @@ const playfair = Playfair_Display({
   display: 'swap',
 });
 
+// Pour revenir au thème cosmique, décommentez les titres ci-dessous et commentez ceux ci-dessus
+// export const metadata: Metadata = {
+//   title: 'Horoscope Karukera — Votre énergie cosmique personnalisée',
+//   description: "Découvrez votre horoscope du jour avec Maryse CondAI...",
+
 export const metadata: Metadata = {
-  title: 'Horoscope Karukera — Votre énergie cosmique personnalisée',
+  title: 'Horoscope Karukera — La voix des ancêtres de la Guadeloupe',
   description:
-    "Découvrez votre horoscope du jour avec Maryse CondAI. Prédictions personnalisées pour l'amour, le travail et la spiritualité, ancrées dans la sagesse ancestrale de Karukera.",
+    "Écoutez les conseils de Maryse CondAI, inspirés par la sagesse ancestrale et les esprits de Karukera. Horoscopes ancrés dans la culture guadeloupéenne.",
   keywords: [
     'horoscope',
     'astrologie',
@@ -40,16 +45,16 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Horoscope Karukera' }],
   openGraph: {
-    title: 'Horoscope Karukera — Votre énergie cosmique personnalisée',
-    description: "Découvrez votre horoscope du jour avec Maryse CondAI, ancrée dans la sagesse ancestrale de Karukera.",
+    title: 'Horoscope Karukera — La voix des ancêtres',
+    description: "Écoutez les conseils de Maryse CondAI, inspirés par les esprits de Karukera et la sagesse guadeloupéenne.",
     type: 'website',
     locale: 'fr_FR',
     siteName: 'Horoscope Karukera',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Horoscope Karukera',
-    description: "Découvrez votre horoscope du jour avec Maryse CondAI, ancrée dans la sagesse ancestrale de Karukera.",
+    title: 'Horoscope Karukera — La voix des ancêtres',
+    description: "Écoutez les conseils de Maryse CondAI, inspirés par les esprits de Karukera.",
   },
   robots: {
     index: true,
@@ -81,7 +86,9 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className={`${inter.variable} ${playfair.variable} antialiased bg-cosmic`}>
+      {/* Thème ancestral activé - Pour revenir au thème cosmique, décommentez la ligne ci-dessous */}
+      {/* <body className={`${inter.variable} ${playfair.variable} antialiased bg-cosmic`}> */}
+      <body className={`${inter.variable} ${playfair.variable} antialiased`}>
         {children}
       </body>
     </html>

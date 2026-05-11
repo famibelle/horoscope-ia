@@ -72,11 +72,11 @@ export default function HoroscopesPreview() {
         transition={{ duration: 0.8 }}
         className="text-center mb-10"
       >
-        <p className="text-violet-300/45 text-xs uppercase tracking-[0.35em] mb-3">
-          Maryse CondAI
+        <p className="text-ancestral-gold/45 text-xs uppercase tracking-[0.35em] mb-3">
+          Maryse Condé
         </p>
-        <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
-          🔮 Les autres signes en quelques lignes…
+        <h2 className="font-display text-2xl sm:text-3xl font-bold text-ancestral-cream">
+          🌿 Les totems de Karukera
         </h2>
       </motion.div>
 
@@ -86,11 +86,11 @@ export default function HoroscopesPreview() {
             <div
               key={i}
               className="animate-pulse rounded-2xl p-5 space-y-2"
-              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}
+              style={{ background: 'rgba(245,245,220,0.03)', border: '1px solid rgba(245,245,220,0.06)' }}
             >
-              <div className="h-4 w-24 rounded bg-white/8" />
-              <div className="h-3 w-full rounded bg-white/5" />
-              <div className="h-3 w-4/5 rounded bg-white/5" />
+              <div className="h-4 w-24 rounded bg-ancestral-cream/8" />
+              <div className="h-3 w-full rounded bg-ancestral-cream/5" />
+              <div className="h-3 w-4/5 rounded bg-ancestral-cream/5" />
             </div>
           ))}
         </div>
@@ -109,17 +109,17 @@ export default function HoroscopesPreview() {
                 href={`/horoscope/${p.signId}`}
                 className="block rounded-2xl p-5 h-full transition-colors"
                 style={{
-                  background: 'linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)',
-                  border: '1px solid rgba(255,255,255,0.07)',
+                  background: 'linear-gradient(145deg, rgba(245,245,220,0.05) 0%, rgba(139,69,19,0.02) 100%)',
+                  border: '1px solid rgba(245,245,220,0.07)',
                 }}
               >
-                <p className="text-white/80 text-sm font-semibold mb-2">
+                <p className="text-ancestral-cream/80 text-sm font-semibold mb-2">
                   {p.emoji} {p.name}
                 </p>
-                <p className="text-white/45 text-sm leading-relaxed mb-3">
+                <p className="text-ancestral-cream/45 text-sm leading-relaxed mb-3">
                   {truncate(p.ouverture)}
                 </p>
-                <span className="text-violet-400/70 text-xs font-medium">
+                <span className="text-ancestral-gold/70 text-xs font-medium">
                   lire la suite →
                 </span>
               </Link>
@@ -131,7 +131,7 @@ export default function HoroscopesPreview() {
       <motion.div
         className="mt-12 h-px mx-auto max-w-xs"
         style={{
-          background: 'linear-gradient(90deg, transparent, rgba(124,58,237,0.4), transparent)',
+          background: 'linear-gradient(90deg, transparent, rgba(210,105,30,0.4), transparent)',
         }}
         initial={{ scaleX: 0 }}
         whileInView={{ scaleX: 1 }}

@@ -9,13 +9,13 @@ export default function Hero() {
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center px-5 py-24 text-center overflow-hidden">
-      {/* Central pulsing glow */}
+      {/* Souffle des ancêtres (remplace le glow cosmique) */}
       <motion.div
         aria-hidden
         className="absolute w-[500px] h-[500px] rounded-full pointer-events-none"
         style={{
           background:
-            'radial-gradient(circle, rgba(124,58,237,0.18) 0%, rgba(59,130,246,0.08) 40%, transparent 70%)',
+            'radial-gradient(circle, rgba(245,245,220,0.15) 0%, rgba(139,69,19,0.08) 40%, transparent 70%)',
           filter: 'blur(40px)',
           left: '50%',
           top: '50%',
@@ -25,20 +25,32 @@ export default function Hero() {
         transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* Orbiting ring */}
+      {/* Motifs traditionnels (remplace les cercles orbitaux) */}
       <motion.div
         aria-hidden
-        className="absolute w-[340px] h-[340px] rounded-full border border-violet-500/10 pointer-events-none"
-        style={{ left: '50%', top: '50%', marginLeft: '-170px', marginTop: '-170px' }}
+        className="absolute w-[340px] h-[340px] rounded-full border border-ancestral-gold/15 pointer-events-none"
+        style={{
+          left: '50%', 
+          top: '50%', 
+          marginLeft: '-170px', 
+          marginTop: '-170px',
+          background: 'conic-gradient(from 0deg, transparent 0deg, rgba(210,180,140,0.05) 10deg, transparent 20deg, rgba(210,180,140,0.05) 30deg, transparent 40deg)'
+        }}
         animate={{ rotate: 360 }}
-        transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+        transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
       />
       <motion.div
         aria-hidden
-        className="absolute w-[520px] h-[520px] rounded-full border border-blue-500/5 pointer-events-none"
-        style={{ left: '50%', top: '50%', marginLeft: '-260px', marginTop: '-260px' }}
+        className="absolute w-[520px] h-[520px] rounded-full border border-ancestral-gold/10 pointer-events-none"
+        style={{
+          left: '50%', 
+          top: '50%', 
+          marginLeft: '-260px', 
+          marginTop: '-260px',
+          background: 'conic-gradient(from 0deg, transparent 0deg, rgba(139,69,19,0.03) 5deg, transparent 10deg, rgba(139,69,19,0.03) 15deg, transparent 20deg)'
+        }}
         animate={{ rotate: -360 }}
-        transition={{ duration: 50, repeat: Infinity, ease: 'linear' }}
+        transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
       />
 
       <div className="relative z-10 max-w-2xl mx-auto">
@@ -49,11 +61,11 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.4 }}
         >
-          <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-gradient">
-            Maryse
+          <span className="block text-5xl sm:text-6xl md:text-7xl text-ancestral-gold">
+            Maryse Condé
           </span>
-          <span className="block text-white/70 text-2xl sm:text-3xl md:text-4xl font-light mt-3">
-            vous guide
+          <span className="block text-ancestral-cream/80 text-2xl sm:text-3xl md:text-4xl font-light mt-3">
+            vous parle
           </span>
         </motion.h1>
 
@@ -61,19 +73,19 @@ export default function Hero() {
         {/* CTA */}
         <motion.button
           onClick={scrollToSigns}
-          className="relative px-10 py-4 rounded-2xl text-white font-semibold text-base sm:text-lg overflow-hidden"
+          className="relative px-10 py-4 rounded-2xl text-ancestral-earth font-semibold text-base sm:text-lg overflow-hidden"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, delay: 0.9, type: 'spring', stiffness: 200 }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.97 }}
           style={{
-            background: 'linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%)',
+            background: 'linear-gradient(135deg, #8B4513 0%, #CD5C5C 100%)',
             boxShadow:
-              '0 0 40px rgba(124, 58, 237, 0.5), 0 4px 24px rgba(0,0,0,0.3)',
+              '0 0 40px rgba(139, 69, 19, 0.5), 0 4px 24px rgba(0,0,0,0.3)',
           }}
         >
-          <span className="relative z-10">✨ Choisir mon signe</span>
+          <span className="relative z-10">🌿 Choisir mon signe</span>
           {/* Shimmer overlay */}
           <div
             className="absolute inset-0 opacity-30 shimmer-bg"
@@ -81,7 +93,7 @@ export default function Hero() {
           />
         </motion.button>
 
-        {/* Stats row */}
+        {/* Stats row - Symboles ancestraux */}
         <motion.div
           className="flex items-center justify-center gap-8 mt-20 text-center"
           initial={{ opacity: 0 }}
@@ -89,20 +101,20 @@ export default function Hero() {
           transition={{ duration: 1, delay: 1.3 }}
         >
           {[
-            { value: '12', label: 'signes' },
-            { value: '✨', label: 'Maryse CondAI' },
-            { value: '∞', label: 'énergies' },
+            { value: '12', label: 'totems' },
+            { value: '🌿', label: 'Maryse Condé' },
+            { value: '∞', label: 'savoir ancestral' },
           ].map((stat) => (
             <div key={stat.label} className="flex flex-col items-center gap-1">
-              <span className="text-xl font-bold text-gradient">{stat.value}</span>
-              <span className="text-white/25 text-xs uppercase tracking-widest">
+              <span className="text-xl font-bold text-ancestral-gold">{stat.value}</span>
+              <span className="text-ancestral-cream/50 text-xs uppercase tracking-widest">
                 {stat.label}
               </span>
             </div>
           ))}
         </motion.div>
 
-        {/* Scroll arrow */}
+        {/* Flèche de scroll - Style ancestral */}
         <motion.div
           className="mt-16 flex flex-col items-center gap-3"
           initial={{ opacity: 0 }}
@@ -110,7 +122,7 @@ export default function Hero() {
           transition={{ delay: 1.6, duration: 1 }}
         >
           <motion.div
-            className="w-px h-14 bg-gradient-to-b from-violet-400/50 to-transparent"
+            className="w-px h-14 bg-gradient-to-b from-ancestral-gold/50 to-transparent"
             style={{ originY: 'top' }}
             animate={{ scaleY: [0, 1, 0] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}

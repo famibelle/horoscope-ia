@@ -47,7 +47,9 @@ export default function EnergyBanner() {
     fetch('/api/signe-du-jour')
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => { if (d && !d.error) setSigne(d); })
-      .catch(() => {});
+      .catch(() => {
+        // API non disponible (clé Mistral manquante en dev local) - silencieux
+      });
   }, []);
 
   const signeEmoji = signe?.type === 'faune' ? '🦎' : '🌿';
@@ -86,11 +88,11 @@ export default function EnergyBanner() {
         transition={{ duration: 0.8 }}
         className="text-center mb-10"
       >
-        <p className="text-violet-300/45 text-xs uppercase tracking-[0.35em] mb-3">
-          Vibrations universelles
+        <p className="text-ancestral-gold/70 text-xs uppercase tracking-[0.35em] mb-3">
+          Paroles des ancêtres
         </p>
-        <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
-          🌟 Énergies du jour
+        <h2 className="font-display text-2xl sm:text-3xl font-bold text-ancestral-cream">
+          🌿 Énergies de Karukera
         </h2>
       </motion.div>
 
@@ -106,19 +108,19 @@ export default function EnergyBanner() {
             className="flex-shrink-0 flex flex-col items-center gap-2 px-5 py-4 rounded-2xl cursor-default"
             style={{
               background:
-                'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)',
+                'linear-gradient(145deg, rgba(245,245,220,0.12) 0%, rgba(210,105,30,0.08) 100%)',
               backdropFilter: 'blur(20px)',
               WebkitBackdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255,255,255,0.08)',
+              border: '1px solid rgba(139,69,19,0.2)',
               minWidth: '120px',
             }}
           >
             <span className="text-2xl">{energy.icon}</span>
             <div className="text-center">
-              <p className="text-white/75 text-xs sm:text-sm font-semibold leading-tight">
+              <p className="text-ancestral-cream/75 text-xs sm:text-sm font-semibold leading-tight">
                 {energy.value}
               </p>
-              <p className="text-white/30 text-[10px] uppercase tracking-wider mt-0.5">
+              <p className="text-ancestral-cream/30 text-[10px] uppercase tracking-wider mt-0.5">
                 {energy.label}
               </p>
             </div>
@@ -126,30 +128,30 @@ export default function EnergyBanner() {
         ))}
       </div>
 
-      {/* Les ancêtres t'envoient un signe */}
+      {/* Les esprits de Karukera murmurent */}
       {signe?.phrase && (
         <motion.div
           className="mt-8 max-w-md mx-auto rounded-2xl p-4"
           style={{
-            background: 'linear-gradient(135deg, rgba(124,58,237,0.1), rgba(59,130,246,0.06))',
-            border: '1px solid rgba(124,58,237,0.18)',
+            background: 'linear-gradient(135deg, rgba(139,69,19,0.15), rgba(210,105,30,0.1))',
+            border: '1px solid rgba(139,69,19,0.25)',
           }}
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5, duration: 0.8 }}
         >
-          <p className="text-white/35 text-xs uppercase tracking-widest mb-1.5">
-            Les ancêtres t'envoient un signe
+          <p className="text-ancestral-gold/40 text-xs uppercase tracking-widest mb-1.5">
+            Les esprits de Karukera murmurent
           </p>
-          <p className="text-white/60 text-sm sm:text-base leading-relaxed italic">{signe.phrase}</p>
+          <p className="text-ancestral-cream/70 text-sm sm:text-base leading-relaxed italic">{signe.phrase}</p>
         </motion.div>
       )}
 
       <motion.div
         className="mt-12 h-px mx-auto max-w-xs"
         style={{
-          background: 'linear-gradient(90deg, transparent, rgba(124,58,237,0.4), transparent)',
+          background: 'linear-gradient(90deg, transparent, rgba(210,105,30,0.4), transparent)',
         }}
         initial={{ scaleX: 0 }}
         whileInView={{ scaleX: 1 }}

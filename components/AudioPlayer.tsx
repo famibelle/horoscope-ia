@@ -170,7 +170,6 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
       setShowLoading(false);
     } catch (e) {
       setError('Génération audio indisponible.');
-      clearInterval(interval);
       setShowLoading(false);
       setState('idle');
     }

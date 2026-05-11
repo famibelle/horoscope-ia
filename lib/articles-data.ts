@@ -16,7 +16,7 @@ export const ARTICLES: ArticleMeta[] = [
     excerpt:
       "Avant le GPS, avant les météos satellitaires, les pêcheurs de Guadeloupe lisaient la lune. Ce savoir-là ne s'apprend pas dans les livres.",
     tag: 'Lune',
-    tagColor: 'from-blue-400 to-violet-500',
+    tagColor: 'from-ancestral-cream to-ancestral-gold',
     readTime: '5 min',
   },
   {
@@ -26,7 +26,7 @@ export const ARTICLES: ArticleMeta[] = [
     excerpt:
       "Le quimbois n'est pas de la superstition. C'est une manière de lire le monde invisible que l'Occident a choisi d'ignorer — et les planètes en font partie.",
     tag: 'Spirituel',
-    tagColor: 'from-violet-500 to-indigo-600',
+    tagColor: 'from-ancestral-earth to-ancestral-deepBrown',
     readTime: '6 min',
   },
   {
@@ -36,7 +36,7 @@ export const ARTICLES: ArticleMeta[] = [
     excerpt:
       "La Soufrière gronde depuis toujours. Saturne aussi. Ces deux forces ont la même leçon à nous enseigner : rien de solide ne se construit dans la précipitation.",
     tag: 'Planètes',
-    tagColor: 'from-amber-500 to-orange-600',
+    tagColor: 'from-ancestral-terracotta to-ancestral-earth',
     readTime: '5 min',
   },
   {
@@ -46,7 +46,7 @@ export const ARTICLES: ArticleMeta[] = [
     excerpt:
       "Cancer, Scorpion, Poissons — ces signes vivent là où la terre et l'eau se mélangent. La mangrove de Guadeloupe leur ressemble plus qu'ils ne le croient.",
     tag: 'Éléments',
-    tagColor: 'from-teal-400 to-cyan-600',
+    tagColor: 'from-ancestral-forest to-ancestral-earth',
     readTime: '5 min',
   },
   {
@@ -56,7 +56,7 @@ export const ARTICLES: ArticleMeta[] = [
     excerpt:
       "L'amour en Guadeloupe ne ressemble pas à l'amour dans les romans parisiens. Vénus, ici, a les pieds dans le sable et la voix qui porte loin.",
     tag: 'Amour',
-    tagColor: 'from-pink-500 to-rose-600',
+    tagColor: 'from-ancestral-gold to-ancestral-terracotta',
     readTime: '6 min',
   },
   {
@@ -66,7 +66,7 @@ export const ARTICLES: ArticleMeta[] = [
     excerpt:
       "Mercure gouverne la parole, les mots, les échanges. Le créole guadeloupéen est une langue qui a survécu à l'interdit. Cette résistance-là est mercurienne.",
     tag: 'Langage',
-    tagColor: 'from-emerald-400 to-green-600',
+    tagColor: 'from-ancestral-forest to-ancestral-gold',
     readTime: '6 min',
   },
 ];
