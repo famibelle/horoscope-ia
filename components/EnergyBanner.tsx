@@ -126,7 +126,7 @@ export default function EnergyBanner() {
         ))}
       </div>
 
-      {/* Signe du jour phrase */}
+      {/* Les ancêtres t'envoient un signe */}
       {signe?.phrase && (
         <motion.div
           className="mt-8 max-w-md mx-auto rounded-2xl p-4"
@@ -140,7 +140,7 @@ export default function EnergyBanner() {
           transition={{ delay: 0.5, duration: 0.8 }}
         >
           <p className="text-white/35 text-xs uppercase tracking-widest mb-1.5">
-            Signe du jour
+            Les ancêtres t'envoient un signe
           </p>
           <p className="text-white/60 text-sm sm:text-base leading-relaxed italic">{signe.phrase}</p>
         </motion.div>
