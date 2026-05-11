@@ -1,12 +1,14 @@
 import StarField from '@/components/StarField';
 import Hero from '@/components/Hero';
 import InteractiveHoroscope from '@/components/InteractiveHoroscope';
+import EditionToggle from '@/components/EditionToggle';
 import EnergyBanner from '@/components/EnergyBanner';
 import ShareButtons from '@/components/ShareButtons';
 import HoroscopesPreview from '@/components/HoroscopesPreview';
 import AdSpace from '@/components/AdSpace';
 import Articles from '@/components/Articles';
 import Footer from '@/components/Footer';
+import { EditionProvider } from '@/contexts/EditionContext';
 
 export default function Home() {
   return (
@@ -44,17 +46,20 @@ export default function Home() {
         />
       </div>
 
-      <div className="relative z-10">
-        <Hero />
-        <InteractiveHoroscope />
-        <AdSpace variant="banner" />
-        <HoroscopesPreview />
-        <EnergyBanner />
-        <ShareButtons />
-        <AdSpace variant="square" />
-        <Articles />
-        <Footer />
-      </div>
+      <EditionProvider>
+        <div className="relative z-10">
+          <EditionToggle />
+          <Hero />
+          <InteractiveHoroscope />
+          <AdSpace variant="banner" />
+          <HoroscopesPreview />
+          <EnergyBanner />
+          <ShareButtons />
+          <AdSpace variant="square" />
+          <Articles />
+          <Footer />
+        </div>
+      </EditionProvider>
     </main>
   );
 }

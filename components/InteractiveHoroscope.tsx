@@ -6,38 +6,17 @@ import SignSelector from './SignSelector';
 import HoroscopeCard from './HoroscopeCard';
 import AudioPlayer from './AudioPlayer';
 import { signs } from '@/lib/signs-data';
-import { detectEdition, EDITION_LABELS, getMoonPhaseEmoji } from '@/lib/edition';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
 import { todayISO } from '@/lib/horoscope-data';
-import type { Edition } from '@/private/maryse-prompt';
+import { useEdition } from '@/contexts/EditionContext';
 
 export default function InteractiveHoroscope() {
+  const { edition } = useEdition();
   const [selectedSignId, setSelectedSignId] = useState<string>('lion');
-  const [edition, setEdition] = useState<Edition>('matin');
   const [data, setData]       = useState<HoroscopeResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState<string | null>(null);
-  const [moonEmoji, setMoonEmoji] = useState<string>('🌙');
   const cardRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setEdition(detectEdition());
-    setMoonEmoji(getMoonPhaseEmoji());
-  }, []);
-
-  // Toggle theme classes for each edition
-  useEffect(() => {
-    // Remove all edition classes first
-    document.body.classList.remove('matin-mode', 'midi-mode', 'soir-mode');
-    // Add the current edition class
-    if (edition === 'matin') {
-      document.body.classList.add('matin-mode');
-    } else if (edition === 'midi') {
-      document.body.classList.add('midi-mode');
-    } else if (edition === 'soir') {
-      document.body.classList.add('soir-mode');
-    }
-  }, [edition]);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -82,37 +61,6 @@ export default function InteractiveHoroscope() {
 
   return (
     <>
-      {/* Edition toggle */}
-      <div className="flex justify-center gap-2 px-4 mb-2">
-        {(['matin', 'midi', 'soir'] as Edition[]).map((ed) => {
-          const { label, emoji } = EDITION_LABELS[ed];
-          const active = edition === ed;
-          // Use dynamic moon emoji for "soir"
-          const displayEmoji = ed === 'soir' ? moonEmoji : emoji;
-          return (
-            <motion.button
-              key={ed}
-              onClick={() => setEdition(ed)}
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium transition-colors"
-              style={{
-                background: active
-                  ? 'linear-gradient(135deg, rgba(210,105,30,0.35), rgba(255,215,0,0.25))'
-                  : 'rgba(245,245,220,0.05)',
-                border: active
-                  ? '1px solid rgba(210,105,30,0.5)'
-                  : '1px solid rgba(245,245,220,0.08)',
-                color: active ? '#F5F5DC' : 'rgba(245,245,220,0.35)',
-              }}
-            >
-              <span>{displayEmoji}</span>
-              <span>{label}</span>
-            </motion.button>
-          );
-        })}
-      </div>
-
       <SignSelector
         selected={selectedSignId}
         onSelect={(id) => {
