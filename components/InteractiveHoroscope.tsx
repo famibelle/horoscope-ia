@@ -6,7 +6,7 @@ import SignSelector from './SignSelector';
 import HoroscopeCard from './HoroscopeCard';
 import AudioPlayer from './AudioPlayer';
 import { signs } from '@/lib/signs-data';
-import { detectEdition, EDITION_LABELS } from '@/lib/edition';
+import { detectEdition, EDITION_LABELS, getMoonPhaseEmoji } from '@/lib/edition';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
 import { todayISO } from '@/lib/horoscope-data';
 import type { Edition } from '@/private/maryse-prompt';
@@ -17,11 +17,18 @@ export default function InteractiveHoroscope() {
   const [data, setData]       = useState<HoroscopeResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState<string | null>(null);
+  const [moonEmoji, setMoonEmoji] = useState<string>('🌙');
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setEdition(detectEdition());
+    setMoonEmoji(getMoonPhaseEmoji());
   }, []);
+
+  // Toggle dark mode for "soir" edition
+  useEffect(() => {
+    document.body.classList.toggle('soir-mode', edition === 'soir');
+  }, [edition]);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -71,6 +78,8 @@ export default function InteractiveHoroscope() {
         {(['matin', 'midi', 'soir'] as Edition[]).map((ed) => {
           const { label, emoji } = EDITION_LABELS[ed];
           const active = edition === ed;
+          // Use dynamic moon emoji for "soir"
+          const displayEmoji = ed === 'soir' ? moonEmoji : emoji;
           return (
             <motion.button
               key={ed}
@@ -88,7 +97,7 @@ export default function InteractiveHoroscope() {
                 color: active ? '#F5F5DC' : 'rgba(245,245,220,0.35)',
               }}
             >
-              <span>{emoji}</span>
+              <span>{displayEmoji}</span>
               <span>{label}</span>
             </motion.button>
           );

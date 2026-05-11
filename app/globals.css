@@ -45,6 +45,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Dark mode pour l'édition "Soir" */
+.soir-mode {
+  background-color: #020617;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% -10%, rgba(210, 105, 30, 0.25) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 80% 10%, rgba(255, 215, 0, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 80%, rgba(85, 64, 40, 0.15) 0%, transparent 50%);
+}
+
+.soir-mode .rounded-3xl {
+  background: rgba(10, 20, 40, 0.3) !important;
+  border-color: rgba(210, 105, 30, 0.25) !important;
+}
+
 @layer utilities {
   .glass {
     background: rgba(245, 245, 220, 0.04);

@@ -1,5 +1,27 @@
 import type { Edition } from '@/private/maryse-prompt';
 
+/**
+ * Returns the current moon phase emoji based on lunar cycle
+ * Calculates phase from a known reference date (2000-01-06 = new moon)
+ */
+export function getMoonPhaseEmoji(): string {
+  const known = new Date('2000-01-06').getTime();
+  const days = (Date.now() - known) / 86400000;
+  const cycle = (days % 29.53 + 29.53) % 29.53;
+  const idx = Math.floor(cycle / 29.53 * 8) % 8;
+  const moonPhases = [
+    '🌑', // Nouvelle lune
+    '🌒', // Croissant naissant
+    '🌓', // Premier quartier
+    '🌔', // Croissant gibbeuse
+    '🌕', // Pleine lune
+    '🌖', // Gibbeuse décroissante
+    '🌗', // Dernier quartier
+    '🌘', // Croissant décroissant
+  ];
+  return moonPhases[idx];
+}
+
 export function detectEdition(): Edition {
   const h = parseInt(
     new Date().toLocaleString('en-US', {
