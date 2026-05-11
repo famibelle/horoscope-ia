@@ -2,10 +2,10 @@ import Link from 'next/link';
 
 const links = {
   Légal: [
-    { label: 'Mentions légales', href: '#' },
-    { label: 'Politique de confidentialité', href: '#' },
-    { label: 'CGU', href: '#' },
-    { label: 'Contact', href: '#' },
+    { label: 'Mentions légales', href: '/mentions-legales' },
+    { label: 'Politique de confidentialité', href: '/politique-de-confidentialite' },
+    { label: 'CGU', href: '/cgu' },
+    { label: 'Contact', href: '/contact' },
   ],
 };
 
@@ -29,26 +29,16 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Links grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-10 mb-14">
-          {Object.entries(links).map(([category, items]) => (
-            <div key={category}>
-              <h3 className="text-ancestral-cream/50 text-xs uppercase tracking-[0.25em] font-semibold mb-4">
-                {category}
-              </h3>
-              <ul className="space-y-2.5">
-                {items.map((item) => (
-                  <li key={item.label}>
-                    <Link
-                      href={item.href}
-                      className="text-ancestral-cream/30 text-sm hover:text-ancestral-gold transition-colors duration-200"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+        {/* Legal links - centered and inline */}
+        <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mb-14">
+          {links.Légal.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className="text-ancestral-cream/40 text-sm hover:text-ancestral-gold transition-colors duration-200"
+            >
+              {item.label}
+            </Link>
           ))}
         </div>
 
