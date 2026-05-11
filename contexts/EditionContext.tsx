@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { detectEdition, getMoonPhaseEmoji } from '@/lib/edition';
-import type { Edition } from '@/private/maryse-prompt';
+import type { Edition } from '@/lib/private/maryse-prompt';
 
 interface EditionContextType {
   edition: Edition;

@@ -8,7 +8,7 @@ import { ArrowLeft, Heart, Briefcase, Coins, Users, Sparkles, Eye, Activity } fr
 import { signs } from '@/lib/signs-data';
 import { detectEdition, EDITION_LABELS } from '@/lib/edition';
 import AudioPlayer from '@/components/AudioPlayer';
-import type { Edition } from '@/private/maryse-prompt';
+import type { Edition } from '@/lib/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
 
 /* ── Types ─────────────────────────────────────────────────────────────────── */

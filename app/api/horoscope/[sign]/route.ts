@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signs } from '@/lib/signs-data';
-import { MARYSE_SYSTEM, buildHoroscopeUserPrompt } from '@/private/maryse-prompt';
+import { MARYSE_SYSTEM, buildHoroscopeUserPrompt } from '@/lib/private/maryse-prompt';
 import {
   getMedicinalPlant,
   getResistancePratique,
@@ -11,7 +11,7 @@ import {
   getHistoricalResonance,
 } from '@/lib/cultural-context';
 import { detectEdition, todayGuadeloupe } from '@/lib/edition';
-import type { Edition } from '@/private/maryse-prompt';
+import type { Edition } from '@/lib/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
 
 const HOROSCOPE_API = 'https://freehoroscopeapi.com/api/v1/get-horoscope/daily';

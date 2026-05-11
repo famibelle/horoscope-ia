@@ -1,4 +1,4 @@
-import type { Edition } from '@/private/maryse-prompt';
+import type { Edition } from '@/lib/private/maryse-prompt';
 
 /**
  * Returns the current moon phase emoji based on lunar cycle

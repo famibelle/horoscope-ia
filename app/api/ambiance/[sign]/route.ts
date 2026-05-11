@@ -11,7 +11,7 @@ import {
 } from '@/lib/cultural-context';
 import { computeScores } from '@/lib/scores';
 import type { WeatherData } from '@/app/api/weather/route';
-import type { Edition } from '@/private/maryse-prompt';
+import type { Edition } from '@/lib/private/maryse-prompt';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 

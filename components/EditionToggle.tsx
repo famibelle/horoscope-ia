@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { EDITION_LABELS } from '@/lib/edition';
 import { useEdition } from '@/contexts/EditionContext';
-import type { Edition } from '@/private/maryse-prompt';
+import type { Edition } from '@/lib/private/maryse-prompt';
 
 export default function EditionToggle() {
   const { edition, setEdition, moonEmoji } = useEdition();

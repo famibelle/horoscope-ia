@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signs } from '@/lib/signs-data';
 import { detectEdition, todayGuadeloupe } from '@/lib/edition';
-import type { Edition } from '@/private/maryse-prompt';
+import type { Edition } from '@/lib/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
 
 async function getCached(key: string): Promise<HoroscopeResponse | null> {
