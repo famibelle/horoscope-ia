@@ -9,6 +9,7 @@ import { signs } from '@/lib/signs-data';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
 import { todayISO } from '@/lib/horoscope-data';
 import { useEdition } from '@/contexts/EditionContext';
+import type { Edition } from '@/private/maryse-prompt';
 
 export default function InteractiveHoroscope() {
   const { edition } = useEdition();

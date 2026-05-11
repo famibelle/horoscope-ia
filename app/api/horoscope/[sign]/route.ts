@@ -149,9 +149,6 @@ async function rewriteWithMistral(
         { role: 'system', content: MARYSE_SYSTEM },
         { role: 'user',   content: buildHoroscopeUserPrompt(
           sign, rawText, weather, edition,
-          medicinal, pratique, objet,
-          faune, flore, lieu,
-          historicalResonance,
         ) },
       ],
     }),
