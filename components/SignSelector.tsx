@@ -18,13 +18,13 @@ export default function SignSelector({ selected, onSelect }: SignSelectorProps) 
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
       >
-        <p className="text-ancestral-gold/45 text-xs uppercase tracking-[0.35em] mb-4">
+        <p className="text-white text-xs uppercase tracking-[0.35em] mb-4">
           Sagesse de Karukera
         </p>
-        <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-ancestral-cream mb-4">
+        <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
           Découvrez votre totem
         </h2>
-        <p className="text-ancestral-cream/35 text-sm sm:text-base max-w-xs mx-auto leading-relaxed">
+        <p className="text-white text-sm sm:text-base max-w-xs mx-auto leading-relaxed">
           Les esprits de la Guadeloupe vous guident vers votre destin ancestral
         </p>
       </motion.div>
@@ -61,12 +61,12 @@ export default function SignSelector({ selected, onSelect }: SignSelectorProps) 
             >
               <span className="text-2xl sm:text-3xl leading-none">{sign.emoji}</span>
               <span
-                className="text-xs font-medium leading-tight text-center transition-colors duration-200 text-ancestral-gold"
-                style={{ color: isSelected ? '#FFD700' : 'rgba(245,245,220,0.65)' }}
+                className="text-xs font-medium leading-tight text-center transition-colors duration-200"
+                style={{ color: isSelected ? '#FFD700' : '#FFFFFF' }}
               >
                 {sign.name}
               </span>
-              <span className="text-ancestral-cream/25 text-[10px] leading-tight text-center hidden sm:block">
+              <span className="text-white text-[10px] leading-tight text-center hidden sm:block">
                 {elementEmoji[sign.element]} {sign.element}
               </span>
 
@@ -98,18 +98,17 @@ export default function SignSelector({ selected, onSelect }: SignSelectorProps) 
             if (!sign) return null;
             return (
               <div
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm text-white"
                 style={{
                   background: `linear-gradient(135deg, rgba(210,105,30,0.20), rgba(255,215,0,0.15))`,
                   border: `1px solid rgba(210,105,30,0.35)`,
-                  color: '#FFD700',
                 }}
               >
                 <span>{sign.emoji}</span>
                 <span className="font-semibold">{sign.name}</span>
-                <span className="text-ancestral-cream/40">·</span>
-                <span className="text-ancestral-cream/50 text-xs">{sign.tagline}</span>
-                <span className="text-ancestral-cream/30 text-xs">· {sign.planet}</span>
+                <span className="text-white">·</span>
+                <span className="text-white text-xs">{sign.tagline}</span>
+                <span className="text-white text-xs">· {sign.planet}</span>
               </div>
             );
           })()}
