@@ -25,7 +25,6 @@ export function getMoonPhaseEmoji(): string {
 export function detectEdition(): Edition {
   const h = parseInt(
     new Date().toLocaleString('en-US', {
-      timeZone: 'America/Guadeloupe',
       hour: 'numeric',
       hour12: false,
     }),
