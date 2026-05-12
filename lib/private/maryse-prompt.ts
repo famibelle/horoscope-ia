@@ -1,6 +1,23 @@
 import type { Sign } from '@/lib/signs-data';
 
-/* ── Persona Maryse Condé ─────────────────────────────────────────────────── */
+/*
+ * ═══════════════════════════════════════════════════════════════
+ * SEPARATION DES PROMPTS POUR FACILITER LE CHANGEMENT DE NARRATEUR
+ * ═══════════════════════════════════════════════════════════════
+ *
+ * Ce fichier contient les prompts utilisés pour générer les horoscopes.
+ * Pour changer de narrateur, modifiez les fichiers Markdown correspondants :
+ *
+ *   - lib/private/maryse_ame.md          → L'âme/personnalité du narrateur
+ *   - lib/private/maryse.md             → Son persona spécifique aux horoscopes
+ *   - lib/private/horoscope_instructions.md → Instructions GÉNÉRIQUES (indépendantes du narrateur)
+ *
+ * Les constantes ci-dessous sont les versions TypeScript des fichiers Markdown.
+ * Pour une mise à jour, modifiez les fichiers .md puis copiez le contenu ici.
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+/* ── Persona Maryse Condé - Voir lib/private/maryse_ame.md ──────────── */
 
 const MARYSE_AME = `Tu es Maryse Condé — romancière guadeloupéenne, voix libre et sans concession, prix Nobel alternatif de littérature 2018.
 
@@ -14,6 +31,8 @@ Ta langue est le français — mais un français qui a mangé du colombo, qui a 
 
 À la radio, tu parles comme tu écris : des phrases courtes qui claquent, un rythme oral naturel, des images concrètes ancrées dans le quotidien guadeloupéen. Pas de langue de bois. Tu respectes tes auditeurs — la diaspora, les gens de là-bas, ceux qui connaissent déjà. Tu ne surexpliques pas. Tu poses les images et tu laisses résonner. Tu n'utilises jamais de titres, d'en-têtes ou de lignes isolées : tout ce que tu dis est pensé pour être entendu, pas lu.`;
 
+/* ── Persona Horoscope - Voir lib/private/maryse.md ───────────────── */
+
 const KREYOL_RESISTANCE = `Les symboles vivants de la résistance créole.
 
 Ces êtres — animaux, plantes, arbres — ne sont pas de la décoration. Ils sont des mémoires. Elle les connaît par le corps, pas par les livres. Elle peut les convoquer quand le moment le demande : un mot, une image, une correspondance. Jamais de façon systématique — seulement quand ça colle, quand ça résonne.
@@ -22,8 +41,10 @@ Igwann péyi — résistance par la patience, savoir disparaître pour survivre.
 
 Manyòk — autonomie alimentaire arrachée au contrôle. Iyam — lien direct avec l'Afrique, acte de mémoire. Woucou — ce qui reste quand on a tout pris. Malomé — protection du quimbois, bouclier invisible. Gommié blan — l'arbre de la mobilité, du refus d'être enfermé.`;
 
-/* ── Édition configs (matin / soir) ──────────────────────────────────────── */
+/* ── Configurations des éditions - Spécifique au projet ─────────────── */
 
+// Ces configurations définissent le ton pour chaque période de la journée
+// Voir horoscope_instructions.md pour les instructions détaillées de rédaction
 export const EDITION_CONFIGS = {
   matin: {
     moment: 'ce matin',
@@ -44,7 +65,11 @@ export const EDITION_CONFIGS = {
 
 export type Edition = keyof typeof EDITION_CONFIGS;
 
-/* ── System prompt complet ───────────────────────────────────────────────── */
+/* ── System Prompt - Combine AME + Persona + Instructions ──────────── */
+/*
+ * Structure : MARYSE_AME + KREYOL_RESISTANCE + Instructions de horoscope_instructions.md
+ * Format de sortie : Objet JSON avec 6 clés (ouverture, amour, travail, argent, amitie, prediction)
+ */
 
 export const MARYSE_SYSTEM = `${MARYSE_AME}
 
@@ -56,7 +81,8 @@ export const MARYSE_SIGNE_SYSTEM = `${MARYSE_AME}
 
 Tu rédiges UNIQUEMENT le signe du jour — une plante, un arbre ou un animal de la Caraïbe. Commence OBLIGATOIREMENT par une variation de "Si tu croises" suivie du nom créole. PAS de description physique. UNE SEULE phrase courte — s'arrêter après le premier point. Pas de titre, pas de formule introductive.`;
 
-/* ── Prompts utilisateur ─────────────────────────────────────────────────── */
+/* ── Prompts utilisateur - Voir horoscope_instructions.md ━ */
+/* Structure : 6 phrases dans l'ordre (ouverture, amour, travail, argent, amitie, prediction) */
 
 export function buildHoroscopeUserPrompt(
   sign: Sign,
