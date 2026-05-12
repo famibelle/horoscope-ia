@@ -109,24 +109,44 @@ export default function HoroscopeSignPage() {
   const [horoscope, setHoroscope] = useState<HoroscopeResponse | null>(null);
   const [ambiance, setAmbiance] = useState<AmbianceData | null>(null);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => { setEdition(detectEdition()); }, []);
+  const [userDate, setUserDate] = useState<string>('');
+  const [userHour, setUserHour] = useState<string>('');
 
   useEffect(() => {
-    if (!edition || !signId) return;
+    // Détecter l'édition et l'heure/date basée sur l'heure du navigateur
+    const now = new Date();
+    const h = now.getHours();
+    let detectedEdition: Edition = 'matin';
+    if (h >= 0 && h < 6) detectedEdition = 'nuit';
+    else if (h >= 6 && h < 12) detectedEdition = 'matin';
+    else if (h >= 12 && h < 18) detectedEdition = 'midi';
+    else detectedEdition = 'soir';
+    setEdition(detectedEdition);
+    
+    // Formater la date du navigateur (YYYY-MM-DD)
+    const formattedDate = now.toISOString().split('T')[0];
+    // Heure du navigateur (HH:MM)
+    const formattedHour = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+    setUserDate(formattedDate);
+    setUserHour(formattedHour);
+  }, []);
+
+  useEffect(() => {
+    if (!edition || !signId || !userDate || !userHour) return;
     setLoading(true);
     setHoroscope(null);
     setAmbiance(null);
+    
     Promise.all([
-      fetch(`/api/horoscope/${signId}?edition=${edition}`).then((r) => r.json()),
-      fetch(`/api/ambiance/${signId}?edition=${edition}`).then((r) => r.json()),
+      fetch(`/api/horoscope/${signId}?edition=${edition}&userDate=${userDate}&userHour=${userHour}`).then((r) => r.json()),
+      fetch(`/api/ambiance/${signId}?edition=${edition}&userDate=${userDate}&userHour=${userHour}`).then((r) => r.json()),
     ])
       .then(([h, a]) => {
         setHoroscope(h as HoroscopeResponse);
         setAmbiance(a as AmbianceData);
       })
       .finally(() => setLoading(false));
-  }, [signId, edition]);
+  }, [signId, edition, userDate, userHour]);
 
   if (!sign) {
     return (
@@ -463,14 +483,10 @@ export default function HoroscopeSignPage() {
               <div className="mt-16">
                 <AudioPlayer
                   signName={sign.name}
-                  text={[
-                    horoscope.ouverture,
-                    horoscope.amour,
-                    horoscope.travail,
-                    horoscope.argent,
-                    horoscope.amitie,
-                    horoscope.prediction,
-                  ].filter(Boolean).join(' ')}
+                  horoscope={horoscope}
+                  edition={horoscope.edition || edition || 'matin'}
+                  userDate={userDate}
+                  userHour={userHour}
                 />
               </div>
             )}

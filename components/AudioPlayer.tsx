@@ -6,7 +6,19 @@ import { Play, Pause, Volume2, Loader2 } from 'lucide-react';
 
 interface AudioPlayerProps {
   signName: string;
-  text: string;
+  horoscope: any;
+  edition?: string;
+  userDate?: string;
+  userHour?: string;
+}
+
+interface HoroscopeData {
+  ouverture?: string;
+  amour?: string;
+  travail?: string;
+  argent?: string;
+  amitie?: string;
+  prediction?: string;
 }
 
 type PlayerState = 'idle' | 'generating' | 'ready' | 'playing' | 'paused';
@@ -68,7 +80,13 @@ const LOADING_MESSAGES = [
   "Les vagues de la Pointe des Châteaux sculptent ton destin sous mes yeux…",
 ];
 
-export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
+export default function AudioPlayer({ 
+  signName, 
+  horoscope, 
+  edition = 'matin',
+  userDate,
+  userHour 
+}: AudioPlayerProps) {
   const [state, setState]         = useState<PlayerState>('idle');
   const [progress, setProgress]   = useState(0);
   const [duration, setDuration]   = useState(0);
@@ -88,7 +106,6 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
   useEffect(() => {
     if (!showLoading) return;
 
-    // Démarrer le défilement (toutes les 1000ms)
     const interval = setInterval(() => {
       const newIndex = Math.floor(Math.random() * LOADING_MESSAGES.length);
       setLoadingMsg(LOADING_MESSAGES[newIndex]);
@@ -97,7 +114,7 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
     return () => clearInterval(interval);
   }, [showLoading]);
 
-  // Reset when sign/text changes
+  // Reset when horoscope changes
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.pause();
@@ -110,10 +127,9 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
     setProgress(0);
     setDuration(0);
     setError(null);
-  }, [text]);
+  }, [horoscope, signName, edition, userDate, userHour]);
 
   async function generate() {
-    // Nettoyer l'ancien audio si présent
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current = null;
@@ -123,7 +139,6 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
       blobUrlRef.current = null;
     }
     
-    // Afficher un message de loading immédiat
     const initialMsgIndex = Math.floor(Math.random() * LOADING_MESSAGES.length);
     setLoadingMsg(LOADING_MESSAGES[initialMsgIndex]);
     
@@ -132,16 +147,21 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
     setError(null);
 
     try {
-      if (!text) {
-        setError('Aucun texte à narrer');
-        // NE PAS mettre setShowLoading(false) pour garder les messages
+      if (!horoscope) {
+        setError('Aucun horoscope à narrer');
         return;
       }
 
       const res = await fetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({
+          horoscope: horoscope,
+          signName: signName,
+          edition: edition,
+          userDate: userDate,
+          userHour: userHour
+        }),
       });
       if (!res.ok) throw new Error(`TTS ${res.status}`);
       const blob = await res.blob();
@@ -229,7 +249,6 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
           boxShadow: '0 0 60px rgba(124,58,237,0.15)',
         }}
       >
-        {/* Waveform decoration */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {Array.from({ length: 40 }).map((_, i) => (
             <motion.div
@@ -258,7 +277,6 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
         </div>
 
         <div className="relative z-10 flex flex-col sm:flex-row items-center gap-6">
-          {/* Play/Generate button */}
           <motion.button
             onClick={hasAudio ? togglePlay : generate}
             disabled={showLoading}
@@ -297,7 +315,6 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
             )}
           </motion.button>
 
-          {/* Track info */}
           <div className="text-center sm:text-left flex-1 w-full">
             <p className="text-white/80 font-semibold text-base sm:text-lg">
               {signName ? `Horoscope ${signName}` : 'Horoscope audio'}
@@ -324,7 +341,6 @@ export default function AudioPlayer({ signName, text }: AudioPlayerProps) {
             </AnimatePresence>
             {error && <p className="text-rose-400/70 text-xs mt-1">{error}</p>}
 
-            {/* Progress bar */}
             {hasAudio && (
               <div className="mt-3 h-1 rounded-full bg-white/10 overflow-hidden max-w-xs mx-auto sm:mx-0">
                 <motion.div
