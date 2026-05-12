@@ -271,6 +271,70 @@ export default function HoroscopeSignPage() {
               </motion.section>
             )}
 
+            {/* Newsletter - Recevoir son horoscope par mail */}
+            <motion.section
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.25 }}
+              className="mb-14"
+            >
+              <div
+                className="rounded-2xl p-6 text-center"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(210,105,30,0.12), rgba(255,215,0,0.08))',
+                  border: '1px solid rgba(210,105,30,0.25)',
+                }}
+              >
+                <h3 className="font-display text-lg font-bold text-ancestral-cream mb-3 flex items-center justify-center gap-3">
+                  <div
+                    className="flex gap-0.5 overflow-hidden relative w-7 h-7 rounded-full"
+                    style={{ background: 'rgba(245,245,220,0.08)' }}
+                  >
+                    <motion.div
+                      className="flex gap-0.5 whitespace-nowrap items-center"
+                      animate={{ x: ['0%', '-100%'] }}
+                      transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+                    >
+                      <span className="text-base">{sign.emoji}</span>
+                      <span className="text-base">❤️</span>
+                      <span className="text-base">💰</span>
+                      <span className="text-base">💪</span>
+                      <span className="text-base">🤝</span>
+                      <span className="text-base">💼</span>
+                      <span className="text-base">{sign.emoji}</span>
+                      <span className="text-base">❤️</span>
+                      <span className="text-base">💰</span>
+                    </motion.div>
+                  </div>
+                  Recevez votre horoscope du {sign.name} tous les matins
+                </h3>
+                <p className="text-ancestral-cream/40 text-sm mb-5">
+                  Les prédictions de Maryse CondAI directement dans votre boîte mail.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <input
+                    type="email"
+                    placeholder="votre@email.com"
+                    className="flex-1 px-4 py-2.5 rounded-xl text-ancestral-cream/80 placeholder-ancestral-cream/20 text-sm"
+                    style={{
+                      background: 'rgba(245,245,220,0.05)',
+                      border: '1px solid rgba(245,245,220,0.15)',
+                    }}
+                  />
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="px-6 py-2.5 rounded-xl text-sm font-semibold text-ancestral-dark bg-gradient-to-r from-ancestral-gold/90 to-ancestral-gold/60"
+                  >
+                    S'abonner
+                  </motion.button>
+                </div>
+                <p className="text-ancestral-cream/30 text-[10px] mt-3">
+                  Désabonnement en un clic. Vos données restent privées.
+                </p>
+              </div>
+            </motion.section>
+
             {/* ══ Ambiance Astrale ══════════════════════════════════════════ */}
             {ambiance && (
               <motion.section

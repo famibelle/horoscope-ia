@@ -1,17 +1,18 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { EDITION_LABELS } from '@/lib/edition';
+import { getDynamicEditionLabels } from '@/lib/edition';
 import { useEdition } from '@/contexts/EditionContext';
 import type { Edition } from '@/lib/private/maryse-prompt';
 
 export default function EditionToggle() {
   const { edition, setEdition, moonEmoji } = useEdition();
+  const dynamicLabels = getDynamicEditionLabels(edition);
 
   return (
     <div className="flex justify-center gap-2 px-4 py-4">
       {(['matin', 'midi', 'soir'] as Edition[]).map((ed) => {
-        const { label, emoji } = EDITION_LABELS[ed];
+        const { label, emoji } = dynamicLabels[ed];
         const active = edition === ed;
         // Use dynamic moon emoji for "soir"
         const displayEmoji = ed === 'soir' ? moonEmoji : emoji;
