@@ -29,37 +29,46 @@ export default function HoroscopesPreview() {
     let cancelled = false;
     const edition = detectEdition();
 
-    fetch(`/api/horoscopes-preview?edition=${edition}`)
-      .then((r) => (r.ok ? r.json() : []))
-      .then(async (data: SignPreview[]) => {
-        if (cancelled) return;
-        if (data.length > 0) {
-          // Prod : cache Blobs disponible, affichage immédiat
-          setPreviews(data);
-          setLoading(false);
+    async function loadPreviews() {
+      try {
+        setLoading(true);
+        
+        // 1. Essayer le cache preview (Blobs)
+        const previewRes = await fetch(`/api/horoscopes-preview?edition=${edition}`);
+        const previewData: SignPreview[] = previewRes.ok ? await previewRes.json() : [];
+        
+        if (previewData.length > 0) {
+          if (!cancelled) setPreviews(previewData);
         } else {
-          // Dev local : pas de Blobs, chargement séquentiel pour ne pas saturer Mistral
-          setLoading(false);
-          for (const sign of signs) {
-            if (cancelled) break;
-            try {
-              const res = await fetch(`/api/horoscope/${sign.id}?edition=${edition}`);
-              if (!res.ok) continue;
-              const horoscope = await res.json();
-              const text = horoscope.teaser || horoscope.ouverture;
-              if (text && horoscope.source !== 'raw') {
-                setPreviews((prev) =>
-                  prev.some((p) => p.signId === sign.id)
-                    ? prev
-                    : [...prev, { signId: sign.id, name: sign.name, emoji: sign.emoji, ouverture: text }],
-                );
+          // 2. Charger tous les signes en parallèle
+          const results = await Promise.all(
+            signs.map(async (sign) => {
+              if (cancelled) return null;
+              try {
+                const res = await fetch(`/api/horoscope/${sign.id}?edition=${edition}`);
+                if (!res.ok) return null;
+                const horoscope = await res.json();
+                // Utiliser teaser si disponible, sinon ouverture (même si source est 'raw')
+                const text = horoscope.teaser || horoscope.ouverture;
+                if (text) {
+                  return { signId: sign.id, name: sign.name, emoji: sign.emoji, ouverture: text };
+                }
+                return null;
+              } catch {
+                return null;
               }
-            } catch { /* skip */ }
-          }
+            })
+          );
+          if (!cancelled) setPreviews(results.filter(Boolean) as SignPreview[]);
         }
-      })
-      .catch(() => { if (!cancelled) setLoading(false); });
+      } catch {
+        // Ignorer les erreurs
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
 
+    loadPreviews();
     return () => { cancelled = true; };
   }, []);
 
