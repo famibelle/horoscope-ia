@@ -1,3 +1,18 @@
+import type { FauneData, FloraData, LieuDetails } from './signs-data';
+
+export interface CulturalData {
+  faune?: FauneData;
+  flore?: FloraData;
+  lieuDetails?: LieuDetails;
+  element: string;
+  spirituel: string;
+  animal: string;
+  nomKreyol: string;
+  plante: string;
+  arbre: string;
+  lieu: string;
+}
+
 export interface HoroscopeResponse {
   ouverture: string;
   amour: string;
@@ -8,9 +23,10 @@ export interface HoroscopeResponse {
   prediction: string;
   signFr: string;
   weather: string;
-  edition?: 'matin' | 'midi' | 'soir';
+  edition?: 'nuit' | 'matin' | 'midi' | 'soir';
   teaser?: string;
   source: 'mistral' | 'raw' | 'fallback';
+  culturalData?: CulturalData;
 }
 
 export function formatDate(): string {

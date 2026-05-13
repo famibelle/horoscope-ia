@@ -131,6 +131,8 @@ async function rewriteWithMistral(
   flore?: { nomCreole: string; nomFr: string; culture: string },
   lieu?: { nomCreole: string; nomFr: string; culture: string },
   historicalResonance?: string,
+  date?: string,
+  hour?: string,
 ): Promise<Record<string, string> | null> {
   const apiKey = process.env.MISTRAL_API_KEY;
   if (!apiKey) return null;
@@ -148,7 +150,7 @@ async function rewriteWithMistral(
       messages: [
         { role: 'system', content: MARYSE_SYSTEM },
         { role: 'user',   content: buildHoroscopeUserPrompt(
-          sign, rawText, weather, edition,
+          sign, rawText, weather, edition, date, hour,
         ) },
       ],
     }),
@@ -174,8 +176,10 @@ export async function GET(
   }
 
   const editionParam = req.nextUrl.searchParams.get('edition') as Edition | null;
+  const userDate = req.nextUrl.searchParams.get('userDate');
+  const userHour = req.nextUrl.searchParams.get('userHour');
   const edition: Edition =
-    editionParam === 'matin' || editionParam === 'midi' || editionParam === 'soir'
+    editionParam === 'matin' || editionParam === 'midi' || editionParam === 'soir' || editionParam === 'nuit'
       ? editionParam
       : detectEdition();
 
@@ -189,13 +193,7 @@ export async function GET(
   }
 
   try {
-    const today             = todayGuadeloupe();
-    const medicinal         = getMedicinalPlant(signId, today);
-    const pratique          = getResistancePratique(signId, today);
-    const objet             = getResistanceObjet(signId, today);
-    const faune             = getSignFaune(signId, today);
-    const flore             = getSignFlore(signId, today);
-    const lieu              = getSignLieu(signId, today);
+    const today = todayGuadeloupe();
     const historicalResonance = getHistoricalResonance(today);
     const [rawText, weather] = await Promise.all([fetchRawHoroscope(signEn), fetchWeather()]);
 
@@ -206,11 +204,16 @@ export async function GET(
       );
     }
 
+    // === DONNÉES CULTURELLES ENRICHIES (depuis signs-data.ts) ===
+    const signData = signs.find(s => s.id === signId)!;
+
     const structured = await rewriteWithMistral(
       signId, rawText, weather, edition,
-      medicinal, pratique, objet,
-      faune, flore, lieu,
+      undefined, undefined, undefined,
+      undefined, undefined, undefined,
       historicalResonance ?? undefined,
+      userDate ?? undefined,
+      userHour ?? undefined,
     );
 
     if (structured?.ouverture && structured?.amour && structured?.travail) {
@@ -228,6 +231,19 @@ export async function GET(
         edition,
         teaser:     teaser || undefined,
         source:     'mistral',
+        // === NOUVELLES DONNÉES CULTURELLES ===
+        culturalData: {
+          faune: signData.faune,
+          flore: signData.flore,
+          lieuDetails: signData.lieuDetails,
+          element: signData.element,
+          spirituel: signData.spirituel,
+          animal: signData.animal,
+          nomKreyol: signData.nomKreyol,
+          plante: signData.plante,
+          arbre: signData.arbre,
+          lieu: signData.lieu,
+        },
       };
       await setCached(blobKey, response);
       return NextResponse.json(response, {
@@ -235,9 +251,34 @@ export async function GET(
       });
     }
 
+    // === Fallback avec données culturelles même pour le raw ===
+    const signData = signs.find(s => s.id === signId)!;
     return NextResponse.json(
-      { ouverture: rawText, amour: '', travail: '', argent: '', amitie: '', prediction: '',
-        signFr: sign.name, weather, edition, source: 'raw' },
+      { 
+        ouverture: rawText, 
+        amour: '', 
+        travail: '', 
+        argent: '', 
+        amitie: '', 
+        prediction: '',
+        signFr: sign.name, 
+        weather, 
+        edition, 
+        source: 'raw',
+        // Données culturelles même en fallback
+        culturalData: {
+          faune: signData.faune,
+          flore: signData.flore,
+          lieuDetails: signData.lieuDetails,
+          element: signData.element,
+          spirituel: signData.spirituel,
+          animal: signData.animal,
+          nomKreyol: signData.nomKreyol,
+          plante: signData.plante,
+          arbre: signData.arbre,
+          lieu: signData.lieu,
+        }
+      },
       { headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300' } },
     );
   } catch (err) {
