@@ -1,41 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { normalizeForTTS } from '@/lib/tts-utils';
 import { MARYSE_AME } from '@/lib/private/maryse-prompt';
-import { todayGuadeloupe, getVisitorTimeOfDay, getIntroPhrase } from '@/lib/edition';
+import { buildTTSPrompt } from '@/lib/private/tts-prompt';
+import { todayGuadeloupe } from '@/lib/edition';
 import { signs } from '@/lib/signs-data';
+import type { Edition } from '@/lib/private/maryse-prompt';
 
 const TTS_URL = 'https://api.mistral.ai/v1/audio/speech';
-
-/* ── Helper : Formater la date en français (sans année) ──────────── */
-function formatDateFr(dateStr: string): string {
-  const date = new Date(dateStr + 'T00:00:00');
-  return date.toLocaleDateString('fr-FR', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long'
-  });
-}
-
-/* ── Instructions TTS (variable, pas fichier) ───────────────────────── */
-const TTS_INSTRUCTIONS_HOROSCOPE = `Tu lis cet horoscope avec la conscience que chez nous, les étoiles, les signes, les présages sont un fil tendu entre les vivants et les ancêtres. Chaque signe est un message qui vient de loin.
-
-Tu reçois un JSON avec 6 clés : ouverture, amour, travail, argent, amitie, prediction.
-
-Tu dois retourner UNIQUEMENT du texte brut (pas de JSON, pas de markdown, pas de balises) avec :
-
-1. Une introduction FIXE à utiliser EXACTEMENT comme fourni : "Bonjour, c'est Maryse. Nous sommes le [DATE], et [INTRO]"
-   Où [DATE] est déjà au format "mercredi 13 mai" (SANS année)
-   Où [INTRO] est déjà au format "ce matin" / "cet après-midi" / "ce soir" / "cette nuit"
-2. La fusion des 6 phrases dans l'ordre, séparées par " ;\n" pour les pauses naturelles
-3. Suppression de toute mention temporelle dans le corps du texte
-
-RÈGLES ABSOLUES (VIOLATION = ÉCHEC TOTAL) :
-- NE JAMAIS modifier, ajouter ou supprimer quoi que ce soit dans l'introduction
-- NE JAMAIS inclure : signe astro, année, heure, lieu, "pour les X", "Ce matin/soir..."
-- NE JAMAIS utiliser : [ ], *, –, « », …, °C
-- Remplace °C par "degrés Celsius"
-- Retourne UNIQUEMENT le texte brut final
-- 6 phrases exactement, style oral, ancrage culturel guadeloupéen`;
 const TTS_MODEL = 'voxtral-mini-tts-2603';
 const TTS_VOICE = 'fr_marie_curious';
 const LLM_MODEL = 'mistral-large-latest';
@@ -73,49 +44,15 @@ async function optimizeTextForTTS(
   userHour: string,
   apiKey: string
 ): Promise<string | null> {
-  // Construire le texte avec les noms des sections explicitement
-  const fullText = `
-- ouverture: ${horoscope.ouverture || ''}
-- amour: ${horoscope.amour || ''}
-- travail: ${horoscope.travail || ''}
-- argent: ${horoscope.argent || ''}
-- amitie: ${horoscope.amitie || ''}
-- prediction: ${horoscope.prediction || ''}
-  `.trim();
-
-  console.log('[TTS] Horoscope reçu:', JSON.stringify(horoscope));
-
-  const systemPrompt = `${MARYSE_AME}\n\n${TTS_INSTRUCTIONS_HOROSCOPE}\n\n` +
-    `Ton rôle : transformer ce JSON horoscope en texte audio naturel. Respecte ABSOLUMENT toutes les contraintes ci-dessus.`;
-
-  // Pré-calculer les valeurs pour l'intro (l'LLM doit les utiliser TEL QUEL)
-  const dateFormatted = formatDateFr(userDate);
-  const introPhrase = getIntroPhrase();
-
-  // Récupérer les données culturelles du signe pour enrichir l'intro
   const signData = signs.find(s => s.name.toLowerCase() === signName.toLowerCase());
-  const culturalContext = signData ? `
-Ici en Guadeloupe, ${signData.faune?.savoir.split('.')[0] || signData.flore?.savoir.split('.')[0] || ''}` : '';
+  if (!signData) {
+    console.error('[TTS] Sign non trouvé:', signName);
+    return null;
+  }
 
-  const userPrompt = `HOROSCOPE À OPTIMISER :
-${fullText}
+  console.log('[TTS] Génération du texte avec buildTTSPrompt');
 
-CONTEXTE CULTUREL KARUKERA :
-${signData ? `- Totem : ${signData.faune?.nom_commun || signData.animal}
-- Plante : ${signData.flore?.nom_commun || signData.plante}
-- Lieu sacré : ${signData.lieu} (${signData.lieuDetails?.symbolique})` : 'Aucun contexte culturel disponible'}
-
-INTRODUCTION À UTILISER (COPIER-COLLER EXACTEMENT) :
-"Bonjour, c'est Maryse. Nous sommes le ${dateFormatted}, ${introPhrase}${culturalContext ? ` ${culturalContext}` : ''}"
-
-INSTRUCTIONS :
-1. COMMENCE EXACTEMENT par l'introduction ci-dessus (copie-colle, ZÉRO modification)
-2. Ajoute UN saut de ligne
-3. Fusionne les 6 phrases dans l'ordre avec " ;\n" entre chaque
-4. NE JAMAIS mentionner : signe, année, heure, lieu, "pour les X"
-5. Retourne UNIQUEMENT le texte final
-6. NE JAMAIS inclure l'année, l'heure ou "à Karukera" dans le texte final
-7. Retourne UNIQUEMENT le texte final, sans JSON, sans markdown, sans balises.`;
+  const prompt = buildTTSPrompt(signData, horoscope, userDate, edition as Edition);
 
   const res = await fetch(MISTRAL_URL, {
     method: 'POST',
@@ -128,8 +65,8 @@ INSTRUCTIONS :
       temperature: 0.3,
       max_tokens: 800,
       messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt },
+        { role: 'system', content: MARYSE_AME },
+        { role: 'user', content: prompt },
       ],
     }),
   });

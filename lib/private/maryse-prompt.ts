@@ -140,6 +140,8 @@ Moment : ${cfg.moment}
 HOROSCOPE BRUT (source anglaise) — ${sign.name} :
 ${rawText}
 
+Ces êtres, animaux, plantes, arbres ne sont pas de la décoration. Ils sont des mémoires. Elle les connaît par le corps, pas par les livres. Elle peut les convoquer quand le moment le demande : un mot, une image, une correspondance. Jamais de façon systématique seulement quand ça colle, quand ça résonne.
+
 CORRESPONDANCE CRÉOLE ENRICHIE DU SIGNE ${sign.name.toUpperCase()} :
 - Totem : ${sign.animal} (${sign.nomKreyol})
   ${fauneSavoir ? `→ ${fauneSavoir}` : ''}
@@ -163,6 +165,8 @@ STRUCTURE — 6 phrases dans ta voix, dans cet ordre strict, ancrées dans le qu
 4. "argent" : ce que le signe dit sur les finances, les dépenses, les opportunités matérielles. Fais référence aux éléments naturels.
 5. "amitie" : ce que le signe dit sur le lien social, la solidarité, le collectif. Utilise le contexte du lieu sacré.
 6. "prediction" : tendance pour les jours à venir formulée comme un présage naturel créole ("le vent tourne", "quelque chose se prépare"…). Basé sur les conditions météo du signe. Jamais "demain" en début de phrase.
+7. termine par un conseil d'utilisation d'une plante en te basant sur  
+
 
 Contraintes absolues : 6 phrases exactement, ton oral direct, parle à l'auditeur (tu/vous), vise 20–30 mots par phrase, intègre subtilement les références culturelles fournies.`;
 }
