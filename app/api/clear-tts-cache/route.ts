@@ -14,18 +14,18 @@ export async function POST(req: Request) {
     const store = getStore('tts-audio');
     
     // Lister toutes les clés
-    const { items } = await store.list();
-    console.log(`[CLEAR_CACHE] Clés à supprimer: ${items.length}`);
+    const { blobs } = await store.list();
+    console.log(`[CLEAR_CACHE] Clés à supprimer: ${blobs.length}`);
     
     // Supprimer chaque entrée
-    for (const item of items) {
-      await store.delete(item.path);
-      console.log(`[CLEAR_CACHE] Supprimé: ${item.path}`);
+    for (const blob of blobs) {
+      await store.delete(blob.key);
+      console.log(`[CLEAR_CACHE] Supprimé: ${blob.key}`);
     }
     
     return NextResponse.json({ 
       success: true, 
-      deleted: items.length 
+      deleted: blobs.length 
     });
   } catch (error) {
     console.error('[CLEAR_CACHE] Erreur:', error);
@@ -46,17 +46,17 @@ export async function GET() {
     const { getStore } = await import('@netlify/blobs');
     const store = getStore('tts-audio');
     
-    const { items } = await store.list();
-    console.log(`[CLEAR_CACHE] Clés à supprimer: ${items.length}`);
+    const { blobs } = await store.list();
+    console.log(`[CLEAR_CACHE] Clés à supprimer: ${blobs.length}`);
     
-    for (const item of items) {
-      await store.delete(item.path);
-      console.log(`[CLEAR_CACHE] Supprimé: ${item.path}`);
+    for (const blob of blobs) {
+      await store.delete(blob.key);
+      console.log(`[CLEAR_CACHE] Supprimé: ${blob.key}`);
     }
     
     return NextResponse.json({ 
       success: true, 
-      deleted: items.length 
+      deleted: blobs.length 
     });
   } catch (error) {
     console.error('[CLEAR_CACHE] Erreur:', error);
