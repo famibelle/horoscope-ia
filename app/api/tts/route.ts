@@ -1,11 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
 import { normalizeForTTS } from '@/lib/tts-utils';
-import { MARYSE_AME, KREYOL_RESISTANCE } from '@/lib/private/maryse-prompt';
+import { MARYSE_AME } from '@/lib/private/maryse-prompt';
 import { todayGuadeloupe } from '@/lib/edition';
 
 const TTS_URL = 'https://api.mistral.ai/v1/audio/speech';
+
+/* ── Instructions TTS (variable, pas fichier) ───────────────────────── */
+const TTS_INSTRUCTIONS_HOROSCOPE = `Tu lis cet horoscope avec la conscience que chez nous, les étoiles, les signes, les présages sont un fil tendu entre les vivants et les ancêtres. Chaque signe est un message qui vient de loin.
+
+Tu reçois un JSON avec 6 clés : ouverture, amour, travail, argent, amitie, prediction.
+
+Tu dois retourner UNIQUEMENT du texte brut (pas de JSON, pas de markdown, pas de balises) avec :
+
+1. Une introduction : "Bonjour, c'est Maryse. Nous sommes le [DATE] et..."
+2. La fusion des 6 phrases dans l'ordre, en texte fluide et naturel à l'oral
+3. Suppression de toute mention de "Ce matin", "Ce midi", "Ce soir", "Cette nuit"
+
+RÈGLES ABSOLUES :
+- NE JAMAIS utiliser : [ ], *, –, « », …, °C
+- Remplace °C par "degrés Celsius"
+- Retourne UNIQUEMENT le texte brut
+- 6 phrases exactement, style oral, ancrage culturel guadeloupéen`;
 const TTS_MODEL = 'voxtral-mini-tts-2603';
 const TTS_VOICE = 'fr_marie_curious';
 const LLM_MODEL = 'mistral-large-latest';
@@ -33,32 +48,6 @@ async function setTtsCached(key: string, audioBase64: string, text: string): Pro
   }
 }
 
-/* ── Lecture des instructions TTS ───────────────────────────────────────── */
-
-let ttsInstructionsCache: string | null = null;
-
-async function getTtsInstructions(): Promise<string> {
-  if (ttsInstructionsCache) {
-    return ttsInstructionsCache;
-  }
-
-  try {
-    const instructionsPath = path.join(process.cwd(), 'lib', 'private', 'tts_instructions.md');
-    const content = await fs.readFile(instructionsPath, 'utf8');
-    ttsInstructionsCache = content;
-    return content;
-  } catch (error) {
-    console.error('Failed to read tts_instructions.md:', error);
-    return `Tu es Maryse Condé. Transforme ce JSON en texte audio naturel pour Karukera.
-    RÈGLES ABSOLUES :
-    - NE JAMAIS utiliser : [ ], *, –, « », …, °C
-    - Remplace °C par "degrés Celsius"
-    - Retourne UNIQUEMENT le texte brut, sans JSON, sans markdown, sans balises
-    - 6 phrases maximum, style oral, ancrage culturel guadeloupéen
-    - Ajoute l'intro : "Bonjour, c'est Maryse. Nous sommes le [DATE], il est [HEURE] à Karukera."`;
-  }
-}
-
 /* ── Optimisation du texte pour TTS via LLM ──────────────────────────────── */
 
 async function optimizeTextForTTS(
@@ -69,24 +58,22 @@ async function optimizeTextForTTS(
   userHour: string,
   apiKey: string
 ): Promise<string | null> {
-  const ttsInstructions = await getTtsInstructions();
-
-  // Construire le texte complet à partir des 6 sections
-  const fullText = [
-    horoscope.ouverture,
-    horoscope.amour,
-    horoscope.travail,
-    horoscope.argent,
-    horoscope.amitie,
-    horoscope.prediction
-  ].filter(Boolean).join('\n');
+  // Construire le texte avec les noms des sections explicitement
+  const fullText = `
+- ouverture: ${horoscope.ouverture || ''}
+- amour: ${horoscope.amour || ''}
+- travail: ${horoscope.travail || ''}
+- argent: ${horoscope.argent || ''}
+- amitie: ${horoscope.amitie || ''}
+- prediction: ${horoscope.prediction || ''}
+  `.trim();
 
   console.log('[TTS] Horoscope reçu:', JSON.stringify(horoscope).slice(0, 200) + '...');
 
-  const systemPrompt = `${MARYSE_AME}\n\n${KREYOL_RESISTANCE}\n\n${ttsInstructions}\n\n` +
-    `Ton rôle : transformer le JSON horoscope en texte audio naturel. Respecte ABSOLUMENT toutes les contraintes ci-dessus.`;
+  const systemPrompt = `${MARYSE_AME}\n\n${TTS_INSTRUCTIONS_HOROSCOPE}\n\n` +
+    `Ton rôle : transformer ce JSON horoscope en texte audio naturel. Respecte ABSOLUMENT toutes les contraintes ci-dessus.`;
 
-  const userPrompt = `HOROSCOPE À OPTIMISER (JSON avec 6 clés) :
+  const userPrompt = `HOROSCOPE À OPTIMISER :
 ${fullText}
 
 CONTEXTE VISITEUR :
@@ -97,7 +84,7 @@ CONTEXTE VISITEUR :
 
 INSTRUCTIONS :
 1. SUPPRIME toute mention de "Ce matin", "Ce midi", "Ce soir", "Cette nuit"
-2. AJOUTE l'introduction : "Bonjour, c'est Maryse. Nous sommes le ${userDate}, il est ${userHour} à Karukera."
+2. AJOUTE l'introduction : "Bonjour, c'est Maryse. Nous sommes le ${userDate} et..."
 3. Fusionne les 6 phrases en un texte fluide
 4. Garde le style oral et les métaphores créoles
 5. Retourne UNIQUEMENT le texte final, sans JSON, sans markdown, sans balises.`;
