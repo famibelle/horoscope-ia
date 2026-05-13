@@ -192,6 +192,9 @@ export async function GET(
     });
   }
 
+  // === DONNÉES CULTURELLES ENRICHIES (depuis signs-data.ts) ===
+  const signData = signs.find(s => s.id === signId)!;
+
   try {
     const today = todayGuadeloupe();
     const historicalResonance = getHistoricalResonance(today);
@@ -203,9 +206,6 @@ export async function GET(
         { status: 503 },
       );
     }
-
-    // === DONNÉES CULTURELLES ENRICHIES (depuis signs-data.ts) ===
-    const signData = signs.find(s => s.id === signId)!;
 
     const structured = await rewriteWithMistral(
       signId, rawText, weather, edition,
@@ -252,7 +252,6 @@ export async function GET(
     }
 
     // === Fallback avec données culturelles même pour le raw ===
-    const signData = signs.find(s => s.id === signId)!;
     return NextResponse.json(
       { 
         ouverture: rawText, 
