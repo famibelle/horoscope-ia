@@ -24,6 +24,10 @@ export type SignPool = {
   lieux: CulturalEntry[];
 };
 
+// Cache en mémoire pour les données culturelles déterministes
+// Clé: `${signId}|${date}|${type}|${offset}`
+const culturalCache = new Map<string, any>();
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const typedData = data as unknown as {
   medicinal: MedicinalEntry[];
@@ -75,76 +79,154 @@ function shorten(text: string, max = 120): string {
 /* ── Global pools ───────────────────────────────────────────────────────────── */
 
 export function getMedicinalPlant(signId: string, date: string): MedicinalEntry {
+  const cacheKey = `${signId}|${date}|med`;
+  if (culturalCache.has(cacheKey)) {
+    return culturalCache.get(cacheKey);
+  }
   const pool = typedData.medicinal;
-  const seed = hash(`${signId}|${date}|med`);
-  return pool[seed % pool.length];
+  const seed = hash(cacheKey);
+  const result = pool[seed % pool.length];
+  culturalCache.set(cacheKey, result);
+  return result;
 }
 
 export function getResistancePratique(signId: string, date: string): ResistanceEntry {
+  const cacheKey = `${signId}|${date}|pratique`;
+  if (culturalCache.has(cacheKey)) {
+    return culturalCache.get(cacheKey);
+  }
   const pool = typedData.resistancePratiques;
-  const seed = hash(`${signId}|${date}|pratique`);
-  return pool[seed % pool.length];
+  const seed = hash(cacheKey);
+  const result = pool[seed % pool.length];
+  culturalCache.set(cacheKey, result);
+  return result;
 }
 
 export function getResistanceObjet(signId: string, date: string): ResistanceEntry {
+  const cacheKey = `${signId}|${date}|objet`;
+  if (culturalCache.has(cacheKey)) {
+    return culturalCache.get(cacheKey);
+  }
   const pool = typedData.resistanceObjets;
-  const seed = hash(`${signId}|${date}|objet`);
-  return pool[seed % pool.length];
+  const seed = hash(cacheKey);
+  const result = pool[seed % pool.length];
+  culturalCache.set(cacheKey, result);
+  return result;
 }
 
 /* ── Per-sign pools (different seeds from ambiance to avoid duplicate picks) ── */
 
 export function getSignFaune(signId: string, date: string): CulturalEntry {
+  const cacheKey = `${signId}|${date}|faune`;
+  if (culturalCache.has(cacheKey)) {
+    return culturalCache.get(cacheKey);
+  }
   const pool = typedData[signId];
-  if (!pool?.faune?.length) return { nomCreole: '', nomFr: '', culture: '' };
-  const seed = hash(`${signId}|${date}|faune`);
-  return pick(pool.faune, seed, 0);
+  if (!pool?.faune?.length) {
+    const empty: CulturalEntry = { nomCreole: '', nomFr: '', culture: '' };
+    culturalCache.set(cacheKey, empty);
+    return empty;
+  }
+  const seed = hash(cacheKey);
+  const result = pick(pool.faune, seed, 0);
+  culturalCache.set(cacheKey, result);
+  return result;
 }
 
 export function getSignFlore(signId: string, date: string): CulturalEntry {
+  const cacheKey = `${signId}|${date}|flore`;
+  if (culturalCache.has(cacheKey)) {
+    return culturalCache.get(cacheKey);
+  }
   const pool = typedData[signId];
-  if (!pool?.flore?.length) return { nomCreole: '', nomFr: '', culture: '' };
-  const seed = hash(`${signId}|${date}|flore`);
-  return pick(pool.flore, seed, 0);
+  if (!pool?.flore?.length) {
+    const empty: CulturalEntry = { nomCreole: '', nomFr: '', culture: '' };
+    culturalCache.set(cacheKey, empty);
+    return empty;
+  }
+  const seed = hash(cacheKey);
+  const result = pick(pool.flore, seed, 0);
+  culturalCache.set(cacheKey, result);
+  return result;
 }
 
 export function getSignLieu(signId: string, date: string): CulturalEntry {
+  const cacheKey = `${signId}|${date}|lieu`;
+  if (culturalCache.has(cacheKey)) {
+    return culturalCache.get(cacheKey);
+  }
   const pool = typedData[signId];
-  if (!pool?.lieux?.length) return { nomCreole: '', nomFr: '', culture: '' };
-  const seed = hash(`${signId}|${date}|lieu`);
-  return pick(pool.lieux, seed, 0);
+  if (!pool?.lieux?.length) {
+    const empty: CulturalEntry = { nomCreole: '', nomFr: '', culture: '' };
+    culturalCache.set(cacheKey, empty);
+    return empty;
+  }
+  const seed = hash(cacheKey);
+  const result = pick(pool.lieux, seed, 0);
+  culturalCache.set(cacheKey, result);
+  return result;
 }
 
 /* ── Ambiance lune pickers ──────────────────────────────────────────────────── */
 
 export function getAmbianceBienetre(signId: string, date: string): MedicinalEntry {
+  const cacheKey = `${signId}|${date}|ambiance-bienetre`;
+  if (culturalCache.has(cacheKey)) {
+    return culturalCache.get(cacheKey);
+  }
   const pool = typedData.medicinal;
-  const seed = hash(`${signId}|${date}|ambiance-bienetre`);
-  return pool[seed % pool.length];
+  const seed = hash(cacheKey);
+  const result = pool[seed % pool.length];
+  culturalCache.set(cacheKey, result);
+  return result;
 }
 
 export function getAmbianceBeaute(signId: string, date: string): CulturalEntry {
+  const cacheKey = `${signId}|${date}|ambiance-beaute`;
+  if (culturalCache.has(cacheKey)) {
+    return culturalCache.get(cacheKey);
+  }
   const pool = typedData.floreBeaute;
-  const seed = hash(`${signId}|${date}|ambiance-beaute`);
-  return pick(pool, seed, 0);
+  const seed = hash(cacheKey);
+  const result = pick(pool, seed, 0);
+  culturalCache.set(cacheKey, result);
+  return result;
 }
 
 export function getAmbianceEsprit(signId: string, date: string): ResistanceEntry {
+  const cacheKey = `${signId}|${date}|ambiance-esprit`;
+  if (culturalCache.has(cacheKey)) {
+    return culturalCache.get(cacheKey);
+  }
   const pool = typedData.resistanceObjets;
-  const seed = hash(`${signId}|${date}|ambiance-esprit`);
-  return pool[seed % pool.length];
+  const seed = hash(cacheKey);
+  const result = pool[seed % pool.length];
+  culturalCache.set(cacheKey, result);
+  return result;
 }
 
 export function getAmbianceMaison(signId: string, date: string): ResistanceEntry {
+  const cacheKey = `${signId}|${date}|ambiance-maison`;
+  if (culturalCache.has(cacheKey)) {
+    return culturalCache.get(cacheKey);
+  }
   const pool = typedData.resistanceMaison;
-  const seed = hash(`${signId}|${date}|ambiance-maison`);
-  return pool[seed % pool.length];
+  const seed = hash(cacheKey);
+  const result = pool[seed % pool.length];
+  culturalCache.set(cacheKey, result);
+  return result;
 }
 
 export function getAmbianceJardinage(signId: string, date: string): CulturalEntry {
+  const cacheKey = `${signId}|${date}|ambiance-jardinage`;
+  if (culturalCache.has(cacheKey)) {
+    return culturalCache.get(cacheKey);
+  }
   const pool = typedData.floreJardinage;
-  const seed = hash(`${signId}|${date}|ambiance-jardinage`);
-  return pick(pool, seed, 0);
+  const seed = hash(cacheKey);
+  const result = pick(pool, seed, 0);
+  culturalCache.set(cacheKey, result);
+  return result;
 }
 
 /* ── Ambiance context block (unchanged) ────────────────────────────────────── */

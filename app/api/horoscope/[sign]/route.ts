@@ -243,6 +243,7 @@ export async function GET(
           plante: signData.plante,
           arbre: signData.arbre,
           lieu: signData.lieu,
+          rawHoroscope: rawText,
         },
       };
       await setCached(blobKey, response);
@@ -276,6 +277,7 @@ export async function GET(
           plante: signData.plante,
           arbre: signData.arbre,
           lieu: signData.lieu,
+          rawHoroscope: rawText,
         }
       },
       { headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300' } },

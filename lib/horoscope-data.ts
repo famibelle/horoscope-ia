@@ -11,6 +11,7 @@ export interface CulturalData {
   plante: string;
   arbre: string;
   lieu: string;
+  rawHoroscope?: string;
 }
 
 export interface HoroscopeResponse {

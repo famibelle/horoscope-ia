@@ -8,6 +8,7 @@ export interface FauneData {
   editions: string[];
   savoir: string;
   sacreSymbolique?: string;
+  typeResistance?: string;
 }
 
 export interface FloraData {
@@ -17,12 +18,16 @@ export interface FloraData {
   conditions: string[];
   editions: string[];
   savoir: string;
+  sacreSymbolique?: string;
+  typeResistance?: string;
 }
 
 export interface LieuDetails {
   description: string;
   symbolique: string;
   localisation: string;
+  categorie: string;
+  sacreSymbolique: string;
 }
 
 export interface Sign {
@@ -75,7 +80,8 @@ export const signs: Sign[] = [
       conditions: ['soleil', 'chaleur'],
       editions: ['matin'],
       savoir: "Animal totem des Arawaks, gardien de Petite-Terre. Les marrons s'en inspiraient : immobile et invisible dans la végétation, il voit tout sans être vu, sait attendre des heures avant d'agir. Les anciens disaient qu'observer un iguane, c'est apprendre la patience qui permet de survivre quand l'ennemi est plus fort.",
-      sacreSymbolique: '⭐⭐⭐ SACRÉ'
+      sacreSymbolique: '⭐⭐⭐ SACRÉ',
+      typeResistance: 'Reptile / Résistance'
     },
     flore: {
       nom_creole: 'flamboyant',
@@ -88,7 +94,9 @@ export const signs: Sign[] = [
     lieuDetails: {
       description: 'Point le plus à l\'est de la Grande-Terre, où la terre rencontre l\'océan Atlantique',
       symbolique: 'Premier lieu à voir le soleil se lever, porte d\'entrée des vents alizés, symbole de nouveau départ',
-      localisation: 'Grand Terre, à l\'extrême est'
+      localisation: 'Grand Terre, à l\'extrême est',
+      categorie: 'Pointe',
+      sacreSymbolique: '⭐⭐ Symbolique'
     }
   },
   {
@@ -116,7 +124,8 @@ export const signs: Sign[] = [
       conditions: [],
       editions: ['matin', 'soir'],
       savoir: "Caprin sauvage des mornes, agile et résistant. Symbole de l'adaptation à un terrain difficile. Les anciens chassaient le kabribo pour sa viande, mais respectaient sa capacité à survivre dans les zones les plus escarpées.",
-      sacreSymbolique: '⭐⭐⭐ SACRÉ NOCTURNE'
+      sacreSymbolique: '⭐⭐⭐ SACRÉ NOCTURNE',
+      typeResistance: 'Animal / Résistance économique'
     },
     flore: {
       nom_creole: 'fromager',
@@ -129,7 +138,9 @@ export const signs: Sign[] = [
     lieuDetails: {
       description: 'Course traditionnelle de bœufs lors des fêtes patronales de Sainte-Anne',
       symbolique: 'Célébration de la force laborieuse et de la communauté rurale, héritage des traditions agricoles',
-      localisation: 'Sainte-Anne, Grande-Terre'
+      localisation: 'Sainte-Anne, Grande-Terre',
+      categorie: 'Événement culturel',
+      sacreSymbolique: '⭐⭐⭐ SACRÉ'
     }
   },
   {
@@ -157,7 +168,8 @@ export const signs: Sign[] = [
       conditions: ['soleil', 'chaleur'],
       editions: ['matin'],
       savoir: "Son nom vient directement des Arawaks — le souffle de l'air à travers ses ailes. Il bat des ailes jusqu'à soixante fois par seconde, suspendu immobile devant la fleur. Les anciens disaient que le voir au lever du soleil annonce une journée qui ira vite, mais où il faut savoir s'arrêter sur ce qui compte.",
-      sacreSymbolique: '⭐⭐⭐ SACRÉ'
+      sacreSymbolique: '⭐⭐⭐ SACRÉ',
+      typeResistance: 'Animal / Résistance culturelle'
     },
     flore: {
       nom_creole: 'gommier',
@@ -165,12 +177,16 @@ export const signs: Sign[] = [
       famille: 'arbres',
       conditions: ['soleil', 'vent'],
       editions: ['matin'],
-      savoir: "C'est de lui qu'on taillait les pirogues de pêche — son bois léger et sa résine imperméable en faisaient le compagnon idéal de la mer. Les Amérindiens l'utilisaient aussi comme torche naturelle. Signe du voyage, de ce qu'on construit pour traverser."
+      savoir: "C'est de lui qu'on taillait les pirogues de pêche — son bois léger et sa résine imperméable en faisaient le compagnon idéal de la mer. Les Amérindiens l'utilisaient aussi comme torche naturelle. Signe du voyage, de ce qu'on construit pour traverser.",
+      sacreSymbolique: '⭐⭐⭐ RÉSISTANCE AMÉRINDIENNE',
+      typeResistance: 'Plante / Résistance amérindienne'
     },
     lieuDetails: {
       description: 'Jardin botanique historique créé au 17ème siècle par le gouverneur Houël',
       symbolique: 'Sanctuaire de la biodiversité guadeloupéenne, lieu de découverte et d\'émerveillement',
-      localisation: 'Deshaies, côte sous le vent'
+      localisation: 'Deshaies, côte sous le vent',
+      categorie: 'Jardin botanique',
+      sacreSymbolique: '⭐⭐ Emblématique'
     }
   },
   {
@@ -198,7 +214,8 @@ export const signs: Sign[] = [
       conditions: ['vent', 'nuageux'],
       editions: ['matin', 'soir'],
       savoir: "Son nom est hérité direct des Kalinagos, intact depuis des siècles. Il a donné son nom aux femmes masquées du carnaval de Guadeloupe — les touloulous qui choisissent leurs cavaliers et ne se découvrent jamais. Signe de ce qui se cache pour être plus libre, qui préserve son mystère pour garder le pouvoir de choisir.",
-      sacreSymbolique: '⭐⭐⭐ SACRÉ CULTUREL'
+      sacreSymbolique: '⭐⭐⭐ SACRÉ CULTUREL',
+      typeResistance: 'Animal / Résistance alimentaire'
     },
     flore: {
       nom_creole: 'palétuwyé',
@@ -211,7 +228,9 @@ export const signs: Sign[] = [
     lieuDetails: {
       description: 'Réserve naturelle de mangrove classée au patrimoine mondial de l\'UNESCO',
       symbolique: 'Zone de transition entre terre et mer, symbole de protection et de nourriture',
-      localisation: 'Entre Basse-Terre et Grande-Terre'
+      localisation: 'Entre Basse-Terre et Grande-Terre',
+      categorie: 'Mangrove / Lagune',
+      sacreSymbolique: '⭐⭐⭐ SACRÉ'
     }
   },
   {
@@ -252,7 +271,9 @@ export const signs: Sign[] = [
     lieuDetails: {
       description: 'Cap rocheux offrant une vue panoramique sur l\'océan Atlantique',
       symbolique: 'Point de vue le plus haut, symbole de vision globale et de domination',
-      localisation: 'Grande-Terre, nord-ouest'
+      localisation: 'Grande-Terre, nord-ouest',
+      categorie: 'Pointe',
+      sacreSymbolique: '⭐⭐ Symbolique'
     }
   },
   {
@@ -293,7 +314,9 @@ export const signs: Sign[] = [
     lieuDetails: {
       description: 'Cascade emblématique de 115 mètres de haut, parmi les plus hautes des Petites Antilles',
       symbolique: 'Pureté de l\'eau, puissance de la nature, lieu de purification et de renaissance',
-      localisation: 'Basse-Terre, parc national'
+      localisation: 'Basse-Terre, parc national',
+      categorie: 'Cascade',
+      sacreSymbolique: '⭐⭐⭐ SACRÉ'
     }
   },
   {
@@ -334,7 +357,9 @@ export const signs: Sign[] = [
     lieuDetails: {
       description: 'Bras de mer séparant la Basse-Terre de la Grande-Terre',
       symbolique: 'Frontière naturelle entre deux territoires, symbole d\'équilibre et de connexion',
-      localisation: 'Entre Basse-Terre et Grande-Terre'
+      localisation: 'Entre Basse-Terre et Grande-Terre',
+      categorie: 'Bras de mer',
+      sacreSymbolique: '⭐⭐⭐ SACRÉ'
     }
   },
   {
@@ -370,12 +395,16 @@ export const signs: Sign[] = [
       famille: 'arbres',
       conditions: ['nuageux', 'pluie'],
       editions: ['soir'],
-      savoir: "Sa calebasse était le premier récipient — bol, louche, gourde, instrument de musique. Les quimboiseurs l'utilisaient pour les cérémonies de purification. Trouver un calebassier rappelle que l'utile peut être beau."
+      savoir: "Sa calebasse était le premier récipient — bol, louche, gourde, instrument de musique. Les quimboiseurs l'utilisaient pour les cérémonies de purification. Trouver un calebassier rappelle que l'utile peut être beau.",
+      sacreSymbolique: '⭐⭐⭐ RÉSISTANCE SPIRITUELLE',
+      typeResistance: 'Plante / Résistance spirituelle'
     },
     lieuDetails: {
       description: 'Volcan actif culminant à 1467 mètres, point le plus haut des Petites Antilles',
       symbolique: 'Symbole de puissance tellurique, de destruction et de renaissance, cœur spirituel de la Guadeloupe',
-      localisation: 'Basse-Terre, parc national'
+      localisation: 'Basse-Terre, parc national',
+      categorie: 'Volcan',
+      sacreSymbolique: '⭐⭐⭐ SACRÉ'
     }
   },
   {
@@ -416,7 +445,9 @@ export const signs: Sign[] = [
     lieuDetails: {
       description: 'Forêt tropicale humide couvrant les contreforts de la Soufrière',
       symbolique: 'Territoire sauvage et préservé, symbole de liberté et d\'exploration',
-      localisation: 'Basse-Terre, sud-est'
+      localisation: 'Basse-Terre, sud-est',
+      categorie: 'Forêt / Réserve',
+      sacreSymbolique: '⭐⭐⭐ SACRÉ'
     }
   },
   {
@@ -444,7 +475,8 @@ export const signs: Sign[] = [
       conditions: [],
       editions: ['matin', 'soir'],
       savoir: "Caprin sauvage des mornes, agile et résistant. Symbole de l'adaptation à un terrain difficile. Les anciens chassaient le kabribo pour sa viande, mais respectaient sa capacité à survivre dans les zones les plus escarpées.",
-      sacreSymbolique: '⭐⭐⭐ SACRÉ NOCTURNE'
+      sacreSymbolique: '⭐⭐⭐ SACRÉ NOCTURNE',
+      typeResistance: 'Animal / Résistance économique'
     },
     flore: {
       nom_creole: 'courbaril',
@@ -457,7 +489,9 @@ export const signs: Sign[] = [
     lieuDetails: {
       description: 'Site historique du combat de Louis Delgrès contre les troupes napoléoniennes en 1802',
       symbolique: 'Symbole de la résistance à l\'oppression et du sacrifice pour la liberté',
-      localisation: 'Basse-Terre, sud'
+      localisation: 'Basse-Terre, sud',
+      categorie: 'Lieu de marronnage',
+      sacreSymbolique: '⭐⭐⭐ SACRÉ'
     }
   },
   {
@@ -498,7 +532,9 @@ export const signs: Sign[] = [
     lieuDetails: {
       description: 'Zone humide abritant des sources naturelles d\'eau douce',
       symbolique: 'Lieu de pureté et de clarification, source de vie et d\'inspiration',
-      localisation: 'Grande-Terre, est'
+      localisation: 'Grande-Terre, est',
+      categorie: 'Source thermale',
+      sacreSymbolique: '⭐⭐⭐ SACRÉ'
     }
   },
   {
@@ -539,7 +575,9 @@ export const signs: Sign[] = [
     lieuDetails: {
       description: 'Plages isolées où les tortues viennent pondre la nuit',
       symbolique: 'Lieu de préservation de la vie marine, symbole de cycle et de continuité',
-      localisation: 'Grande-Terre, nord'
+      localisation: 'Grande-Terre, nord',
+      categorie: 'Plage',
+      sacreSymbolique: '⭐⭐⭐ SACRÉ'
     }
   }
 ];

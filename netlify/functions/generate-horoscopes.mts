@@ -113,7 +113,7 @@ async function callMistral(
       response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: MARYSE_SYSTEM },
-        { role: 'user', content: buildHoroscopeUserPrompt(sign, rawText, weather, edition) },
+        { role: 'user', content: buildHoroscopeUserPrompt(sign, rawText, weather, edition, undefined, undefined) },
       ],
     }),
   });

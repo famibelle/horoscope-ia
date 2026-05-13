@@ -43,7 +43,7 @@ export async function GET(
 
   const editionParam = req.nextUrl.searchParams.get('edition') as Edition | null;
   const edition: Edition =
-    editionParam === 'matin' || editionParam === 'midi' || editionParam === 'soir'
+    editionParam === 'matin' || editionParam === 'midi' || editionParam === 'soir' || editionParam === 'nuit'
       ? editionParam : detectEdition();
 
   const cacheKey = `${todayGuadeloupe()}|${signId}|${edition}`;
