@@ -15,8 +15,10 @@
     "data:parse": "npm run flore:parse && npm run faune:parse && npm run lieux:parse && npm run kreyol:parse && npm run histoire:parse",
     "postinstall": "npm run data:parse",
     "send-test-newsletter": "npx tsx scripts/send-test-newsletter.ts",
+    "send-brevo-test": "npx tsx scripts/send-brevo-test.ts",
     "test-newsletter-templates": "npx tsx scripts/test-newsletter-templates.ts",
-    "test-newsletter-generator": "npx tsx scripts/test-newsletter-generator.ts"
+    "test-newsletter-generator": "npx tsx scripts/test-newsletter-generator.ts",
+    "test-brevo-connection": "npx tsx scripts/send-brevo-test.ts --test-connection"
   },
   "dependencies": {
     "@netlify/blobs": "^10.7.4",
