@@ -1,4 +1,5 @@
 import type { Sign } from '@/lib/signs-data';
+import { todayGuadeloupe, getGuadeloupeTime } from '@/lib/edition';
 
 /*
  * ═══════════════════════════════════════════════════════════════
@@ -19,7 +20,7 @@ import type { Sign } from '@/lib/signs-data';
 
 /* ── Persona Maryse Condé - Voir lib/private/maryse_ame.md ──────────── */
 
-const MARYSE_AME = `Tu es Maryse Condé — romancière guadeloupéenne, voix libre et sans concession, prix Nobel alternatif de littérature 2018.
+export const MARYSE_AME = `Tu es Maryse Condé — romancière guadeloupéenne, voix libre et sans concession, prix Nobel alternatif de littérature 2018.
 
 Tu as grandi à Pointe-à-Pitre dans une famille bourgeoise qui niait le créole et la canne, qui regardait vers Paris en tournant le dos à la mer. Tu as traversé l'Afrique — le Ghana, le Mali, le Sénégal — où tu as cherché une Afrique mère et trouvé à la place des hommes ordinaires, des politiques corrompus, une réalité qui ne correspondait pas au mythe. Ce désenchantement t'a libérée : tu n'as plus eu à appartenir à personne. Puis Paris, puis New York, et enfin ce retour à toi-même — Guadeloupéenne, Noire, femme, insoumise. Non pas par idéologie, mais par vérité.
 
@@ -33,7 +34,7 @@ Ta langue est le français — mais un français qui a mangé du colombo, qui a 
 
 /* ── Persona Horoscope - Voir lib/private/maryse.md ───────────────── */
 
-const KREYOL_RESISTANCE = `Les symboles vivants de la résistance créole.
+export const KREYOL_RESISTANCE = `Les symboles vivants de la résistance créole.
 
 Ces êtres — animaux, plantes, arbres — ne sont pas de la décoration. Ils sont des mémoires. Elle les connaît par le corps, pas par les livres. Elle peut les convoquer quand le moment le demande : un mot, une image, une correspondance. Jamais de façon systématique — seulement quand ça colle, quand ça résonne.
 
@@ -46,6 +47,11 @@ Manyòk — autonomie alimentaire arrachée au contrôle. Iyam — lien direct a
 // Ces configurations définissent le ton pour chaque période de la journée
 // Voir horoscope_instructions.md pour les instructions détaillées de rédaction
 export const EDITION_CONFIGS = {
+  nuit: {
+    moment: 'cette nuit',
+    instruction:
+      "C'est l'ÉDITION DE LA NUIT. Oriente chaque phrase vers le calme, les rêves, ce qui se prépare pendant la nuit. Formules de repos, de reconnexion aux esprits, de préparation au lendemain. Évocation des ancêtres et des forces invisibles.",
+  },
   matin: {
     moment: 'ce matin',
     instruction:
@@ -89,36 +95,54 @@ export function buildHoroscopeUserPrompt(
   rawText: string,
   weather: string,
   edition: Edition = 'matin',
+  date?: string,
+  hour?: string,
 ): string {
   const cfg = EDITION_CONFIGS[edition];
+  const dateToUse = date || todayGuadeloupe();
+  const hourToUse = hour || getGuadeloupeTime();
   const weatherBlock = weather
     ? `\nMÉTÉO DU JOUR À POINTE-À-PITRE : ${weather}`
     : '';
 
-  return `HOROSCOPE BRUT (source anglaise) — ${sign.name} :
+  // Récupérer les données culturelles enrichies si disponibles
+  const fauneSavoir = sign.faune?.savoir.split('.')[0] || '';
+  const floreSavoir = sign.flore?.savoir.split('.')[0] || '';
+  const lieuSymbolique = sign.lieuDetails?.symbolique || '';
+
+  return `CONTEXTE TEMPOREL À KARUKERA :
+Date : ${dateToUse}
+Heure locale : ${hourToUse}
+Moment : ${cfg.moment}
+
+HOROSCOPE BRUT (source anglaise) — ${sign.name} :
 ${rawText}
 
-CORRESPONDANCE CRÉOLE DU SIGNE ${sign.name.toUpperCase()} :
+CORRESPONDANCE CRÉOLE ENRICHIE DU SIGNE ${sign.name.toUpperCase()} :
 - Totem : ${sign.animal} (${sign.nomKreyol})
-- Plante / Fleur : ${sign.plante}
+  ${fauneSavoir ? `→ ${fauneSavoir}` : ''}
+- Plante : ${sign.plante} (${sign.flore?.nom_creole || ''})
+  ${floreSavoir ? `→ ${floreSavoir}` : ''}
 - Arbre : ${sign.arbre}
 - Lieu de Guadeloupe : ${sign.lieu}
+  ${lieuSymbolique ? `→ ${lieuSymbolique}` : ''}
 - Élément : ${sign.element}
 - Dimension spirituelle : ${sign.spirituel}
+- Conditions idéales : ${sign.faune?.conditions.join(', ') || sign.flore?.conditions.join(', ') || 'toutes'}
+- Éditions associées : ${sign.faune?.editions.join(', ') || sign.flore?.editions.join(', ') || 'toutes'}
 ${weatherBlock}
 
-MOMENT DE LA JOURNÉE : ${cfg.moment}
 ÉDITION : ${cfg.instruction}
 
 STRUCTURE — 6 phrases dans ta voix, dans cet ordre strict, ancrées dans le quotidien créole guadeloupéen :
-1. "ouverture" : image caribéenne qui pose le ton du jour (totem, plante ou lieu du signe en priorité). Jamais de titre ni description physique.
-2. "amour" : ce que le signe dit sur les relations et le cœur, ancré dans le quotidien créole.
-3. "travail" : ce que le signe dit sur l'action, l'effort, la réussite professionnelle.
-4. "argent" : ce que le signe dit sur les finances, les dépenses, les opportunités matérielles.
-5. "amitie" : ce que le signe dit sur le lien social, la solidarité, le collectif.
-6. "prediction" : tendance pour les jours à venir formulée comme un présage naturel créole ("le vent tourne", "quelque chose se prépare"…). Jamais "demain" en début de phrase.
+1. "ouverture" : image caribéenne qui pose le ton du jour (totem, plante ou lieu du signe en priorité). Utilise les savoirs traditionnels fournis. Jamais de titre ni description physique.
+2. "amour" : ce que le signe dit sur les relations et le cœur, ancré dans le quotidien créole. Intègre les symboles culturels.
+3. "travail" : ce que le signe dit sur l'action, l'effort, la réussite professionnelle. Inspire-toi des caractéristiques de la faune/flore.
+4. "argent" : ce que le signe dit sur les finances, les dépenses, les opportunités matérielles. Fais référence aux éléments naturels.
+5. "amitie" : ce que le signe dit sur le lien social, la solidarité, le collectif. Utilise le contexte du lieu sacré.
+6. "prediction" : tendance pour les jours à venir formulée comme un présage naturel créole ("le vent tourne", "quelque chose se prépare"…). Basé sur les conditions météo du signe. Jamais "demain" en début de phrase.
 
-Contraintes absolues : 6 phrases exactement, ton oral direct, parle à l'auditeur (tu/vous), vise 20–30 mots par phrase.`;
+Contraintes absolues : 6 phrases exactement, ton oral direct, parle à l'auditeur (tu/vous), vise 20–30 mots par phrase, intègre subtilement les références culturelles fournies.`;
 }
 
 export function buildSigneDuJourUserPrompt(
