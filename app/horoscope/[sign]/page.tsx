@@ -291,6 +291,150 @@ export default function HoroscopeSignPage() {
               </motion.section>
             )}
 
+            {/* ══ Carte Culturelle Karukera ════════════════════════════════════════ */}
+            {horoscope?.culturalData && (
+              <motion.section
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="mb-14"
+              >
+                <p className="text-ancestral-gold/45 text-xs uppercase tracking-[0.35em] mb-1">Savoirs de Karukera</p>
+                <h2 className="font-display text-xl font-bold text-ancestral-cream mb-6">🌿 Totems et symboles</h2>
+                
+                <div
+                  className="rounded-2xl overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(145deg, rgba(46,72,44,0.08) 0%, rgba(139,69,19,0.04) 100%)',
+                    border: `1px solid rgba(210,105,30,0.20)`,
+                  }}
+                >
+                  <div className="h-px" style={{ background: `linear-gradient(90deg, transparent, rgba(210,105,30,0.6), transparent)` }} />
+                  
+                  {/* Faune */}
+                  {horoscope.culturalData.faune && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center"
+                          style={{
+                            background: 'linear-gradient(135deg, rgba(210,105,30,0.20), rgba(255,215,0,0.12))',
+                            border: '1px solid rgba(210,105,30,0.30)'
+                          }}
+                        >
+                          <span className="text-2xl">🦎</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-ancestral-cream text-sm flex items-center gap-2">
+                            {horoscope.culturalData.faune.nom_commun}
+                            <span className="text-ancestral-cream/40 text-xs">({horoscope.culturalData.faune.nom_creole})</span>
+                          </h3>
+                          <p className="text-ancestral-cream/50 text-xs mt-2 leading-relaxed italic">
+                            {horoscope.culturalData.faune.savoir}
+                          </p>
+                          {horoscope.culturalData.faune.conditions.length > 0 && (
+                            <div className="mt-3 flex gap-2">
+                              {horoscope.culturalData.faune.conditions.map((c) => (
+                                <span
+                                  key={c}
+                                  className="px-2 py-0.5 rounded-full text-[10px] font-medium"
+                                  style={{
+                                    background: 'rgba(245,245,220,0.10)',
+                                    color: 'rgba(245,245,220,0.60)',
+                                    border: '1px solid rgba(245,245,220,0.15)'
+                                  }}
+                                >
+                                  {c === 'soleil' && '☀️'}
+                                  {c === 'pluie' && '🌧️'}
+                                  {c === 'nuageux' && '☁️'}
+                                  {c === 'vent' && '💨'}
+                                  {c === 'chaleur' && '🔥'}
+                                  {c}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {horoscope.culturalData.faune && horoscope.culturalData.flore && (
+                    <div className="px-6 pb-4 pt-2 border-t border-white/5">
+                      <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center"
+                          style={{
+                            background: 'linear-gradient(135deg, rgba(34,139,34,0.20), rgba(144,238,144,0.12))',
+                            border: '1px solid rgba(34,139,34,0.30)'
+                          }}
+                        >
+                          <span className="text-2xl">🌺</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-ancestral-cream text-sm flex items-center gap-2">
+                            {horoscope.culturalData.flore.nom_commun}
+                            <span className="text-ancestral-cream/40 text-xs">({horoscope.culturalData.flore.nom_creole})</span>
+                          </h3>
+                          <p className="text-ancestral-cream/50 text-xs mt-2 leading-relaxed italic">
+                            {horoscope.culturalData.flore.savoir}
+                          </p>
+                          {horoscope.culturalData.flore.conditions.length > 0 && (
+                            <div className="mt-3 flex gap-2">
+                              {horoscope.culturalData.flore.conditions.map((c) => (
+                                <span
+                                  key={c}
+                                  className="px-2 py-0.5 rounded-full text-[10px] font-medium"
+                                  style={{
+                                    background: 'rgba(245,245,220,0.10)',
+                                    color: 'rgba(245,245,220,0.60)',
+                                    border: '1px solid rgba(245,245,220,0.15)'
+                                  }}
+                                >
+                                  {c === 'soleil' && '☀️'}
+                                  {c === 'pluie' && '🌧️'}
+                                  {c === 'nuageux' && '☁️'}
+                                  {c === 'vent' && '💨'}
+                                  {c === 'chaleur' && '🔥'}
+                                  {c}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {horoscope.culturalData.lieuDetails && (
+                    <div className="px-6 py-4 border-t border-white/5">
+                      <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center"
+                          style={{
+                            background: 'linear-gradient(135deg, rgba(70,130,180,0.20), rgba(173,216,230,0.12))',
+                            border: '1px solid rgba(70,130,180,0.30)'
+                          }}
+                        >
+                          <span className="text-2xl">📍</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-ancestral-cream text-sm flex items-center gap-2">
+                            {horoscope.culturalData.lieu}
+                          </h3>
+                          <p className="text-ancestral-cream/50 text-xs mt-2 leading-relaxed">
+                            {horoscope.culturalData.lieuDetails.description}
+                          </p>
+                          <p className="text-ancestral-cream/40 text-xs mt-2 italic">
+                            "{horoscope.culturalData.lieuDetails.symbolique}"
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="h-px" style={{ background: `linear-gradient(90deg, transparent, rgba(255,215,0,0.4), transparent)` }} />
+                </div>
+              </motion.section>
+            )}
+
             {/* Newsletter - Recevoir son horoscope par mail */}
             <motion.section
               initial={{ opacity: 0, y: 20 }}
