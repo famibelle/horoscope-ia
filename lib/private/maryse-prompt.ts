@@ -110,8 +110,30 @@ export function buildHoroscopeUserPrompt(
   const floreSavoir = sign.flore?.savoir.split('.')[0] || '';
   const lieuSymbolique = sign.lieuDetails?.symbolique || '';
 
+  // Détecter les correspondances météo/édition pour adapter le contexte
+  const signConditions = [...(sign.faune?.conditions || []), ...(sign.flore?.conditions || [])];
+  const signEditions = [...(sign.faune?.editions || []), ...(sign.flore?.editions || [])];
+  
+  // Extraire la météo principale depuis weather
+  const weatherKeywords = weather.toLowerCase();
+  const hasMatchingCondition = signConditions.some(c => weatherKeywords.includes(c.toLowerCase()));
+  const hasMatchingEdition = signEditions.includes(edition);
+
+  // Contexte dynamique basé sur les correspondances
+  const dynamicContext = [];
+  if (hasMatchingCondition && hasMatchingEdition) {
+    dynamicContext.push(`✦ CONTEXTE IDÉAL : La météo et l'heure correspondent parfaitement aux conditions du ${sign.name}.`);
+  } else if (hasMatchingCondition) {
+    dynamicContext.push(`✦ CONTEXTE FAVORABLE : La météo correspond aux conditions idéales du ${sign.name}.`);
+  } else if (hasMatchingEdition) {
+    dynamicContext.push(`✦ CONTEXTE ADAPTÉ : L'édition "${edition}" convient particulièrement au ${sign.name}.`);
+  }
+  const dynamicContextBlock = dynamicContext.length > 0 
+    ? `\n${dynamicContext.join('\n')}\n`
+    : '';
+
   return `CONTEXTE TEMPOREL À KARUKERA :
-Date : ${dateToUse}
+${dynamicContextBlock}Date : ${dateToUse}
 Heure locale : ${hourToUse}
 Moment : ${cfg.moment}
 
