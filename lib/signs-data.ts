@@ -7,6 +7,7 @@ export interface FauneData {
   conditions: string[];
   editions: string[];
   savoir: string;
+  sacreSymbolique?: string;
 }
 
 export interface FloraData {
@@ -73,7 +74,8 @@ export const signs: Sign[] = [
       famille: 'reptiles',
       conditions: ['soleil', 'chaleur'],
       editions: ['matin'],
-      savoir: "Animal totem des Arawaks, gardien de Petite-Terre. Les marrons s'en inspiraient : immobile et invisible dans la végétation, il voit tout sans être vu, sait attendre des heures avant d'agir. Les anciens disaient qu'observer un iguane, c'est apprendre la patience qui permet de survivre quand l'ennemi est plus fort."
+      savoir: "Animal totem des Arawaks, gardien de Petite-Terre. Les marrons s'en inspiraient : immobile et invisible dans la végétation, il voit tout sans être vu, sait attendre des heures avant d'agir. Les anciens disaient qu'observer un iguane, c'est apprendre la patience qui permet de survivre quand l'ennemi est plus fort.",
+      sacreSymbolique: '⭐⭐⭐ SACRÉ'
     },
     flore: {
       nom_creole: 'flamboyant',
@@ -113,7 +115,8 @@ export const signs: Sign[] = [
       famille: 'mammifères',
       conditions: [],
       editions: ['matin', 'soir'],
-      savoir: "Caprin sauvage des mornes, agile et résistant. Symbole de l'adaptation à un terrain difficile. Les anciens chassaient le kabribo pour sa viande, mais respectaient sa capacité à survivre dans les zones les plus escarpées."
+      savoir: "Caprin sauvage des mornes, agile et résistant. Symbole de l'adaptation à un terrain difficile. Les anciens chassaient le kabribo pour sa viande, mais respectaient sa capacité à survivre dans les zones les plus escarpées.",
+      sacreSymbolique: '⭐⭐⭐ SACRÉ NOCTURNE'
     },
     flore: {
       nom_creole: 'fromager',
@@ -153,7 +156,8 @@ export const signs: Sign[] = [
       famille: 'oiseaux',
       conditions: ['soleil', 'chaleur'],
       editions: ['matin'],
-      savoir: "Son nom vient directement des Arawaks — le souffle de l'air à travers ses ailes. Il bat des ailes jusqu'à soixante fois par seconde, suspendu immobile devant la fleur. Les anciens disaient que le voir au lever du soleil annonce une journée qui ira vite, mais où il faut savoir s'arrêter sur ce qui compte."
+      savoir: "Son nom vient directement des Arawaks — le souffle de l'air à travers ses ailes. Il bat des ailes jusqu'à soixante fois par seconde, suspendu immobile devant la fleur. Les anciens disaient que le voir au lever du soleil annonce une journée qui ira vite, mais où il faut savoir s'arrêter sur ce qui compte.",
+      sacreSymbolique: '⭐⭐⭐ SACRÉ'
     },
     flore: {
       nom_creole: 'gommier',
@@ -193,7 +197,8 @@ export const signs: Sign[] = [
       famille: 'crustacés',
       conditions: ['vent', 'nuageux'],
       editions: ['matin', 'soir'],
-      savoir: "Son nom est hérité direct des Kalinagos, intact depuis des siècles. Il a donné son nom aux femmes masquées du carnaval de Guadeloupe — les touloulous qui choisissent leurs cavaliers et ne se découvrent jamais. Signe de ce qui se cache pour être plus libre, qui préserve son mystère pour garder le pouvoir de choisir."
+      savoir: "Son nom est hérité direct des Kalinagos, intact depuis des siècles. Il a donné son nom aux femmes masquées du carnaval de Guadeloupe — les touloulous qui choisissent leurs cavaliers et ne se découvrent jamais. Signe de ce qui se cache pour être plus libre, qui préserve son mystère pour garder le pouvoir de choisir.",
+      sacreSymbolique: '⭐⭐⭐ SACRÉ CULTUREL'
     },
     flore: {
       nom_creole: 'palétuwyé',
@@ -233,7 +238,8 @@ export const signs: Sign[] = [
       famille: 'oiseaux',
       conditions: ['soleil', 'vent'],
       editions: ['matin', 'soir'],
-      savoir: "Animal totem des pêcheurs — quand les pélicans plongent en masse, le banc de poissons est là. Leur présence groupée annonce le beau temps et la bonne prise. Les anciens disaient qu'ils lisaient la mer mieux que n'importe quelle boussole. Signe de ce qui sait, sans avoir appris dans les livres."
+      savoir: "Animal totem des pêcheurs — quand les pélicans plongent en masse, le banc de poissons est là. Leur présence groupée annonce le beau temps et la bonne prise. Les anciens disaient qu'ils lisaient la mer mieux que n'importe quelle boussole. Signe de ce qui sait, sans avoir appris dans les livres.",
+      sacreSymbolique: '⭐ Symbolique'
     },
     flore: {
       nom_creole: 'flamboyant',
@@ -273,7 +279,8 @@ export const signs: Sign[] = [
       famille: 'reptiles',
       conditions: ['nuageux'],
       editions: ['matin'],
-      savoir: "Couleuvre inoffensive, endémique des Antilles — elle ne mord que si on la provoque. Gardienne silencieuse des jardins et des réserves à grain, elle mange les rats et les fourmis. Les anciens disaient qu'une couresse installée sous la case, c'est une chance. Signe de ce qui effraie sans raison, et protège sans bruit."
+      savoir: "Couleuvre inoffensive, endémique des Antilles — elle ne mord que si on la provoque. Gardienne silencieuse des jardins et des réserves à grain, elle mange les rats et les fourmis. Les anciens disaient qu'une couresse installée sous la case, c'est une chance. Signe de ce qui effraie sans raison, et protège sans bruit.",
+      sacreSymbolique: '⭐⭐ Symbolique'
     },
     flore: {
       nom_creole: 'manguier',
@@ -313,7 +320,8 @@ export const signs: Sign[] = [
       famille: 'marins',
       conditions: ['nuageux', 'pluie'],
       editions: ['soir'],
-      savoir: "Les premiers marins ont pris le lamantin pour une sirène — à l'origine des légendes de la Manman Dlo caribéenne. Il allaite ses petits comme une femme, flotte entre deux eaux, appartient aux deux mondes. Espèce aujourd'hui en grand danger. Signe de ce qui nage entre deux mondes sans appartenir à aucun des deux."
+      savoir: "Les premiers marins ont pris le lamantin pour une sirène — à l'origine des légendes de la Manman Dlo caribéenne. Il allaite ses petits comme une femme, flotte entre deux eaux, appartient aux deux mondes. Espèce aujourd'hui en grand danger. Signe de ce qui nage entre deux mondes sans appartenir à aucun des deux.",
+      sacreSymbolique: '⭐⭐⭐ SACRÉ MYTHIQUE'
     },
     flore: {
       nom_creole: 'acajou pays',
@@ -353,7 +361,8 @@ export const signs: Sign[] = [
       famille: 'arachnides',
       conditions: [],
       editions: ['soir'],
-      savoir: "Araignée imposante vivante dans les zones volcaniques de la Soufrière. Malgré son apparence effrayante, elle est inoffensive et joue un rôle clé dans l'écosystème. Symbole de ce qui impressionne mais ne cause pas de mal."
+      savoir: "Araignée imposante vivante dans les zones volcaniques de la Soufrière. Malgré son apparence effrayante, elle est inoffensive et joue un rôle clé dans l'écosystème. Symbole de ce qui impressionne mais ne cause pas de mal.",
+      sacreSymbolique: '⭐⭐⭐ SACRÉ ENDÉMIQUE'
     },
     flore: {
       nom_creole: 'calebassier',
@@ -393,7 +402,8 @@ export const signs: Sign[] = [
       famille: 'marins',
       conditions: ['pluie', 'nuageux'],
       editions: ['matin'],
-      savoir: "Crevette géante des rivières de Basse-Terre — elle remonte les courants jusqu'aux sources les plus hautes des mornes. Elle vivait dans les rivières que les anciens considéraient comme sacrées. Signe de ce qui prospère dans les eaux claires, profondes, et qu'on n'atteint qu'en ayant le courage de remonter à contre-courant."
+      savoir: "Crevette géante des rivières de Basse-Terre — elle remonte les courants jusqu'aux sources les plus hautes des mornes. Elle vivait dans les rivières que les anciens considéraient comme sacrées. Signe de ce qui prospère dans les eaux claires, profondes, et qu'on n'atteint qu'en ayant le courage de remonter à contre-courant.",
+      sacreSymbolique: '⭐⭐ Culturel'
     },
     flore: {
       nom_creole: 'coco',
@@ -433,7 +443,8 @@ export const signs: Sign[] = [
       famille: 'mammifères',
       conditions: [],
       editions: ['matin', 'soir'],
-      savoir: "Caprin sauvage des mornes, agile et résistant. Symbole de l'adaptation à un terrain difficile. Les anciens chassaient le kabribo pour sa viande, mais respectaient sa capacité à survivre dans les zones les plus escarpées."
+      savoir: "Caprin sauvage des mornes, agile et résistant. Symbole de l'adaptation à un terrain difficile. Les anciens chassaient le kabribo pour sa viande, mais respectaient sa capacité à survivre dans les zones les plus escarpées.",
+      sacreSymbolique: '⭐⭐⭐ SACRÉ NOCTURNE'
     },
     flore: {
       nom_creole: 'courbaril',
@@ -473,7 +484,8 @@ export const signs: Sign[] = [
       famille: 'marins',
       conditions: [],
       editions: ['soir'],
-      savoir: "Maître du camouflage et de l'intelligence marine. Capable de changer de couleur, de forme et même de texture en une fraction de seconde. Les anciens pêcheurs voyaient en lui un esprit de la mer, capable de résoudre les énigmes les plus complexes. Signe de l'adaptabilité extrême."
+      savoir: "Maître du camouflage et de l'intelligence marine. Capable de changer de couleur, de forme et même de texture en une fraction de seconde. Les anciens pêcheurs voyaient en lui un esprit de la mer, capable de résoudre les énigmes les plus complexes. Signe de l'adaptabilité extrême.",
+      sacreSymbolique: '⭐⭐ Symbolique'
     },
     flore: {
       nom_creole: 'citronnelle',
@@ -513,7 +525,8 @@ export const signs: Sign[] = [
       famille: 'marins',
       conditions: ['vent', 'soleil'],
       editions: ['matin', 'soir'],
-      savoir: "Sa carapace translucide et dorée était taillée en parures rituelles amérindiennes. Aujourd'hui en danger critique d'extinction. Les anciens disaient qu'elle porte un monde entier sur le dos — et que quand une espèce disparaît, c'est un morceau du monde qu'elle emporte avec elle."
+      savoir: "Sa carapace translucide et dorée était taillée en parures rituelles amérindiennes. Aujourd'hui en danger critique d'extinction. Les anciens disaient qu'elle porte un monde entier sur le dos — et que quand une espèce disparaît, c'est un morceau du monde qu'elle emporte avec elle.",
+      sacreSymbolique: '⭐⭐⭐ SACRÉE'
     },
     flore: {
       nom_creole: 'korosòl',
