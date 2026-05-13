@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { normalizeForTTS } from '@/lib/tts-utils';
 import { MARYSE_AME } from '@/lib/private/maryse-prompt';
-import { todayGuadeloupe } from '@/lib/edition';
+import { todayGuadeloupe, getVisitorTimeOfDay, getIntroPhrase } from '@/lib/edition';
+import { signs } from '@/lib/signs-data';
 
 const TTS_URL = 'https://api.mistral.ai/v1/audio/speech';
 
@@ -89,19 +90,23 @@ async function optimizeTextForTTS(
 
   // Pré-calculer les valeurs pour l'intro (l'LLM doit les utiliser TEL QUEL)
   const dateFormatted = formatDateFr(userDate);
-  const introPhraseMap: Record<string, string> = {
-    matin: 'ce matin',
-    midi: 'cet après-midi',
-    soir: 'ce soir',
-    nuit: 'cette nuit',
-  };
-  const introPhrase = introPhraseMap[edition] || 'ce matin';
+  const introPhrase = getIntroPhrase();
+
+  // Récupérer les données culturelles du signe pour enrichir l'intro
+  const signData = signs.find(s => s.name.toLowerCase() === signName.toLowerCase());
+  const culturalContext = signData ? `
+Ici en Guadeloupe, ${signData.faune?.savoir.split('.')[0] || signData.flore?.savoir.split('.')[0] || ''}` : '';
 
   const userPrompt = `HOROSCOPE À OPTIMISER :
 ${fullText}
 
+CONTEXTE CULTUREL KARUKERA :
+${signData ? `- Totem : ${signData.faune?.nom_commun || signData.animal}
+- Plante : ${signData.flore?.nom_commun || signData.plante}
+- Lieu sacré : ${signData.lieu} (${signData.lieuDetails?.symbolique})` : 'Aucun contexte culturel disponible'}
+
 INTRODUCTION À UTILISER (COPIER-COLLER EXACTEMENT) :
-"Bonjour, c'est Maryse. Nous sommes le ${dateFormatted}, et ${introPhrase}"
+"Bonjour, c'est Maryse. Nous sommes le ${dateFormatted}, ${introPhrase}${culturalContext ? ` ${culturalContext}` : ''}"
 
 INSTRUCTIONS :
 1. COMMENCE EXACTEMENT par l'introduction ci-dessus (copie-colle, ZÉRO modification)
