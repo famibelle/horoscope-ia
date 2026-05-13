@@ -1,0 +1,498 @@
+/**
+ * Générateur de contenu pour la newsletter d'horoscope
+ * Crée des newsletters complètes avec les données culturelles guadeloupéennes
+ */
+
+import { signs } from './signs-data';
+import { todayGuadeloupe } from './edition';
+import { getEditionFromDate } from './private/tts-prompt';
+import NewsletterTemplates, { NewsletterData } from './newsletter-templates';
+import {
+  floreData,
+  fauneData,
+  lieuxData,
+  kreyolData,
+  histoireData
+} from './private';
+
+// Types pour la structure de la newsletter
+interface SignHoroscope {
+  sign: typeof signs[0];
+  horoscope: {
+    ouverture: string;
+    amour: string;
+    travail: string;
+    argent: string;
+    amitie: string;
+    prediction: string;
+  };
+}
+
+interface CulturalContent {
+  title: string;
+  content: string;
+  type: 'flore' | 'faune' | 'lieu' | 'histoire' | 'kreyol' | 'rituel';
+  imageUrl?: string;
+}
+
+interface Newsletter {
+  subject: string;
+  html: string;
+  text: string;
+  date: string;
+  subscriberName?: string;
+}
+
+// Données culturelles pour les conseils et rituels
+const culturalTips: Record<string, string[]> = {
+  patience: [
+    'Comme l\'igwann péyi qui attend patiemment sous le soleil de Karukera, apprends à laisser les choses venir à toi.',
+    'La patience est une vertu sacrée, comme la Soufrière qui dort depuis des siècles.',
+    'Rappelle-toi du manguier : il faut des années pour porter des fruits, mais le résultat en vaut la peine.'
+  ],
+  resistance: [
+    'Comme le zandoli qui lâche sa queue pour échapper au danger, sache quand il faut te libérer.',
+    'La résistance, c\'est comme le bois de gaïac : plus on le malmène, plus il devient fort.',
+    'Les esclaves marrons nous ont appris que la liberté se gagne par la persévérance.'
+  ],
+  love: [
+    'Comme le kolibri qui danse devant les fleurs pour attirer son amour, laisse ton cœur s\'exprimer librement.',
+    'En amour, sois comme le flamant rose : élégant, fidèle, et toujours prêt à voler ensemble.',
+    'Le secret d\'un amour durable ? La confiance, comme les racines du fromager qui s\'entrelaçent.'
+  ],
+  money: [
+    'Comme le cocotier qui donne à la fois eau, nourriture et abri, fais fructifier tes ressources avec sagesse.',
+    'L\'argent est comme la mer : il vient et il part avec les marées, ne t\'y attache pas trop.',
+    'Investis comme on plante un manguier : avec patience et foi en l\'avenir.'
+  ],
+  work: [
+    'Travaille comme la fourmi manmi : sans bruit, mais avec une efficacité redoutable.',
+    'Le succès vient à ceux qui, comme le vent alizé, persistent jour après jour.',
+    'Une tâche difficile ? Pense au morne qui a mis des siècles à se former : un pas à la fois.'
+  ],
+  health: [
+    'Prends soin de toi comme le jardin créole : avec amour, patience, et les bons ingrédients.',
+    'Bois une infusion de cerasee pour purifier ton corps et ton esprit.',
+    'La santé, c\'est comme la terre de Grande-Terre : plus tu en prends soin, plus elle te rend.'
+  ]
+};
+
+// Rituels traditionnels par jour de la semaine
+const dailyRituals: Record<string, string> = {
+  monday: 'Allume une bougie blanche pour commencer la semaine avec pureté.',
+  tuesday: 'Mets une feuille de basilic sous ton oreiller pour attirer la chance.',
+  wednesday: 'Boire une tisane de menthe poulet pour la clarté d\'esprit.',
+  thursday: 'Porte une pierre de rivière dans ta poche pour rester ancré.',
+  friday: 'Lave tes mains avec de l\'eau de fleur d\'oranger pour attirer l\'abondance.',
+  saturday: 'Balaye devant ta porte avec une branche de romarin pour chasser les mauvaises énergies.',
+  sunday: 'Allume de l\'encens de copal pour honorer tes ancêtres.'
+};
+
+// Thèmes culturels par jour de la semaine
+const weeklyCulturalThemes: Record<string, { title: string; content: string }> = {
+  monday: {
+    title: '🌿 La Flore Sacrée de Guadeloupe',
+    content: 'La Guadeloupe regorge de plantes aux vertus méconnues. Le manguier, symbole de patience, nous rappelle que les meilleures choses prennent du temps. Le cerisier, utilisé en médecine traditionnelle, purifie le corps et l\'esprit. Et n\'oublions pas le corossol, dont les feuilles en infusion aident à trouver le sommeil.'
+  },
+  tuesday: {
+    title: '🦜 La Faune Symbolique',
+    content: 'Le kolibri, cet oiseau minuscule qui butine sans relâche, symbolise la persévérance et la joie des petites choses. L\'igwann péyi, lui, incarne la sagesse et la capacité à se fondre dans son environnement. Quant à la manman dlo, cette créature mystérieuse des rivières, elle nous rappelle que la nature recèle encore bien des secrets.'
+  },
+  wednesday: {
+    title: '⛰️ Lieux de Pouvoir en Guadeloupe',
+    content: 'La Soufrière, cœur battant de la Guadeloupe, est bien plus qu\'un volcan : c\'est un lieu sacré où les Kalinagos vénéraient les esprits de la terre. Les chutes du Carbet, elles, représentent la purification et le renouveau. Et que dire de la Pointe des Châteaux, où les vents alizés apportent des messages du passé ?'
+  },
+  thursday: {
+    title: '📜 Pages d\'Histoire',
+    content: 'Le 8 février 1802, Delgrès et ses compagnons ont choisi la mort plutôt que l\'esclavage. Leur sacrifice à Matouba reste gravé dans notre mémoire collective comme symbole de liberté absolue. Plus tôt, les Taïnos nous ont laissé un héritage de vie en harmonie avec la nature, que nous commençons seulement à redécouvrir.'
+  },
+  friday: {
+    title: '🍛 Saveurs Traditionnelles',
+    content: 'Le colombo, avec son mélange d\'épices venues d\'Inde, d\'Afrique et des Amériques, incarne la diversité de notre île. Le bokit, lui, est bien plus qu\'un simple sandwich : c\'est un symbole de partage. Et que dire du rhum arrangé, où chaque famille a sa propre recette secrète transmise de génération en génération ?'
+  },
+  saturday: {
+    title: '🕯️ Spiritualité et Quimbois',
+    content: 'Le quimbois n\'est pas de la magie noire, mais une science de l\'équilibre. Que ce soit pour protéger sa maison avec un bwa bandé, purifier son corps avec un bain de feuilles, ou honorer ses ancêtres avec une offrande, chaque geste a une signification profonde.'
+  },
+  sunday: {
+    title: '🌅 Légendes et Contes',
+    content: 'La légende de la Soufrière raconte qu\'elle était autrefois une belle femme transformée en volcan par un sortilège. Celle du diable et du manguier nous rappelle que le mal peut parfois se cacher sous les apparences les plus innocentes. Ces histoires, transmises oralement, sont des trésors de notre patrimoine.'
+  }
+};
+
+// Noms des jours en français
+const dayNames = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+
+// Fonctions utilitaires
+function getDayName(date: string): string {
+  const d = new Date(date);
+  return dayNames[d.getDay()];
+}
+
+function getRandomTip(category: string): string {
+  const tips = culturalTips[category] || culturalTips['patience'];
+  return tips[Math.floor(Math.random() * tips.length)];
+}
+
+function getCulturalElementByType(type: string, index: number = 0): any {
+  const datasets: Record<string, any[]> = {
+    flore: floreData,
+    faune: fauneData,
+    lieu: lieuxData,
+    kreyol: kreyolData,
+    histoire: histoireData
+  };
+
+  const dataset = datasets[type] || [];
+  return dataset[index % dataset.length];
+}
+
+// Générateur de conseils culturels pour un signe
+function generateCulturalTip(sign: typeof signs[0], date: string): string {
+  const day = getDayName(date);
+  const ritual = dailyRituals[day] || '';
+  
+  // Analyser le thème principal de l'horoscope (simplifié)
+  const themes = ['patience', 'resistance', 'love', 'money', 'work', 'health'];
+  const theme = themes[Math.floor(Math.random() * themes.length)];
+  
+  // Obtenir un conseil lié au thème
+  let tip = getRandomTip(theme);
+  
+  // Ajouter une référence à l'élément du signe
+  if (sign.element) {
+    tip += ` Ton élément ${sign.element} te donne aujourd'hui une énergie particulière pour cela.`;
+  }
+  
+  return tip;
+}
+
+// Générateur de rituels pour un signe
+function generateRitual(sign: typeof signs[0], date: string): string {
+  const day = getDayName(date);
+  const baseRitual = dailyRituals[day] || '';
+  
+  // Personnaliser en fonction du signe
+  if (sign.faune?.nom_creole) {
+    return `${baseRitual} Pense à l'esprit de ${sign.faune.nom_creole} pendant que tu le fais.`;
+  } else if (sign.flore?.nom_creole) {
+    return `${baseRitual} Utilise si possible une feuille de ${sign.flore.nom_creole}.`;
+  }
+  
+  return baseRitual;
+}
+
+// Générateur de section culturelle du jour
+function generateCulturalSection(date: string): CulturalContent {
+  const day = getDayName(date);
+  const theme = weeklyCulturalThemes[day];
+  
+  return {
+    title: theme.title,
+    content: theme.content,
+    type: 'rituel',
+    imageUrl: `/images/cultural/${day}.jpg` // À adapter selon vos assets
+  };
+}
+
+// Générateur de prévisions spéciales
+function generateSpecialPredictions(allSigns: SignHoroscope[]): {
+  love: string;
+  work: string;
+  money: string;
+  health: string;
+} {
+  // Trouver le signe le plus chanceux pour chaque catégorie (simplifié)
+  const loveSign = allSigns[Math.floor(Math.random() * allSigns.length)];
+  const workSign = allSigns[Math.floor(Math.random() * allSigns.length)];
+  const moneySign = allSigns[Math.floor(Math.random() * allSigns.length)];
+  const healthSign = allSigns[Math.floor(Math.random() * allSigns.length)];
+  
+  return {
+    love: `${loveSign.sign.name} : ${getRandomTip('love')}`,
+    work: `${workSign.sign.name} : ${getRandomTip('work')}`,
+    money: `${moneySign.sign.name} : ${getRandomTip('money')}`,
+    health: `${healthSign.sign.name} : ${getRandomTip('health')}`
+  };
+}
+
+// Fonction principale : Générer une newsletter complète
+async function generateNewsletter(
+  date: string = todayGuadeloupe(),
+  allSignsData: SignHoroscope[] = [],
+  subscriberName?: string
+): Promise<Newsletter> {
+  try {
+    // Si aucune donnée fournie, utiliser des données par défaut
+    if (allSignsData.length === 0) {
+      // Simuler des données pour chaque signe
+      allSignsData = signs.map(sign => ({
+        sign,
+        horoscope: {
+          ouverture: `Une journée ${['favorable', 'intéressante', 'challengante', 'inspirante'][Math.floor(Math.random() * 4)]} pour les natifs du ${sign.name}.`,
+          amour: `En amour, ${['soyez ouvert', 'prenez votre temps', 'exprimez vos sentiments', 'écoutez votre cœur'][Math.floor(Math.random() * 4)]}.' ,
+          travail: `Au travail, ${['votre créativité', 'votre persévérance', 'votre intuition', 'votre expérience'][Math.floor(Math.random() * 4)]} sera votre atout.`,
+          argent: `Côté finances, ${['évitez les dépenses inutiles', 'une opportunité pourrait se présenter', 'soyez prudent', 'investissez avec sagesse'][Math.floor(Math.random() * 4)]}.`,
+          amitie: `Vos amis ${['vous soutiendront', 'auront besoin de vous', 'vous apporteront de la joie', 'vous donneront de bons conseils'][Math.floor(Math.random() * 4)]} aujourd'hui.`,
+          prediction: `Prédiction : ${['un changement positif', 'une bonne nouvelle', 'une rencontre importante', 'une prise de conscience'][Math.floor(Math.random() * 4)]} vous attend.`
+        }
+      }));
+    }
+
+    const edition = getEditionFromDate(date);
+    const dayName = getDayName(date);
+    const culturalSection = generateCulturalSection(date);
+    const specialPredictions = generateSpecialPredictions(allSignsData);
+    
+    // Générer le sujet de l'email
+    const subject = subscriberName 
+      ? `🌟 ${subscriberName}, voici votre horoscope guadeloupéen pour le ${date}`
+      : `🌟 Horoscope Guadeloupéen - ${date}`;
+
+    // Générer le contenu HTML
+    let htmlContent = '';
+    let textContent = '';
+
+    // Ajouter l'en-tête
+    htmlContent += NewsletterTemplates.getHeaderTemplate(date);
+    textContent += `HOROSCOPE GUADELOUPÉEN - ${date}\n`;
+    textContent += `"Les esprits de Karukera vous parlent"\n\n`;
+
+    // Ajouter l'introduction (rotation quotidienne)
+    const introductions = [
+      `Chers amis, aujourd'hui les étoiles de Karukera s'alignent pour vous apporter des messages importants. Voici ce que la journée vous réserve.`,
+      `Bonjour à tous ! Que les alizés portent jusqu'à vous les conseils de Maryse pour cette belle journée.`,
+      `La Soufrière veille sur nous aujourd'hui. Découvrez ce que les esprits ont à vous dire.`,
+      `En ce ${dayName}, prenons un moment pour écouter les messages que la nature et les ancêtres nous envoient.`
+    ];
+    const intro = introductions[Math.floor(Math.random() * introductions.length)];
+    
+    htmlContent += `
+<div style="
+  padding: 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #4a5568;
+  line-height: 1.6;
+">
+  <p style="font-size: 16px;">${intro}</p>
+</div>
+    `;
+    textContent += `${intro}\n\n`;
+
+    // Ajouter la section culturelle du jour
+    htmlContent += NewsletterTemplates.getCulturalSectionTemplate(
+      culturalSection.title,
+      culturalSection.content,
+      culturalSection.imageUrl
+    );
+    textContent += `\n=== ${culturalSection.title} ===\n${culturalSection.content}\n\n`;
+
+    // Ajouter les prévisions spéciales
+    htmlContent += NewsletterTemplates.getSpecialPredictionsTemplate(specialPredictions);
+    textContent += `\n=== PRÉDICTIONS SPÉCIALES ===\nAmour: ${specialPredictions.love}\nTravail: ${specialPredictions.work}\nArgent: ${specialPredictions.money}\nSanté: ${specialPredictions.health}\n\n`;
+
+    // Ajouter les horoscopes par signe
+    htmlContent += `<div style="padding: 8px 24px;">
+      <h2 style="
+        color: #2d3748;
+        font-size: 20px;
+        margin: 24px 0;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #7c3aed;
+        text-align: center;
+      ">
+        🔮 Horoscopes par Signe
+      </h2>
+    </div>`;
+    textContent += `\n=== HOROSCOPES PAR SIGNE ===\n\n`;
+
+    for (const signData of allSignsData) {
+      const newsletterData: NewsletterData = {
+        date,
+        sign: signData.sign,
+        horoscope: signData.horoscope,
+        culturalTip: generateCulturalTip(signData.sign, date),
+        ritual: generateRitual(signData.sign, date)
+      };
+
+      htmlContent += NewsletterTemplates.getSignHtmlTemplate(newsletterData);
+      textContent += NewsletterTemplates.getSignTextTemplate(newsletterData);
+    }
+
+    // Ajouter le pied de page
+    htmlContent += NewsletterTemplates.getFooterTemplate();
+    textContent += `\n\n${NewsletterTemplates.getFooterTemplate().replace(/<[^>]*>/g, '')}`;
+
+    // Personnaliser avec le nom du destinataire si disponible
+    if (subscriberName) {
+      // Ajouter une salutation personnalisée en haut
+      htmlContent = `
+<div style="
+  padding: 16px 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
+  color: white;
+  border-radius: 12px 12px 0 0;
+">
+  <p style="margin: 0; font-size: 16px;">Bonjour ${subscriberName},</p>
+  <p style="margin: 8px 0 0 0; font-size: 14px; opacity: 0.9;">Voici votre horoscope guadeloupéen pour aujourd'hui.</p>
+</div>
+      ` + htmlContent;
+      
+      textContent = `Bonjour ${subscriberName},
+
+Voici votre horoscope guadeloupéen pour aujourd'hui.
+
+` + textContent;
+    }
+
+    return {
+      subject,
+      html: `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${subject}</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f7fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <div style="max-width: 600px; margin: 0 auto; background: white;">
+    ${htmlContent}
+  </div>
+</body>
+</html>`,
+      text: textContent,
+      date
+    };
+
+  } catch (error) {
+    console.error('Erreur lors de la génération de la newsletter:', error);
+    throw new Error('Échec de la génération de la newsletter');
+  }
+}
+
+// Générateur de newsletter pour un signe spécifique
+async function generateSignNewsletter(
+  signId: string,
+  date: string = todayGuadeloupe(),
+  horoscopeData: Partial<HoroscopeResponse> = {},
+  subscriberName?: string
+): Promise<Newsletter> {
+  const sign = signs.find(s => s.id === signId);
+  
+  if (!sign) {
+    throw new Error(`Signe non trouvé: ${signId}`);
+  }
+
+  // Compléter avec des données par défaut si nécessaire
+  const completeHoroscope: HoroscopeResponse = {
+    ouverture: horoscopeData.ouverture || `Une journée ${['favorable', 'intéressante', 'challengante'][Math.floor(Math.random() * 3)]} pour les natifs du ${sign.name}.`,
+    amour: horoscopeData.amour || `En amour, ${['soyez ouvert', 'prenez votre temps', 'exprimez vos sentiments'][Math.floor(Math.random() * 3)]}.`,
+    travail: horoscopeData.travail || `Au travail, ${['votre créativité', 'votre persévérance', 'votre intuition'][Math.floor(Math.random() * 3)]} sera votre atout.`,
+    argent: horoscopeData.argent || `Côté finances, ${['évitez les dépenses inutiles', 'une opportunité pourrait se présenter'][Math.floor(Math.random() * 2)]}.`,
+    amitie: horoscopeData.amitie || `Vos amis ${['vous soutiendront', 'auront besoin de vous'][Math.floor(Math.random() * 2)]} aujourd'hui.`,
+    prediction: horoscopeData.prediction || `Prédiction : ${['un changement positif', 'une bonne nouvelle'][Math.floor(Math.random() * 2)]} vous attend.`
+  };
+
+  const newsletterData: NewsletterData = {
+    date,
+    sign,
+    horoscope: completeHoroscope,
+    culturalTip: generateCulturalTip(sign, date),
+    ritual: generateRitual(sign, date)
+  };
+
+  const edition = getEditionFromDate(date);
+  const dayName = getDayName(date);
+  const culturalSection = generateCulturalSection(date);
+
+  const subject = subscriberName 
+    ? `🌟 ${subscriberName}, votre horoscope ${sign.name} pour le ${date}`
+    : `🌟 Horoscope ${sign.name} - ${date}`;
+
+  let htmlContent = '';
+  let textContent = '';
+
+  // En-tête
+  htmlContent += NewsletterTemplates.getHeaderTemplate(date);
+  textContent += `HOROSCOPE GUADELOUPÉEN - ${sign.name} - ${date}\n`;
+
+  // Introduction
+  const intro = `Bonjour ${subscriberName || 'ami(e)'}, voici votre horoscope pour le ${sign.name} en ce ${dayName} ${date}.`;
+  htmlContent += `
+<div style="padding: 24px; color: #4a5568; line-height: 1.6;">
+  <p style="font-size: 16px;">${intro}</p>
+</div>
+  `;
+  textContent += `${intro}\n\n`;
+
+  // Horoscope du signe
+  htmlContent += NewsletterTemplates.getSignHtmlTemplate(newsletterData);
+  textContent += NewsletterTemplates.getSignTextTemplate(newsletterData);
+
+  // Section culturelle
+  htmlContent += NewsletterTemplates.getCulturalSectionTemplate(
+    culturalSection.title,
+    culturalSection.content,
+    culturalSection.imageUrl
+  );
+  textContent += `\n=== ${culturalSection.title} ===\n${culturalSection.content}\n\n`;
+
+  // Rituel
+  htmlContent += `
+<div style="padding: 8px 24px;">
+  <h2 style="color: #2d3748; font-size: 18px; margin: 20px 0 12px 0;">
+    🌿 Rituel du Jour
+  </h2>
+  <div style="background: rgba(59, 130, 246, 0.05); border-left: 2px solid #3b82f6; padding: 12px; border-radius: 6px;">
+    <p style="color: #4a5568; margin: 0; line-height: 1.5;">${newsletterData.ritual}</p>
+  </div>
+</div>
+  `;
+  textContent += `\nRITUEL DU JOUR:\n${newsletterData.ritual}\n\n`;
+
+  // Pied de page
+  htmlContent += NewsletterTemplates.getFooterTemplate();
+  textContent += `\n\n${NewsletterTemplates.getFooterTemplate().replace(/<[^>]*>/g, '')}`;
+
+  return {
+    subject,
+    html: `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${subject}</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f7fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <div style="max-width: 600px; margin: 0 auto; background: white;">
+    ${htmlContent}
+  </div>
+</body>
+</html>`,
+    text: textContent,
+    date
+  };
+}
+
+// Générateur de newsletter quotidienne complète
+export async function generateDailyNewsletter(
+  date: string = todayGuadeloupe(),
+  subscriberName?: string
+): Promise<Newsletter> {
+  // Générer avec tous les signes
+  return generateNewsletter(date, [], subscriberName);
+}
+
+// Générateur de newsletter pour un signe spécifique
+export async function generatePersonalizedNewsletter(
+  signId: string,
+  date: string = todayGuadeloupe(),
+  horoscopeData: Partial<HoroscopeResponse> = {},
+  subscriberName?: string
+): Promise<Newsletter> {
+  return generateSignNewsletter(signId, date, horoscopeData, subscriberName);
+}
+
+export type { Newsletter, NewsletterData, CulturalContent, SignHoroscope };
+export { generateCulturalSection, generateSpecialPredictions, generateCulturalTip, generateRitual };
