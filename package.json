@@ -13,7 +13,10 @@
     "kreyol:parse": "npx tsx lib/private/parse-kreyol-ref.ts",
     "histoire:parse": "npx tsx lib/private/parse-histoire-ref.ts",
     "data:parse": "npm run flore:parse && npm run faune:parse && npm run lieux:parse && npm run kreyol:parse && npm run histoire:parse",
-    "postinstall": "npm run data:parse"
+    "postinstall": "npm run data:parse",
+    "send-test-newsletter": "npx tsx scripts/send-test-newsletter.ts",
+    "test-newsletter-templates": "npx tsx scripts/test-newsletter-templates.ts",
+    "test-newsletter-generator": "npx tsx scripts/test-newsletter-generator.ts"
   },
   "dependencies": {
     "@netlify/blobs": "^10.7.4",
@@ -28,11 +31,13 @@
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.15.11",
     "@types/node": "^20",
+    "@types/nodemailer": "^6.4.23",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "^15.0.0",
+    "nodemailer": "^6.10.1",
     "postcss": "^8",
     "tailwindcss": "^3.4.0",
     "typescript": "^5"
