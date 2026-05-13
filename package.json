@@ -6,7 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "flore:parse": "npx tsx lib/private/parse-flore-ref.ts",
+    "faune:parse": "npx tsx lib/private/parse-faune-ref.ts",
+    "lieux:parse": "npx tsx lib/private/parse-lieux-ref.ts",
+    "kreyol:parse": "npx tsx lib/private/parse-kreyol-ref.ts",
+    "histoire:parse": "npx tsx lib/private/parse-histoire-ref.ts",
+    "data:parse": "npm run flore:parse && npm run faune:parse && npm run lieux:parse && npm run kreyol:parse && npm run histoire:parse",
+    "postinstall": "npm run data:parse"
   },
   "dependencies": {
     "@netlify/blobs": "^10.7.4",
