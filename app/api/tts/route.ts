@@ -5,6 +5,16 @@ import { todayGuadeloupe } from '@/lib/edition';
 
 const TTS_URL = 'https://api.mistral.ai/v1/audio/speech';
 
+/* ── Helper : Formater la date en français (sans année) ──────────── */
+function formatDateFr(dateStr: string): string {
+  const date = new Date(dateStr + 'T00:00:00');
+  return date.toLocaleDateString('fr-FR', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long'
+  });
+}
+
 /* ── Instructions TTS (variable, pas fichier) ───────────────────────── */
 const TTS_INSTRUCTIONS_HOROSCOPE = `Tu lis cet horoscope avec la conscience que chez nous, les étoiles, les signes, les présages sont un fil tendu entre les vivants et les ancêtres. Chaque signe est un message qui vient de loin.
 
@@ -12,14 +22,18 @@ Tu reçois un JSON avec 6 clés : ouverture, amour, travail, argent, amitie, pre
 
 Tu dois retourner UNIQUEMENT du texte brut (pas de JSON, pas de markdown, pas de balises) avec :
 
-1. Une introduction : "Bonjour, c'est Maryse. Nous sommes le [DATE] et..."
-2. La fusion des 6 phrases dans l'ordre, en texte fluide et naturel à l'oral
-3. Suppression de toute mention de "Ce matin", "Ce midi", "Ce soir", "Cette nuit"
+1. Une introduction FIXE à utiliser EXACTEMENT comme fourni : "Bonjour, c'est Maryse. Nous sommes le [DATE], et [INTRO]"
+   Où [DATE] est déjà au format "mercredi 13 mai" (SANS année)
+   Où [INTRO] est déjà au format "ce matin" / "cet après-midi" / "ce soir" / "cette nuit"
+2. La fusion des 6 phrases dans l'ordre, séparées par " ;\n" pour les pauses naturelles
+3. Suppression de toute mention temporelle dans le corps du texte
 
-RÈGLES ABSOLUES :
+RÈGLES ABSOLUES (VIOLATION = ÉCHEC TOTAL) :
+- NE JAMAIS modifier, ajouter ou supprimer quoi que ce soit dans l'introduction
+- NE JAMAIS inclure : signe astro, année, heure, lieu, "pour les X", "Ce matin/soir..."
 - NE JAMAIS utiliser : [ ], *, –, « », …, °C
 - Remplace °C par "degrés Celsius"
-- Retourne UNIQUEMENT le texte brut
+- Retourne UNIQUEMENT le texte brut final
 - 6 phrases exactement, style oral, ancrage culturel guadeloupéen`;
 const TTS_MODEL = 'voxtral-mini-tts-2603';
 const TTS_VOICE = 'fr_marie_curious';
@@ -68,26 +82,35 @@ async function optimizeTextForTTS(
 - prediction: ${horoscope.prediction || ''}
   `.trim();
 
-  console.log('[TTS] Horoscope reçu:', JSON.stringify(horoscope).slice(0, 200) + '...');
+  console.log('[TTS] Horoscope reçu:', JSON.stringify(horoscope));
 
   const systemPrompt = `${MARYSE_AME}\n\n${TTS_INSTRUCTIONS_HOROSCOPE}\n\n` +
     `Ton rôle : transformer ce JSON horoscope en texte audio naturel. Respecte ABSOLUMENT toutes les contraintes ci-dessus.`;
 
+  // Pré-calculer les valeurs pour l'intro (l'LLM doit les utiliser TEL QUEL)
+  const dateFormatted = formatDateFr(userDate);
+  const introPhraseMap: Record<string, string> = {
+    matin: 'ce matin',
+    midi: 'cet après-midi',
+    soir: 'ce soir',
+    nuit: 'cette nuit',
+  };
+  const introPhrase = introPhraseMap[edition] || 'ce matin';
+
   const userPrompt = `HOROSCOPE À OPTIMISER :
 ${fullText}
 
-CONTEXTE VISITEUR :
-- Signe : ${signName}
-- Édition : ${edition}
-- Date : ${userDate}
-- Heure à Karukera : ${userHour}
+INTRODUCTION À UTILISER (COPIER-COLLER EXACTEMENT) :
+"Bonjour, c'est Maryse. Nous sommes le ${dateFormatted}, et ${introPhrase}"
 
 INSTRUCTIONS :
-1. SUPPRIME toute mention de "Ce matin", "Ce midi", "Ce soir", "Cette nuit"
-2. AJOUTE l'introduction : "Bonjour, c'est Maryse. Nous sommes le ${userDate} et..."
-3. Fusionne les 6 phrases en un texte fluide
-4. Garde le style oral et les métaphores créoles
-5. Retourne UNIQUEMENT le texte final, sans JSON, sans markdown, sans balises.`;
+1. COMMENCE EXACTEMENT par l'introduction ci-dessus (copie-colle, ZÉRO modification)
+2. Ajoute UN saut de ligne
+3. Fusionne les 6 phrases dans l'ordre avec " ;\n" entre chaque
+4. NE JAMAIS mentionner : signe, année, heure, lieu, "pour les X"
+5. Retourne UNIQUEMENT le texte final
+6. NE JAMAIS inclure l'année, l'heure ou "à Karukera" dans le texte final
+7. Retourne UNIQUEMENT le texte final, sans JSON, sans markdown, sans balises.`;
 
   const res = await fetch(MISTRAL_URL, {
     method: 'POST',
@@ -119,7 +142,7 @@ INSTRUCTIONS :
     return null;
   }
 
-  console.log('[TTS] Texte optimisé par LLM:', content.slice(0, 200) + '...');
+  console.log('[TTS] Texte optimisé par LLM:', content);
   return normalizeForTTS(content);
 }
 
@@ -158,7 +181,7 @@ export async function POST(req: NextRequest) {
   // 1. Vérifier le cache TTS (MP3)
   const cached = await getTtsCached(cacheKey);
   if (cached?.audio) {
-    console.log('[TTS] Cache hit pour:', cacheKey, '-> texte:', cached.text?.slice(0, 200) + '...');
+    console.log('[TTS] Cache hit pour:', cacheKey, '-> texte:', cached.text);
     const mp3 = Buffer.from(cached.audio, 'base64');
     return new NextResponse(mp3, {
       headers: {
@@ -187,7 +210,7 @@ export async function POST(req: NextRequest) {
   }
 
   // 3. Générer l'audio via Mistral TTS
-  console.log('[TTS] Texte final envoyé à Mistral TTS:', optimizedText.slice(0, 200) + '...');
+  console.log('[TTS] Texte final envoyé à Mistral TTS:', optimizedText);
   const ttsRes = await fetch(TTS_URL, {
     method: 'POST',
     headers: {
