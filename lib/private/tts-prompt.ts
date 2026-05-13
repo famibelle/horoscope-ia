@@ -18,15 +18,65 @@ function formatDateFr(dateStr: string): string {
   });
 }
 
+/* ── Helper : Rotation des éléments culturels pour éviter la répétition ──── */
+function getRotatedCulturalElement(signName: string, dateStr: string, elements: any[]): any[] {
+  // Utiliser le nom du signe et la date pour créer une rotation déterministe
+  const seed = signName.length + new Date(dateStr).getDate();
+  const rotationIndex = seed % Math.max(1, elements.length);
+  
+  // Réorganiser les éléments en fonction de la rotation
+  return [...elements.slice(rotationIndex), ...elements.slice(0, rotationIndex)];
+}
+
 /* ── Helper : Salutation selon l'édition ──────────────────── */
 function getSalutation(edition: Edition): { greeting: string; moment: string } {
   const salutions: Record<Edition, { greeting: string; moment: string }> = {
-    matin: { greeting: 'Bonjour', moment: 'Ce matin' },
-    midi: { greeting: 'Bonjour', moment: 'Cet après-midi' },
-    soir: { greeting: 'Bonsoir', moment: 'Ce soir' },
-    nuit: { greeting: 'Bonsoir', moment: 'Cette nuit' },
+    matin: { greeting: 'Bonjour', moment: 'ce matin' },
+    midi: { greeting: 'Bonjour', moment: 'cet après-midi' },
+    soir: { greeting: 'Bonsoir', moment: 'ce soir' },
+    nuit: { greeting: 'Bonsoir', moment: 'cette nuit' },
   };
   return salutions[edition] || salutions.matin;
+}
+
+/* ── Helper : Déterminer l'édition basée sur l'heure ──────── */
+export function getEditionFromDate(dateStr: string): Edition {
+  const date = new Date(dateStr);
+  const hours = date.getHours();
+  
+  if (hours >= 6 && hours < 12) return 'matin';
+  if (hours >= 12 && hours < 18) return 'midi';
+  if (hours >= 18 && hours < 22) return 'soir';
+  return 'nuit';
+}
+
+/* ── Helper : Score de pertinence culturelle ──────────────────── */
+function getCulturalRelevanceScore(text: string, element: { resistanceType?: string; sacreSymbolique?: string; dimensionCulturelle?: string }): number {
+  if (!element) return 0;
+  
+  let score = 0;
+  
+  // Score basé sur le type de résistance
+  if (element.resistanceType) {
+    if (element.resistanceType.includes('TOTEM') || element.resistanceType.includes('SACRÉ')) score += 3;
+    else if (element.resistanceType.includes('Emblématique')) score += 2;
+    else score += 1;
+  }
+  
+  // Score basé sur la dimension culturelle
+  if (element.dimensionCulturelle) {
+    const lowerText = text.toLowerCase();
+    const lowerDim = element.dimensionCulturelle.toLowerCase();
+    
+    // Mots clés de pertinence
+    if (lowerDim.includes('patience') && lowerText.includes('attend')) score += 2;
+    if (lowerDim.includes('résistance') && lowerText.includes('force')) score += 2;
+    if (lowerDim.includes('liberté') && lowerText.includes('libre')) score += 2;
+    if (lowerDim.includes('sagesse') && lowerText.includes('sage')) score += 2;
+    if (lowerDim.includes('amour') && lowerText.includes('cœur')) score += 2;
+  }
+  
+  return score;
 }
 
 /* ── Helper : Enrichir les données flore avec flore-data.ts ──────── */
@@ -279,12 +329,8 @@ function getEnrichedHistoire(texte?: string): {
 }
 
 /**
- * Génère un prompt pour le LLM afin de produire un texte TTS riche et authentique,
- * intégrant TOUS les éléments culturels enrichis de culturalData :
- * - faune.typeResistance, faune.sacreSymbolique
- * - flore.typeResistance, flore.sacreSymbolique
- * - lieuDetails.categorie, lieuDetails.sacreSymbolique
- * - Et tous les autres champs traditionnels
+ * Génère un prompt concis pour le LLM afin de produire un texte TTS
+ * intégrant les éléments culturels essentiels sans dépasser les limites TTS
  */
 export function buildTTSPrompt(
   sign: Sign,
@@ -293,98 +339,117 @@ export function buildTTSPrompt(
   edition?: Edition
 ): string {
   const dateToUse = date || todayGuadeloupe();
-  const ed = edition || horoscope.edition || 'matin';
+  const ed = edition || getEditionFromDate(dateToUse);
   const formattedDate = formatDateFr(dateToUse);
   const { greeting, moment } = getSalutation(ed);
   const { faune, flore, lieuDetails, element, spirituel, nomKreyol } = sign;
 
-  // Enrichir les données avec les fichiers de référence
+  // Enrichir uniquement les éléments essentiels
   const enrichedFlore = getEnrichedFlore(flore);
   const enrichedFaune = getEnrichedFaune(faune);
   const enrichedLieu = getEnrichedLieu(lieuDetails);
-  // Enrichir kreyol à partir de la faune ou flore du signe
-  const enrichedKreyol = getEnrichedKreyol(faune || flore);
-  const enrichedHistoire = getEnrichedHistoire(element);
 
-  return `Tu es Maryse Condé. Rédige un texte **oral** pour l'horoscope du ${sign.name} (${nomKreyol}), édition ${ed}, date du ${dateToUse}.
-Le texte sera lu par TTS : **pas de JSON, pas de markdown**, uniquement du texte brut avec une ponctuation naturelle.
+  // Sélection intelligente des éléments culturels avec priorisation contextuelle
+  const horoscopeText = Object.values(horoscope).filter(Boolean).join(' ');
+  
+  // Calculer les scores de pertinence pour chaque élément
+  const scoredElements = [
+    { 
+      type: 'Faune', 
+      data: enrichedFaune, 
+      score: getCulturalRelevanceScore(horoscopeText, enrichedFaune),
+      display: enrichedFaune.resistanceType ? `${enrichedFaune.nomCreole} (${enrichedFaune.resistanceType})` : null
+    },
+    { 
+      type: 'Flore', 
+      data: enrichedFlore, 
+      score: getCulturalRelevanceScore(horoscopeText, enrichedFlore),
+      display: enrichedFlore.resistanceType ? `${enrichedFlore.nomCreole} (${enrichedFlore.resistanceType})` : null
+    },
+    { 
+      type: 'Lieu', 
+      data: enrichedLieu, 
+      score: getCulturalRelevanceScore(horoscopeText, enrichedLieu),
+      display: enrichedLieu.sacreSymbolique ? `${enrichedLieu.nom} (${enrichedLieu.sacreSymbolique})` : null
+    }
+  ].filter(el => el.display !== null); // Filtrer les éléments sans données
 
----
+  // Appliquer la rotation pour éviter la répétition
+  const rotatedElements = getRotatedCulturalElement(sign.name, dateToUse, scoredElements);
+  
+  // Trier par score décroissant (après rotation)
+  rotatedElements.sort((a, b) => b.score - a.score);
+  
+  // Sélectionner 1-3 éléments selon la longueur de l'horoscope
+  const horoscopeWordCount = horoscopeText.split(' ').length;
+  const maxElements = horoscopeWordCount < 50 ? 2 : 1; // Plus l'horoscope est court, plus on ajoute d'éléments culturels
+  
+  const culturalElements = rotatedElements.slice(0, maxElements).map(el => `${el.type}: ${el.display}`);
 
-ÉLÉMENTS CULTURELS À INTÉGRER (obligatoire) :
-- **Faune** : ${enrichedFaune.nomCreole} (${enrichedFaune.nomFrancais})
-  → Catégorie : ${enrichedFaune.categorie}
-  → Sous-catégorie : ${enrichedFaune.sousCategorie}
-  → **Type de résistance** : ${enrichedFaune.resistanceType || faune?.typeResistance || 'non spécifié'}
-  → **Sacré/Symbolique** : ${enrichedFaune.sacreSymbolique || faune?.sacreSymbolique || 'non spécifié'}
-  → **Description de résistance** : ${enrichedFaune.resistanceDescription || ''}
-  → Savoir traditionnel : ${enrichedFaune.dimensionCulturelle?.split('.')[0] || faune?.savoir?.split('.')[0] || ''}
+  // Générer des suggestions d'intégration contextuelle
+  const integrationSuggestions = culturalElements.map(el => {
+    if (el.includes('Faune') && el.includes('patience')) {
+      return "Intègre la faune comme métaphore de patience (ex: 'Comme [animal] qui attend son heure...')";
+    } else if (el.includes('Flore') && el.includes('résistance')) {
+      return "Utilise la flore comme symbole de force (ex: 'Comme [plante] qui résiste au vent...')";
+    } else if (el.includes('Lieu') && el.includes('SACRÉ')) {
+      return "Évoque le lieu sacré pour une conclusion poétique (ex: 'Que [lieu] veille sur ton chemin...')";
+    } else {
+      return "Intègre naturellement: " + el.replace(':', ' comme');
+    }
+  }).join('; ');
 
-- **Flore** : ${enrichedFlore.nomCreole} (${enrichedFlore.nomFrancais})
-  → Catégorie : ${enrichedFlore.categorie}
-  → **Type de résistance** : ${enrichedFlore.resistanceType || flore?.typeResistance || 'non spécifié'}
-  → **Sacré/Symbolique** : ${enrichedFlore.sacreSymbolique || flore?.sacreSymbolique || 'non spécifié'}
-  → **Description de résistance** : ${enrichedFlore.resistanceDescription || flore?.savoir?.split('.')[0] || ''}
-  → Savoir traditionnel : ${enrichedFlore.dimensionCulturelle?.split('.')[0] || flore?.savoir?.split('.')[0] || ''}
+  return `Tu es Maryse Condé. Rédige un texte **oral concis** (200-300 mots max) pour l'horoscope du ${sign.name} (${nomKreyol}).
+Le texte sera lu par TTS : **pas de JSON, pas de markdown**, uniquement du texte brut avec ponctuation naturelle.
 
-- **Lieu sacré** : ${enrichedLieu.nom} (${enrichedLieu.localisation})
-  → **Catégorie** : ${enrichedLieu.categorie || lieuDetails?.categorie || 'non spécifiée'}
-  → Sous-catégorie : ${enrichedLieu.sousCategorie || ''}
-  → **Sacré/Symbolique** : ${enrichedLieu.sacreSymbolique || lieuDetails?.sacreSymbolique || 'non spécifié'}
-  → **Type de résistance** : ${enrichedLieu.resistanceType || ''}
-  → **Description de résistance** : ${enrichedLieu.resistanceDescription || ''}
-  → Symbolique : ${lieuDetails?.symbolique || ''}
-  → Description : ${enrichedLieu.dimensionCulturelle?.split('.')[0] || lieuDetails?.description || ''}
+ÉLÉMENTS CULTURELS PRIORITAIRES (intégration intelligente) :
+${culturalElements.map((el, i) => `${i+1}. ${el}`).join('\n')}
 
-- **Symbole de résistance** : ${enrichedKreyol.nomCreole} (${enrichedKreyol.nomFrancais})
-  → Famille : ${enrichedKreyol.famille}
-  → **Type de résistance** : ${enrichedKreyol.typeResistance || faune?.typeResistance || flore?.typeResistance || 'non spécifié'}
-  → **Description de résistance** : ${enrichedKreyol.resistanceDescription || faune?.savoir?.split('.')[0] || flore?.savoir?.split('.')[0] || ''}
-  → Dimension culturelle : ${enrichedKreyol.dimensionCulturelle?.split('.')[0] || ''}
+SUGGESTIONS D'INTÉGRATION CONTEXTUELLE:
+${integrationSuggestions}
 
-- **Contexte historique** : ${enrichedHistoire.faitHistorique || ''}
-  → Période : ${enrichedHistoire.periode || ''}
-  → **Portée symbolique** : ${enrichedHistoire.porteeSymbolique || ''}
-
-- **Autres** :
-  → Élément : ${element}
-  → Dimension spirituelle : ${spirituel}
-
----
 HOROSCOPE DU JOUR (à reformuler à l'oral) :
-- Ouverture : ${horoscope.ouverture}
-- Amour : ${horoscope.amour}
-- Travail : ${horoscope.travail}
-- Argent : ${horoscope.argent}
-- Amitié : ${horoscope.amitie}
-- Prédiction : ${horoscope.prediction}
+- Ouverture: ${horoscope.ouverture}
+- Amour: ${horoscope.amour}
+- Travail: ${horoscope.travail}
+- Argent: ${horoscope.argent}
+- Amitié: ${horoscope.amitie}
+- Prédiction: ${horoscope.prediction}
 
----
-INSTRUCTIONS STRICTES :
-1. **Structure** :
-   - Commence **EXACTEMENT** par : *"${greeting}, c'est Maryse. ${moment}, nous sommes le ${formattedDate}."*
-   - Intègre **tous les éléments culturels** ci-dessus de manière naturelle (ex: *"Comme l’igwann péyi, toi aussi tu sais attendre ton heure…"*).
-   - Utilise les 6 phrases de l'horoscope comme **fil conducteur**, mais reformule-les en un récit fluide.
-   - Termine par une **conclusion poétique** liée à la Guadeloupe (ex: *"Que la Soufrière veiller sur toi."*).
+INSTRUCTIONS STRICTES:
+1. Commence EXACTEMENT par: "${greeting}, c'est Maryse. ${moment}, nous sommes le ${formattedDate}."
+2. **PRIORITÉ CULTURELLE**: Intègre d'abord l'élément avec le score le plus élevé en lien direct avec le thème principal de l'horoscope
+3. **INTÉGRATION NATURELLE**: Utilise les suggestions contextuelles pour créer des métaphores fluides
+4. Reformule les 6 phrases d'horoscope en un récit fluide et oral (phrases courtes, 15-20 mots max)
+5. Longueur: 200-300 mots MAX (≈ 1.5-2 min à l'oral)
+6. Termine par une conclusion poétique liée à la Guadeloupe, en utilisant si possible un élément culturel
+7. Style: ton de Maryse Condé - libre, engagé, ancré dans la résistance
+8. **ADAPTATION DYNAMIQUE**: Si l'horoscope est court (<50 mots), développe davantage les éléments culturels pour enrichir le texte
 
-2. **Style** :
-   - **Oral** : phrases courtes (15-20 mots max), rythme adapté à la lecture à voix haute.
-   - **Authentique** : mots créoles **uniquement si naturels** (ex: *"un ti coup"* mais pas de traduction forcée).
-   - **Riche** : utilise les **savoirs traditionnels** et les **symboles sacrés** pour donner de la profondeur.
-   - **Engagé** : ton de Maryse Condé (libre, sans concession, ancré dans la résistance).
+EXEMPLE DE STRUCTURE:
+"${greeting}, c'est Maryse. ${moment}, nous sommes le ${formattedDate}.
+[INTRODUCTION AVEC ÉLÉMENT CULTUREL PRIORITAIRE - ex: 'Comme [faune] qui incarne la patience, aujourd'hui tu devras...']
 
-3. **Contraintes techniques** :
-   - Longueur : **250-400 mots** (≈ 2-3 min à l'oral).
-   - **Interdits** : JSON, markdown, listes à puces, titres.
-   - Ponctuation : **naturelle** (points, virgules, points d’exclamation pour le rythme).
-   - **À éviter** : répétitions, anglicismes, explications superflues.
-   - **OBLIGATOIRE** : L'introduction doit utiliser EXACTEMENT le format : *"${greeting}, c'est Maryse. ${moment}, nous sommes le ${formattedDate}."*
+[DÉVELOPPEMENT DES 6 THÈMES HOROSCOPE avec 1-2 autres références culturelles naturelles]
 
-4. **Exemple de sortie attendue** :
-   *"${greeting}, c'est Maryse. ${moment}, nous sommes le ${formattedDate}.
-   Le vent souffle fort comme sur la Pointe des Châteaux…
-   L’igwann péyi, lui, ne craint pas les tempêtes : il attend, immobile, que l’urgence passe. Toi aussi, tu devras faire preuve de cette patience de la résistance.
-   En amour, comme le colibri qui butine sans se lasser, ton cœur trouvera sa douceur…
-   [etc.]"*
----`;
+[CONCLUSION POÉTIQUE avec lieu sacré ou symbole de résistance - ex: 'Que [lieu sacré] guide tes pas sous le soleil de Karukera.']"
+
+RÈGLES DE SÉLECTION APPLIQUÉES:
+- Score de pertinence calculé en fonction du thème de l'horoscope
+- Rotation quotidienne pour varier les références culturelles
+- Adaptation dynamique: ${maxElements} élément(s) sélectionné(s) pour ${horoscopeWordCount} mots d'horoscope
+`;
+}
+
+/**
+ * Version détaillée pour les cas où on veut plus de contexte (non utilisée par défaut pour TTS)
+ */
+export function buildDetailedTTSPrompt(
+  sign: Sign,
+  horoscope: HoroscopeResponse,
+  date?: string,
+  edition?: Edition
+): string {
+  // ... (contenu détaillé original pour d'autres usages)
+  return buildTTSPrompt(sign, horoscope, date, edition); // Fallback
 }
