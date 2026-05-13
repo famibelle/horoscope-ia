@@ -80,8 +80,9 @@ export default function InteractiveHoroscope() {
       />
 
       <AudioPlayer
+        horoscope={data}
         signName={sign?.name ?? ''}
-        text={horoscopeText}
+        
       />
     </>
   );
