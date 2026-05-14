@@ -1,8 +1,11 @@
 'use client';
 
-import { useState, JSX } from 'react';
-import { motion } from 'framer-motion';
+import { useState, JSX, ReactNode } from 'react';
+import { motion, HTMLMotionProps } from 'framer-motion';
 import { Mail, CheckCircle, AlertCircle } from 'lucide-react';
+
+// Typed motion.div component to satisfy TypeScript
+const MotionDiv = motion.div as React.ComponentType<HTMLMotionProps<"div"> & { children?: ReactNode }>;
 
 export default function EmailSubscribe(): JSX.Element {
   const [email, setEmail] = useState('');
@@ -49,8 +52,7 @@ export default function EmailSubscribe(): JSX.Element {
   };
 
   return (
-    // @ts-ignore - motion.div is a valid React component
-    <motion.div
+    <MotionDiv
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -108,7 +110,7 @@ export default function EmailSubscribe(): JSX.Element {
 
         <div className="mt-4">
           {status === 'error' && (
-            <motion.div
+            <MotionDiv
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               className="overflow-hidden"
@@ -117,11 +119,11 @@ export default function EmailSubscribe(): JSX.Element {
                 <AlertCircle size={16} className="text-rose-400 mr-2" />
                 <span className="text-rose-300 text-sm">{error}</span>
               </div>
-            </motion.div>
+            </MotionDiv>
           )}
 
           {status === 'success' && (
-            <motion.div
+            <MotionDiv
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               className="overflow-hidden"
@@ -132,7 +134,7 @@ export default function EmailSubscribe(): JSX.Element {
                   Merci ! Vérifiez votre boîte mail pour confirmer votre abonnement.
                 </span>
               </div>
-            </motion.div>
+            </MotionDiv>
           )}
         </div>
       </form>
@@ -140,6 +142,6 @@ export default function EmailSubscribe(): JSX.Element {
       <p className="text-xs text-white/20 text-center mt-6">
         Vos données sont chiffrées et ne seront jamais partagées.
       </p>
-    </motion.div>
+    </MotionDiv>
   );
 }
