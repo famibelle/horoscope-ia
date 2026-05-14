@@ -31,7 +31,7 @@ async function retryWithBackoff<T>(
   maxRetries: number = 4,
   initialDelay: number = 4000,
 ): Promise<T> {
-  let lastError: Error;
+  let lastError: Error | undefined;
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
@@ -46,7 +46,7 @@ async function retryWithBackoff<T>(
     }
   }
 
-  throw lastError;
+  throw lastError ?? new Error('All retry attempts failed');
 }
 
 /* ── Netlify Blobs helpers ─────────────────────────────────────────────────── */
