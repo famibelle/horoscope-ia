@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Pause, Volume2, Loader2 } from 'lucide-react';
+import { Play, Pause, Volume2, Loader2, PhoneCall } from 'lucide-react';
 
 interface AudioPlayerProps {
   signName: string;
@@ -297,8 +297,17 @@ export default function AudioPlayer({
           >
             <AnimatePresence mode="wait">
               {showLoading ? (
-                <motion.div key="loading" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
-                  <Loader2 size={22} className="text-white animate-spin" />
+                <motion.div
+                  key="calling"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{
+                    scale: [1, 1.05, 1],
+                    opacity: [0.7, 1, 0.7]
+                  }}
+                  transition={{ duration: 0.8, repeat: Infinity }}
+                  style={{ display: 'inline-flex' }}
+                >
+                  <PhoneCall size={22} className="text-white" />
                 </motion.div>
               ) : isPlaying ? (
                 <motion.div key="pause" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
