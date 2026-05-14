@@ -227,7 +227,7 @@ Configuration requise dans .env.local:
       subject: newsletter.subject,
       preview: preview,
       htmlContent: newsletter.html,
-      textContent: newsletter.text,
+      text: newsletter.text,
       sign: type === 'personalized' ? signId : undefined,
       subscriberEmail: email,
     });

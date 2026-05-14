@@ -36,7 +36,7 @@ async function main() {
     subject: newsletter.subject,
     preview: newsletter.html.substring(0, 200) + '...',
     htmlContent: newsletter.html,
-    textContent: newsletter.text,
+    text: newsletter.text,
   });
 
   console.log('💾 Newsletter sauvegardée :');
