@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signs } from '@/lib/signs-data';
-import { detectEdition, todayGuadeloupe } from '@/lib/edition';
+import { detectEditionWithNight, todayGuadeloupe } from '@/lib/edition';
 import type { Edition } from '@/lib/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
 
@@ -17,9 +17,9 @@ async function getCached(key: string): Promise<HoroscopeResponse | null> {
 export async function GET(req: NextRequest) {
   const editionParam = req.nextUrl.searchParams.get('edition') as Edition | null;
   const edition: Edition =
-    editionParam === 'matin' || editionParam === 'midi' || editionParam === 'soir'
+    editionParam === 'matin' || editionParam === 'midi' || editionParam === 'soir' || editionParam === 'nuit'
       ? editionParam
-      : detectEdition();
+      : detectEditionWithNight();
 
   const today = todayGuadeloupe();
 
