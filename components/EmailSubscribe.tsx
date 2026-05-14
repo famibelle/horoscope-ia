@@ -97,41 +97,43 @@ export default function EmailSubscribe() {
                            transform hover:scale-[1.02] active:scale-95'}`}
         >
           {status === 'loading' ? (
-            <>Envoi en cours...</>
+            <span>Envoi en cours...</span>
           ) : status === 'success' ? (
-            <><CheckCircle size={18} className="inline-block mr-2" /> Inscrit !</>
+            <span><CheckCircle size={18} className="inline-block mr-2" /> Inscrit !</span>
           ) : (
-            <>S\'abonner gratuitement</>
+            <span>S\'abonner gratuitement</span>
           )}
         </button>
 
-        {status === 'error' && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            className="overflow-hidden"
-          >
-            <div className="flex items-center p-3 rounded-lg bg-rose-900/20 border border-rose-500/30">
-              <AlertCircle size={16} className="text-rose-400 mr-2" />
-              <span className="text-rose-300 text-sm">{error}</span>
-            </div>
-          </motion.div>
-        )}
+        <div className="mt-4">
+          {status === 'error' && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              className="overflow-hidden"
+            >
+              <div className="flex items-center p-3 rounded-lg bg-rose-900/20 border border-rose-500/30">
+                <AlertCircle size={16} className="text-rose-400 mr-2" />
+                <span className="text-rose-300 text-sm">{error}</span>
+              </div>
+            </motion.div>
+          )}
 
-        {status === 'success' && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            className="overflow-hidden"
-          >
-            <div className="flex items-center p-3 rounded-lg bg-green-900/20 border border-green-500/30">
-              <CheckCircle size={16} className="text-green-400 mr-2" />
-              <span className="text-green-300 text-sm">
-                Merci ! Vérifiez votre boîte mail pour confirmer votre abonnement.
-              </span>
-            </div>
-          </motion.div>
-        )}
+          {status === 'success' && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              className="overflow-hidden"
+            >
+              <div className="flex items-center p-3 rounded-lg bg-green-900/20 border border-green-500/30">
+                <CheckCircle size={16} className="text-green-400 mr-2" />
+                <span className="text-green-300 text-sm">
+                  Merci ! Vérifiez votre boîte mail pour confirmer votre abonnement.
+                </span>
+              </div>
+            </motion.div>
+          )}
+        </div>
       </form>
 
       <p className="text-xs text-white/20 text-center mt-6">
