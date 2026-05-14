@@ -311,7 +311,7 @@ async function generateNewsletter(
         horoscope: {
           ...signData.horoscope,
           sante: '',
-          signFr: signData.sign.nameFr,
+          signFr: signData.sign.name,
           weather: 'Ensembleiel',
           source: 'fallback'
         },
