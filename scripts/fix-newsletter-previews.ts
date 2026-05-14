@@ -18,7 +18,7 @@ async function main() {
     // Vérifier si le preview contient du HTML
     if (newsletter.preview.includes('<') || newsletter.preview.includes('>')) {
       // Nettoyer le preview en extrayant le texte
-      const cleanPreview = newsletter.text
+      const cleanPreview = newsletter.textContent
         .replace(/\n/g, ' ')
         .replace(/\s+/g, ' ')
         .substring(0, 200) + '...';
