@@ -489,7 +489,7 @@ const exampleNewsletters: StoredNewsletter[] = [
         </footer>
       </div>
     `,
-    textContent: `Votre Horoscope du 14 Mai 2026 - Sagesse de Karukera pour le signe du Bélier
+    text: `Votre Horoscope du 14 Mai 2026 - Sagesse de Karukera pour le signe du Bélier
 
 VOTRE HOROSCOPE DU JOUR
 =======================
@@ -535,7 +535,7 @@ Paroles inspirées par Maryse CondAI · pour honorer nos traditions
         </main>
       </div>
     `,
-    textContent: 'Votre Horoscope du 13 Mai 2026\n\nContenu de la newsletter...',
+    text: 'Votre Horoscope du 13 Mai 2026\n\nContenu de la newsletter...',
   },
   {
     id: 'newsletter-2026-05-12',
@@ -553,7 +553,7 @@ Paroles inspirées par Maryse CondAI · pour honorer nos traditions
         </main>
       </div>
     `,
-    textContent: 'Votre Horoscope du 12 Mai 2026\n\nContenu de la newsletter...',
+    text: 'Votre Horoscope du 12 Mai 2026\n\nContenu de la newsletter...',
   },
 ];
 
