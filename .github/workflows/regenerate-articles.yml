@@ -38,7 +38,8 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git checkout main
-          git pull origin main
+          git fetch origin
+          git reset --hard origin/main
           git add lib/articles-content.json
           git diff --staged --quiet || git commit -m "chore: régénération mensuelle des articles ($(date +%Y-%m))"
-          git push
+          git push --force-with-lease origin main
