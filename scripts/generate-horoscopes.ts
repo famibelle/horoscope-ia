@@ -197,7 +197,8 @@ async function fetchWeather(): Promise<string> {
 async function saveToLocalFile(today: string, data: Record<string, any>) {
   const fs = await import('fs/promises');
   const path = await import('path');
-  const dir = path.join(process.cwd(), 'data', 'horoscopes');
+  // Sauvegarder dans public/ pour que les fichiers soient servis comme assets statiques
+  const dir = path.join(process.cwd(), 'public', 'data', 'horoscopes');
   await fs.mkdir(dir, { recursive: true });
   const filePath = path.join(dir, `${today}.json`);
   await fs.writeFile(filePath, JSON.stringify(data, null, 2));
