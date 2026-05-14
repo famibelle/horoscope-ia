@@ -1,6 +1,20 @@
 import { config } from 'dotenv';
 config(); // Charger les variables d'environnement depuis .env
 
+// Parser les arguments en ligne de commande
+const args = process.argv.slice(2);
+const options = {
+  verbose: args.includes('-v') || args.includes('--verbose'),
+  force: args.includes('-f') || args.includes('--force'),
+};
+
+if (options.verbose) {
+  console.log('🔊 Mode verbose activé');
+}
+if (options.force) {
+  console.log('⚡ Mode force activé - régénération forcée');
+}
+
 import { signs } from '@/lib/signs-data';
 import { MARYSE_SYSTEM, buildHoroscopeUserPrompt, type Edition } from '@/lib/private/maryse-prompt';
 import {
@@ -194,15 +208,20 @@ export async function generateAllHoroscopes() {
   const today = todayGuadeloupe();
   const filePath = `data/horoscopes/${today}.json`;
   
-  // Vérifier si les horoscopes du jour existent déjà
-  try {
-    const fs = await import('fs/promises');
-    await fs.access(filePath);
-    console.log(`\n⏭️  Les horoscopes pour le ${today} existent déjà (${filePath})`);
-    console.log('   → Pas de régénération nécessaire.\n');
-    return;
-  } catch {
-    // Fichier n'existe pas, continuer la génération
+  // Vérifier si les horoscopes du jour existent déjà (sauf si --force)
+  if (!options.force) {
+    try {
+      const fs = await import('fs/promises');
+      await fs.access(filePath);
+      console.log(`\n⏭️  Les horoscopes pour le ${today} existent déjà (${filePath})`);
+      console.log('   → Pas de régénération nécessaire.\n');
+      console.log('   Pour forcer: passez --force ou -f\n');
+      return;
+    } catch {
+      // Fichier n'existe pas, continuer la génération
+    }
+  } else if (options.verbose) {
+    console.log(`\n⚡ Mode force: régénération des horoscopes pour ${today}...\n`);
   }
 
   console.log(`\n📅 ========== GÉNÉRATION DES HOROSCOPES POUR LE ${today} ==========`);
