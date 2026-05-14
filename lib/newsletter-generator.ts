@@ -17,14 +17,7 @@ import { histoireData } from './private/histoire-data';
 // Types pour la structure de la newsletter
 interface SignHoroscope {
   sign: typeof signs[0];
-  horoscope: {
-    ouverture: string;
-    amour: string;
-    travail: string;
-    argent: string;
-    amitie: string;
-    prediction: string;
-  };
+  horoscope: HoroscopeResponse;
 }
 
 interface CulturalContent {
@@ -233,7 +226,11 @@ async function generateNewsletter(
           travail: `Au travail, ${['votre créativité', 'votre persévérance', 'votre intuition', 'votre expérience'][Math.floor(Math.random() * 4)]} sera votre atout.`,
           argent: `Côté finances, ${['évitez les dépenses inutiles', 'une opportunité pourrait se présenter', 'soyez prudent', 'investissez avec sagesse'][Math.floor(Math.random() * 4)]}.`,
           amitie: `Vos amis ${['vous soutiendront', 'auront besoin de vous', 'vous apporteront de la joie', 'vous donneront de bons conseils'][Math.floor(Math.random() * 4)]} aujourd'hui.`,
-          prediction: `Prédiction : ${['un changement positif', 'une bonne nouvelle', 'une rencontre importante', 'une prise de conscience'][Math.floor(Math.random() * 4)]} vous attend.`
+          prediction: `Prédiction : ${['un changement positif', 'une bonne nouvelle', 'une rencontre importante', 'une prise de conscience'][Math.floor(Math.random() * 4)]} vous attend.`,
+          sante: `Votre santé est bonne, ${['prenez soin de vous', 'écoutez votre corps'][Math.floor(Math.random() * 2)]}.`,
+          signFr: sign.name,
+          weather: 'Ensoleillé',
+          source: 'fallback'
         }
       }));
     }
@@ -309,13 +306,7 @@ async function generateNewsletter(
       const newsletterData: NewsletterData = {
         date,
         sign: signData.sign,
-        horoscope: {
-          ...signData.horoscope,
-          sante: '',
-          signFr: signData.sign.name,
-          weather: 'Ensembleiel',
-          source: 'fallback'
-        },
+        horoscope: signData.horoscope,
         culturalTip: generateCulturalTip(signData.sign, date),
         ritual: generateRitual(signData.sign, date)
       };
