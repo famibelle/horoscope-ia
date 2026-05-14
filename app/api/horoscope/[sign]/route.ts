@@ -203,8 +203,8 @@ async function getFromLocalFile(date: string, signId: string, edition: Edition):
   } catch (fsError) {
     // Si fs échoue (ex: Netlify Edge Functions), essayer via fetch
     try {
-      // Dans Netlify, les fichiers statiques sont accessibles via /data/horoscopes/
-      const response = await fetch(`https://horoscope-karukera.netlify.app/data/horoscopes/${date}.json`);
+      // Chemin relatif - fonctionne dans Next.js pour les fichiers dans /public ou /data
+      const response = await fetch(`/data/horoscopes/${date}.json`);
       if (!response.ok) return null;
       const allHoroscopes = await response.json();
       const key = `${date}|${signId}|${edition}`;
