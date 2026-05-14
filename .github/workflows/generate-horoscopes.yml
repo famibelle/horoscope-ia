@@ -3,7 +3,16 @@ name: Générer les horoscopes quotidiens
 on:
   schedule:
     - cron: '0 4 * * *'   # Tous les jours à 4h UTC = minuit heure Guadeloupe (UTC-4)
-  workflow_dispatch:       # Déclenchement manuel
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Forcer la régénération même si les fichiers existent'
+        required: false
+        default: 'false'
+      verbose:
+        description: 'Mode verbeux (plus de logs)'
+        required: false
+        default: 'false'
 
 jobs:
   generate:
@@ -31,7 +40,11 @@ jobs:
       - name: Générer les horoscopes
         env:
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
-        run: npx tsx scripts/generate-horoscopes.ts
+        run: |
+          ARGS=""
+          if [ "${{ inputs.force }}" = "true" ]; then ARGS="$ARGS --force"; fi
+          if [ "${{ inputs.verbose }}" = "true" ]; then ARGS="$ARGS --verbose"; fi
+          npx tsx scripts/generate-horoscopes.ts $ARGS
 
       - name: Commit les horoscopes générés
         run: |
