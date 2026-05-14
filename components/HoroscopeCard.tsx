@@ -26,9 +26,9 @@ interface HoroscopeCardProps {
 
 const SECTIONS = [
   { key: 'ouverture',  label: 'Parole des ancêtres', Icon: Sparkles,  colorClass: 'text-ancestral-gold' },
-  { key: 'amour',      label: 'Cœur créole',        Icon: Heart,     colorClass: 'text-ancestral-terracotta' },
-  { key: 'travail',    label: 'Labeur sacré',       Icon: Briefcase, colorClass: 'text-ancestral-forest' },
-  { key: 'argent',     label: 'Riches de la terre', Icon: Coins,     colorClass: 'text-ancestral-gold' },
+  { key: 'amour',      label: 'Amour',              Icon: Heart,     colorClass: 'text-ancestral-terracotta' },
+  { key: 'travail',    label: 'Travail',            Icon: Briefcase, colorClass: 'text-ancestral-forest' },
+  { key: 'argent',     label: 'Argent',             Icon: Coins,     colorClass: 'text-ancestral-gold' },
   { key: 'amitie',     label: 'Lyannaj',            Icon: Users,     colorClass: 'text-ancestral-cream' },
   { key: 'prediction', label: 'Présage ancestral',  Icon: Eye,       colorClass: 'text-ancestral-gold' },
 ] as const;
