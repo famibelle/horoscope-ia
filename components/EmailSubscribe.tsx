@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, JSX } from 'react';
+import { useState } from 'react';
 import { Mail, CheckCircle, AlertCircle } from 'lucide-react';
 
-export default function EmailSubscribe(): JSX.Element {
+export default function EmailSubscribe() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [error, setError] = useState('');
