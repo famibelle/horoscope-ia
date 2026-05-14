@@ -15,7 +15,11 @@ const testHoroscope = {
   travail: 'Votre créativité sera votre atout majeur aujourd\'hui.',
   argent: 'Évitez les dépenses impulsives, attendez demain pour les gros achats.',
   amitie: 'Un ami proche pourrait vous donner un conseil précieux.',
-  prediction: 'Un message inattendu pourrait changer votre perspective.'
+  prediction: 'Un message inattendu pourrait changer votre perspective.',
+  sante: 'Votre énergie est bonne, prenez soin de vous.',
+  signFr: testSign.name,
+  weather: 'Ensoleillé',
+  source: 'fallback'
 };
 
 // Test des templates
