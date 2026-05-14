@@ -19,7 +19,7 @@ const testHoroscope = {
   sante: 'Votre énergie est bonne, prenez soin de vous.',
   signFr: testSign.name,
   weather: 'Ensoleillé',
-  source: 'fallback'
+  source: 'fallback' as const
 };
 
 // Test des templates
