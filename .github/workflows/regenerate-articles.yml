@@ -5,14 +5,16 @@ on:
     - cron: '0 4 1 * *'   # 1er du mois à 4h UTC (minuit Guadeloupe)
   workflow_dispatch:
     inputs:
-      force:
-        description: 'Forcer la régénération même si les fichiers existent'
+      mode:
+        description: 'Mode de génération'
         required: false
-        default: 'false'
-      verbose:
-        description: 'Mode verbeux (plus de logs)'
-        required: false
-        default: 'false'
+        default: 'normal'
+        type: choice
+        options:
+        - normal
+        - verbose
+        - force
+        - force-verbose
 
 jobs:
   regenerate:
@@ -42,8 +44,11 @@ jobs:
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
         run: |
           ARGS=""
-          if [ "${{ inputs.force }}" = "true" ]; then ARGS="$ARGS --force"; fi
-          if [ "${{ inputs.verbose }}" = "true" ]; then ARGS="$ARGS --verbose"; fi
+          case "${{ inputs.mode }}" in
+            verbose)   ARGS="--verbose" ;;
+            force)     ARGS="--force" ;;
+            force-verbose) ARGS="--force --verbose" ;;
+          esac
           npx tsx private/generate-articles.ts $ARGS
 
       - name: Commit et push si des articles ont changé
