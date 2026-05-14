@@ -48,15 +48,14 @@ export default function EmailSubscribe(): JSX.Element {
     }
   };
 
-  const motionProps = {
-    initial: { opacity: 0, y: 20 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true },
-    transition: { duration: 0.6 },
-  };
-
   return (
-    <motion.div {...motionProps} className="max-w-md mx-auto p-6 sm:p-8">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      className="max-w-md mx-auto p-6 sm:p-8"
+    >
       <div className="text-center mb-6">
         <h3 className="font-display text-xl sm:text-2xl font-bold text-white mb-2">
           Recevez les horoscopes par email
