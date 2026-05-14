@@ -58,6 +58,6 @@ jobs:
           git checkout main
           git fetch origin
           git reset --hard origin/main
-          git add data/horoscopes/*.json
+          git add public/data/horoscopes/*.json
           git diff --staged --quiet || git commit -m "chore: génération quotidienne horoscopes ($(date +%Y-%m-%d))"
           git push --force-with-lease origin main
