@@ -190,15 +190,28 @@ async function rewriteWithMistral(
 
 async function getFromLocalFile(date: string, signId: string, edition: Edition): Promise<HoroscopeResponse | null> {
   try {
+    // Essayer fs d'abord (pour local et Netlify serverless)
     const fs = await import('fs/promises');
     const path = await import('path');
+    
+    // Chemin absolu vers le fichier
     const filePath = path.join(process.cwd(), 'data', 'horoscopes', `${date}.json`);
     const content = await fs.readFile(filePath, 'utf-8');
     const allHoroscopes = JSON.parse(content);
     const key = `${date}|${signId}|${edition}`;
     return allHoroscopes[key] || null;
-  } catch {
-    return null;
+  } catch (fsError) {
+    // Si fs échoue (ex: Netlify Edge Functions), essayer via fetch
+    try {
+      // Dans Netlify, les fichiers statiques sont accessibles via /data/horoscopes/
+      const response = await fetch(`https://horoscope-karukera.netlify.app/data/horoscopes/${date}.json`);
+      if (!response.ok) return null;
+      const allHoroscopes = await response.json();
+      const key = `${date}|${signId}|${edition}`;
+      return allHoroscopes[key] || null;
+    } catch {
+      return null;
+    }
   }
 }
 
