@@ -626,7 +626,7 @@ export default async function NewsletterDetailPage(props: any) {
           📄 Version Texte
         </h2>
         <pre className="text-ancestral-cream/80 text-base whitespace-pre-wrap overflow-x-auto leading-relaxed">
-          {newsletter.textContent}
+          {newsletter.text}
         </pre>
       </section>
 
