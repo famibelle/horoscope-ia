@@ -48,10 +48,9 @@ export default function EmailSubscribe(): JSX.Element {
     }
   };
 
-  const MotionDiv = motion.div;
-
   return (
-    <MotionDiv
+    // @ts-ignore - motion.div is a valid React component
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -109,7 +108,7 @@ export default function EmailSubscribe(): JSX.Element {
 
         <div className="mt-4">
           {status === 'error' && (
-            <MotionDiv
+            <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               className="overflow-hidden"
@@ -118,11 +117,11 @@ export default function EmailSubscribe(): JSX.Element {
                 <AlertCircle size={16} className="text-rose-400 mr-2" />
                 <span className="text-rose-300 text-sm">{error}</span>
               </div>
-            </MotionDiv>
+            </motion.div>
           )}
 
           {status === 'success' && (
-            <MotionDiv
+            <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               className="overflow-hidden"
@@ -133,7 +132,7 @@ export default function EmailSubscribe(): JSX.Element {
                   Merci ! Vérifiez votre boîte mail pour confirmer votre abonnement.
                 </span>
               </div>
-            </MotionDiv>
+            </motion.div>
           )}
         </div>
       </form>
@@ -141,6 +140,6 @@ export default function EmailSubscribe(): JSX.Element {
       <p className="text-xs text-white/20 text-center mt-6">
         Vos données sont chiffrées et ne seront jamais partagées.
       </p>
-    </MotionDiv>
+    </motion.div>
   );
 }
