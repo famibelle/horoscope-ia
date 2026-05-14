@@ -7,6 +7,7 @@ import { signs } from './signs-data';
 import { todayGuadeloupe } from './edition';
 import { getEditionFromDate } from './private/tts-prompt';
 import NewsletterTemplates, { NewsletterData } from './newsletter-templates';
+import { HoroscopeResponse } from './horoscope-data';
 import { floreData } from './private/flore-data';
 import { fauneData } from './private/faune-data';
 import { lieuxData } from './private/lieux-data';
