@@ -6,6 +6,21 @@
  *   npm run send-brevo-test votre@email.com --sign lion --name "Jean Dupont"
  */
 
+// Charger les variables d'environnement AVANT les imports
+const dotenv = require('dotenv');
+dotenv.config({ path: '.env' });
+dotenv.config({ path: '.env.local', override: true });
+
+// Vérifier que les clés sont bien chargées
+if (!process.env.BREVO_API_KEY) {
+  console.error('❌ BREVO_API_KEY non trouvée dans .env ou .env.local');
+  console.error('   Ajoutez-la dans votre fichier .env :');
+  console.error('   BREVO_API_KEY=votre_clé_api_brevo');
+  console.error('   BREVO_LIST_ID=votre_id_de_liste');
+  process.exit(1);
+}
+
+// Maintenant on peut importer (les variables sont chargées)
 import { 
   sendEmailViaBrevo, 
   testBrevoConnection,
@@ -15,20 +30,24 @@ import {
   generateDailyNewsletter,
   generatePersonalizedNewsletter
 } from '../lib/newsletter-generator';
+import { saveNewsletter } from '../lib/newsletter-storage';
 import { signs } from '../lib/signs-data';
 
 // Couleurs pour les logs
-const colors = {
+type ColorKey = 'reset' | 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan' | 'white';
+
+const colors: Record<ColorKey, string> = {
   reset: '\x1b[0m',
   red: '\x1b[31m',
   green: '\x1b[32m',
   yellow: '\x1b[33m',
   blue: '\x1b[34m',
   magenta: '\x1b[35m',
-  cyan: '\x1b[36m'
+  cyan: '\x1b[36m',
+  white: '\x1b[37m'
 };
 
-function log(message: string, color: keyof typeof colors = 'reset') {
+function log(message: string, color: ColorKey = 'reset') {
   console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
@@ -195,10 +214,28 @@ Configuration requise dans .env.local:
 
     log(`   - Sujet: ${newsletter.subject}`);
     log(`   - Taille HTML: ${(newsletter.html.length / 1024).toFixed(2)} KB`);
-    log(`   - Taille texte: ${(newsletter.text.length / 1024).toFixed(2)} KB\n`);
+    log(`   - Taille texte: ${(newsletter.text.length / 1024).toFixed(2)} KB`);
+
+    // 2.5. Sauvegarder la newsletter dans le stockage local
+    log('2️⃣💾 Sauvegarde de la newsletter...', 'yellow');
+    
+    // Extraire un preview en texte pur (sans balises HTML)
+    const cleanText = newsletter.text.replace(/\n/g, ' ').replace(/\s+/g, ' ');
+    const preview = cleanText.substring(0, 200) + '...';
+    
+    const saved = await saveNewsletter({
+      subject: newsletter.subject,
+      preview: preview,
+      htmlContent: newsletter.html,
+      textContent: newsletter.text,
+      sign: type === 'personalized' ? signId : undefined,
+      subscriberEmail: email,
+    });
+    log(`   ✅ Newsletter sauvegardée: ${saved.id}`, 'green');
+    log(`   📁 Chemin: private_data/newsletters/${saved.id}.json\n`);
 
     // 3. Envoyer l'email
-    log(`3️⃣ Envoi à ${email}...`, 'yellow');
+    log(`4️⃣ Envoi à ${email}...`, 'yellow');
     const result = await sendEmailViaBrevo(
       email,
       newsletter.subject,

@@ -7,13 +7,11 @@ import { signs } from './signs-data';
 import { todayGuadeloupe } from './edition';
 import { getEditionFromDate } from './private/tts-prompt';
 import NewsletterTemplates, { NewsletterData } from './newsletter-templates';
-import {
-  floreData,
-  fauneData,
-  lieuxData,
-  kreyolData,
-  histoireData
-} from './private';
+import { floreData } from './private/flore-data';
+import { fauneData } from './private/faune-data';
+import { lieuxData } from './private/lieux-data';
+import { kreyolData } from './private/kreyol-data';
+import { histoireData } from './private/histoire-data';
 
 // Types pour la structure de la newsletter
 interface SignHoroscope {
@@ -77,44 +75,44 @@ const culturalTips: Record<string, string[]> = {
   ]
 };
 
-// Rituels traditionnels par jour de la semaine
+// Rituels traditionnels par jour de la semaine (en français)
 const dailyRituals: Record<string, string> = {
-  monday: 'Allume une bougie blanche pour commencer la semaine avec pureté.',
-  tuesday: 'Mets une feuille de basilic sous ton oreiller pour attirer la chance.',
-  wednesday: 'Boire une tisane de menthe poulet pour la clarté d\'esprit.',
-  thursday: 'Porte une pierre de rivière dans ta poche pour rester ancré.',
-  friday: 'Lave tes mains avec de l\'eau de fleur d\'oranger pour attirer l\'abondance.',
-  saturday: 'Balaye devant ta porte avec une branche de romarin pour chasser les mauvaises énergies.',
-  sunday: 'Allume de l\'encens de copal pour honorer tes ancêtres.'
+  lundi: 'Allume une bougie blanche pour commencer la semaine avec pureté.',
+  mardi: 'Mets une feuille de basilic sous ton oreiller pour attirer la chance.',
+  mercredi: 'Boire une tisane de menthe poulet pour la clarté d\'esprit.',
+  jeudi: 'Porte une pierre de rivière dans ta poche pour rester ancré.',
+  vendredi: 'Lave tes mains avec de l\'eau de fleur d\'oranger pour attirer l\'abondance.',
+  samedi: 'Balaye devant ta porte avec une branche de romarin pour chasser les mauvaises énergies.',
+  dimanche: 'Allume de l\'encens de copal pour honorer tes ancêtres.'
 };
 
-// Thèmes culturels par jour de la semaine
+// Thèmes culturels par jour de la semaine (en français)
 const weeklyCulturalThemes: Record<string, { title: string; content: string }> = {
-  monday: {
+  lundi: {
     title: '🌿 La Flore Sacrée de Guadeloupe',
     content: 'La Guadeloupe regorge de plantes aux vertus méconnues. Le manguier, symbole de patience, nous rappelle que les meilleures choses prennent du temps. Le cerisier, utilisé en médecine traditionnelle, purifie le corps et l\'esprit. Et n\'oublions pas le corossol, dont les feuilles en infusion aident à trouver le sommeil.'
   },
-  tuesday: {
+  mardi: {
     title: '🦜 La Faune Symbolique',
     content: 'Le kolibri, cet oiseau minuscule qui butine sans relâche, symbolise la persévérance et la joie des petites choses. L\'igwann péyi, lui, incarne la sagesse et la capacité à se fondre dans son environnement. Quant à la manman dlo, cette créature mystérieuse des rivières, elle nous rappelle que la nature recèle encore bien des secrets.'
   },
-  wednesday: {
+  mercredi: {
     title: '⛰️ Lieux de Pouvoir en Guadeloupe',
     content: 'La Soufrière, cœur battant de la Guadeloupe, est bien plus qu\'un volcan : c\'est un lieu sacré où les Kalinagos vénéraient les esprits de la terre. Les chutes du Carbet, elles, représentent la purification et le renouveau. Et que dire de la Pointe des Châteaux, où les vents alizés apportent des messages du passé ?'
   },
-  thursday: {
+  jeudi: {
     title: '📜 Pages d\'Histoire',
     content: 'Le 8 février 1802, Delgrès et ses compagnons ont choisi la mort plutôt que l\'esclavage. Leur sacrifice à Matouba reste gravé dans notre mémoire collective comme symbole de liberté absolue. Plus tôt, les Taïnos nous ont laissé un héritage de vie en harmonie avec la nature, que nous commençons seulement à redécouvrir.'
   },
-  friday: {
+  vendredi: {
     title: '🍛 Saveurs Traditionnelles',
     content: 'Le colombo, avec son mélange d\'épices venues d\'Inde, d\'Afrique et des Amériques, incarne la diversité de notre île. Le bokit, lui, est bien plus qu\'un simple sandwich : c\'est un symbole de partage. Et que dire du rhum arrangé, où chaque famille a sa propre recette secrète transmise de génération en génération ?'
   },
-  saturday: {
+  samedi: {
     title: '🕯️ Spiritualité et Quimbois',
     content: 'Le quimbois n\'est pas de la magie noire, mais une science de l\'équilibre. Que ce soit pour protéger sa maison avec un bwa bandé, purifier son corps avec un bain de feuilles, ou honorer ses ancêtres avec une offrande, chaque geste a une signification profonde.'
   },
-  sunday: {
+  dimanche: {
     title: '🌅 Légendes et Contes',
     content: 'La légende de la Soufrière raconte qu\'elle était autrefois une belle femme transformée en volcan par un sortilège. Celle du diable et du manguier nous rappelle que le mal peut parfois se cacher sous les apparences les plus innocentes. Ces histoires, transmises oralement, sont des trésors de notre patrimoine.'
   }
@@ -230,7 +228,7 @@ async function generateNewsletter(
         sign,
         horoscope: {
           ouverture: `Une journée ${['favorable', 'intéressante', 'challengante', 'inspirante'][Math.floor(Math.random() * 4)]} pour les natifs du ${sign.name}.`,
-          amour: `En amour, ${['soyez ouvert', 'prenez votre temps', 'exprimez vos sentiments', 'écoutez votre cœur'][Math.floor(Math.random() * 4)]}.' ,
+          amour: `En amour, ${['soyez ouvert', 'prenez votre temps', 'exprimez vos sentiments', 'écoutez votre cœur'][Math.floor(Math.random() * 4)]}.`,
           travail: `Au travail, ${['votre créativité', 'votre persévérance', 'votre intuition', 'votre expérience'][Math.floor(Math.random() * 4)]} sera votre atout.`,
           argent: `Côté finances, ${['évitez les dépenses inutiles', 'une opportunité pourrait se présenter', 'soyez prudent', 'investissez avec sagesse'][Math.floor(Math.random() * 4)]}.`,
           amitie: `Vos amis ${['vous soutiendront', 'auront besoin de vous', 'vous apporteront de la joie', 'vous donneront de bons conseils'][Math.floor(Math.random() * 4)]} aujourd'hui.`,

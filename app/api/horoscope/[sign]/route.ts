@@ -10,7 +10,7 @@ import {
   getSignLieu,
   getHistoricalResonance,
 } from '@/lib/cultural-context';
-import { detectEdition, todayGuadeloupe } from '@/lib/edition';
+import { detectEdition, detectEditionWithNight, todayGuadeloupe } from '@/lib/edition';
 import type { Edition } from '@/lib/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
 
@@ -23,6 +23,31 @@ const SIGN_EN: Record<string, string> = {
   balance: 'libra', scorpion: 'scorpio', sagittaire: 'sagittarius',
   capricorne: 'capricorn', verseau: 'aquarius', poissons: 'pisces',
 };
+
+/* ── Retry helper with exponential backoff ──────────────────────────────────── */
+
+async function retryWithBackoff<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 4,
+  initialDelay: number = 4000,
+): Promise<T> {
+  let lastError: Error;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastError = err as Error;
+      if (attempt < maxRetries) {
+        const delay = initialDelay * Math.pow(2, attempt);
+        console.log(`⏳ Mistral tentative ${attempt + 1}/${maxRetries + 1} échouée, retry dans ${delay}ms...`);
+        await new Promise((r) => setTimeout(r, delay));
+      }
+    }
+  }
+
+  throw lastError;
+}
 
 /* ── Netlify Blobs helpers ─────────────────────────────────────────────────── */
 
@@ -51,7 +76,7 @@ async function setCached(key: string, data: HoroscopeResponse): Promise<void> {
 async function fetchRawHoroscope(signEn: string): Promise<string> {
   const res = await fetch(`${HOROSCOPE_API}?sign=${signEn}`, {
     headers: { 'User-Agent': 'HoroscopeKarukera/1.0' },
-    next: { revalidate: 3600 },
+    next: { revalidate: 28800 },
   });
   if (!res.ok) throw new Error(`horoscope API ${res.status}`);
   const data = await res.json();
@@ -65,7 +90,7 @@ async function fetchWeather(): Promise<string> {
         '?latitude=16.17&longitude=-61.58' +
         '&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max' +
         '&timezone=America%2FGuadeloupe&forecast_days=1',
-      { next: { revalidate: 3600 } },
+      { next: { revalidate: 28800 } },
     );
     if (!res.ok) return '';
     const data = await res.json();
@@ -181,14 +206,14 @@ export async function GET(
   const edition: Edition =
     editionParam === 'matin' || editionParam === 'midi' || editionParam === 'soir' || editionParam === 'nuit'
       ? editionParam
-      : detectEdition();
+      : detectEditionWithNight();
 
   // Check Blobs cache first
   const blobKey = `${todayGuadeloupe()}|${signId}|${edition}`;
   const cached = await getCached(blobKey);
   if (cached) {
     return NextResponse.json(cached, {
-      headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300' },
+      headers: { 'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' },
     });
   }
 
@@ -207,14 +232,24 @@ export async function GET(
       );
     }
 
-    const structured = await rewriteWithMistral(
-      signId, rawText, weather, edition,
-      undefined, undefined, undefined,
-      undefined, undefined, undefined,
-      historicalResonance ?? undefined,
-      userDate ?? undefined,
-      userHour ?? undefined,
-    );
+    let structured: Record<string, string> | null = null;
+    try {
+      structured = await retryWithBackoff(
+        () => rewriteWithMistral(
+          signId, rawText, weather, edition,
+          undefined, undefined, undefined,
+          undefined, undefined, undefined,
+          historicalResonance ?? undefined,
+          userDate ?? undefined,
+          userHour ?? undefined,
+        ),
+        4,
+        4000,
+      );
+    } catch (retryErr) {
+      console.error('❌ Toutes les tentatives Mistral ont échoué:', retryErr);
+      structured = null; // Forcer le fallback
+    }
 
     if (structured?.ouverture && structured?.amour && structured?.travail) {
       const teaser = await generateTeaser(sign.name, structured as Record<string, string>);
@@ -248,40 +283,46 @@ export async function GET(
       };
       await setCached(blobKey, response);
       return NextResponse.json(response, {
-        headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300' },
+        headers: { 'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' },
       });
     }
 
-    // === Fallback avec données culturelles même pour le raw ===
-    return NextResponse.json(
-      { 
-        ouverture: rawText, 
-        amour: '', 
-        travail: '', 
-        argent: '', 
-        amitie: '', 
-        prediction: '',
-        signFr: sign.name, 
-        weather, 
-        edition, 
-        source: 'raw',
-        // Données culturelles même en fallback
-        culturalData: {
-          faune: signData.faune,
-          flore: signData.flore,
-          lieuDetails: signData.lieuDetails,
-          element: signData.element,
-          spirituel: signData.spirituel,
-          animal: signData.animal,
-          nomKreyol: signData.nomKreyol,
-          plante: signData.plante,
-          arbre: signData.arbre,
-          lieu: signData.lieu,
-          rawHoroscope: rawText,
-        }
+    // === Fallback en FRANÇAIS si Mistral échoue après toutes les tentatives ===
+    console.error('❌ Toutes les tentatives Mistral ont échoué pour', signId, edition);
+    
+    const fallbackFr: HoroscopeResponse = {
+      ouverture: `⚠️ Les esprits de Karukera sont temporairement voilés pour ${sign.name}...`,
+      amour: 'Prenez ce temps pour écouter votre cœur et vos intuitions.',
+      travail: 'Votre sagesse intérieure est votre meilleure conseillère aujourd’hui.',
+      argent: 'Une période de réflexion avant toute décision financière.',
+      amitie: 'Vos proches comptent sur votre présence, même silencieuse.',
+      prediction: 'La clarté reviendra bientôt.',
+      sante: '',
+      signFr: sign.name,
+      weather,
+      edition,
+      source: 'fallback',
+      culturalData: {
+        faune: signData.faune,
+        flore: signData.flore,
+        lieuDetails: signData.lieuDetails,
+        element: signData.element,
+        spirituel: signData.spirituel,
+        animal: signData.animal,
+        nomKreyol: signData.nomKreyol,
+        plante: signData.plante,
+        arbre: signData.arbre,
+        lieu: signData.lieu,
+        rawHoroscope: rawText,
       },
-      { headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300' } },
-    );
+    };
+
+    // Cache court pour le fallback (5 minutes) - sera régénéré rapidement
+    await setCached(blobKey, fallbackFr);
+    
+    return NextResponse.json(fallbackFr, {
+      headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' },
+    });
   } catch (err) {
     console.error('Horoscope route error:', err);
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });

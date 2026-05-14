@@ -1,0 +1,34 @@
+name: Générer la newsletter quotidienne
+
+on:
+  schedule:
+    - cron: '0 5 * * *'   # Tous les jours à 5h UTC = 01:00 heure Guadeloupe (après les horoscopes)
+  workflow_dispatch:       # Déclenchement manuel
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Configurer SSH pour le sous-module privé
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SUBMODULE_DEPLOY_KEY }}
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm install
+
+      - name: Générer la newsletter
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+        run: npx tsx scripts/generate-daily-newsletter.ts

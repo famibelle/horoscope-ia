@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { normalizeForTTS } from '@/lib/tts-utils';
 import { MARYSE_AME } from '@/lib/private/maryse-prompt';
-import { buildTTSPrompt } from '@/lib/private/tts-prompt';
+import { buildTTSPrompt, getEditionFromDate } from '@/lib/private/tts-prompt';
 import { todayGuadeloupe } from '@/lib/edition';
 import { signs } from '@/lib/signs-data';
 import type { Edition } from '@/lib/private/maryse-prompt';
@@ -109,6 +109,17 @@ export async function POST(req: NextRequest) {
     edition = body.edition || 'matin';
     userDate = body.userDate || todayGuadeloupe();
     userHour = body.userHour || '';
+    
+    // Si on a l'heure du navigateur, l'utiliser pour déterminer l'édition
+    if (userHour) {
+      // Créer une date avec l'heure du navigateur pour getEditionFromDate
+      const dateWithUserHour = new Date(userDate);
+      dateWithUserHour.setHours(parseInt(userHour));
+      edition = getEditionFromDate(dateWithUserHour.toISOString());
+    } else {
+      // Sinon utiliser l'heure actuelle du serveur
+      edition = getEditionFromDate(userDate);
+    }
   } catch {
     return NextResponse.json({ error: 'Corps invalide' }, { status: 400 });
   }

@@ -3,11 +3,24 @@
  * Pour l'envoi de newsletters et la gestion des contacts
  */
 
-const BREVO_API_KEY = process.env.BREVO_API_KEY || process.env.SENDINBLUE_API_KEY;
 const BREVO_API_URL = 'https://api.brevo.com/v3';
 
-// ID de la liste par défaut (à modifier dans votre .env)
-const DEFAULT_LIST_ID = parseInt(process.env.BREVO_LIST_ID || '1');
+// Fonctions pour récupérer les variables d'environnement
+function getBrevoApiKey(): string {
+  const key = process.env.BREVO_API_KEY || process.env.SENDINBLUE_API_KEY;
+  if (!key) {
+    throw new Error('BREVO_API_KEY ou SENDINBLUE_API_KEY doit être défini dans les variables d\'environnement');
+  }
+  return key;
+}
+
+function getBrevoListId(): number {
+  const listId = parseInt(process.env.BREVO_LIST_ID || '1');
+  if (isNaN(listId)) {
+    throw new Error('BREVO_LIST_ID doit être un nombre valide');
+  }
+  return listId;
+}
 
 interface BrevoContact {
   email: string;
@@ -37,12 +50,10 @@ interface SendEmailRequest {
  */
 export async function addContactToBrevo(
   email: string,
-  listId: number = DEFAULT_LIST_ID,
+  listId: number = getBrevoListId(),
   attributes: Record<string, any> = {}
 ): Promise<any> {
-  if (!BREVO_API_KEY) {
-    throw new Error('BREVO_API_KEY non configurée dans les variables d\'environnement');
-  }
+  const apiKey = getBrevoApiKey();
 
   const contact: BrevoContact = {
     email: email.toLowerCase().trim(),
@@ -59,7 +70,7 @@ export async function addContactToBrevo(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'api-key': BREVO_API_KEY
+        'api-key': apiKey
       },
       body: JSON.stringify({ contacts: [contact] })
     });
@@ -91,9 +102,7 @@ export async function sendEmailViaBrevo(
   senderEmail?: string,
   senderName?: string
 ): Promise<any> {
-  if (!BREVO_API_KEY) {
-    throw new Error('BREVO_API_KEY non configurée');
-  }
+  const apiKey = getBrevoApiKey();
 
   const emailList = Array.isArray(to) ? to : [to];
   
@@ -119,7 +128,7 @@ export async function sendEmailViaBrevo(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'api-key': BREVO_API_KEY
+        'api-key': apiKey
       },
       body: JSON.stringify(request)
     });
@@ -143,16 +152,14 @@ export async function sendEmailViaBrevo(
 /**
  * Récupérer tous les contacts d'une liste
  */
-export async function getContactsFromList(listId: number = DEFAULT_LIST_ID): Promise<string[]> {
-  if (!BREVO_API_KEY) {
-    throw new Error('BREVO_API_KEY non configurée');
-  }
+export async function getContactsFromList(listId: number = getBrevoListId()): Promise<string[]> {
+  const apiKey = getBrevoApiKey();
 
   try {
     const response = await fetch(`${BREVO_API_URL}/contacts?listIds=${listId}&limit=500`, {
       method: 'GET',
       headers: {
-        'api-key': BREVO_API_KEY
+        'api-key': apiKey
       }
     });
 
@@ -180,12 +187,10 @@ export async function createEmailCampaign(
   subject: string,
   html: string,
   text: string,
-  listId: number = DEFAULT_LIST_ID,
+  listId: number = getBrevoListId(),
   scheduledAt?: string
 ): Promise<any> {
-  if (!BREVO_API_KEY) {
-    throw new Error('BREVO_API_KEY non configurée');
-  }
+  const apiKey = getBrevoApiKey();
 
   const requestBody = {
     name,
@@ -209,7 +214,7 @@ export async function createEmailCampaign(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'api-key': BREVO_API_KEY
+        'api-key': apiKey
       },
       body: JSON.stringify(requestBody)
     });
@@ -231,16 +236,14 @@ export async function createEmailCampaign(
  * Envoyer une campagne immédiatement
  */
 export async function sendCampaignNow(campaignId: number): Promise<any> {
-  if (!BREVO_API_KEY) {
-    throw new Error('BREVO_API_KEY non configurée');
-  }
+  const apiKey = getBrevoApiKey();
 
   try {
     const response = await fetch(`${BREVO_API_URL}/emailCampaigns/${campaignId}/sendNow`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'api-key': BREVO_API_KEY
+        'api-key': apiKey
       }
     });
 
@@ -261,17 +264,14 @@ export async function sendCampaignNow(campaignId: number): Promise<any> {
  * Vérifier l'état de l'API Brevo
  */
 export async function testBrevoConnection(): Promise<boolean> {
-  if (!BREVO_API_KEY) {
-    console.warn('⚠️ BREVO_API_KEY non définie');
-    return false;
-  }
-
   try {
+    const apiKey = getBrevoApiKey();
+    
     // Tester avec une requête simple
     const response = await fetch(`${BREVO_API_URL}/account`, {
       method: 'GET',
       headers: {
-        'api-key': BREVO_API_KEY
+        'api-key': apiKey
       }
     });
 
@@ -293,8 +293,4 @@ export async function testBrevoConnection(): Promise<boolean> {
   }
 }
 
-export {
-  BREVO_API_KEY,
-  BREVO_API_URL,
-  DEFAULT_LIST_ID
-};
+export { BREVO_API_URL };

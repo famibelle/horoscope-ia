@@ -18,7 +18,9 @@
     "send-brevo-test": "npx tsx scripts/send-brevo-test.ts",
     "test-newsletter-templates": "npx tsx scripts/test-newsletter-templates.ts",
     "test-newsletter-generator": "npx tsx scripts/test-newsletter-generator.ts",
-    "test-brevo-connection": "npx tsx scripts/send-brevo-test.ts --test-connection"
+    "test-brevo-connection": "npx tsx scripts/send-brevo-test.ts --test-connection",
+    "generate-daily-newsletter": "npx tsx scripts/generate-daily-newsletter.ts",
+    "fix-newsletter-previews": "npx tsx scripts/fix-newsletter-previews.ts"
   },
   "dependencies": {
     "@netlify/blobs": "^10.7.4",

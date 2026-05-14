@@ -31,10 +31,10 @@ interface AmbianceData {
 
 const HOROSCOPE_SECTIONS = [
   { key: 'ouverture',  label: 'Parole des ancêtres', Icon: Sparkles,  colorClass: 'text-ancestral-gold' },
-  { key: 'amour',      label: 'Cœur créole',        Icon: Heart,     colorClass: 'text-ancestral-terracotta' },
-  { key: 'travail',    label: 'Labeur sacré',       Icon: Briefcase, colorClass: 'text-ancestral-forest' },
-  { key: 'argent',     label: 'Riches de la terre', Icon: Coins,     colorClass: 'text-ancestral-gold' },
-  { key: 'amitie',     label: 'Solidarité',         Icon: Users,     colorClass: 'text-ancestral-cream' },
+  { key: 'amour',      label: 'Amour',              Icon: Heart,     colorClass: 'text-ancestral-terracotta' },
+  { key: 'travail',    label: 'Travail',            Icon: Briefcase, colorClass: 'text-ancestral-forest' },
+  { key: 'argent',     label: 'Argent',             Icon: Coins,     colorClass: 'text-ancestral-gold' },
+  { key: 'amitie',     label: 'Lyannaj',            Icon: Users,     colorClass: 'text-ancestral-cream' },
   { key: 'sante',      label: 'Santé',              Icon: Activity,  colorClass: 'text-ancestral-forest' },
   { key: 'prediction', label: 'Présage ancestral',  Icon: Eye,       colorClass: 'text-ancestral-gold' },
 ] as const;
@@ -259,7 +259,7 @@ export default function HoroscopeSignPage() {
                   <div className="px-6 py-6 space-y-5">
                     {HOROSCOPE_SECTIONS.map(({ key, label, Icon, colorClass }) => {
                       const text = horoscope[key as keyof HoroscopeResponse] as string;
-                      if (!text) return null;
+                      if (!text || key === 'sante') return null;  // Masquage forcé : santé est un sujet sensible
                       const isPrediction = key === 'prediction';
                       return (
                         <div key={key} className="space-y-1.5">

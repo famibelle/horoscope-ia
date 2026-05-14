@@ -24,4 +24,7 @@ private_data/
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
-"data/"
+
+# Ignorer data/ sauf les horoscopes générés (qui sont commités par GitHub Actions)
+data/*
+!data/horoscopes/

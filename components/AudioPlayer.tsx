@@ -152,6 +152,11 @@ export default function AudioPlayer({
         return;
       }
 
+      // Utiliser l'heure actuelle du navigateur
+      const now = new Date();
+      const currentHour = now.getHours();
+      const currentDate = now.toISOString().split('T')[0]; // Format YYYY-MM-DD
+
       const res = await fetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -159,8 +164,8 @@ export default function AudioPlayer({
           horoscope: horoscope,
           signName: signName,
           edition: edition,
-          userDate: userDate,
-          userHour: userHour
+          userDate: userDate || currentDate,
+          userHour: userHour || currentHour.toString()
         }),
       });
       if (!res.ok) throw new Error(`TTS ${res.status}`);
@@ -342,7 +347,17 @@ export default function AudioPlayer({
             {error && <p className="text-rose-400/70 text-xs mt-1">{error}</p>}
 
             {hasAudio && (
-              <div className="mt-3 h-1 rounded-full bg-white/10 overflow-hidden max-w-xs mx-auto sm:mx-0">
+              <div className="mt-3 h-1 rounded-full bg-white/10 overflow-hidden max-w-xs mx-auto sm:mx-0 cursor-pointer" 
+                   onClick={(e) => {
+                     const audio = audioRef.current;
+                     if (!audio || !duration) return;
+                     const rect = e.currentTarget.getBoundingClientRect();
+                     const clickPosition = e.clientX - rect.left;
+                     const newTime = (clickPosition / rect.width) * duration;
+                     audio.currentTime = newTime;
+                     setProgress(newTime / duration);
+                   }}
+              >
                 <motion.div
                   className="h-full rounded-full"
                   style={{

@@ -197,7 +197,7 @@ export async function generateAllHoroscopes() {
   const weather = await fetchWeather();
   console.log(`🌤️  Météo: ${weather}\n`);
 
-  const editions: Edition[] = ['matin', 'midi', 'soir'];
+  const editions: Edition[] = ['nuit', 'matin', 'midi', 'soir'];
   const total = signs.length * editions.length;
   let generated = 0;
   let skipped = 0;
