@@ -308,7 +308,13 @@ async function generateNewsletter(
       const newsletterData: NewsletterData = {
         date,
         sign: signData.sign,
-        horoscope: signData.horoscope,
+        horoscope: {
+          ...signData.horoscope,
+          sante: '',
+          signFr: signData.sign.nameFr,
+          weather: 'Ensembleiel',
+          source: 'fallback'
+        },
         culturalTip: generateCulturalTip(signData.sign, date),
         ritual: generateRitual(signData.sign, date)
       };
