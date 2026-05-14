@@ -13,7 +13,7 @@ interface StoredNewsletter {
   subject: string;
   preview: string;
   htmlContent: string;
-  textContent: string;
+  text: string;
   sign?: string;
   subscriberEmail?: string;
 }
