@@ -32,6 +32,8 @@ const config: Config = {
         shimmer: 'shimmer 2.5s linear infinite',
         'slide-in': 'slideIn 0.6s ease-out',
         'ancestral-pulse': 'ancestralPulse 3s ease-in-out infinite', // Nouveau: souffle des ancêtres
+        fadeIn: 'fadeIn 0.6s ease-out',
+        fadeInUp: 'fadeInUp 0.6s ease-out',
       },
       keyframes: {
         float: {
@@ -53,6 +55,14 @@ const config: Config = {
         ancestralPulse: {
           '0%, 100%': { opacity: '0.7', transform: 'scale(1)' },
           '50%': { opacity: '1', transform: 'scale(1.02)' },
+        },
+        fadeIn: {
+          from: { opacity: '0' },
+          to: { opacity: '1' },
+        },
+        fadeInUp: {
+          from: { opacity: '0', transform: 'translateY(20px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
         },
       },
       backgroundImage: {

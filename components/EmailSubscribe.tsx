@@ -1,11 +1,7 @@
 'use client';
 
-import { useState, JSX, ReactNode } from 'react';
-import { motion, HTMLMotionProps } from 'framer-motion';
+import { useState, JSX } from 'react';
 import { Mail, CheckCircle, AlertCircle } from 'lucide-react';
-
-// Typed motion.div component to satisfy TypeScript
-const MotionDiv = motion.div as React.ComponentType<HTMLMotionProps<"div"> & { children?: ReactNode }>;
 
 export default function EmailSubscribe(): JSX.Element {
   const [email, setEmail] = useState('');
@@ -33,7 +29,7 @@ export default function EmailSubscribe(): JSX.Element {
         setEmail('');
       } else {
         setStatus('error');
-        setError(data.error || 'Erreur lors de l\'inscription');
+        setError(data.error || "Erreur lors de l'inscription");
       }
     } catch (err) {
       setStatus('error');
@@ -52,13 +48,7 @@ export default function EmailSubscribe(): JSX.Element {
   };
 
   return (
-    <MotionDiv
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
-      className="max-w-md mx-auto p-6 sm:p-8"
-    >
+    <div className="max-w-md mx-auto p-6 sm:p-8 opacity-0 animate-fadeInUp">
       <div className="text-center mb-6">
         <h3 className="font-display text-xl sm:text-2xl font-bold text-white mb-2">
           Recevez les horoscopes par email
@@ -110,31 +100,23 @@ export default function EmailSubscribe(): JSX.Element {
 
         <div className="mt-4">
           {status === 'error' && (
-            <MotionDiv
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              className="overflow-hidden"
-            >
+            <div className="overflow-hidden animate-fadeIn">
               <div className="flex items-center p-3 rounded-lg bg-rose-900/20 border border-rose-500/30">
                 <AlertCircle size={16} className="text-rose-400 mr-2" />
                 <span className="text-rose-300 text-sm">{error}</span>
               </div>
-            </MotionDiv>
+            </div>
           )}
 
           {status === 'success' && (
-            <MotionDiv
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              className="overflow-hidden"
-            >
+            <div className="overflow-hidden animate-fadeIn">
               <div className="flex items-center p-3 rounded-lg bg-green-900/20 border border-green-500/30">
                 <CheckCircle size={16} className="text-green-400 mr-2" />
                 <span className="text-green-300 text-sm">
                   Merci ! Vérifiez votre boîte mail pour confirmer votre abonnement.
                 </span>
               </div>
-            </MotionDiv>
+            </div>
           )}
         </div>
       </form>
@@ -142,6 +124,6 @@ export default function EmailSubscribe(): JSX.Element {
       <p className="text-xs text-white/20 text-center mt-6">
         Vos données sont chiffrées et ne seront jamais partagées.
       </p>
-    </MotionDiv>
+    </div>
   );
 }
