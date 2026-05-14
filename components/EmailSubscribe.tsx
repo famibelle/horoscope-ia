@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, JSX } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, CheckCircle, AlertCircle } from 'lucide-react';
 
