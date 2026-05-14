@@ -192,6 +192,19 @@ async function saveToLocalFile(today: string, data: Record<string, any>) {
 
 export async function generateAllHoroscopes() {
   const today = todayGuadeloupe();
+  const filePath = `data/horoscopes/${today}.json`;
+  
+  // Vérifier si les horoscopes du jour existent déjà
+  try {
+    const fs = await import('fs/promises');
+    await fs.access(filePath);
+    console.log(`\n⏭️  Les horoscopes pour le ${today} existent déjà (${filePath})`);
+    console.log('   → Pas de régénération nécessaire.\n');
+    return;
+  } catch {
+    // Fichier n'existe pas, continuer la génération
+  }
+
   console.log(`\n📅 ========== GÉNÉRATION DES HOROSCOPES POUR LE ${today} ==========`);
 
   const weather = await fetchWeather();
@@ -203,7 +216,6 @@ export async function generateAllHoroscopes() {
   let skipped = 0;
 
   const results: Record<string, any> = {};
-  const filePath = `data/horoscopes/${today}.json`;
 
   try {
     const { getStore } = await import('@netlify/blobs');
