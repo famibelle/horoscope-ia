@@ -186,6 +186,22 @@ async function rewriteWithMistral(
   try { return JSON.parse(content); } catch { return null; }
 }
 
+/* ── Local file helpers ──────────────────────────────────────────────────── */
+
+async function getFromLocalFile(date: string, signId: string, edition: Edition): Promise<HoroscopeResponse | null> {
+  try {
+    const fs = await import('fs/promises');
+    const path = await import('path');
+    const filePath = path.join(process.cwd(), 'data', 'horoscopes', `${date}.json`);
+    const content = await fs.readFile(filePath, 'utf-8');
+    const allHoroscopes = JSON.parse(content);
+    const key = `${date}|${signId}|${edition}`;
+    return allHoroscopes[key] || null;
+  } catch {
+    return null;
+  }
+}
+
 /* ── Route ─────────────────────────────────────────────────────────────────── */
 
 export async function GET(
@@ -208,8 +224,18 @@ export async function GET(
       ? editionParam
       : detectEditionWithNight();
 
-  // Check Blobs cache first
-  const blobKey = `${todayGuadeloupe()}|${signId}|${edition}`;
+  const date = userDate || todayGuadeloupe();
+  const blobKey = `${date}|${signId}|${edition}`;
+
+  // 1. Check local file first (fastest)
+  const localData = await getFromLocalFile(date, signId, edition);
+  if (localData) {
+    return NextResponse.json(localData, {
+      headers: { 'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' },
+    });
+  }
+
+  // 2. Check Blobs cache
   const cached = await getCached(blobKey);
   if (cached) {
     return NextResponse.json(cached, {
