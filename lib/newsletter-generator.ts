@@ -396,7 +396,11 @@ async function generateSignNewsletter(
     travail: horoscopeData.travail || `Au travail, ${['votre créativité', 'votre persévérance', 'votre intuition'][Math.floor(Math.random() * 3)]} sera votre atout.`,
     argent: horoscopeData.argent || `Côté finances, ${['évitez les dépenses inutiles', 'une opportunité pourrait se présenter'][Math.floor(Math.random() * 2)]}.`,
     amitie: horoscopeData.amitie || `Vos amis ${['vous soutiendront', 'auront besoin de vous'][Math.floor(Math.random() * 2)]} aujourd'hui.`,
-    prediction: horoscopeData.prediction || `Prédiction : ${['un changement positif', 'une bonne nouvelle'][Math.floor(Math.random() * 2)]} vous attend.`
+    prediction: horoscopeData.prediction || `Prédiction : ${['un changement positif', 'une bonne nouvelle'][Math.floor(Math.random() * 2)]} vous attend.`,
+    sante: horoscopeData.sante || `Votre santé est bonne, ${['prenez soin de vous', 'écoutez votre corps'][Math.floor(Math.random() * 2)]}.`,
+    signFr: sign.name,
+    weather: horoscopeData.weather || 'Ensoleillé',
+    source: horoscopeData.source || 'fallback'
   };
 
   const newsletterData: NewsletterData = {
