@@ -15,6 +15,21 @@ import type { Edition } from '@/lib/private/maryse-prompt';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
+/* ── Local file helper ────────────────────────────────────────────────────── */
+async function getFromLocalFile(date: string, signId: string, edition: Edition, req: NextRequest): Promise<any | null> {
+  try {
+    // Utiliser URL absolue via req.url pour fonctionner en production (Netlify)
+    const url = new URL(`/data/ambiance/${date}.json`, req.url);
+    const response = await fetch(url.toString(), { next: { revalidate: 28800 } });
+    if (!response.ok) return null;
+    const allAmbiances = await response.json();
+    const key = `${date}|${signId}|${edition}`;
+    return allAmbiances[key] || null;
+  } catch {
+    return null;
+  }
+}
+
 /* ── Persistent cache using Netlify Blobs ───────────────────────────────── */
 async function getAmbienceCache() {
   try {
@@ -57,13 +72,20 @@ export async function GET(
     editionParam === 'matin' || editionParam === 'midi' || editionParam === 'soir' || editionParam === 'nuit'
       ? editionParam : detectEdition();
 
-  const cacheKey = `${todayGuadeloupe()}|${signId}|${edition}`;
+  const userDate = req.nextUrl.searchParams.get('userDate') || todayGuadeloupe();
+  const cacheKey = `${userDate}|${signId}|${edition}`;
   const today = todayGuadeloupe();
-  
-  // Get cache store once
+
+  // 1. Check local file first (fastest - static files)
+  const localData = await getFromLocalFile(userDate, signId, edition, req);
+  if (localData) {
+    return NextResponse.json(localData, {
+      headers: { 'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' },
+    });
+  }
+
+  // 2. Try Netlify Blobs cache (for backwards compatibility)
   const blobStore = await getAmbienceCache();
-  
-  // Try Netlify Blobs cache first
   if (blobStore) {
     try {
       const cached = await blobStore.get(cacheKey, { type: 'json' });
@@ -77,7 +99,7 @@ export async function GET(
     }
   }
   
-  // Fallback to in-memory cache (for local dev)
+  // 3. Fallback to in-memory cache (for local dev)
   const hit = _inMemoryCache.get(cacheKey);
   if (hit && Date.now() - hit.ts < TTL) {
     return NextResponse.json(hit.data, {

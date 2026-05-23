@@ -1,0 +1,333 @@
+import { config } from 'dotenv';
+config(); // Charger les variables d'environnement depuis .env
+
+import { signs } from '@/lib/signs-data';
+import { todayGuadeloupe } from '@/lib/edition';
+import {
+  getCulturalContext,
+  getAmbianceBienetre,
+  getAmbianceBeaute,
+  getAmbianceEsprit,
+  getAmbianceMaison,
+  getAmbianceJardinage,
+} from '@/lib/cultural-context';
+import { computeScores } from '@/lib/scores';
+import type { WeatherData } from '@/app/api/weather/route';
+import type { Edition } from '@/lib/private/maryse-prompt';
+
+const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
+
+// Parser les arguments en ligne de commande
+const args = process.argv.slice(2);
+const options = {
+  verbose: args.includes('-v') || args.includes('--verbose'),
+  force: args.includes('-f') || args.includes('--force'),
+  date: args.find(arg => arg.startsWith('--date='))?.split('=')[1],
+};
+
+function logVerbose(message: string, data?: any) {
+  if (options.verbose) {
+    const timestamp = new Date().toISOString().split('T')[1].split('.')[0];
+    if (data !== undefined) {
+      console.log(`   [${timestamp}] ℹ️  ${message}`, data);
+    } else {
+      console.log(`   [${timestamp}] ℹ️  ${message}`);
+    }
+  }
+}
+
+function logError(message: string, error?: any) {
+  if (options.verbose) {
+    const timestamp = new Date().toISOString().split('T')[1].split('.')[0];
+    console.log(`   [${timestamp}] ❌  ${message}`, error || '');
+  } else {
+    console.log(`❌ ${message}`);
+  }
+}
+
+function lunarPhaseLabel(): string {
+  const known = new Date('2000-01-06').getTime();
+  const days = (Date.now() - known) / 86_400_000;
+  const cycle = ((days % 29.53) + 29.53) % 29.53;
+  const idx = Math.floor((cycle / 29.53) * 8) % 8;
+  return [
+    'Nouvelle lune', 'Croissant naissant', 'Premier quartier', 'Croissant gibbeuse',
+    'Pleine lune', 'Gibbeuse décroissante', 'Dernier quartier', 'Croissant décroissant',
+  ][idx];
+}
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchWeather(): Promise<string> {
+  logVerbose('Appel Open-Meteo API pour la météo de la Guadeloupe...');
+  const startTime = Date.now();
+  
+  try {
+    const res = await fetch(
+      'https://api.open-meteo.com/v1/forecast' +
+        '?latitude=16.17&longitude=-61.58' +
+        '&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,weathercode' +
+        '&timezone=America%2FGuadeloupe&forecast_days=1'
+    );
+    
+    logVerbose(`Réponse Open-Meteo: ${res.status} (${Date.now() - startTime}ms)`);
+    
+    if (!res.ok) {
+      logError('Échec récupération météo', { status: res.status });
+      return '';
+    }
+    
+    const data = await res.json();
+    const d = data.daily;
+    if (!d?.time?.length) {
+      logError('Pas de données quotidiennes disponibles');
+      return '';
+    }
+    
+    const tmax = Math.round(d.temperature_2m_max[0]);
+    const tmin = Math.round(d.temperature_2m_min[0]);
+    const rain = d.precipitation_sum[0] as number;
+    const wind = Math.round(d.windspeed_10m_max[0]);
+    const code = d.weathercode?.[0] ?? 0;
+    
+    const rainLabel =
+      rain === 0 ? 'pas de pluie'
+        : rain < 5 ? 'légère pluie'
+        : rain < 20 ? 'pluie modérée'
+        : 'fortes pluies';
+    const windLabel =
+      wind < 20 ? 'vent faible' : wind < 40 ? 'vent modéré' : 'vent fort';
+    
+    const result = `${tmin}–${tmax}°C, ${rainLabel}, ${windLabel} (${wind} km/h)`;
+    logVerbose(`Météo formatée: ${result}`);
+    return result;
+  } catch (e) {
+    logError('Erreur lors de la récupération météo', e instanceof Error ? e.message : e);
+    return '';
+  }
+}
+
+async function saveToLocalFile(today: string, data: Record<string, any>): Promise<string> {
+  const fs = await import('fs/promises');
+  const path = await import('path');
+  
+  const dir = path.join(process.cwd(), 'public', 'data', 'ambiance');
+  await fs.mkdir(dir, { recursive: true });
+  const filePath = path.join(dir, `${today}.json`);
+  
+  const entryCount = Object.keys(data).length;
+  const fileSize = JSON.stringify(data, null, 2).length;
+  
+  logVerbose(`Sauvegarde dans ${filePath}`, {
+    entries: entryCount,
+    estimatedSize: `${(fileSize / 1024).toFixed(2)} KB`
+  });
+  
+  await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+  logVerbose(`Fichier sauvegardé avec succès: ${filePath}`);
+  return filePath;
+}
+
+async function generateAmbience(
+  signId: string,
+  edition: Edition,
+  weather: string,
+  today: string,
+): Promise<Record<string, any> | null> {
+  const apiKey = process.env.MISTRAL_API_KEY;
+  if (!apiKey) {
+    console.log('❌ MISTRAL_API_KEY non trouvé dans .env');
+    logError('MISTRAL_API_KEY manquant');
+    return null;
+  }
+
+  const sign = signs.find((s) => s.id === signId);
+  if (!sign) {
+    logError(`Signe non trouvé: ${signId}`);
+    return null;
+  }
+
+  logVerbose(`Génération ambiance pour ${signId} (${edition})...`);
+
+  const lunarPhase = lunarPhaseLabel();
+  const otherSigns = signs.filter((s) => s.id !== signId).map((s) => s.id);
+  const culturalContext = getCulturalContext(signId, today);
+
+  const luneBienetre = getAmbianceBienetre(signId, today);
+  const luneBeaute = getAmbianceBeaute(signId, today);
+  const luneEsprit = getAmbianceEsprit(signId, today);
+  const luneMaison = getAmbianceMaison(signId, today);
+  const luneJardinage = getAmbianceJardinage(signId, today);
+
+  // Calcul des scores (réutilisation de la même logique que dans l'API)
+  const weatherData: WeatherData = {
+    tmin: 24,
+    tmax: 30,
+    rain: 0,
+    wind: 20,
+    code: 1,
+    label: 'Partiellement nuageux',
+    summary: weather || '',
+  };
+  const scores = computeScores(signId, today, weatherData);
+
+  const prompt = `Tu es Maryse CondAI, voix astrologique de Karukera (Guadeloupe).
+Génère l'ambiance astrale du jour pour le ${sign.name} (édition ${edition}).
+
+Signe : ${sign.name} · Planète : ${sign.planet} · Élément : ${sign.element}
+Phase lunaire : ${lunarPhase}
+Météo à Pointe-à-Pitre : ${weather}
+
+${culturalContext}
+
+Scores énergétiques du jour (FIXES — calculés depuis les cycles planétaires, la météo et le calendrier guadeloupéen) :
+Amour ${scores.amour}% · Travail ${scores.travail}% · Bien-être ${scores.bienetre}% · Vie sociale ${scores.vieSociale}% · Finances ${scores.finances}%
+
+Tiens compte de ces scores dans ton ambiance : commente brièvement les domaines forts (>75) et faibles (<50).
+
+Réponds avec un objet JSON valide et ces clés exactes :
+{
+  "ambiance": "2-3 phrases sur l'énergie du jour, ancrées dans les références culturelles ci-dessus et cohérentes avec les scores",
+  "chiffrePorteBonheur": <entier 1-99, de préférence un nombre premier (2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97)>
+  "compatibilite": ["<signId1>", "<signId2>"],
+  "lune": {
+    "bienetre": "conseil bien-être ancré sur le rimèd razié du jour : ${luneBienetre.nomCreole} (${luneBienetre.nomFr}) — ${luneBienetre.usage}. Mentionne le nom créole et son usage pour le corps. 2 phrases.",
+    "beaute": "conseil beauté/soin naturel ancré sur la plante du jour : ${luneBeaute.nomCreole} (${luneBeaute.nomFr}) — ${luneBeaute.culture}. Mentionne le nom créole et son usage beauté ou soin. 2 phrases.",
+    "esprit": "conseil mental ou spirituel ancré sur l'objet ou lieu de résistance du jour : ${luneEsprit.nomCreole} (${luneEsprit.nomFr}) — ${luneEsprit.dimension}. Lié aussi à la ${lunarPhase}. 2 phrases.",
+    "maison": "conseil maison/espace de vie créole ancré sur l'objet ou pratique du jour : ${luneMaison.nomCreole} (${luneMaison.nomFr}) — ${luneMaison.dimension}. 2 phrases.",
+    "jardinage": "conseil jardinage créole ancré sur la plante du jour : ${luneJardinage.nomCreole} (${luneJardinage.nomFr}) — ${luneJardinage.culture}. Mentionne le nom créole et comment la cultiver ou l'utiliser selon la ${lunarPhase}. 2 phrases."
+  }
+}
+
+Pour "compatibilite" choisis exactement 2 valeurs parmi : ${otherSigns.join(', ')}.
+Sans markdown dans les valeurs JSON.`;
+
+  // Délai pour éviter le rate limit Mistral
+  logVerbose(`Délai 5s avant appel Mistral pour ${signId} ${edition}...`);
+  await delay(5000);
+  logVerbose(`Délai terminé, appel Mistral`);
+
+  const startTime = Date.now();
+  const res = await fetch(MISTRAL_URL, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'mistral-small-latest',
+      temperature: 0.8,
+      max_tokens: 900,
+      response_format: { type: 'json_object' },
+      messages: [{ role: 'user', content: prompt }],
+    }),
+  });
+
+  logVerbose(`Réponse Mistral: ${res.status} (${Date.now() - startTime}ms)`);
+
+  if (!res.ok) {
+    console.log(`❌ Mistral échoué: ${res.status}`);
+    logError('Échec appel Mistral', { status: res.status });
+    return null;
+  }
+
+  const data = await res.json();
+  const content = data.choices?.[0]?.message?.content ?? '{}';
+
+  try {
+    const parsed = JSON.parse(content);
+    logVerbose('JSON valide parsé avec succès', Object.keys(parsed));
+    return { ...parsed, scores };
+  } catch (e) {
+    console.log(`❌ JSON invalide pour ${signId} ${edition}`);
+    logError('Échec parsing JSON', e instanceof Error ? e.message : e);
+    logError('Contenu:', content);
+    return null;
+  }
+}
+
+export async function generateAllAmbiances() {
+  const today = options.date || todayGuadeloupe();
+  const filePath = `data/ambiance/${today}.json`;
+
+  logVerbose(`Début de la génération des ambiances`, {
+    date: today,
+    forceMode: options.force,
+    outputPath: filePath
+  });
+
+  // Vérifier si les ambiances du jour existent déjà (sauf si --force)
+  if (!options.force) {
+    try {
+      const fs = await import('fs/promises');
+      const path = await import('path');
+      const existingFilePath = path.join(process.cwd(), 'public', filePath);
+      await fs.access(existingFilePath);
+      console.log(`\n⏭️  Les ambiances pour le ${today} existent déjà (${filePath})`);
+      console.log('   → Pas de régénération nécessaire.\n');
+      console.log('   Pour forcer: passez --force ou -f\n');
+      logVerbose('Fichier existant détecté, génération annulée');
+      return;
+    } catch {
+      // Fichier n'existe pas, continuer la génération
+      logVerbose('Aucun fichier existant trouvé, génération nécessaire');
+    }
+  } else if (options.verbose) {
+    console.log(`\n⚡ Mode force: régénération des ambiances pour ${today}...\n`);
+  }
+
+  console.log(`\n🌙 ========== GÉNÉRATION DES AMBIANCES POUR LE ${today} ==========`);
+
+  const weather = await fetchWeather();
+  console.log(`🌤️  Météo: ${weather}\n`);
+  logVerbose('Météo récupérée avec succès');
+
+  const editions: Edition[] = ['nuit', 'matin', 'midi', 'soir'];
+  const total = signs.length * editions.length;
+  let generated = 0;
+  let failed = 0;
+
+  const results: Record<string, any> = {};
+
+  for (const sign of signs) {
+    for (const edition of editions) {
+      const blobKey = `${today}|${sign.id}|${edition}`;
+      console.log(`🔄 [${generated + failed + 1}/${total}] ${sign.id} (${edition})...`);
+
+      const ambiance = await generateAmbience(sign.id, edition, weather, today);
+      
+      if (ambiance) {
+        results[blobKey] = ambiance;
+        console.log(`✅ [${++generated}/${total}] ${sign.id} (${edition}) - GÉNÉRÉ`);
+      } else {
+        console.log(`❌ [${++failed}/${total}] ${sign.id} (${edition}) - ÉCHEC`);
+        logError(`Échec génération ambiance pour ${sign.id} ${edition}`);
+      }
+
+      // Sauvegarder au fil de l'eau
+      if (Object.keys(results).length > 0) {
+        await saveToLocalFile(today, results);
+      }
+    }
+  }
+
+  console.log(`\n✨ ========== TERMINÉ ==========`);
+  console.log(`   Générés: ${generated}/${total}`);
+  console.log(`   Échecs: ${failed}/${total}`);
+  console.log(`   Fichier: ${filePath}\n`);
+  logVerbose('Génération complète terminée', {
+    generated,
+    failed,
+    total,
+    successRate: `${((generated / total) * 100).toFixed(1)}%`
+  });
+}
+
+// Exécuter
+generateAllAmbiances()
+  .then(() => {
+    logVerbose('🎉 Script terminé avec succès');
+  })
+  .catch((error) => {
+    logError('❌ Erreur fatale dans le script', error instanceof Error ? error.message : error);
+    console.error(error);
+  });
