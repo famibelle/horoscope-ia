@@ -1,6 +1,10 @@
 import type { Sign } from '@/lib/signs-data';
 import { todayGuadeloupe, getGuadeloupeTime } from '@/lib/edition';
 import { floreData } from '@/lib/private/flore-data';
+import { fauneData } from '@/lib/private/faune-data';
+import { lieuxData } from '@/lib/private/lieux-data';
+import { kreyolData } from '@/lib/private/kreyol-data';
+import { histoireData } from '@/lib/private/histoire-data';
 
 /*
  * ═══════════════════════════════════════════════════════════════
@@ -265,6 +269,39 @@ export function buildHoroscopeUserPrompt(
     f.nomFrancais.toLowerCase() === floreNom.toLowerCase()
   );
   const floreUsage = floreEntry?.usage || '';
+  const floreDimension = floreEntry?.dimensionCulturelle || '';
+  
+  // Récupérer la dimension culturelle de la faune
+  const fauneNom = sign.faune?.nom_creole || sign.nomKreyol || '';
+  const fauneEntry = fauneData.find(f => 
+    f.nomCreole.toLowerCase() === fauneNom.toLowerCase() || 
+    f.nomFrancais.toLowerCase() === fauneNom.toLowerCase()
+  );
+  const fauneDimension = fauneEntry?.dimensionCulturelle || '';
+  
+  // Récupérer la dimension culturelle du lieu
+  const lieuEntry = lieuxData.find(l => 
+    l.nom.toLowerCase() === sign.lieu.toLowerCase()
+  );
+  const lieuDimension = lieuEntry?.dimensionCulturelle || '';
+  
+  // Récupérer un événement historique pertinent (par mois ou mot-clé)
+  const [year, month, day] = dateToUse.split('-');
+  const histoireByMonth = histoireData.filter(h => h.periode.includes(`${month}-${day}`));
+  const histoireEntry = histoireByMonth[0] || histoireData.find(h => 
+    h.faitHistorique.toLowerCase().includes(sign.element.toLowerCase()) ||
+    h.faitHistorique.toLowerCase().includes(sign.spirituel.toLowerCase())
+  );
+  const histoireFait = histoireEntry?.faitHistorique || '';
+  const histoirePeriode = histoireEntry?.periode || '';
+  
+  // Récupérer un symbole créole pertinent (par élément du signe)
+  const kreyolEntry = kreyolData.find(k => 
+    k.famille.toLowerCase().includes(sign.element.toLowerCase()) ||
+    k.typeResistance?.toLowerCase().includes(sign.spirituel.toLowerCase())
+  );
+  const kreyolSymbol = kreyolEntry?.nomCreole || '';
+  const kreyolDimension = kreyolEntry?.dimensionCulturelle || '';
 
   // Détecter les correspondances météo/édition pour adapter le contexte
   const signConditions = [...(sign.faune?.conditions || []), ...(sign.flore?.conditions || [])];
@@ -301,14 +338,21 @@ Ces êtres, animaux, plantes, arbres ne sont pas de la décoration. Ils sont des
 CORRESPONDANCE CRÉOLE ENRICHIE DU SIGNE ${sign.name.toUpperCase()} :
 - Totem : ${sign.animal} (${sign.nomKreyol})
   ${fauneSavoir ? `→ ${fauneSavoir}` : ''}
+  ${fauneDimension ? `SACRÉ : ${fauneDimension}` : ''}
 - Plante : ${sign.plante} (${sign.flore?.nom_creole || ''})
   ${floreSavoir ? `→ ${floreSavoir}` : ''}
   ${floreUsage ? `USAGE : ${floreUsage}` : ''}
+  ${floreDimension ? `CULTUREL : ${floreDimension}` : ''}
 - Arbre : ${sign.arbre}
-- Lieu de Guadeloupe : ${sign.lieu}
+- Lieu sacré : ${sign.lieu} (${lieuEntry?.localisation || ''})
   ${lieuSymbolique ? `→ ${lieuSymbolique}` : ''}
+  ${lieuDimension ? `DIMENSION : ${lieuDimension}` : ''}
 - Élément : ${sign.element}
 - Dimension spirituelle : ${sign.spirituel}
+- Symbole créole : ${kreyolSymbol}
+  ${kreyolDimension ? `→ ${kreyolDimension}` : ''}
+- Histoire : ${histoirePeriode}
+  ${histoireFait ? `→ ${histoireFait}` : ''}
 - Conditions idéales : ${sign.faune?.conditions.join(', ') || sign.flore?.conditions.join(', ') || 'toutes'}
 - Éditions associées : ${sign.faune?.editions.join(', ') || sign.flore?.editions.join(', ') || 'toutes'}
 ${weatherBlock}
