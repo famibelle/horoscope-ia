@@ -273,8 +273,10 @@ export function buildHoroscopeUserPrompt(
   // Récupérer l'usage de la plante depuis flore-data.ts
   const floreNom = sign.flore?.nom_creole || sign.plante || '';
   const floreEntry = floreData.find(f => 
-    f.nomCreole.toLowerCase() === floreNom.toLowerCase() || 
-    f.nomFrancais.toLowerCase() === floreNom.toLowerCase()
+    f.nomCreole.toLowerCase().includes(floreNom.toLowerCase()) || 
+    f.nomFrancais.toLowerCase().includes(floreNom.toLowerCase()) ||
+    floreNom.toLowerCase().includes(f.nomCreole.toLowerCase()) ||
+    floreNom.toLowerCase().includes(f.nomFrancais.toLowerCase())
   );
   const floreUsage = floreEntry?.usage || '';
   const floreDimension = floreEntry?.dimensionCulturelle || '';
@@ -282,34 +284,95 @@ export function buildHoroscopeUserPrompt(
   // Récupérer la dimension culturelle de la faune
   const fauneNom = sign.faune?.nom_creole || sign.nomKreyol || '';
   const fauneEntry = fauneData.find(f => 
-    f.nomCreole.toLowerCase() === fauneNom.toLowerCase() || 
-    f.nomFrancais.toLowerCase() === fauneNom.toLowerCase()
+    f.nomCreole.toLowerCase().includes(fauneNom.toLowerCase()) || 
+    f.nomFrancais.toLowerCase().includes(fauneNom.toLowerCase()) ||
+    fauneNom.toLowerCase().includes(f.nomCreole.toLowerCase()) ||
+    fauneNom.toLowerCase().includes(f.nomFrancais.toLowerCase())
   );
   const fauneDimension = fauneEntry?.dimensionCulturelle || '';
   
   // Récupérer la dimension culturelle du lieu
   const lieuEntry = lieuxData.find(l => 
-    l.nom.toLowerCase() === sign.lieu.toLowerCase()
+    l.nom.toLowerCase().includes(sign.lieu.toLowerCase()) ||
+    sign.lieu.toLowerCase().includes(l.nom.toLowerCase())
   );
   const lieuDimension = lieuEntry?.dimensionCulturelle || '';
   
-  // Récupérer un événement historique pertinent (par mois ou mot-clé)
+  // Récupérer un événement historique pertinent (par mois, année ou élément)
   const [year, month, day] = dateToUse.split('-');
-  const histoireByMonth = histoireData.filter(h => h.periode.includes(`${month}-${day}`));
+  const moisNom = new Date(dateToUse).toLocaleString('fr-FR', { month: 'long' });
+  const histoireByMonth = histoireData.filter(h => 
+    h.periode.includes(year) ||
+    h.periode.includes(moisNom) ||
+    h.periode.includes(month)
+  );
   const histoireEntry = histoireByMonth[0] || histoireData.find(h => 
     h.faitHistorique.toLowerCase().includes(sign.element.toLowerCase()) ||
-    h.faitHistorique.toLowerCase().includes(sign.spirituel.toLowerCase())
+    h.faitHistorique.toLowerCase().includes(sign.spirituel.toLowerCase()) ||
+    h.faitHistorique.toLowerCase().includes(sign.animal?.toLowerCase() || '') ||
+    h.faitHistorique.toLowerCase().includes(sign.plante?.toLowerCase() || '')
   );
   const histoireFait = histoireEntry?.faitHistorique || '';
   const histoirePeriode = histoireEntry?.periode || '';
   
-  // Récupérer un symbole créole pertinent (par élément du signe)
+  // Récupérer un symbole créole pertinent (par nom, élément ou animal/plante)
   const kreyolEntry = kreyolData.find(k => 
+    k.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '') ||
+    k.nomCreole.toLowerCase().includes(sign.nomKreyol?.toLowerCase() || '') ||
+    k.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '') ||
     k.famille.toLowerCase().includes(sign.element.toLowerCase()) ||
-    k.typeResistance?.toLowerCase().includes(sign.spirituel.toLowerCase())
+    (k.tags && k.tags.some(tag => 
+      tag.includes(sign.element.toLowerCase()) ||
+      tag.includes(sign.animal?.toLowerCase() || '') ||
+      tag.includes(sign.plante?.toLowerCase() || '')
+    ))
   );
   const kreyolSymbol = kreyolEntry?.nomCreole || '';
   const kreyolDimension = kreyolEntry?.dimensionCulturelle || '';
+
+  // Filtrer les données enrichies pour ne garder que les pertinentes
+  // FAUNE-DATA : 5-8 entrées liées au signe
+  const fauneEnrichies = fauneData.filter(f => 
+    f.nomCreole.toLowerCase().includes(sign.element.toLowerCase()) ||
+    f.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '') ||
+    f.nomCreole.toLowerCase().includes(sign.nomKreyol?.toLowerCase() || '') ||
+    f.tags?.some(tag => tag.includes(sign.element.toLowerCase()))
+  ).slice(0, 8);
+
+  // FLORE-DATA : 5-8 entrées liées au signe
+  const floreEnrichies = floreData.filter(f => 
+    f.nomCreole.toLowerCase().includes(sign.element.toLowerCase()) ||
+    f.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '') ||
+    f.tags?.some(tag => tag.includes(sign.element.toLowerCase()))
+  ).slice(0, 8);
+
+  // LIEUX-DATA : 3-5 entrées liées au signe
+  const lieuxEnrichis = lieuxData.filter(l => 
+    l.dimensionCulturelle.toLowerCase().includes(sign.element.toLowerCase()) ||
+    l.nom.toLowerCase().includes(sign.lieu?.toLowerCase() || '') ||
+    l.tags?.some(tag => tag.includes(sign.element.toLowerCase()))
+  ).slice(0, 5);
+
+  // KREYOL-DATA : 3-5 entrées filtrées
+  const kreyolEnrichis = kreyolData.filter(k => 
+    k.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '') ||
+    k.nomCreole.toLowerCase().includes(sign.nomKreyol?.toLowerCase() || '') ||
+    k.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '') ||
+    k.famille.toLowerCase().includes(sign.element.toLowerCase()) ||
+    (k.tags && k.tags.some(tag => 
+      tag.includes(sign.element.toLowerCase()) ||
+      tag.includes(sign.animal?.toLowerCase() || '') ||
+      tag.includes(sign.plante?.toLowerCase() || '')
+    ))
+  ).slice(0, 5);
+
+  // HISTOIRE-DATA : 2-3 entrées pertinentes
+  const histoireEnrichies = histoireData.filter(h => 
+    h.periode.includes(year) ||
+    h.periode.includes(moisNom) ||
+    h.periode.includes(month) ||
+    h.faitHistorique.toLowerCase().includes(sign.element.toLowerCase())
+  ).slice(0, 3);
 
   // Détecter les correspondances météo/édition pour adapter le contexte
   const signConditions = [...(sign.faune?.conditions || []), ...(sign.flore?.conditions || [])];
@@ -337,46 +400,62 @@ export function buildHoroscopeUserPrompt(
 ${dynamicContextBlock}Date : ${dateToUse}
 Heure locale : ${hourToUse}
 Moment : ${cfg.moment}
-
-HOROSCOPE BRUT (source anglaise) — ${sign.name} :
-${rawText}
-
-Ces êtres, animaux, plantes, arbres ne sont pas de la décoration. Ils sont des mémoires. Elle les connaît par le corps, pas par les livres. Elle peut les convoquer quand le moment le demande : un mot, une image, une correspondance. Jamais de façon systématique seulement quand ça colle, quand ça résonne.
-
-CORRESPONDANCE CRÉOLE ENRICHIE DU SIGNE ${sign.name.toUpperCase()} :
-- Totem : ${sign.animal} (${sign.nomKreyol})
-  ${fauneSavoir ? `→ ${fauneSavoir}` : ''}
-  ${fauneDimension ? `SACRÉ : ${fauneDimension}` : ''}
-- Plante : ${sign.plante} (${sign.flore?.nom_creole || ''})
-  ${floreSavoir ? `→ ${floreSavoir}` : ''}
-  ${floreUsage ? `USAGE : ${floreUsage}` : ''}
-  ${floreDimension ? `CULTUREL : ${floreDimension}` : ''}
-- Arbre : ${sign.arbre}
-- Lieu sacré : ${sign.lieu} (${lieuEntry?.localisation || ''})
-  ${lieuSymbolique ? `→ ${lieuSymbolique}` : ''}
-  ${lieuDimension ? `DIMENSION : ${lieuDimension}` : ''}
-- Élément : ${sign.element}
-- Dimension spirituelle : ${sign.spirituel}
-- Symbole créole : ${kreyolSymbol}
-  ${kreyolDimension ? `→ ${kreyolDimension}` : ''}
-- Histoire : ${histoirePeriode}
-  ${histoireFait ? `→ ${histoireFait}` : ''}
-- Conditions idéales : ${sign.faune?.conditions.join(', ') || sign.flore?.conditions.join(', ') || 'toutes'}
-- Éditions associées : ${sign.faune?.editions.join(', ') || sign.flore?.editions.join(', ') || 'toutes'}
 ${weatherBlock}
+
+🌍 HOROSCOPE BRUT (source anglaise - pour inspiration uniquement) :
+${sign.name} : ${rawText}
+
+🎯 **CONSIGNE PRINCIPALE** : Intègre **AU MOINS 3 références culturelles DIFFÉRENTES** dans ton horoscope. **Ne répète PAS** les symboles principaux (${sign.animal}, ${sign.plante}, ${sign.arbre}) plus d'UNE FOIS dans tout l'horoscope. Privilégie les **données enrichies** ci-dessous pour varier tes références.
+
+⭐ DONNÉES ENRICHIES CULTURELLES (PRIORITÉ ABSOLUE) ⭐
+
+📚 FAUNE-DATA (symboles animaux pertinents) :
+${fauneEnrichies.map(f => `  - ${f.nomCreole} (${f.nomFrancais}): ${f.dimensionCulturelle || f.savoir || ''}`).join('\n')}
+
+🌺 FLORE-DATA (plantes et arbres sacrés) :
+${floreEnrichies.map(f => `  - ${f.nomCreole} (${f.nomFrancais}): ${f.usage ? `USAGE=${f.usage}, ` : ''}DIMENSION=${f.dimensionCulturelle || f.savoir || ''}`).join('\n')}
+
+🏞️  LIEUX-DATA (sites sacrés et symboliques) :
+${lieuxEnrichis.map(l => `  - ${l.nom} (${l.localisation}): ${l.dimensionCulturelle || l.symbolique || ''}`).join('\n')}
+
+🎭 KREYOL-DATA (symboles de résistance) :
+${kreyolEnrichis.map(k => `  - ${k.nomCreole}: ${k.dimensionCulturelle || k.typeResistance || ''}`).join('\n')}
+
+📜 HISTOIRE-DATA (événements historiques) :
+${histoireEnrichies.map(h => `  - ${h.periode}: ${h.faitHistorique}`).join('\n')}
+
+⚠️ DONNÉES DU SIGNE (pour référence - À UTILISER AVEC MODÉRATION) :
+  - id: ${sign.id}
+  - name: ${sign.name}
+  - animal: ${sign.animal}
+  - nomKreyol: ${sign.nomKreyol}
+  - plante: ${sign.plante}
+  - arbre: ${sign.arbre}
+  - lieu: ${sign.lieu}
+  - element: ${sign.element}
+  - spirituel: ${sign.spirituel.substring(0, 150)}${sign.spirituel.length > 150 ? '...' : ''}
+  - dateRange: ${sign.dateRange}
+  - planet: ${sign.planet}
+  - tagline: ${sign.tagline}
 
 ÉDITION : ${cfg.instruction}
 
 STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien créole guadeloupéen :
-1. "ouverture" : UNE phrase - image caribéenne qui pose le ton du jour (totem, plante ou lieu du signe en priorité). Utilise les savoirs traditionnels fournis. Jamais de titre ni description physique.
-2. "amour" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les relations et le cœur, ancré dans le quotidien créole. Intègre les symboles culturels.
-3. "travail" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur l'action, l'effort, la réussite professionnelle. Inspire-toi des caractéristiques de la faune/flore.
-4. "argent" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les finances, les dépenses, les opportunités matérielles. Fais référence aux éléments naturels.
-5. "amitie" (Lyannaj) : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur le lien social, la solidarité, le collectif. Utilise le contexte du lieu sacré.
-6. "prediction" : UNE phrase - tendance pour les jours à venir formulée comme un présage naturel créole ("le vent tourne", "quelque chose se prépare"…). Basé sur les conditions météo du signe. Jamais "demain" en début de phrase.
-7. "conseil" : UNE phrase - un conseil pratique d'utilisation de la plante (${sign.plante}) basé sur son usage traditionnel en Guadeloupe (voir USAGE fourni).
+1. "ouverture" : UNE phrase - image caribéenne qui pose le ton du jour. **Utilise un symbole différent de ceux des autres sections.**
+2. "amour" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les relations et le cœur. **Choisis parmi FAUNE-DATA, FLORE-DATA ou KREYOL-DATA.**
+3. "travail" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur l'action, l'effort. **Choisis parmi FAUNE-DATA ou LIEUX-DATA.**
+4. "argent" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les finances. **Choisis parmi FLORE-DATA ou HISTOIRE-DATA.**
+5. "amitie" (Lyannaj) : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur le lien social. **Choisis parmi LIEUX-DATA ou KREYOL-DATA.**
+6. "prediction" : UNE phrase - tendance pour les jours à venir. **Utilise une métaphore naturelle.**
+7. "conseil" : UNE phrase - un conseil pratique basé sur une plante ou un symbole.
 
 Note : Le champ "sante" (optionnel) peut être ajouté séparément avec EXACTEMENT 2 OU 4 phrases.
+
+🎯 **RÈGLES DE VARIÉTÉ ABSOLUES** :
+- Chaque section doit utiliser des symboles DIFFÉRENTS des autres sections
+- Ne répète PAS ${sign.animal} ou ${sign.nomKreyol} plus d'UNE FOIS
+- Ne répète PAS ${sign.plante} ou ${sign.arbre} plus d'UNE FOIS
+- Ne répète PAS ${sign.lieu} plus d'UNE FOIS
 
 Contraintes absolues : ton oral direct, parle à l'auditeur (tu/vous), vise 20–30 mots par phrase.
 Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Utilise uniquement des virgules, des points, des tirets simples (-) ou des espaces.

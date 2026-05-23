@@ -1,4 +1,5 @@
 import data from './cultural-context-data.json';
+import { histoireData } from './private/histoire-data';
 
 interface CulturalEntry {
   nomCreole: string;
@@ -53,7 +54,36 @@ const COMMEMORATIONS: Record<string, string> = {
 
 export function getHistoricalResonance(date: string): string | null {
   const mmdd = date.slice(5); // 'YYYY-MM-DD' → 'MM-DD'
-  return COMMEMORATIONS[mmdd] ?? null;
+  
+  // D'abord, vérifier les commémorations spéciales
+  if (COMMEMORATIONS[mmdd]) {
+    return COMMEMORATIONS[mmdd];
+  }
+  
+  // Sinon, chercher dans histoireData par année ou mois
+  const [year, month] = date.split('-');
+  const moisNom = new Date(date).toLocaleString('fr-FR', { month: 'long' });
+  
+  // Filtre plus large : cherche des événements dans l'année ou le mois
+  const matchingHistoire = histoireData.find(h => 
+    h.periode.includes(year) ||
+    h.periode.includes(moisNom) ||
+    h.periode.includes(month)
+  );
+  
+  if (matchingHistoire) {
+    return `${matchingHistoire.periode}: ${matchingHistoire.faitHistorique}`;
+  }
+  
+  // Si rien n'est trouvé, retourner un événement aléatoire pour la diversité
+  if (histoireData.length > 0) {
+    const randomIndex = Math.floor(Math.random() * histoireData.length);
+    const randomHistoire = histoireData[randomIndex];
+    return `${randomHistoire.periode}: ${randomHistoire.faitHistorique}`;
+  }
+  
+  // Retourner null si histoireData est vide
+  return null;
 }
 
 /* ── Helpers ────────────────────────────────────────────────────────────────── */
