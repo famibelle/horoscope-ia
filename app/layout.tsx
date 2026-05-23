@@ -20,7 +20,7 @@ const playfair = Playfair_Display({
 //   description: "Découvrez votre horoscope du jour avec Maryse CondAI...",
 
 export const metadata: Metadata = {
-  title: 'Horoscope Karukera — La voix des ancêtres de la Guadeloupe',
+  title: 'La Voix de nos Ancêtres',
   description:
     "Écoutez les conseils de Maryse CondAI, inspirés par la sagesse ancestrale et les esprits de Karukera. Horoscopes ancrés dans la culture guadeloupéenne.",
   keywords: [
@@ -43,17 +43,17 @@ export const metadata: Metadata = {
     'verseau',
     'poissons',
   ],
-  authors: [{ name: 'Horoscope Karukera' }],
+  authors: [{ name: 'La Voix de nos Ancêtres' }],
   openGraph: {
-    title: 'Horoscope Karukera — La voix des ancêtres',
+    title: 'La Voix de nos Ancêtres',
     description: "Écoutez les conseils de Maryse CondAI, inspirés par les esprits de Karukera et la sagesse guadeloupéenne.",
     type: 'website',
     locale: 'fr_FR',
-    siteName: 'Horoscope Karukera',
+    siteName: 'La Voix de nos Ancêtres',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Horoscope Karukera — La voix des ancêtres',
+    title: 'La Voix de nos Ancêtres',
     description: "Écoutez les conseils de Maryse CondAI, inspirés par les esprits de Karukera.",
   },
   robots: {
