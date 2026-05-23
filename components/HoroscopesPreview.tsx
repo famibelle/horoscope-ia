@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { signs } from '@/lib/signs-data';
-import { detectEditionWithNight } from '@/lib/edition';
+import { detectLocalEditionWithNight } from '@/lib/edition';
 
 interface SignPreview {
   signId: string;
@@ -27,7 +27,7 @@ export default function HoroscopesPreview() {
 
   useEffect(() => {
     let cancelled = false;
-    const edition = detectEditionWithNight();
+    const edition = detectLocalEditionWithNight();
 
     async function loadPreviews() {
       try {
