@@ -163,7 +163,7 @@ Sans markdown dans les valeurs JSON.`;
     // Store in Netlify Blobs cache
     if (blobStore) {
       try {
-        await blobStore.set(cacheKey, JSON.stringify(data), { expiration: 3600 });
+        await blobStore.set(cacheKey, JSON.stringify(data));
       } catch {
         // Fall through to in-memory cache
       }
