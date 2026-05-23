@@ -124,9 +124,9 @@ export function getDynamicEditionLabels(currentEdition: Edition): Record<Edition
     // La nuit : Matin, Midi, Soir sont des prédictions
     return {
       nuit:   { label: 'Édition de la nuit', emoji: '🌌', desc: 'Ce qui compte maintenant' },
-      matin: { label: 'Prédiction matin', emoji: '🔮', desc: 'Ce qui vous attend demain matin' },
-      midi:  { label: 'Prédiction midi', emoji: '🔮', desc: 'Ce qui vous attend demain à midi' },
-      soir:  { label: 'Prédiction soir', emoji: '🔮', desc: 'Ce qui vous attend demain soir' },
+      matin: { label: 'Matin', emoji: '🔮', desc: 'Ce qui vous attend demain matin' },
+      midi:  { label: 'Midi', emoji: '🔮', desc: 'Ce qui vous attend demain à midi' },
+      soir:  { label: 'Soir', emoji: '🔮', desc: 'Ce qui vous attend demain soir' },
     };
   }
 
@@ -135,8 +135,8 @@ export function getDynamicEditionLabels(currentEdition: Edition): Record<Edition
     return {
       nuit:   { label: 'Édition de la nuit', emoji: '🌌', desc: 'Cette nuit (pour référence)' },
       matin: { label: 'Édition du matin', emoji: '🌅', desc: 'Ce qui compte maintenant' },
-      midi:  { label: 'Prédiction midi', emoji: '🔮', desc: 'Ce qui vous attend cet après-midi' },
-      soir:  { label: 'Prédiction soir', emoji: '🌙', desc: 'Comment terminer votre journée' },
+      midi:  { label: 'Midi', emoji: '🔮', desc: 'Ce qui vous attend cet après-midi' },
+      soir:  { label: 'Soir', emoji: '🌙', desc: 'Comment terminer votre journée' },
     };
   }
 
@@ -146,13 +146,13 @@ export function getDynamicEditionLabels(currentEdition: Edition): Record<Edition
       nuit:   { label: 'Édition de la nuit', emoji: '🌌', desc: 'Cette nuit (pour référence)' },
       matin: { label: 'Édition du matin', emoji: '🌅', desc: 'Ce matin (pour référence)' },
       midi:  { label: 'Édition du midi', emoji: '☀️', desc: 'Ce qui compte maintenant' },
-      soir:  { label: 'Prédiction soir', emoji: '🌙', desc: 'Comment terminer votre journée' },
+      soir:  { label: 'Soir', emoji: '🌙', desc: 'Comment terminer votre journée' },
     };
   }
 
   // Le soir : Nuit est une prédiction, Matin et Midi sont déjà passés
   return {
-    nuit:   { label: 'Prédiction nuit', emoji: '🌌', desc: 'Ce qui vous attend cette nuit' },
+    nuit:   { label: 'Nuit', emoji: '🌌', desc: 'Ce qui vous attend cette nuit' },
     matin: { label: 'Édition du matin', emoji: '🌅', desc: 'Ce matin (pour référence)' },
     midi:  { label: 'Édition du midi', emoji: '☀️', desc: 'Cet après-midi (pour référence)' },
     soir:  { label: 'Édition du soir', emoji: '🌙', desc: 'Ce qui compte maintenant' },

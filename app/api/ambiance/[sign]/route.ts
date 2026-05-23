@@ -15,9 +15,20 @@ import type { Edition } from '@/lib/private/maryse-prompt';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
-/* ── Simple in-memory cache (local dev) ────────────────────────────────────── */
-const _cache = new Map<string, { data: unknown; ts: number }>();
-const TTL = 3_600_000;
+/* ── Persistent cache using Netlify Blobs ───────────────────────────────── */
+async function getAmbienceCache() {
+  try {
+    const { getStore } = await import('@netlify/blobs');
+    return getStore('ambiance-cache');
+  } catch {
+    // Fallback to in-memory cache if Netlify Blobs is not available
+    return null;
+  }
+}
+
+/* ── Simple in-memory cache (fallback for local dev) ──────────────────────── */
+const _inMemoryCache = new Map<string, { data: unknown; ts: number }>();
+const TTL = 3_600_000; // 1 hour
 
 function lunarPhaseLabel(): string {
   const known = new Date('2000-01-06').getTime();
@@ -47,7 +58,27 @@ export async function GET(
       ? editionParam : detectEdition();
 
   const cacheKey = `${todayGuadeloupe()}|${signId}|${edition}`;
-  const hit = _cache.get(cacheKey);
+  const today = todayGuadeloupe();
+  
+  // Get cache store once
+  const blobStore = await getAmbienceCache();
+  
+  // Try Netlify Blobs cache first
+  if (blobStore) {
+    try {
+      const cached = await blobStore.get(cacheKey, { type: 'json' });
+      if (cached) {
+        return NextResponse.json(cached, {
+          headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300' },
+        });
+      }
+    } catch {
+      // Fall through to in-memory cache
+    }
+  }
+  
+  // Fallback to in-memory cache (for local dev)
+  const hit = _inMemoryCache.get(cacheKey);
   if (hit && Date.now() - hit.ts < TTL) {
     return NextResponse.json(hit.data, {
       headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300' },
@@ -55,7 +86,6 @@ export async function GET(
   }
 
   const lunarPhase = lunarPhaseLabel();
-  const today = todayGuadeloupe();
   const otherSigns = signs.filter((s) => s.id !== signId).map((s) => s.id);
   const culturalContext = getCulturalContext(signId, today);
 
@@ -129,7 +159,19 @@ Sans markdown dans les valeurs JSON.`;
 
   try {
     const data = { ...JSON.parse(content), scores };
-    _cache.set(cacheKey, { data, ts: Date.now() });
+    
+    // Store in Netlify Blobs cache
+    if (blobStore) {
+      try {
+        await blobStore.set(cacheKey, JSON.stringify(data), { expiration: 3600 });
+      } catch {
+        // Fall through to in-memory cache
+      }
+    }
+    
+    // Also store in in-memory cache (for local dev)
+    _inMemoryCache.set(cacheKey, { data, ts: Date.now() });
+    
     return NextResponse.json(data, {
       headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300' },
     });
