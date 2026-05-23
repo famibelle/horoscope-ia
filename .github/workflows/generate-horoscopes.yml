@@ -63,10 +63,22 @@ jobs:
           esac
           npx tsx scripts/generate-ambiances.ts $ARGS
 
+      - name: Générer le signe du jour
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+        run: |
+          ARGS=""
+          case "${{ inputs.mode }}" in
+            verbose)   ARGS="--verbose" ;;
+            force)     ARGS="--force" ;;
+            force-verbose) ARGS="--force --verbose" ;;
+          esac
+          npx tsx scripts/generate-signe-du-jour.ts $ARGS
+
       - name: Commit les données générées
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git add public/data/horoscopes/*.json public/data/ambiance/*.json
-          git diff --staged --quiet || git commit -m "chore: génération quotidienne horoscopes et ambiances ($(date +%Y-%m-%d))"
+          git add public/data/horoscopes/*.json public/data/ambiance/*.json public/data/signe-du-jour/*.json
+          git diff --staged --quiet || git commit -m "chore: génération quotidienne horoscopes, ambiances et signe du jour ($(date +%Y-%m-%d))"
           git push --force-with-lease origin main
