@@ -22,6 +22,7 @@ export interface HoroscopeResponse {
   amitie: string;
   sante: string;
   prediction: string;
+  conseil: string;
   signFr: string;
   weather: string;
   edition?: 'nuit' | 'matin' | 'midi' | 'soir';

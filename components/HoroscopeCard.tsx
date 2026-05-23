@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Briefcase, Coins, Users, Sparkles, Eye, Cloud, RefreshCw } from 'lucide-react';
+import { Heart, Briefcase, Coins, Users, Sparkles, Eye, Leaf, Cloud, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 import { signs } from '@/lib/signs-data';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
@@ -31,6 +31,7 @@ const SECTIONS = [
   { key: 'argent',     label: 'Argent',             Icon: Coins,     colorClass: 'text-ancestral-gold' },
   { key: 'amitie',     label: 'Lyannaj',            Icon: Users,     colorClass: 'text-ancestral-cream' },
   { key: 'prediction', label: 'Présage ancestral',  Icon: Eye,       colorClass: 'text-ancestral-gold' },
+  { key: 'conseil',    label: 'Conseil de la plante', Icon: Leaf,      colorClass: 'text-ancestral-forest' },
 ] as const;
 
 /* ── Skeleton ──────────────────────────────────────────────────────────────── */

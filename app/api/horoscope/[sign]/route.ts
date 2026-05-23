@@ -277,7 +277,7 @@ export async function GET(
       structured = null; // Forcer le fallback
     }
 
-    if (structured?.ouverture && structured?.amour && structured?.travail) {
+    if (structured?.ouverture && structured?.amour && structured?.travail && structured?.conseil) {
       const teaser = await generateTeaser(sign.name, structured as Record<string, string>);
       const response: HoroscopeResponse = {
         ouverture:  structured.ouverture,
@@ -287,6 +287,7 @@ export async function GET(
         amitie:     structured.amitie ?? '',
         sante:      structured.sante ?? '',
         prediction: structured.prediction ?? '',
+        conseil:    structured.conseil ?? '',
         signFr:     sign.name,
         weather,
         edition,
@@ -323,6 +324,7 @@ export async function GET(
       argent: 'Une période de réflexion avant toute décision financière.',
       amitie: 'Vos proches comptent sur votre présence, même silencieuse.',
       prediction: 'La clarté reviendra bientôt.',
+      conseil: 'Prenez soin de vous et laissez le temps faire son œuvre.',
       sante: '',
       signFr: sign.name,
       weather,

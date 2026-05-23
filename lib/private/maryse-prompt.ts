@@ -1,5 +1,6 @@
 import type { Sign } from '@/lib/signs-data';
 import { todayGuadeloupe, getGuadeloupeTime } from '@/lib/edition';
+import { floreData } from '@/lib/private/flore-data';
 
 /*
  * ═══════════════════════════════════════════════════════════════
@@ -228,7 +229,7 @@ export const MARYSE_SYSTEM = `${MARYSE_AME}
 
 ${MARYSE_IDENTITE}
 
-Tu rédiges un horoscope quotidien ancré dans la culture guadeloupéenne. Réponds UNIQUEMENT avec un objet JSON valide contenant exactement 6 clés : "ouverture", "amour", "travail", "argent", "amitie", "prediction". Chaque valeur est UNE seule phrase dans ta voix. Sans markdown, sans commentaire, juste le JSON brut.`;
+Tu rédiges un horoscope quotidien ancré dans la culture guadeloupéenne. Réponds UNIQUEMENT avec un objet JSON valide contenant exactement 7 clés : "ouverture", "amour", "travail", "argent", "amitie", "prediction", "conseil". Chaque valeur est UNE seule phrase dans ta voix. Sans markdown, sans commentaire, juste le JSON brut.`;
 
 export const MARYSE_SIGNE_SYSTEM = `${MARYSE_AME}
 
@@ -256,6 +257,14 @@ export function buildHoroscopeUserPrompt(
   const fauneSavoir = sign.faune?.savoir.split('.')[0] || '';
   const floreSavoir = sign.flore?.savoir.split('.')[0] || '';
   const lieuSymbolique = sign.lieuDetails?.symbolique || '';
+  
+  // Récupérer l'usage de la plante depuis flore-data.ts
+  const floreNom = sign.flore?.nom_creole || sign.plante || '';
+  const floreEntry = floreData.find(f => 
+    f.nomCreole.toLowerCase() === floreNom.toLowerCase() || 
+    f.nomFrancais.toLowerCase() === floreNom.toLowerCase()
+  );
+  const floreUsage = floreEntry?.usage || '';
 
   // Détecter les correspondances météo/édition pour adapter le contexte
   const signConditions = [...(sign.faune?.conditions || []), ...(sign.flore?.conditions || [])];
@@ -294,6 +303,7 @@ CORRESPONDANCE CRÉOLE ENRICHIE DU SIGNE ${sign.name.toUpperCase()} :
   ${fauneSavoir ? `→ ${fauneSavoir}` : ''}
 - Plante : ${sign.plante} (${sign.flore?.nom_creole || ''})
   ${floreSavoir ? `→ ${floreSavoir}` : ''}
+  ${floreUsage ? `USAGE : ${floreUsage}` : ''}
 - Arbre : ${sign.arbre}
 - Lieu de Guadeloupe : ${sign.lieu}
   ${lieuSymbolique ? `→ ${lieuSymbolique}` : ''}
@@ -312,10 +322,9 @@ STRUCTURE — 6 phrases dans ta voix, dans cet ordre strict, ancrées dans le qu
 4. "argent" : ce que le signe dit sur les finances, les dépenses, les opportunités matérielles. Fais référence aux éléments naturels.
 5. "amitie" : ce que le signe dit sur le lien social, la solidarité, le collectif. Utilise le contexte du lieu sacré.
 6. "prediction" : tendance pour les jours à venir formulée comme un présage naturel créole ("le vent tourne", "quelque chose se prépare"…). Basé sur les conditions météo du signe. Jamais "demain" en début de phrase.
-7. termine par un conseil d'utilisation d'une plante en te basant sur  
+7. "conseil" : un conseil pratique d'utilisation de la plante (${sign.plante}) basé sur son usage traditionnel en Guadeloupe (voir USAGE fourni).
 
-
-Contraintes absolues : 6 phrases exactement, ton oral direct, parle à l'auditeur (tu/vous), vise 20–30 mots par phrase, intègre subtilement les références culturelles fournies.`;
+Contraintes absolues : 7 phrases exactement, ton oral direct, parle à l'auditeur (tu/vous), vise 20–30 mots par phrase, intègre subtilement les références culturelles fournies.`;
 }
 
 export function buildSigneDuJourUserPrompt(

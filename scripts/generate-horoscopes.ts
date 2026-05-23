@@ -132,6 +132,7 @@ async function generateTeaser(
     structured.argent,
     structured.amitie,
     structured.prediction,
+    structured.conseil,
   ]
     .filter(Boolean)
     .join(' ');
@@ -286,6 +287,7 @@ export async function generateAllHoroscopes() {
           amitie: structured.amitie ?? '',
           sante: structured.sante ?? '',
           prediction: structured.prediction ?? '',
+          conseil: structured.conseil ?? '',
           signFr: sign.name,
           weather,
           edition,
@@ -306,6 +308,7 @@ export async function generateAllHoroscopes() {
         console.log(`   💰 Argent: "${structured.argent}"`);
         console.log(`   👫 Amitié: "${structured.amitie}"`);
         console.log(`   🎯 Prédiction: "${structured.prediction}"`);
+        console.log(`   🌿 Conseil: "${structured.conseil}"`);
         console.log(`   🌟 Teaser: "${teaser}"\n`);
         console.log('---');
       }
@@ -389,6 +392,7 @@ export async function generateAllHoroscopes() {
         console.log(`   💰 Argent: "${structured.argent}"`);
         console.log(`   👫 Amitié: "${structured.amitie}"`);
         console.log(`   🎯 Prédiction: "${structured.prediction}"`);
+        console.log(`   🌿 Conseil: "${structured.conseil}"`);
         console.log(`   🌟 Teaser: "${teaser}"\n`);
         console.log('---');
       }
