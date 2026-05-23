@@ -1,16 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { normalizeForTTS } from '@/lib/tts-utils';
-import { MARYSE_AME } from '@/lib/private/maryse-prompt';
-import { buildTTSPrompt, getEditionFromDate } from '@/lib/private/tts-prompt';
 import { todayGuadeloupe } from '@/lib/edition';
-import { signs } from '@/lib/signs-data';
-import type { Edition } from '@/lib/private/maryse-prompt';
+import { getEditionFromDate } from '@/lib/private/tts-prompt';
+import type { HoroscopeResponse } from '@/lib/horoscope-data';
 
 const TTS_URL = 'https://api.mistral.ai/v1/audio/speech';
 const TTS_MODEL = 'voxtral-mini-tts-2603';
 const TTS_VOICE = 'fr_marie_curious';
-const LLM_MODEL = 'mistral-large-latest';
-const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
 /* ── Cache Netlify Blobs pour les MP3 ───────────────────────────────────── */
 
@@ -34,60 +30,6 @@ async function setTtsCached(key: string, audioBase64: string, text: string): Pro
   }
 }
 
-/* ── Optimisation du texte pour TTS via LLM ──────────────────────────────── */
-
-async function optimizeTextForTTS(
-  horoscope: any,
-  signName: string,
-  edition: string,
-  userDate: string,
-  userHour: string,
-  apiKey: string
-): Promise<string | null> {
-  const signData = signs.find(s => s.name.toLowerCase() === signName.toLowerCase());
-  if (!signData) {
-    console.error('[TTS] Sign non trouvé:', signName);
-    return null;
-  }
-
-  console.log('[TTS] Génération du texte avec buildTTSPrompt');
-
-  const prompt = buildTTSPrompt(signData, horoscope, userDate, edition as Edition);
-
-  const res = await fetch(MISTRAL_URL, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: LLM_MODEL,
-      temperature: 0.3,
-      max_tokens: 800,
-      messages: [
-        { role: 'system', content: MARYSE_AME },
-        { role: 'user', content: prompt },
-      ],
-    }),
-  });
-
-  if (!res.ok) {
-    console.error('[TTS] LLM failed:', res.status);
-    return null;
-  }
-
-  const data = await res.json();
-  const content = data.choices?.[0]?.message?.content?.trim();
-
-  if (!content) {
-    console.log('[TTS] LLM a retourné un contenu vide');
-    return null;
-  }
-
-  console.log('[TTS] Texte optimisé par LLM:', content);
-  return normalizeForTTS(content);
-}
-
 /* ── Route principale ─────────────────────────────────────────────────────── */
 
 export async function POST(req: NextRequest) {
@@ -96,7 +38,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'TTS non configuré' }, { status: 503 });
   }
 
-  let horoscope: any = null;
+  let horoscope: HoroscopeResponse | null = null;
   let signName: string = 'un signe';
   let edition: string = 'matin';
   let userDate: string = todayGuadeloupe();
@@ -112,12 +54,10 @@ export async function POST(req: NextRequest) {
     
     // Si on a l'heure du navigateur, l'utiliser pour déterminer l'édition
     if (userHour) {
-      // Créer une date avec l'heure du navigateur pour getEditionFromDate
       const dateWithUserHour = new Date(userDate);
       dateWithUserHour.setHours(parseInt(userHour));
       edition = getEditionFromDate(dateWithUserHour.toISOString());
     } else {
-      // Sinon utiliser l'heure actuelle du serveur
       edition = getEditionFromDate(userDate);
     }
   } catch {
@@ -134,7 +74,7 @@ export async function POST(req: NextRequest) {
   // 1. Vérifier le cache TTS (MP3)
   const cached = await getTtsCached(cacheKey);
   if (cached?.audio) {
-    console.log('[TTS] Cache hit pour:', cacheKey, '-> texte:', cached.text);
+    console.log('[TTS] Cache hit pour:', cacheKey);
     const mp3 = Buffer.from(cached.audio, 'base64');
     return new NextResponse(mp3, {
       headers: {
@@ -145,25 +85,38 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  // 2. Optimiser le texte via LLM
-  let optimizedText: string;
-  try {
-    const optimized = await optimizeTextForTTS(horoscope, signName, edition, userDate, userHour, apiKey);
-    if (optimized) {
-      optimizedText = optimized;
-    } else {
-      console.log('[TTS] Utilisation du fallback de normalisation simple');
-      const fullText = Object.values(horoscope).filter(Boolean).join(' ');
-      optimizedText = normalizeForTTS(fullText);
-    }
-  } catch (error) {
-    console.error('[TTS] Erreur LLM:', error);
-    const fullText = Object.values(horoscope).filter(Boolean).join(' ');
-    optimizedText = normalizeForTTS(fullText);
-  }
+  // 2. Construire le texte complet à partir de l'horoscope
+  // Le texte est déjà généré par LLM1 (mistral-large) en français optimisé pour TTS
+  const sections = ['ouverture', 'amour', 'travail', 'argent', 'amitie', 'prediction', 'conseil'];
+  const horoscopeText = sections
+    .map(key => horoscope[key as keyof HoroscopeResponse])
+    .filter(Boolean)
+    .join(' ');
+
+  // Ajouter l'intro Maryse avec la date et l'heure
+  const now = new Date(userDate);
+  const formattedDate = now.toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+  
+  const formattedHour = userHour ? userHour.replace(':', 'h') : '';
+  const momentLabel = edition === 'matin' ? 'ce matin'
+    : edition === 'midi' ? 'cet après-midi'
+    : edition === 'soir' ? 'ce soir'
+    : 'cette nuit';
+  
+  const intro = `Bonjour, c'est Maryse. ${momentLabel}, nous sommes le ${formattedDate}${formattedHour ? `, il est ${formattedHour}` : ''} à Karukera.`;
+  
+  const fullText = `${intro} ${horoscopeText}`;
+
+  // Normaliser le texte pour TTS
+  const finalText = normalizeForTTS(fullText);
+
+  console.log('[TTS] Texte final envoyé à Mistral TTS:', finalText);
 
   // 3. Générer l'audio via Mistral TTS
-  console.log('[TTS] Texte final envoyé à Mistral TTS:', optimizedText);
   const ttsRes = await fetch(TTS_URL, {
     method: 'POST',
     headers: {
@@ -171,7 +124,7 @@ export async function POST(req: NextRequest) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      input: optimizedText,
+      input: finalText,
       model: TTS_MODEL,
       response_format: 'mp3',
       voice_id: TTS_VOICE,
@@ -191,8 +144,8 @@ export async function POST(req: NextRequest) {
 
   const mp3 = Buffer.from(ttsData.audio_data, 'base64');
 
-  // 4. Mettre en cache le MP3 et le texte optimisé
-  await setTtsCached(cacheKey, ttsData.audio_data, optimizedText);
+  // 4. Mettre en cache le MP3 et le texte
+  await setTtsCached(cacheKey, ttsData.audio_data, finalText);
 
   // 5. Retourner le MP3
   return new NextResponse(mp3, {
