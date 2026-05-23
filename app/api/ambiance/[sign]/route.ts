@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { signs } from '@/lib/signs-data';
 import { detectEdition, todayGuadeloupe } from '@/lib/edition';
+import { MARYSE_SYSTEM } from '@/lib/private/maryse-prompt';
 import {
   getCulturalContext,
   getAmbianceBienetre,
@@ -170,7 +171,10 @@ Sans markdown dans les valeurs JSON.`;
       temperature: 0.8,
       max_tokens: 900,
       response_format: { type: 'json_object' },
-      messages: [{ role: 'user', content: prompt }],
+      messages: [
+        { role: 'system', content: MARYSE_SYSTEM },
+        { role: 'user', content: prompt },
+      ],
     }),
   });
 
