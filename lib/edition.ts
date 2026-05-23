@@ -123,7 +123,7 @@ export function getDynamicEditionLabels(currentEdition: Edition): Record<Edition
   if (isNight) {
     // La nuit : Matin, Midi, Soir sont des prédictions
     return {
-      nuit:   { label: 'Édition de la nuit', emoji: '🌌', desc: 'Ce qui compte maintenant' },
+      nuit:   { label: 'Nuit', emoji: '🌌', desc: 'Ce qui compte maintenant' },
       matin: { label: 'Matin', emoji: '🔮', desc: 'Ce qui vous attend demain matin' },
       midi:  { label: 'Midi', emoji: '🔮', desc: 'Ce qui vous attend demain à midi' },
       soir:  { label: 'Soir', emoji: '🔮', desc: 'Ce qui vous attend demain soir' },
@@ -133,8 +133,8 @@ export function getDynamicEditionLabels(currentEdition: Edition): Record<Edition
   if (isMorning) {
     // Le matin : Midi et Soir sont des prédictions, Nuit est déjà passée
     return {
-      nuit:   { label: 'Édition de la nuit', emoji: '🌌', desc: 'Cette nuit (pour référence)' },
-      matin: { label: 'Édition du matin', emoji: '🌅', desc: 'Ce qui compte maintenant' },
+      nuit:   { label: 'Nuit', emoji: '🌌', desc: 'Cette nuit (pour référence)' },
+      matin: { label: 'Matin', emoji: '🌅', desc: 'Ce qui compte maintenant' },
       midi:  { label: 'Midi', emoji: '🔮', desc: 'Ce qui vous attend cet après-midi' },
       soir:  { label: 'Soir', emoji: '🌙', desc: 'Comment terminer votre journée' },
     };
@@ -143,9 +143,9 @@ export function getDynamicEditionLabels(currentEdition: Edition): Record<Edition
   if (isAfternoon) {
     // À midi : Soir est une prédiction, Nuit et Matin sont déjà passés
     return {
-      nuit:   { label: 'Édition de la nuit', emoji: '🌌', desc: 'Cette nuit (pour référence)' },
-      matin: { label: 'Édition du matin', emoji: '🌅', desc: 'Ce matin (pour référence)' },
-      midi:  { label: 'Édition du midi', emoji: '☀️', desc: 'Ce qui compte maintenant' },
+      nuit:   { label: 'Nuit', emoji: '🌌', desc: 'Cette nuit (pour référence)' },
+      matin: { label: 'Matin', emoji: '🌅', desc: 'Ce matin (pour référence)' },
+      midi:  { label: 'Midi', emoji: '☀️', desc: 'Ce qui compte maintenant' },
       soir:  { label: 'Soir', emoji: '🌙', desc: 'Comment terminer votre journée' },
     };
   }
@@ -153,8 +153,8 @@ export function getDynamicEditionLabels(currentEdition: Edition): Record<Edition
   // Le soir : Nuit est une prédiction, Matin et Midi sont déjà passés
   return {
     nuit:   { label: 'Nuit', emoji: '🌌', desc: 'Ce qui vous attend cette nuit' },
-    matin: { label: 'Édition du matin', emoji: '🌅', desc: 'Ce matin (pour référence)' },
-    midi:  { label: 'Édition du midi', emoji: '☀️', desc: 'Cet après-midi (pour référence)' },
-    soir:  { label: 'Édition du soir', emoji: '🌙', desc: 'Ce qui compte maintenant' },
+    matin: { label: 'Matin', emoji: '🌅', desc: 'Ce matin (pour référence)' },
+    midi:  { label: 'Midi', emoji: '☀️', desc: 'Cet après-midi (pour référence)' },
+    soir:  { label: 'Soir', emoji: '🌙', desc: 'Ce qui compte maintenant' },
   };
 }
