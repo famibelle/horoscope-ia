@@ -85,6 +85,7 @@ export default function RootLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3159683365493434"
           crossOrigin="anonymous"
         />
+        <meta name="google-adsense-account" content="ca-pub-3159683365493434" />
       </head>
       {/* Thème ancestral activé - Pour revenir au thème cosmique, décommentez la ligne ci-dessous */}
       {/* <body className={`${inter.variable} ${playfair.variable} antialiased bg-cosmic`}> */}
