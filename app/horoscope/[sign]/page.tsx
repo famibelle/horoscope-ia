@@ -287,7 +287,15 @@ export default function HoroscopeSignPage() {
                 className="mb-14"
               >
                 <p className="text-ancestral-gold/45 text-xs uppercase tracking-[0.35em] mb-1">Savoirs de Karukera</p>
-                <h2 className="font-display text-xl font-bold text-ancestral-cream mb-6">🌿 Totems et symboles</h2>
+                <h2 className="font-display text-xl font-bold text-ancestral-cream mb-2">🌿 Totems et symboles</h2>
+                {/* Teaser dynamique selon l'édition */}
+                <p className="text-ancestral-cream/60 text-sm mb-6 italic">
+                  {(!edition && "Les esprits de Karukera vous attendent...") ||
+                   (edition === 'nuit' && "Cette nuit, les esprits de Karukera dansent sous la lune, écoutez leurs murmures dans le vent.") ||
+                   (edition === 'matin' && "Ce matin, le soleil se lève sur les mornes de Guadeloupe, éveillant les forces ancestrales.") ||
+                   (edition === 'midi' && "Ce midi, l'énergie de Karukera est à son apogée, comme le zandoli sous le soleil de midi.") ||
+                   (edition === 'soir' && "Ce soir, les étoiles guident vos pas sur les chemins de la sagesse créole.")}
+                </p>
                 
                 <div
                   className="rounded-2xl overflow-hidden"
