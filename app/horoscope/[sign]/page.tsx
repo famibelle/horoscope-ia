@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Heart, Briefcase, Coins, Users, Sparkles, Eye, Activity } from 'lucide-react';
 import { signs } from '@/lib/signs-data';
-import { detectEditionWithNight, getDynamicEditionLabels } from '@/lib/edition';
+import { detectLocalEditionWithNight, getLocalDynamicEditionLabels } from '@/lib/edition';
 import AudioPlayer from '@/components/AudioPlayer';
 import type { Edition } from '@/lib/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
@@ -113,8 +113,8 @@ export default function HoroscopeSignPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Détecter l'édition basée sur l'heure de Guadeloupe
-    setEdition(detectEditionWithNight());
+    // Détecter l'édition basée sur l'heure LOCALE du navigateur
+    setEdition(detectLocalEditionWithNight());
   }, []);
 
   useEffect(() => {
@@ -194,7 +194,7 @@ export default function HoroscopeSignPage() {
         {/* Edition pills */}
         <div className="flex gap-2 mb-10">
           {(['nuit', 'matin', 'midi', 'soir'] as const).map((ed) => {
-            const dynamicLabels = getDynamicEditionLabels(edition || 'matin');
+            const dynamicLabels = getLocalDynamicEditionLabels(edition || 'matin');
             const { label, emoji: edEmoji } = dynamicLabels[ed];
             const active = edition === ed;
             return (

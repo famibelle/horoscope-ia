@@ -1,13 +1,13 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { getDynamicEditionLabels } from '@/lib/edition';
+import { getLocalDynamicEditionLabels } from '@/lib/edition';
 import { useEdition } from '@/contexts/EditionContext';
 import type { Edition } from '@/lib/private/maryse-prompt';
 
 export default function EditionToggle() {
   const { edition, setEdition, moonEmoji } = useEdition();
-  const dynamicLabels = getDynamicEditionLabels(edition);
+  const dynamicLabels = getLocalDynamicEditionLabels(edition);
 
   return (
     <div className="flex justify-center gap-2 px-4 py-4">

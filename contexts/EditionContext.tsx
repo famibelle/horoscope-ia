@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { detectEditionWithNight, getMoonPhaseEmoji } from '@/lib/edition';
+import { detectLocalEditionWithNight, getMoonPhaseEmoji } from '@/lib/edition';
 import type { Edition } from '@/lib/private/maryse-prompt';
 
 interface EditionContextType {
@@ -17,7 +17,7 @@ export function EditionProvider({ children }: { children: ReactNode }) {
   const [moonEmoji, setMoonEmoji] = useState<string>('🌙');
 
   useEffect(() => {
-    setEdition(detectEditionWithNight());
+    setEdition(detectLocalEditionWithNight());
     setMoonEmoji(getMoonPhaseEmoji());
   }, []);
 

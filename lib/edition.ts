@@ -89,10 +89,22 @@ export function getGuadeloupeTime(): string {
 export type EditionWithNight = Edition | 'nuit';
 
 /**
- * Détecte l'édition avec la nuit (0h-6h)
+ * Détecte l'édition avec la nuit (0h-6h) basée sur l'heure de Guadeloupe
  */
 export function detectEditionWithNight(): EditionWithNight {
   const h = getGuadeloupeHour();
+  if (h >= 0 && h < 6) return 'nuit';
+  if (h < 12) return 'matin';
+  if (h < 18) return 'midi';
+  return 'soir';
+}
+
+/**
+ * Détecte l'édition avec la nuit (0h-6h) basée sur l'HEURE LOCALE du navigateur
+ * C'est cette fonction qui fait foi pour l'affichage des onglets
+ */
+export function detectLocalEditionWithNight(): EditionWithNight {
+  const h = new Date().getHours();
   if (h >= 0 && h < 6) return 'nuit';
   if (h < 12) return 'matin';
   if (h < 18) return 'midi';
@@ -111,7 +123,7 @@ export const EDITION_LABELS: Record<Edition, { label: string; emoji: string; des
 };
 
 /**
- * Retourne les labels dynamiques selon l'heure actuelle.
+ * Retourne les labels dynamiques selon l'heure de Guadeloupe.
  * Option D : Le matin, midi/soir/nuit deviennent des "Prédictions" si futur
  */
 export function getDynamicEditionLabels(currentEdition: Edition): Record<Edition, { label: string; emoji: string; desc: string }> {
@@ -142,6 +154,52 @@ export function getDynamicEditionLabels(currentEdition: Edition): Record<Edition
 
   if (isAfternoon) {
     // À midi : Soir est une prédiction, Nuit et Matin sont déjà passés
+    return {
+      nuit:   { label: 'Nuit', emoji: '🌌', desc: 'Cette nuit (pour référence)' },
+      matin: { label: 'Matin', emoji: '🌅', desc: 'Ce matin (pour référence)' },
+      midi:  { label: 'Midi', emoji: '☀️', desc: 'Ce qui compte maintenant' },
+      soir:  { label: 'Soir', emoji: '🌙', desc: 'Comment terminer votre journée' },
+    };
+  }
+
+  // Le soir : Nuit est une prédiction, Matin et Midi sont déjà passés
+  return {
+    nuit:   { label: 'Nuit', emoji: '🌌', desc: 'Ce qui vous attend cette nuit' },
+    matin: { label: 'Matin', emoji: '🌅', desc: 'Ce matin (pour référence)' },
+    midi:  { label: 'Midi', emoji: '☀️', desc: 'Cet après-midi (pour référence)' },
+    soir:  { label: 'Soir', emoji: '🌙', desc: 'Ce qui compte maintenant' },
+  };
+}
+
+/**
+ * Retourne les labels dynamiques selon l'HEURE LOCALE du navigateur.
+ * C'est cette fonction qui fait foi pour l'affichage des onglets.
+ */
+export function getLocalDynamicEditionLabels(currentEdition: Edition): Record<Edition, { label: string; emoji: string; desc: string }> {
+  const h = new Date().getHours();
+  const isNight = h >= 0 && h < 6;
+  const isMorning = h >= 6 && h < 12;
+  const isAfternoon = h >= 12 && h < 18;
+
+  if (isNight) {
+    return {
+      nuit:   { label: 'Nuit', emoji: '🌌', desc: 'Ce qui compte maintenant' },
+      matin: { label: 'Matin', emoji: '🔮', desc: 'Ce qui vous attend demain matin' },
+      midi:  { label: 'Midi', emoji: '🔮', desc: 'Ce qui vous attend demain à midi' },
+      soir:  { label: 'Soir', emoji: '🔮', desc: 'Ce qui vous attend demain soir' },
+    };
+  }
+
+  if (isMorning) {
+    return {
+      nuit:   { label: 'Nuit', emoji: '🌌', desc: 'Cette nuit (pour référence)' },
+      matin: { label: 'Matin', emoji: '🌅', desc: 'Ce qui compte maintenant' },
+      midi:  { label: 'Midi', emoji: '🔮', desc: 'Ce qui vous attend cet après-midi' },
+      soir:  { label: 'Soir', emoji: '🌙', desc: 'Comment terminer votre journée' },
+    };
+  }
+
+  if (isAfternoon) {
     return {
       nuit:   { label: 'Nuit', emoji: '🌌', desc: 'Cette nuit (pour référence)' },
       matin: { label: 'Matin', emoji: '🌅', desc: 'Ce matin (pour référence)' },
