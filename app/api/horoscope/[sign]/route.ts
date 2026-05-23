@@ -217,7 +217,7 @@ export async function GET(
   }
 
   const editionParam = req.nextUrl.searchParams.get('edition') as Edition | null;
-  const userDate = req.nextUrl.searchParams.get('userDate');
+  const userDate = req.nextUrl.searchParams.get('date') || req.nextUrl.searchParams.get('userDate');
   const userHour = req.nextUrl.searchParams.get('userHour');
   const edition: Edition =
     editionParam === 'matin' || editionParam === 'midi' || editionParam === 'soir' || editionParam === 'nuit'

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { signs } from '@/lib/signs-data';
 import { detectLocalEditionWithNight } from '@/lib/edition';
+import { todayISO } from '@/lib/horoscope-data';
 
 interface SignPreview {
   signId: string;
@@ -45,7 +46,7 @@ export default function HoroscopesPreview() {
             signs.map(async (sign) => {
               if (cancelled) return null;
               try {
-                const res = await fetch(`/api/horoscope/${sign.id}?edition=${edition}`);
+                const res = await fetch(`/api/horoscope/${sign.id}?date=${todayISO()}&edition=${edition}`);
                 if (!res.ok) return null;
                 const horoscope = await res.json();
                 // Utiliser teaser si disponible, sinon ouverture (même si source est 'raw')
