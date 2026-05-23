@@ -415,6 +415,7 @@ HOROSCOPE DU JOUR (à reformuler à l'oral) :
 - Argent: ${horoscope.argent}
 - Amitié: ${horoscope.amitie}
 - Prédiction: ${horoscope.prediction}
+- Conseil: ${horoscope.conseil}
 
 INSTRUCTIONS STRICTES:
 1. Commence EXACTEMENT par: "${greeting}, c'est Maryse. ${moment}, nous sommes le ${formattedDate}."
