@@ -199,15 +199,13 @@ async function generateWithMistral(
     nomCreole: floreEntry.nomCreole,
     nomFrancais: floreEntry.nomFrancais,
     usage: floreEntry.usage,
-    dimensionCulturelle: floreEntry.dimensionCulturelle,
-    savoir: floreEntry.savoir
+    dimensionCulturelle: floreEntry.dimensionCulturelle
   } : 'Aucune entrée trouvée');
   
   logVerbose('📚 LIEUX-DATA (source brute)', lieuEntry ? {
     nom: lieuEntry.nom,
     localisation: lieuEntry.localisation,
-    dimensionCulturelle: lieuEntry.dimensionCulturelle,
-    symbolique: lieuEntry.symbolique
+    dimensionCulturelle: lieuEntry.dimensionCulturelle
   } : 'Aucune entrée trouvée');
   
   logVerbose('📚 KREYOL-DATA (filtré par élément/spirituel)', {

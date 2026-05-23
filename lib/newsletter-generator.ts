@@ -227,6 +227,7 @@ async function generateNewsletter(
           argent: `Côté finances, ${['évitez les dépenses inutiles', 'une opportunité pourrait se présenter', 'soyez prudent', 'investissez avec sagesse'][Math.floor(Math.random() * 4)]}.`,
           amitie: `Vos amis ${['vous soutiendront', 'auront besoin de vous', 'vous apporteront de la joie', 'vous donneront de bons conseils'][Math.floor(Math.random() * 4)]} aujourd'hui.`,
           prediction: `Prédiction : ${['un changement positif', 'une bonne nouvelle', 'une rencontre importante', 'une prise de conscience'][Math.floor(Math.random() * 4)]} vous attend.`,
+          conseil: `Conseil : ${['écoutez votre intuition', 'suivez le rythme de Karukera', 'utilisez les plantes locales', 'honorez vos ancêtres'][Math.floor(Math.random() * 4)]}.`,
           sante: `Votre santé est bonne, ${['prenez soin de vous', 'écoutez votre corps'][Math.floor(Math.random() * 2)]}.`,
           signFr: sign.name,
           weather: 'Ensoleillé',

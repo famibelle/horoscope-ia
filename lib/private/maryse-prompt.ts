@@ -410,13 +410,13 @@ ${sign.name} : ${rawText}
 ⭐ DONNÉES ENRICHIES CULTURELLES (PRIORITÉ ABSOLUE) ⭐
 
 📚 FAUNE-DATA (symboles animaux pertinents) :
-${fauneEnrichies.map(f => `  - ${f.nomCreole} (${f.nomFrancais}): ${f.dimensionCulturelle || f.savoir || ''}`).join('\n')}
+${fauneEnrichies.map(f => `  - ${f.nomCreole} (${f.nomFrancais}): ${f.dimensionCulturelle || ''}`).join('\n')}
 
 🌺 FLORE-DATA (plantes et arbres sacrés) :
-${floreEnrichies.map(f => `  - ${f.nomCreole} (${f.nomFrancais}): ${f.usage ? `USAGE=${f.usage}, ` : ''}DIMENSION=${f.dimensionCulturelle || f.savoir || ''}`).join('\n')}
+${floreEnrichies.map(f => `  - ${f.nomCreole} (${f.nomFrancais}): ${f.usage ? `USAGE=${f.usage}, ` : ''}DIMENSION=${f.dimensionCulturelle || ''}`).join('\n')}
 
 🏞️  LIEUX-DATA (sites sacrés et symboliques) :
-${lieuxEnrichis.map(l => `  - ${l.nom} (${l.localisation}): ${l.dimensionCulturelle || l.symbolique || ''}`).join('\n')}
+${lieuxEnrichis.map(l => `  - ${l.nom} (${l.localisation}): ${l.dimensionCulturelle || ''}`).join('\n')}
 
 🎭 KREYOL-DATA (symboles de résistance) :
 ${kreyolEnrichis.map(k => `  - ${k.nomCreole}: ${k.dimensionCulturelle || k.typeResistance || ''}`).join('\n')}

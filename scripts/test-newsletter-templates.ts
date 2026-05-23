@@ -16,6 +16,7 @@ const testHoroscope = {
   argent: 'Évitez les dépenses impulsives, attendez demain pour les gros achats.',
   amitie: 'Un ami proche pourrait vous donner un conseil précieux.',
   prediction: 'Un message inattendu pourrait changer votre perspective.',
+  conseil: 'Conseil : écoutez votre intuition et suivez le rythme de Karukera.',
   sante: 'Votre énergie est bonne, prenez soin de vous.',
   signFr: testSign.name,
   weather: 'Ensoleillé',
