@@ -301,10 +301,12 @@ export default function AudioPlayer({
                   key="calling"
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{
-                    scale: [1, 1.05, 1],
-                    opacity: [0.7, 1, 0.7]
+                    rotate: [-5, 5, -5],
+                    x: [-2, 2, -2],
+                    scale: [1, 1.02, 1],
+                    opacity: [0.8, 1, 0.8]
                   }}
-                  transition={{ duration: 0.8, repeat: Infinity }}
+                  transition={{ duration: 0.5, repeat: Infinity, ease: "easeInOut" }}
                   style={{ display: 'inline-flex' }}
                 >
                   <PhoneCall size={22} className="text-white" />
