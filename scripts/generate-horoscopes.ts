@@ -95,7 +95,7 @@ async function generateWithMistral(
       response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: MARYSE_SYSTEM },
-        { role: 'user', content: buildHoroscopeUserPrompt(sign, rawText, weather, edition, todayGuadeloupe(), undefined) },
+        { role: 'user', content: buildHoroscopeUserPrompt(sign, rawText, weather, edition, undefined, undefined) },
       ],
     }),
   });

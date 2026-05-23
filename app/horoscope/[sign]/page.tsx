@@ -107,28 +107,15 @@ export default function HoroscopeSignPage() {
   const signId = params.sign;
   const sign = signs.find((s) => s.id === signId);
 
-  // Initialiser userDate et userHour directement pour éviter les états vides
-  const now = new Date();
-  const initialDate = now.toISOString().split('T')[0];
-  const initialHour = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-  
-  // Détecter l'édition initiale
-  let initialEdition: Edition = 'matin';
-  const h = now.getHours();
-  if (h >= 0 && h < 6) initialEdition = 'nuit';
-  else if (h >= 6 && h < 12) initialEdition = 'matin';
-  else if (h >= 12 && h < 18) initialEdition = 'midi';
-  else initialEdition = 'soir';
-
-  const [edition, setEdition] = useState<Edition | null>(initialEdition);
+  const [edition, setEdition] = useState<Edition | null>(null);
   const [horoscope, setHoroscope] = useState<HoroscopeResponse | null>(null);
   const [ambiance, setAmbiance] = useState<AmbianceData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [userDate, setUserDate] = useState<string>(initialDate);
-  const [userHour, setUserHour] = useState<string>(initialHour);
+  const [userDate, setUserDate] = useState<string>('');
+  const [userHour, setUserHour] = useState<string>('');
 
   useEffect(() => {
-    // Mettre à jour l'édition et l'heure/date basée sur l'heure du navigateur
+    // Détecter l'édition et l'heure/date basée sur l'heure du navigateur
     const now = new Date();
     const h = now.getHours();
     let detectedEdition: Edition = 'matin';
