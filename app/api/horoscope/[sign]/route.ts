@@ -188,30 +188,17 @@ async function rewriteWithMistral(
 
 /* ── Local file helpers ──────────────────────────────────────────────────── */
 
-async function getFromLocalFile(date: string, signId: string, edition: Edition): Promise<HoroscopeResponse | null> {
+async function getFromLocalFile(date: string, signId: string, edition: Edition, req: NextRequest): Promise<HoroscopeResponse | null> {
   try {
-    // Essayer fs d'abord (pour local)
-    const fs = await import('fs/promises');
-    const path = await import('path');
-    
-    // Chemin absolu vers le fichier dans public/
-    const filePath = path.join(process.cwd(), 'public', 'data', 'horoscopes', `${date}.json`);
-    const content = await fs.readFile(filePath, 'utf-8');
-    const allHoroscopes = JSON.parse(content);
+    // Utiliser URL absolue via req.url pour fonctionner en production (Netlify)
+    const url = new URL(`/data/horoscopes/${date}.json`, req.url);
+    const response = await fetch(url.toString(), { next: { revalidate: 28800 } });
+    if (!response.ok) return null;
+    const allHoroscopes = await response.json();
     const key = `${date}|${signId}|${edition}`;
     return allHoroscopes[key] || null;
-  } catch (fsError) {
-    // Si fs échoue (ex: Netlify Edge Functions), essayer via fetch
-    try {
-      // Chemin relatif - fonctionne pour les fichiers dans public/
-      const response = await fetch(`/data/horoscopes/${date}.json`);
-      if (!response.ok) return null;
-      const allHoroscopes = await response.json();
-      const key = `${date}|${signId}|${edition}`;
-      return allHoroscopes[key] || null;
-    } catch {
-      return null;
-    }
+  } catch {
+    return null;
   }
 }
 
@@ -241,7 +228,7 @@ export async function GET(
   const blobKey = `${date}|${signId}|${edition}`;
 
   // 1. Check local file first (fastest)
-  const localData = await getFromLocalFile(date, signId, edition);
+  const localData = await getFromLocalFile(date, signId, edition, req);
   if (localData) {
     return NextResponse.json(localData, {
       headers: { 'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' },
