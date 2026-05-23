@@ -219,8 +219,14 @@ export default async function handler() {
       }
 
       const structured = await callMistral(sign.id, rawText, weather, edition, apiKey);
-      if (!structured?.ouverture) {
-        console.warn(`  ✗ ${sign.id}/${edition} — Mistral a échoué`);
+      
+      // Vérifier que tous les 7 champs obligatoires sont présents et non vides
+      const requiredFields = ['ouverture', 'amour', 'travail', 'argent', 'amitie', 'prediction', 'conseil'];
+      const hasAllFields = structured && requiredFields.every(field => structured[field] && structured[field].trim() !== '');
+      
+      if (!hasAllFields) {
+        const missingFields = requiredFields.filter(f => !structured?.[f] || structured[f].trim() === '');
+        console.warn(`  ✗ ${sign.id}/${edition} — Mistral a échoué: champs manquants: ${missingFields.join(', ')}`);
         continue;
       }
 

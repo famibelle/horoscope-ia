@@ -226,21 +226,29 @@ export type Edition = keyof typeof EDITION_CONFIGS;
 /* ── System Prompt - Combine AME + IDENTITE + Instructions ──────────── */
 /*
  * Structure : MARYSE_AME + MARYSE_IDENTITE + Instructions de horoscope_instructions.md
- * Format de sortie : Objet JSON avec 6 clés (ouverture, amour, travail, argent, amitie, prediction)
+ * Format de sortie : Objet JSON avec 7 clés (ouverture, amour, travail, argent, amitie, prediction, conseil)
  */
 
 export const MARYSE_SYSTEM = `${MARYSE_AME}
 
 ${MARYSE_IDENTITE}
 
-Tu rédiges un horoscope quotidien ancré dans la culture guadeloupéenne. Réponds UNIQUEMENT avec un objet JSON valide contenant exactement 7 clés : "ouverture", "amour", "travail", "argent", "amitie", "prediction", "conseil". Chaque valeur est UNE seule phrase dans ta voix. Sans markdown, sans commentaire, juste le JSON brut.`;
+Tu rédiges un horoscope quotidien ancré dans la culture guadeloupéenne. Réponds UNIQUEMENT avec un objet JSON valide contenant exactement 7 clés : "ouverture", "amour", "travail", "argent", "amitie", "prediction", "conseil".
+
+Contraintes de structure :
+- "ouverture", "prediction", "conseil" : UNE seule phrase dans ta voix
+- "amour", "travail", "argent", "amitie" (Lyannaj) : EXACTEMENT 2 OU 4 phrases dans ta voix (pas 1, pas 3, pas 5)
+
+Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Utilise uniquement des virgules, des points, des tirets simples (-) ou des espaces.
+
+Sans markdown, sans commentaire, juste le JSON brut.`;
 
 export const MARYSE_SIGNE_SYSTEM = `${MARYSE_AME}
 
 Tu rédiges UNIQUEMENT le signe du jour — une plante, un arbre ou un animal de la Caraïbe. Commence OBLIGATOIREMENT par une variation de "Si tu croises" suivie du nom créole. PAS de description physique. UNE SEULE phrase courte — s'arrêter après le premier point. Pas de titre, pas de formule introductive.`;
 
 /* ── Prompts utilisateur - Voir horoscope_instructions.md ━ */
-/* Structure : 6 phrases dans l'ordre (ouverture, amour, travail, argent, amitie, prediction) */
+/* Structure : 1 phrase (ouverture/prediction/conseil) ou 2-4 phrases (amour/travail/argent/amitie/sante) */
 
 export function buildHoroscopeUserPrompt(
   sign: Sign,
@@ -359,16 +367,20 @@ ${weatherBlock}
 
 ÉDITION : ${cfg.instruction}
 
-STRUCTURE — 6 phrases dans ta voix, dans cet ordre strict, ancrées dans le quotidien créole guadeloupéen :
-1. "ouverture" : image caribéenne qui pose le ton du jour (totem, plante ou lieu du signe en priorité). Utilise les savoirs traditionnels fournis. Jamais de titre ni description physique.
-2. "amour" : ce que le signe dit sur les relations et le cœur, ancré dans le quotidien créole. Intègre les symboles culturels.
-3. "travail" : ce que le signe dit sur l'action, l'effort, la réussite professionnelle. Inspire-toi des caractéristiques de la faune/flore.
-4. "argent" : ce que le signe dit sur les finances, les dépenses, les opportunités matérielles. Fais référence aux éléments naturels.
-5. "amitie" : ce que le signe dit sur le lien social, la solidarité, le collectif. Utilise le contexte du lieu sacré.
-6. "prediction" : tendance pour les jours à venir formulée comme un présage naturel créole ("le vent tourne", "quelque chose se prépare"…). Basé sur les conditions météo du signe. Jamais "demain" en début de phrase.
-7. "conseil" : un conseil pratique d'utilisation de la plante (${sign.plante}) basé sur son usage traditionnel en Guadeloupe (voir USAGE fourni).
+STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien créole guadeloupéen :
+1. "ouverture" : UNE phrase - image caribéenne qui pose le ton du jour (totem, plante ou lieu du signe en priorité). Utilise les savoirs traditionnels fournis. Jamais de titre ni description physique.
+2. "amour" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les relations et le cœur, ancré dans le quotidien créole. Intègre les symboles culturels.
+3. "travail" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur l'action, l'effort, la réussite professionnelle. Inspire-toi des caractéristiques de la faune/flore.
+4. "argent" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les finances, les dépenses, les opportunités matérielles. Fais référence aux éléments naturels.
+5. "amitie" (Lyannaj) : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur le lien social, la solidarité, le collectif. Utilise le contexte du lieu sacré.
+6. "prediction" : UNE phrase - tendance pour les jours à venir formulée comme un présage naturel créole ("le vent tourne", "quelque chose se prépare"…). Basé sur les conditions météo du signe. Jamais "demain" en début de phrase.
+7. "conseil" : UNE phrase - un conseil pratique d'utilisation de la plante (${sign.plante}) basé sur son usage traditionnel en Guadeloupe (voir USAGE fourni).
 
-Contraintes absolues : 7 phrases exactement, ton oral direct, parle à l'auditeur (tu/vous), vise 20–30 mots par phrase, intègre subtilement les références culturelles fournies.`;
+Note : Le champ "sante" (optionnel) peut être ajouté séparément avec EXACTEMENT 2 OU 4 phrases.
+
+Contraintes absolues : ton oral direct, parle à l'auditeur (tu/vous), vise 20–30 mots par phrase.
+Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Utilise uniquement des virgules, des points, des tirets simples (-) ou des espaces.
+Intègre subtilement les références culturelles fournies.`;
 }
 
 export function buildSigneDuJourUserPrompt(

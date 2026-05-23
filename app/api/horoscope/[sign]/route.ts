@@ -259,6 +259,8 @@ export async function GET(
     }
 
     let structured: Record<string, string> | null = null;
+    const requiredFields = ['ouverture', 'amour', 'travail', 'argent', 'amitie', 'prediction', 'conseil'];
+    
     try {
       structured = await retryWithBackoff(
         () => rewriteWithMistral(
@@ -274,11 +276,24 @@ export async function GET(
       );
     } catch (retryErr) {
       console.error('❌ Toutes les tentatives Mistral ont échoué:', retryErr);
-      structured = null; // Forcer le fallback
     }
 
-    if (structured?.ouverture && structured?.amour && structured?.travail && structured?.conseil) {
-      const teaser = await generateTeaser(sign.name, structured as Record<string, string>);
+    // Vérifier que structured est valide et contient tous les champs obligatoires
+    if (!structured) {
+      console.error('❌ JSON incomplet - structured est null');
+      structured = null;
+    } else {
+      // TypeScript narrowing: structured est non-null ici
+      const hasAllFields = requiredFields.every(field => structured![field] && structured![field].trim() !== '');
+      if (!hasAllFields) {
+        const missingFields = requiredFields.filter(f => !structured![f] || structured![f].trim() === '');
+        console.error('❌ JSON incomplet - champs manquants:', missingFields.join(', '));
+        structured = null;
+      }
+    }
+    
+    if (structured) {
+      const teaser = await generateTeaser(sign.name, structured);
       const response: HoroscopeResponse = {
         ouverture:  structured.ouverture,
         amour:      structured.amour,

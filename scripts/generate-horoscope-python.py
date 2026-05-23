@@ -1,18 +1,32 @@
 #!/usr/bin/env python3
 """
-Script Python pour générer un horoscope pour un signe donné.
-Lit les données depuis public/data/horoscopes/YYYY-MM-DD.json
+Script Python pour générer/affiche un horoscope pour un signe donné.
+
+MODES:
+- Lire depuis fichier JSON existant (par défaut)
+- Générer via l'API Next.js locale (--generate)
 
 Usage:
+    # Lire depuis fichier existant
     python scripts/generate-horoscope-python.py belier
     python scripts/generate-horoscope-python.py taureau --edition soir
     python scripts/generate-horoscope-python.py cancer --date 2026-05-23
+    
+    # Générer via API Next.js (nécessite serveur local sur http://localhost:3000)
+    python scripts/generate-horoscope-python.py belier --generate
+    python scripts/generate-horoscope-python.py taureau --edition soir --generate
+    
+    # Générer avec sauvegarde dans fichier
+    python scripts/generate-horoscope-python.py belier --generate --save
+    
+    # Lister les signes
+    python scripts/generate-horoscope-python.py --list-signs
 """
 
 import argparse
 import json
-import os
 import sys
+import requests
 from datetime import datetime
 from pathlib import Path
 
@@ -27,6 +41,9 @@ VALID_SIGNS = [
 
 # Éditions valides
 VALID_EDITIONS = ["matin", "midi", "soir", "nuit"]
+
+# URL de l'API Next.js locale
+API_BASE_URL = "http://localhost:3000"
 
 
 def get_today_date():
@@ -77,6 +94,40 @@ def get_current_edition():
         return "nuit"
 
 
+def fetch_from_api(sign, edition=None, date=None, base_url=None):
+    """
+    Récupère un horoscope depuis l'API Next.js locale.
+    
+    Args:
+        sign: Signe du zodiaque
+        edition: Édition (matin, midi, soir, nuit)
+        date: Date au format YYYY-MM-DD
+        base_url: URL base de l'API (par défaut: http://localhost:3000)
+    
+    Returns:
+        dict: Les données de l'horoscope
+    """
+    url = f"{base_url or API_BASE_URL}/api/horoscope/{sign}"
+    
+    params = {}
+    if edition:
+        params["edition"] = edition
+    if date:
+        params["userDate"] = date
+    
+    try:
+        response = requests.get(url, params=params, timeout=30)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.ConnectionError:
+        print(f"❌ Impossible de se connecter à l'API sur {url}")
+        print("   Vérifiez que le serveur Next.js tourne: npm run dev")
+        sys.exit(1)
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Erreur API: {e}")
+        sys.exit(1)
+
+
 def format_horoscope(horoscope_data, sign, edition=None):
     """Formate l'horoscope pour affichage."""
     if edition is None:
@@ -89,9 +140,8 @@ def format_horoscope(horoscope_data, sign, edition=None):
     key = f"{today}|{sign}|{edition}"
     data = horoscope_data.get(key)
     
-    # Si non trouvé, essayer sans la date (format ancien)
+    # Si non trouvé, essayer toutes les éditions pour ce signe aujourd'hui
     if not data:
-        # Essayer toutes les éditions pour ce signe aujourd'hui
         for ed in VALID_EDITIONS:
             key = f"{today}|{sign}|{ed}"
             data = horoscope_data.get(key)
@@ -145,9 +195,11 @@ def format_horoscope(horoscope_data, sign, edition=None):
         cd = data["culturalData"]
         print(f"  🌿 Données culturelles:")
         if cd.get("faune"):
-            print(f"    - Totem: {cd['faune'].get('nom_creole', 'N/A')}")
+            faune_name = cd["faune"].get("nom_creole", cd["faune"].get("nom_commun", "N/A"))
+            print(f"    - Totem: {faune_name}")
         if cd.get("flore"):
-            print(f"    - Plante: {cd['flore'].get('nom_creole', 'N/A')}")
+            flore_name = cd["flore"].get("nom_creole", cd["flore"].get("nom_commun", "N/A"))
+            print(f"    - Plante: {flore_name}")
         if cd.get("lieu"):
             print(f"    - Lieu: {cd.get('lieu', 'N/A')}")
         print()
@@ -155,9 +207,32 @@ def format_horoscope(horoscope_data, sign, edition=None):
     print(f"{'='*60}\n")
 
 
+def save_horoscope(horoscope_data, sign, edition, date):
+    """Sauvegarde l'horoscope dans un fichier JSON."""
+    HOROSCOPE_DIR.mkdir(parents=True, exist_ok=True)
+    file_path = HOROSCOPE_DIR / f"{date}.json"
+    
+    # Charger les données existantes ou créer un nouveau dict
+    if file_path.exists():
+        with open(file_path, 'r', encoding='utf-8') as f:
+            all_data = json.load(f)
+    else:
+        all_data = {}
+    
+    # Ajouter le nouvel horoscope
+    key = f"{date}|{sign}|{edition}"
+    all_data[key] = horoscope_data
+    
+    # Sauvegarder
+    with open(file_path, 'w', encoding='utf-8') as f:
+        json.dump(all_data, f, indent=2, ensure_ascii=False)
+    
+    print(f"✅ Horoscope sauvegardé dans {file_path}")
+
+
 def main():
     parser = argparse.ArgumentParser(
-        description="Génère un horoscope pour un signe donné"
+        description="Génère ou affiche un horoscope pour un signe donné"
     )
     parser.add_argument(
         "sign",
@@ -186,6 +261,22 @@ def main():
         action="store_true",
         help="Lister tous les signes valides"
     )
+    parser.add_argument(
+        "--generate", "-g",
+        action="store_true",
+        help="Générer via l'API Next.js locale (nécessite npm run dev)"
+    )
+    parser.add_argument(
+        "--save", "-s",
+        action="store_true",
+        help="Sauvegarder l'horoscope généré dans un fichier"
+    )
+    parser.add_argument(
+        "--api-url",
+        type=str,
+        default=API_BASE_URL,
+        help=f"URL de l'API Next.js. Par défaut: {API_BASE_URL}"
+    )
     
     args = parser.parse_args()
     
@@ -208,8 +299,39 @@ def main():
         print(f"Signes valides: {', '.join(VALID_SIGNS)}")
         sys.exit(1)
     
-    # Charger les données
+    # Déterminer l'édition
+    edition = args.edition if args.edition else get_current_edition()
+    
+    # Date
     date_str = args.date if args.date else get_today_date()
+    
+    # ============================================================================
+    # MODE GÉNÉRATION : Appel à l'API Next.js
+    # ============================================================================
+    if args.generate:
+        print(f"\n🔮 Génération de l'horoscope pour {sign} ({edition}) via API...")
+        print("-" * 60)
+        
+        horoscope_data = fetch_from_api(
+            sign=sign,
+            edition=edition,
+            date=date_str,
+            base_url=args.api_url
+        )
+        
+        # Afficher le résultat
+        format_horoscope({date_str: {f"{date_str}|{sign}|{edition}": horoscope_data}}, sign, edition)
+        
+        # Sauvegarder si demandé
+        if args.save:
+            save_horoscope(horoscope_data, sign, edition, date_str)
+        
+        sys.exit(0)
+    
+    # ============================================================================
+    # MODE LECTURE : Lire depuis fichier existant
+    # ============================================================================
+    # Charger les données
     horoscope_data = load_horoscope_data(date_str)
     
     if args.all_editions:

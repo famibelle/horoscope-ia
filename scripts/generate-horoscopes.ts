@@ -267,8 +267,14 @@ export async function generateAllHoroscopes() {
         // Générer avec Mistral
         console.log(`   🤖 Appel Mistral (large) pour ${sign.id}...`);
         const structured = await generateWithMistral(sign.id, rawText, weather, edition);
-        if (!structured?.ouverture) {
-          console.log(`❌ [${generated + skipped + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Mistral large a échoué\n`);
+        
+        // Vérifier que tous les 7 champs obligatoires sont présents et non vides
+        const requiredFields = ['ouverture', 'amour', 'travail', 'argent', 'amitie', 'prediction', 'conseil'];
+        const hasAllFields = structured && requiredFields.every(field => structured[field] && structured[field].trim() !== '');
+        
+        if (!hasAllFields) {
+          const missingFields = requiredFields.filter(f => !structured?.[f] || structured[f].trim() === '');
+          console.log(`❌ [${generated + skipped + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Champs manquants: ${missingFields.join(', ')}\n`);
           continue;
         }
         console.log(`   ✓ Mistral large: OK`);
@@ -358,8 +364,14 @@ export async function generateAllHoroscopes() {
         console.log(`   ✓ Horoscope brut reçu`);
 
         const structured = await generateWithMistral(sign.id, rawText, weather, edition);
-        if (!structured?.ouverture) {
-          console.log(`❌ [${generated + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Mistral large\n`);
+        
+        // Vérifier que tous les 7 champs obligatoires sont présents et non vides
+        const requiredFields = ['ouverture', 'amour', 'travail', 'argent', 'amitie', 'prediction', 'conseil'];
+        const hasAllFields = structured && requiredFields.every(field => structured[field] && structured[field].trim() !== '');
+        
+        if (!hasAllFields) {
+          const missingFields = requiredFields.filter(f => !structured?.[f] || structured[f].trim() === '');
+          console.log(`❌ [${generated + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Mistral large - Champs manquants: ${missingFields.join(', ')}\n`);
           continue;
         }
         console.log(`   ✓ Mistral large: OK`);
