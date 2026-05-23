@@ -11,7 +11,7 @@ export default function EditionToggle() {
 
   return (
     <div className="flex justify-center gap-2 px-4 py-4">
-      {(['matin', 'midi', 'soir'] as Edition[]).map((ed) => {
+      {(['nuit', 'matin', 'midi', 'soir'] as const).map((ed) => {
         const { label, emoji } = dynamicLabels[ed];
         const active = edition === ed;
         // Use dynamic moon emoji for "soir"

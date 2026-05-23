@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { detectEdition, getMoonPhaseEmoji } from '@/lib/edition';
+import { detectEditionWithNight, getMoonPhaseEmoji } from '@/lib/edition';
 import type { Edition } from '@/lib/private/maryse-prompt';
 
 interface EditionContextType {
@@ -17,14 +17,16 @@ export function EditionProvider({ children }: { children: ReactNode }) {
   const [moonEmoji, setMoonEmoji] = useState<string>('🌙');
 
   useEffect(() => {
-    setEdition(detectEdition());
+    setEdition(detectEditionWithNight());
     setMoonEmoji(getMoonPhaseEmoji());
   }, []);
 
   // Apply theme class to body
   useEffect(() => {
-    document.body.classList.remove('matin-mode', 'midi-mode', 'soir-mode');
-    if (edition === 'matin') {
+    document.body.classList.remove('nuit-mode', 'matin-mode', 'midi-mode', 'soir-mode');
+    if (edition === 'nuit') {
+      document.body.classList.add('nuit-mode');
+    } else if (edition === 'matin') {
       document.body.classList.add('matin-mode');
     } else if (edition === 'midi') {
       document.body.classList.add('midi-mode');
