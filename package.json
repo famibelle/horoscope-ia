@@ -26,6 +26,9 @@
   "dependencies": {
     "@netlify/blobs": "^10.7.4",
     "@netlify/functions": "^5.2.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "autoprefixer": "^10.0.1",
     "dotenv": "^17.4.2",
     "framer-motion": "^11.0.0",
@@ -39,10 +42,7 @@
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.15.11",
-    "@types/node": "^20",
     "@types/nodemailer": "^6.4.23",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
     "eslint": "^8",
     "eslint-config-next": "^15.0.0",
     "nodemailer": "^6.10.1"
