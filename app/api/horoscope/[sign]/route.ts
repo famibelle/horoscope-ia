@@ -10,11 +10,10 @@ import {
   getSignLieu,
   getHistoricalResonance,
 } from '@/lib/cultural-context';
-import { detectEdition, detectEditionWithNight, todayGuadeloupe } from '@/lib/edition';
+import { detectEditionWithNight, todayGuadeloupe, getGuadeloupeHour } from '@/lib/edition';
 import type { Edition } from '@/lib/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
-// Import vaudou context
-import { getVaudouContextForSign, SIGN_TO_LOA, SIGN_TO_VAUDOU_CONTEXT } from '@/lib/private/vaudou-mappings';
+import { loadHoroscopeData, saveSingleHoroscope } from '@/lib/private/horoscope-file-cache';
 
 const HOROSCOPE_API = 'https://freehoroscopeapi.com/api/v1/get-horoscope/daily';
 const MISTRAL_URL   = 'https://api.mistral.ai/v1/chat/completions';
@@ -25,6 +24,12 @@ const SIGN_EN: Record<string, string> = {
   balance: 'libra', scorpion: 'scorpio', sagittaire: 'sagittarius',
   capricorne: 'capricorn', verseau: 'aquarius', poissons: 'pisces',
 };
+
+/* ── Configuration ──────────────────────────────────────────────────────── */
+
+// Activation de la génération à la volée (pour production)
+const ENABLE_ON_DEMAND_GENERATION = process.env.ENABLE_ON_DEMAND_GENERATION === 'true';
+const ENABLE_BACKGROUND_GENERATION = process.env.ENABLE_BACKGROUND_GENERATION === 'true';
 
 /* ── Retry helper with exponential backoff ──────────────────────────────────── */
 
@@ -85,8 +90,10 @@ async function fetchRawHoroscope(signEn: string): Promise<string> {
   return data.horoscope || data?.data?.horoscope || data.description || '';
 }
 
-async function fetchWeather(): Promise<string> {
+async function fetchWeather(date?: string): Promise<string> {
   try {
+    // Si une date est fournie, utiliser cette date pour la météo
+    // Sinon, utiliser la date du jour (Guadeloupe)
     const res = await fetch(
       'https://api.open-meteo.com/v1/forecast' +
         '?latitude=16.17&longitude=-61.58' +
@@ -146,6 +153,88 @@ async function generateTeaser(
   return data.choices?.[0]?.message?.content?.trim() ?? '';
 }
 
+/**
+ * Génère un horoscope complet via Mistral
+ * Utilisé pour la génération à la volée
+ */
+async function generateHoroscopeWithMistral(
+  signId: string,
+  date: string,
+  edition: Edition,
+): Promise<Record<string, string> | null> {
+  const apiKey = process.env.MISTRAL_API_KEY;
+  if (!apiKey) {
+    console.error('❌ MISTRAL_API_KEY manquant');
+    return null;
+  }
+
+  const sign = signs.find((s) => s.id === signId);
+  if (!sign) {
+    console.error(`❌ Signe non trouvé: ${signId}`);
+    return null;
+  }
+
+  const signEn = SIGN_EN[signId];
+  if (!signEn) {
+    console.error(`❌ SIGN_EN non trouvé pour: ${signId}`);
+    return null;
+  }
+
+  // Récupérer les données
+  const weather = await fetchWeather(date);
+  const historicalResonance = getHistoricalResonance(date);
+  
+  // Récupérer l'horoscope brut
+  let rawText: string;
+  try {
+    rawText = await fetchRawHoroscope(signEn);
+    if (!rawText) {
+      console.error(`❌ Pas de texte brut pour ${signId}`);
+      return null;
+    }
+  } catch (err) {
+    console.error(`❌ Échec fetchRawHoroscope:`, err);
+    return null;
+  }
+
+  // Appel à Mistral pour la réécriture
+  let structured: Record<string, string> | null = null;
+  const requiredFields = ['ouverture', 'amour', 'travail', 'argent', 'amitie', 'prediction', 'conseil'];
+  
+  try {
+    structured = await retryWithBackoff(
+      () => rewriteWithMistral(
+        signId, rawText, weather, edition,
+        undefined, undefined, undefined,
+        undefined, undefined, undefined,
+        historicalResonance ?? undefined,
+        date, // Passer la date pour le contexte
+        undefined,
+      ),
+      4,
+      4000,
+    );
+  } catch (retryErr) {
+    console.error('❌ Toutes les tentatives Mistral ont échoué:', retryErr);
+    return null;
+  }
+
+  // Validation
+  if (!structured) {
+    console.error('❌ JSON incomplet - structured est null');
+    return null;
+  }
+
+  const hasAllFields = requiredFields.every(field => structured[field] && structured[field].trim() !== '');
+  if (!hasAllFields) {
+    const missingFields = requiredFields.filter(f => !structured[f] || structured[f].trim() === '');
+    console.error('❌ JSON incomplet - champs manquants:', missingFields.join(', '));
+    return null;
+  }
+
+  return structured;
+}
+
 async function rewriteWithMistral(
   signId: string,
   rawText: string,
@@ -188,20 +277,110 @@ async function rewriteWithMistral(
   try { return JSON.parse(content); } catch { return null; }
 }
 
-/* ── Local file helpers ──────────────────────────────────────────────────── */
+/**
+ * Construit une réponse complète d'horoscope
+ */
+function buildResponse(
+  sign: any,
+  structured: Record<string, string>,
+  weather: string,
+  edition: Edition,
+  teaser: string,
+): HoroscopeResponse {
+  return {
+    ouverture:  structured.ouverture,
+    amour:      structured.amour,
+    travail:    structured.travail,
+    argent:     structured.argent ?? '',
+    amitie:     structured.amitie ?? '',
+    sante:      structured.sante ?? '',
+    prediction: structured.prediction ?? '',
+    conseil:    structured.conseil ?? '',
+    signFr:     sign.name,
+    weather,
+    edition,
+    teaser:     teaser || undefined,
+    source:     'mistral',
+    culturalData: {
+      faune: sign.faune,
+      flore: sign.flore,
+      lieuDetails: sign.lieuDetails,
+      element: sign.element,
+      spirituel: sign.spirituel,
+      animal: sign.animal,
+      nomKreyol: sign.nomKreyol,
+      plante: sign.plante,
+      arbre: sign.arbre,
+      lieu: sign.lieu,
+    },
+  };
+}
 
-async function getFromLocalFile(date: string, signId: string, edition: Edition, req: NextRequest): Promise<HoroscopeResponse | null> {
-  try {
-    // Utiliser URL absolue via req.url pour fonctionner en production (Netlify)
-    const url = new URL(`/data/horoscopes/${date}.json`, req.url);
-    const response = await fetch(url.toString(), { next: { revalidate: 28800 } });
-    if (!response.ok) return null;
-    const allHoroscopes = await response.json();
-    const key = `${date}|${signId}|${edition}`;
-    return allHoroscopes[key] || null;
-  } catch {
-    return null;
-  }
+/**
+ * Génère une réponse de fallback intelligente
+ * Indique que la génération est en cours
+ */
+function buildGeneratingResponse(sign: any, date: string, edition: Edition, weather: string): HoroscopeResponse {
+  return {
+    ouverture: `⏳ Génération de l'horoscope en cours pour ${sign.name}...`,
+    amour: 'Nous préparons votre horoscope personnalisé avec soin.',
+    travail: 'Votre horoscope sera disponible dans quelques instants.',
+    argent: 'Patience, les étoiles s\'alignent pour vous.',
+    amitie: 'Le message complet arrive bientôt.',
+    prediction: `Rafraîchissez la page dans 30 secondes pour voir l'horoscope du ${date}.`,
+    conseil: `Votre horoscope pour le ${date} (${edition}) est en cours de génération.`,
+    sante: '',
+    signFr: sign.name,
+    weather,
+    edition,
+    source: 'generating',
+    isGenerating: true,
+    retryAfter: 30,
+    culturalData: {
+      faune: sign.faune,
+      flore: sign.flore,
+      lieuDetails: sign.lieuDetails,
+      element: sign.element,
+      spirituel: sign.spirituel,
+      animal: sign.animal,
+      nomKreyol: sign.nomKreyol,
+      plante: sign.plante,
+      arbre: sign.arbre,
+      lieu: sign.lieu,
+    },
+  };
+}
+
+/**
+ * Génère une réponse de fallback statique (dernier recours)
+ */
+function buildFallbackResponse(sign: any, weather: string, edition: Edition): HoroscopeResponse {
+  return {
+    ouverture: `⚠️ Les esprits de Karukera sont temporairement voilés pour ${sign.name}...`,
+    amour: 'Prenez ce temps pour écouter votre cœur et vos intuitions.',
+    travail: 'Votre sagesse intérieure est votre meilleure conseillère aujourd’hui.',
+    argent: 'Une période de réflexion avant toute décision financière.',
+    amitie: 'Vos proches comptent sur votre présence, même silencieuse.',
+    prediction: 'La clarté reviendra bientôt.',
+    conseil: 'Prenez soin de vous et laissez le temps faire son œuvre.',
+    sante: '',
+    signFr: sign.name,
+    weather,
+    edition,
+    source: 'fallback',
+    culturalData: {
+      faune: sign.faune,
+      flore: sign.flore,
+      lieuDetails: sign.lieuDetails,
+      element: sign.element,
+      spirituel: sign.spirituel,
+      animal: sign.animal,
+      nomKreyol: sign.nomKreyol,
+      plante: sign.plante,
+      arbre: sign.arbre,
+      lieu: sign.lieu,
+    },
+  };
 }
 
 /* ── Route ─────────────────────────────────────────────────────────────────── */
@@ -218,191 +397,189 @@ export async function GET(
     return NextResponse.json({ error: 'Signe inconnu' }, { status: 404 });
   }
 
+  // ============================================================
+  // GESTION DE LA DATE : Priorité à la date du visiteur
+  // ============================================================
+  // Le frontend doit passer la date du visiteur dans les paramètres
+  // Exemple: /api/horoscope/belier?date=2026-05-24&userHour=14
+  
   const editionParam = req.nextUrl.searchParams.get('edition') as Edition | null;
   const userDate = req.nextUrl.searchParams.get('date') || req.nextUrl.searchParams.get('userDate');
   const userHour = req.nextUrl.searchParams.get('userHour');
-  const edition: Edition =
-    editionParam === 'matin' || editionParam === 'midi' || editionParam === 'soir' || editionParam === 'nuit'
-      ? editionParam
-      : detectEditionWithNight();
-
+  
+  // 🔹 NOUVELLE LOGIQUE : 
+  // 1. Si userDate est fourni → utiliser la date du visiteur
+  // 2. Sinon → utiliser la date de Guadeloupe (fallback pour compatibilité)
   const date = userDate || todayGuadeloupe();
+  
+  // 🔹 Gestion de l'édition :
+  // 1. Si editionParam est fourni → utiliser l'édition du visiteur
+  // 2. Si userHour est fourni → calculer l'édition basée sur l'heure du visiteur
+  // 3. Sinon → utiliser l'heure de Guadeloupe
+  let hour: number;
+  let edition: Edition;
+  
+  if (editionParam) {
+    edition = editionParam;
+    hour = getGuadeloupeHour(); // Default hour
+  } else if (userHour) {
+    hour = parseInt(userHour, 10);
+    edition = (hour >= 0 && hour < 6 ? 'nuit' : 
+               hour < 12 ? 'matin' : 
+               hour < 18 ? 'midi' : 'soir');
+  } else {
+    hour = getGuadeloupeHour();
+    edition = detectEditionWithNight();
+  }
+
   const blobKey = `${date}|${signId}|${edition}`;
 
-  // 1. Check local file first (fastest)
-  const localData = await getFromLocalFile(date, signId, edition, req);
-  if (localData) {
-    return NextResponse.json(localData, {
-      headers: { 'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' },
-    });
-  }
+  // ============================================================
+  // LOGGING DÉTAILLÉ
+  // ============================================================
+  console.log(`[API HOROSCOPE] === NOUVELLE REQUÊTE ===`);
+  console.log(`[API HOROSCOPE] Signe: ${signId}`);
+  console.log(`[API HOROSCOPE] Date: ${date} (userDate=${userDate || 'auto'})`);
+  console.log(`[API HOROSCOPE] Édition: ${edition} (userHour=${userHour || 'auto'}, hour=${hour})`);
+  console.log(`[API HOROSCOPE] Clé: ${blobKey}`);
+  console.log(`[API HOROSCOPE] URL base: ${req.nextUrl.origin}`);
+  console.log(`[API HOROSCOPE] Mode: ${process.env.NODE_ENV || 'production'}`);
+  console.log(`[API HOROSCOPE] On-demand generation: ${ENABLE_ON_DEMAND_GENERATION}`);
+  console.log(`[API HOROSCOPE] Background generation: ${ENABLE_BACKGROUND_GENERATION}`);
 
-  // 2. Check Blobs cache
-  const cached = await getCached(blobKey);
-  if (cached) {
-    return NextResponse.json(cached, {
-      headers: { 'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' },
-    });
-  }
-
-  // === DONNÉES CULTURELLES ENRICHIES (depuis signs-data.ts) ===
-  const signData = signs.find(s => s.id === signId)!;
-
-  // ============================================
-  // CONTEXTE VAUDOU
-  // ============================================
-  const vaudouContext = getVaudouContextForSign(signId);
-  const loa = SIGN_TO_LOA[signId];
-  const signVaudouContext = SIGN_TO_VAUDOU_CONTEXT[signId];
-
+  // ============================================================
+  // ÉTAPE 1: Essayer de charger depuis le cache (fetch HTTP)
+  // ============================================================
+  console.log(`\n[API HOROSCOPE] ÉTAPE 1/4: Chargement depuis le cache...`);
+  
   try {
-    const today = todayGuadeloupe();
-    const historicalResonance = getHistoricalResonance(today);
-    const [rawText, weather] = await Promise.all([fetchRawHoroscope(signEn), fetchWeather()]);
-
-    if (!rawText) {
-      return NextResponse.json(
-        { error: 'Horoscope indisponible depuis la source externe.' },
-        { status: 503 },
-      );
-    }
-
-    let structured: Record<string, string> | null = null;
-    const requiredFields = ['ouverture', 'amour', 'travail', 'argent', 'amitie', 'prediction', 'conseil'];
-    
-    try {
-      structured = await retryWithBackoff(
-        () => rewriteWithMistral(
-          signId, rawText, weather, edition,
-          undefined, undefined, undefined,
-          undefined, undefined, undefined,
-          historicalResonance ?? undefined,
-          userDate ?? undefined,
-          userHour ?? undefined,
-        ),
-        4,
-        4000,
-      );
-    } catch (retryErr) {
-      console.error('❌ Toutes les tentatives Mistral ont échoué:', retryErr);
-    }
-
-    // Vérifier que structured est valide et contient tous les champs obligatoires
-    if (!structured) {
-      console.error('❌ JSON incomplet - structured est null');
-      structured = null;
-    } else {
-      // TypeScript narrowing: structured est non-null ici
-      const hasAllFields = requiredFields.every(field => structured![field] && structured![field].trim() !== '');
-      if (!hasAllFields) {
-        const missingFields = requiredFields.filter(f => !structured![f] || structured![f].trim() === '');
-        console.error('❌ JSON incomplet - champs manquants:', missingFields.join(', '));
-        structured = null;
-      }
-    }
-    
-    if (structured) {
-      const teaser = await generateTeaser(sign.name, structured);
-      const response: HoroscopeResponse = {
-        ouverture:  structured.ouverture,
-        amour:      structured.amour,
-        travail:    structured.travail,
-        argent:     structured.argent ?? '',
-        amitie:     structured.amitie ?? '',
-        sante:      structured.sante ?? '',
-        prediction: structured.prediction ?? '',
-        conseil:    structured.conseil ?? '',
-        signFr:     sign.name,
-        weather,
-        edition,
-        teaser:     teaser || undefined,
-        source:     'mistral',
-        // === NOUVELLES DONNÉES CULTURELLES ===
-        culturalData: {
-          faune: signData.faune,
-          flore: signData.flore,
-          lieuDetails: signData.lieuDetails,
-          element: signData.element,
-          spirituel: signData.spirituel,
-          animal: signData.animal,
-          nomKreyol: signData.nomKreyol,
-          plante: signData.plante,
-          arbre: signData.arbre,
-          lieu: signData.lieu,
-          rawHoroscope: rawText,
+    const localData = await loadHoroscopeData(date, signId, edition, req);
+    if (localData) {
+      console.log(`[API HOROSCOPE] ✅ CACHE HIT: ${blobKey}`);
+      return NextResponse.json(localData, {
+        headers: { 
+          'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' 
         },
-        // === CONTEXTE VAUDOU ===
-        vaudou: {
-          loa: loa || 'Legba',
-          famille: signVaudouContext?.famille || 'Rada',
-          energie: signVaudouContext?.energie || 'Harmonie et équilibre',
-          couleurs: signVaudouContext?.couleurs || ['blanc'],
-          plante: signVaudouContext?.plante,
-          animal: signVaudouContext?.animal,
-          objet: signVaudouContext?.objet,
-          lieu: signVaudouContext?.lieu,
-          rituel: signVaudouContext?.rituel,
-          emoji: signVaudouContext?.emoji || '🔮',
-        },
-      };
-      await setCached(blobKey, response);
-      return NextResponse.json(response, {
-        headers: { 'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' },
       });
     }
-
-    // === Fallback en FRANÇAIS si Mistral échoue après toutes les tentatives ===
-    console.error('❌ Toutes les tentatives Mistral ont échoué pour', signId, edition);
-    
-    const fallbackFr: HoroscopeResponse = {
-      ouverture: `⚠️ Les esprits de Karukera sont temporairement voilés pour ${sign.name}...`,
-      amour: 'Prenez ce temps pour écouter votre cœur et vos intuitions.',
-      travail: 'Votre sagesse intérieure est votre meilleure conseillère aujourd’hui.',
-      argent: 'Une période de réflexion avant toute décision financière.',
-      amitie: 'Vos proches comptent sur votre présence, même silencieuse.',
-      prediction: 'La clarté reviendra bientôt.',
-      conseil: 'Prenez soin de vous et laissez le temps faire son œuvre.',
-      sante: '',
-      signFr: sign.name,
-      weather,
-      edition,
-      source: 'fallback',
-      culturalData: {
-        faune: signData.faune,
-        flore: signData.flore,
-        lieuDetails: signData.lieuDetails,
-        element: signData.element,
-        spirituel: signData.spirituel,
-        animal: signData.animal,
-        nomKreyol: signData.nomKreyol,
-        plante: signData.plante,
-        arbre: signData.arbre,
-        lieu: signData.lieu,
-        rawHoroscope: rawText,
-      },
-      // === CONTEXTE VAUDOU ===
-      vaudou: {
-        loa: loa || 'Legba',
-        famille: signVaudouContext?.famille || 'Rada',
-        energie: signVaudouContext?.energie || 'Harmonie et équilibre',
-        couleurs: signVaudouContext?.couleurs || ['blanc'],
-        plante: signVaudouContext?.plante,
-        animal: signVaudouContext?.animal,
-        objet: signVaudouContext?.objet,
-        lieu: signVaudouContext?.lieu,
-        rituel: signVaudouContext?.rituel,
-        emoji: signVaudouContext?.emoji || '🔮',
-      },
-    };
-
-    // Cache court pour le fallback (5 minutes) - sera régénéré rapidement
-    await setCached(blobKey, fallbackFr);
-    
-    return NextResponse.json(fallbackFr, {
-      headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' },
-    });
   } catch (err) {
-    console.error('Horoscope route error:', err);
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
+    console.error(`[API HOROSCOPE] ❌ CACHE ERROR:`, err instanceof Error ? err.message : err);
   }
+
+  console.log(`[API HOROSCOPE] ❌ CACHE MISS: ${blobKey}`);
+
+  // ============================================================
+  // ÉTAPE 2: Essayer Netlify Blobs
+  // ============================================================
+  console.log(`\n[API HOROSCOPE] ÉTAPE 2/4: Netlify Blobs...`);
+  
+  try {
+    const cached = await getCached(blobKey);
+    if (cached) {
+      console.log(`[API HOROSCOPE] ✅ BLOBS HIT: ${blobKey}`);
+      return NextResponse.json(cached, {
+        headers: { 
+          'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' 
+        },
+      });
+    }
+  } catch (err) {
+    console.error(`[API HOROSCOPE] ❌ BLOBS ERROR:`, err instanceof Error ? err.message : err);
+  }
+
+  console.log(`[API HOROSCOPE] ❌ BLOBS MISS: ${blobKey}`);
+
+  // ============================================================
+  // ÉTAPE 3: Génération à la volée (si activé)
+  // ============================================================
+  if (ENABLE_ON_DEMAND_GENERATION) {
+    console.log(`\n[API HOROSCOPE] ÉTAPE 3/4: Génération à la volée...`);
+    
+    try {
+      // Générer l'horoscope
+      const structured = await generateHoroscopeWithMistral(signId, date, edition);
+      
+      if (structured) {
+        // Générer le teaser
+        const teaser = await generateTeaser(sign.name, structured);
+        
+        // Construire la réponse
+        const response = buildResponse(sign, structured, await fetchWeather(date), edition, teaser);
+        
+        // Sauvegarder dans Netlify Blobs
+        await setCached(blobKey, response);
+        
+        // Sauvegarder dans le fichier local (dev seulement)
+        if (process.env.NODE_ENV === 'development') {
+          await saveSingleHoroscope(date, signId, edition, response);
+        }
+        
+        console.log(`[API HOROSCOPE] ✅ GÉNÉRATION RÉUSSIE: ${blobKey}`);
+        console.log(`[API HOROSCOPE] Source: on-demand`);
+        
+        return NextResponse.json(response, {
+          headers: { 
+            'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' 
+          },
+        });
+      } else {
+        console.error(`[API HOROSCOPE] ❌ GÉNÉRATION ÉCHOUÉE: Mistral n'a pas retourné de données valides`);
+      }
+    } catch (err) {
+      console.error(`[API HOROSCOPE] ❌ GÉNÉRATION ERROR:`, err instanceof Error ? err.message : err);
+    }
+  } else {
+    console.log(`[API HOROSCOPE] ⚠️  Génération à la volée désactivée (ENABLE_ON_DEMAND_GENERATION=false)`);
+  }
+
+  console.log(`[API HOROSCOPE] ❌ ÉTAPE 3 ÉCHOUÉE`);
+
+  // ============================================================
+  // ÉTAPE 4: Fallback
+  // ============================================================
+  console.log(`\n[API HOROSCOPE] ÉTAPE 4/4: Fallback`);
+  
+  const weather = await fetchWeather(date);
+  
+  // 🔹 Si la génération en arrière-plan est activée, lancer la génération
+  // mais retourner une réponse immédiate
+  if (ENABLE_BACKGROUND_GENERATION && ENABLE_ON_DEMAND_GENERATION) {
+    console.log(`[API HOROSCOPE] 🔄 Lancement de la génération en arrière-plan...`);
+    
+    // Lancer la génération sans attendre (fire-and-forget)
+    generateHoroscopeWithMistral(signId, date, edition)
+      .then(async (structured) => {
+        if (structured) {
+          const teaser = await generateTeaser(sign.name, structured);
+          const response = buildResponse(sign, structured, weather, edition, teaser);
+          await setCached(blobKey, response);
+          console.log(`[API HOROSCOPE] ✅ Génération en arrière-plan terminée: ${blobKey}`);
+        }
+      })
+      .catch((err) => {
+        console.error(`[API HOROSCOPE] ❌ Génération en arrière-plan échouée:`, err);
+      });
+    
+    // Retourner une réponse de "génération en cours"
+    const generatingResponse = buildGeneratingResponse(sign, date, edition, weather);
+    
+    console.log(`[API HOROSCOPE] ⏳ RETOUR: Génération en cours`);
+    return NextResponse.json(generatingResponse, {
+      headers: { 
+        'Cache-Control': 'no-store, max-age=30' // Cache très court pour la régénération
+      },
+    });
+  }
+
+  // 🔹 Fallback statique (dernier recours)
+  console.error(`[API HOROSCOPE] ❌ TOUTES LES ÉTAPES ÉCHOUÉES: ${blobKey}`);
+  console.error(`[API HOROSCOPE] → Retour du fallback statique`);
+  
+  const fallbackResponse = buildFallbackResponse(sign, weather, edition);
+  
+  return NextResponse.json(fallbackResponse, {
+    headers: { 
+      'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' // Cache court pour le fallback
+    },
+  });
 }

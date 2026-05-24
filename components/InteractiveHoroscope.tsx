@@ -34,8 +34,12 @@ export default function InteractiveHoroscope() {
     setError(null);
     setData(null);
     try {
+      // Get visitor's local date and hour
+      const date = todayISO();
+      const hour = new Date().getHours();
+      
       const res = await fetch(
-        `/api/horoscope/${signId}?date=${todayISO()}&edition=${ed}`,
+        `/api/horoscope/${signId}?date=${date}&userHour=${hour}&edition=${ed}`,
       );
       if (!res.ok) throw new Error(`${res.status}`);
       const json = await res.json();

@@ -111,8 +111,15 @@ export function detectLocalEditionWithNight(): EditionWithNight {
   return 'soir';
 }
 
+/**
+ * Retourne la date actuelle en Guadeloupe (UTC-4, pas de DST)
+ * Utilise un calcul manuel pour éviter les problèmes de timezone dans les environnements serverless
+ */
 export function todayGuadeloupe(): string {
-  return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Guadeloupe' });
+  const now = new Date();
+  // Guadeloupe = UTC-4 (pas d'heure d'été)
+  const guadeloupeTime = now.getTime() - (4 * 60 * 60 * 1000);
+  return new Date(guadeloupeTime).toISOString().split('T')[0];
 }
 
 export const EDITION_LABELS: Record<Edition, { label: string; emoji: string; desc: string }> = {
