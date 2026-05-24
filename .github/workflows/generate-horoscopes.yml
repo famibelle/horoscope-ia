@@ -4,11 +4,11 @@ name: Générer les horoscopes et ambiances quotidiens
 # Sécurisé avec checks préventifs pour éviter le gaspillage d'appels Mistral
 
 on:
-  # Tous les jours à 20h00 UTC = 16h00 en Guadeloupe (UTC-4)
-  # Cela permet d'avoir les horoscopes prêts pour le lendemain en Guadeloupe
+  # Tous les jours à 4h00 UTC = minuit en Guadeloupe (UTC-4)
+  # Cela permet d'avoir les horoscopes prêts pour la journée en Guadeloupe
   # et pour les visiteurs dans d'autres fuseaux horaires
   schedule:
-    - cron: '0 20 * * *'  # 20h00 UTC = 16h00 Guadeloupe
+    - cron: '0 4 * * *'  # 4h00 UTC = 00h00 Guadeloupe
   
   # Déclenchement manuel avec options
   workflow_dispatch:
