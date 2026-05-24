@@ -355,7 +355,7 @@ jobs:
   # Job supplémentaire pour vérifier le déploiement
   verify:
     needs: generate
-    if: always() && steps.generate.outputs.SUCCESS == 'true'
+    if: always() && needs.generate.outputs.SUCCESS == 'true'
     runs-on: ubuntu-latest
     
     steps:
