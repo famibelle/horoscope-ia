@@ -13,6 +13,8 @@ import {
 import { detectEdition, detectEditionWithNight, todayGuadeloupe } from '@/lib/edition';
 import type { Edition } from '@/lib/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
+// Import vaudou context
+import { getVaudouContextForSign, SIGN_TO_LOA, SIGN_TO_VAUDOU_CONTEXT } from '@/lib/private/vaudou-mappings';
 
 const HOROSCOPE_API = 'https://freehoroscopeapi.com/api/v1/get-horoscope/daily';
 const MISTRAL_URL   = 'https://api.mistral.ai/v1/chat/completions';
@@ -246,6 +248,13 @@ export async function GET(
   // === DONNÉES CULTURELLES ENRICHIES (depuis signs-data.ts) ===
   const signData = signs.find(s => s.id === signId)!;
 
+  // ============================================
+  // CONTEXTE VAUDOU
+  // ============================================
+  const vaudouContext = getVaudouContextForSign(signId);
+  const loa = SIGN_TO_LOA[signId];
+  const signVaudouContext = SIGN_TO_VAUDOU_CONTEXT[signId];
+
   try {
     const today = todayGuadeloupe();
     const historicalResonance = getHistoricalResonance(today);
@@ -322,6 +331,19 @@ export async function GET(
           lieu: signData.lieu,
           rawHoroscope: rawText,
         },
+        // === CONTEXTE VAUDOU ===
+        vaudou: {
+          loa: loa || 'Legba',
+          famille: signVaudouContext?.famille || 'Rada',
+          energie: signVaudouContext?.energie || 'Harmonie et équilibre',
+          couleurs: signVaudouContext?.couleurs || ['blanc'],
+          plante: signVaudouContext?.plante,
+          animal: signVaudouContext?.animal,
+          objet: signVaudouContext?.objet,
+          lieu: signVaudouContext?.lieu,
+          rituel: signVaudouContext?.rituel,
+          emoji: signVaudouContext?.emoji || '🔮',
+        },
       };
       await setCached(blobKey, response);
       return NextResponse.json(response, {
@@ -357,6 +379,19 @@ export async function GET(
         arbre: signData.arbre,
         lieu: signData.lieu,
         rawHoroscope: rawText,
+      },
+      // === CONTEXTE VAUDOU ===
+      vaudou: {
+        loa: loa || 'Legba',
+        famille: signVaudouContext?.famille || 'Rada',
+        energie: signVaudouContext?.energie || 'Harmonie et équilibre',
+        couleurs: signVaudouContext?.couleurs || ['blanc'],
+        plante: signVaudouContext?.plante,
+        animal: signVaudouContext?.animal,
+        objet: signVaudouContext?.objet,
+        lieu: signVaudouContext?.lieu,
+        rituel: signVaudouContext?.rituel,
+        emoji: signVaudouContext?.emoji || '🔮',
       },
     };
 

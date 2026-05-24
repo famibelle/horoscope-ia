@@ -5,6 +5,19 @@ import { fauneData } from '@/lib/private/faune-data';
 import { lieuxData } from '@/lib/private/lieux-data';
 import { kreyolData } from '@/lib/private/kreyol-data';
 import { histoireData } from '@/lib/private/histoire-data';
+import {
+  SIGN_TO_LOA,
+  SIGN_TO_VAUDOU_CONTEXT,
+  EDITION_TO_VAUDOU_CONTEXT,
+  getVaudouContextForSign,
+  getRitualDateContext,
+  isRitualDate
+} from '@/lib/private/vaudou-mappings';
+import {
+  loasData,
+  animauxData,
+  plantesData
+} from '@/lib/private/vaudou-data';
 
 /*
  * ═══════════════════════════════════════════════════════════════
@@ -330,6 +343,32 @@ export function buildHoroscopeUserPrompt(
   const kreyolSymbol = kreyolEntry?.nomCreole || '';
   const kreyolDimension = kreyolEntry?.dimensionCulturelle || '';
 
+  // ============================================
+  // CONTEXTE VAUDOU GUADELOUPÉEN
+  // ============================================
+  const vaudouContext = getVaudouContextForSign(sign.id);
+  const ritualDate = getRitualDateContext(dateToUse);
+  const isRitual = isRitualDate(dateToUse);
+  
+  // Récupérer des éléments vaudou aléatoires mais pertinents
+  const loaName = SIGN_TO_LOA[sign.id];
+  
+  // Filtrer les données vaudou par pertinence avec le signe
+  const relevantLoas = loasData.filter(l => 
+    l.nomCreole.toLowerCase().includes(loaName.toLowerCase()) ||
+    l.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase()
+  ).slice(0, 3);
+  
+  const relevantAnimals = animauxData.filter(a => 
+    a.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase() ||
+    a.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '')
+  ).slice(0, 3);
+  
+  const relevantPlantes = plantesData.filter(p => 
+    p.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase() ||
+    p.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '')
+  ).slice(0, 3);
+
   // Filtrer les données enrichies pour ne garder que les pertinentes
   // FAUNE-DATA : 5-8 entrées liées au signe
   const fauneEnrichies = fauneData.filter(f => 
@@ -424,6 +463,28 @@ ${kreyolEnrichis.map(k => `  - ${k.nomCreole}: ${k.dimensionCulturelle || k.type
 📜 HISTOIRE-DATA (événements historiques) :
 ${histoireEnrichies.map(h => `  - ${h.periode}: ${h.faitHistorique}`).join('\n')}
 
+🔮 **CONTEXTE VAUDOU GUADELOUPÉEN** (NOUVEAU - À INTÉGRER DANS TON HOROSCOPE) :
+📌 Signe ${sign.name} → Loa principal : **${vaudouContext.loa}** (${vaudouContext.famille})
+   Énergie : ${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.energie || 'Harmonie et équilibre'}
+   Couleurs sacrées : ${(SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || ['blanc']).join(', ')}
+   Symbole : ${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.emoji || '🔮'}
+
+💫 Loa de l'édition "${edition}" : **${EDITION_TO_VAUDOU_CONTEXT[edition]?.loa || 'Legba'}**
+   Énergie : ${EDITION_TO_VAUDOU_CONTEXT[edition]?.energie || 'Ouverture'}
+   Conseil : ${EDITION_TO_VAUDOU_CONTEXT[edition]?.conseil || 'Allumez une bougie blanche'}
+
+${isRitual ? `⭐ DATE RITUELLE SPÉCIALE : **${ritualDate?.nomFrancais || ritualDate?.nomCreole || 'Cérémonie sacrée'}**
+   Loa associé : ${ritualDate?.famille || 'Multiple'}
+   Thème : ${ritualDate?.dimensionCulturelle?.split('.')[0] || 'Célébration traditionnelle'}
+` : ''}📚 LOAS PERTINENTS :
+${relevantLoas.map(l => `  - ${l.nomCreole} (${l.nomFrancais}): ${l.dimensionCulturelle.split('.')[0]}`).join('\n')}
+
+🐍 ANIMAUX SACRÉS PERTINENTS :
+${relevantAnimals.map(a => `  - ${a.nomCreole} (${a.nomFrancais}): ${a.dimensionCulturelle.split('.')[0]}`).join('\n')}
+
+🌿 PLANTES SACRÉES PERTINENTES :
+${relevantPlantes.map(p => `  - ${p.nomCreole} (${p.nomFrancais}): ${p.dimensionCulturelle.split('.')[0]}`).join('\n')}
+
 ⚠️ DONNÉES DU SIGNE (pour référence - À UTILISER AVEC MODÉRATION) :
   - id: ${sign.id}
   - name: ${sign.name}
@@ -441,13 +502,19 @@ ${histoireEnrichies.map(h => `  - ${h.periode}: ${h.faitHistorique}`).join('\n')
 ÉDITION : ${cfg.instruction}
 
 STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien créole guadeloupéen :
-1. "ouverture" : UNE phrase - image caribéenne qui pose le ton du jour. **Utilise un symbole différent de ceux des autres sections.**
-2. "amour" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les relations et le cœur. **Choisis parmi FAUNE-DATA, FLORE-DATA ou KREYOL-DATA.**
-3. "travail" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur l'action, l'effort. **Choisis parmi FAUNE-DATA ou LIEUX-DATA.**
-4. "argent" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les finances. **Choisis parmi FLORE-DATA ou HISTOIRE-DATA.**
-5. "amitie" (Lyannaj) : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur le lien social. **Choisis parmi LIEUX-DATA ou KREYOL-DATA.**
-6. "prediction" : UNE phrase - tendance pour les jours à venir. **Utilise une métaphore naturelle.**
-7. "conseil" : UNE phrase - un conseil pratique basé sur une plante ou un symbole.
+1. "ouverture" : UNE phrase - image caribéenne qui pose le ton du jour. **Utilise un symbole vaudou si possible.**
+2. "amour" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les relations et le cœur. **Choisis parmi FAUNE-DATA, FLORE-DATA, KREYOL-DATA ou CONTEXTE VAUDOU.**
+3. "travail" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur l'action, l'effort. **Choisis parmi FAUNE-DATA, LIEUX-DATA ou CONTEXTE VAUDOU.**
+4. "argent" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les finances. **Choisis parmi FLORE-DATA, HISTOIRE-DATA ou CONTEXTE VAUDOU.**
+5. "amitie" (Lyannaj) : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur le lien social. **Choisis parmi LIEUX-DATA, KREYOL-DATA ou CONTEXTE VAUDOU.**
+6. "prediction" : UNE phrase - tendance pour les jours à venir. **Utilise une métaphore naturelle ou vaudou.**
+7. "conseil" : UNE phrase - un conseil pratique basé sur une plante, un symbole OU un rituel vaudou.
+
+✨ **NOUVEAU : INTÈGRE LE CONTEXTE VAUDOU** ✨
+- **Dans au moins 3 sections**, fais référence au loa principal (${vaudouContext.loa}) ou à l'énergie de l'édition (${EDITION_TO_VAUDOU_CONTEXT[edition]?.loa})
+- **Utilise 1 mot créole vaudou max par section** (ex: "Kòb", "Zerbenn", "Vèvè"), TOUJOURS avec traduction entre parenthèses
+- **Priorité aux symboles vaudou** : couleurs (${(SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || []).join(', ')}), plantes (${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.plante}), animaux (${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.animal})
+- **Pour les dates rituelles** : Mentionne explicitement la fête (${ritualDate?.nomFrancais || 'N/A'}) et son loa associé
 
 Note : Le champ "sante" (optionnel) peut être ajouté séparément avec EXACTEMENT 2 OU 4 phrases.
 
@@ -456,10 +523,11 @@ Note : Le champ "sante" (optionnel) peut être ajouté séparément avec EXACTEM
 - Ne répète PAS ${sign.animal} ou ${sign.nomKreyol} plus d'UNE FOIS
 - Ne répète PAS ${sign.plante} ou ${sign.arbre} plus d'UNE FOIS
 - Ne répète PAS ${sign.lieu} plus d'UNE FOIS
+- Ne répète PAS un mot créole vaudou dans plusieurs sections
 
 Contraintes absolues : ton oral direct, parle à l'auditeur (tu/vous), vise 20–30 mots par phrase.
 Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Utilise uniquement des virgules, des points, des tirets simples (-) ou des espaces.
-Intègre subtilement les références culturelles fournies.`;
+Intègre subtilement les références culturelles fournies ET le contexte vaudou.`;
 }
 
 export function buildSigneDuJourUserPrompt(
@@ -469,10 +537,25 @@ export function buildSigneDuJourUserPrompt(
   savoir: string,
   weather: string,
   edition: Edition,
+  loa?: string,
+  familleVaudou?: string,
 ): string {
   const cfg = EDITION_CONFIGS[edition];
+  const vaudouSection = loa && familleVaudou 
+    ? `🔮 **CONTEXTE VAUDOU** :
+Loa associé : **${loa}** (${familleVaudou})
+Intègre une référence subtile au loa ou à son énergie dans ta phrase.`
+    : '';
+  
   return `${type === 'flore' ? 'PLANTE' : 'ANIMAL'} : ${nomCommun} (${nomCreole})
 MÉTÉO DU JOUR : ${weather || 'Temps variable'}
 MOMENT : ${cfg.moment}
-SAVOIR : ${savoir}`;
+SAVOIR : ${savoir}
+${vaudouSection}
+
+RÈGLES :
+- Commence OBLIGATOIREMENT par "Si tu croises"
+- 1 phrase courte, s'arrêter après le premier point
+- Sans titre, sans formule introductive
+- 1 mot créole max, TOUJOURS avec traduction entre parenthèses`;
 }

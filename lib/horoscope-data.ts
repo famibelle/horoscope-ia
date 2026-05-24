@@ -14,6 +14,20 @@ export interface CulturalData {
   rawHoroscope?: string;
 }
 
+// Interface pour le contexte vaudou
+export interface VaudouContext {
+  loa: string;
+  famille: 'Rada' | 'Petro' | 'Congo';
+  energie: string;
+  couleurs: string[];
+  plante?: string;
+  animal?: string;
+  objet?: string;
+  lieu?: string;
+  rituel?: string;
+  emoji: string;
+}
+
 export interface HoroscopeResponse {
   ouverture: string;
   amour: string;
@@ -29,6 +43,7 @@ export interface HoroscopeResponse {
   teaser?: string;
   source: 'mistral' | 'raw' | 'fallback';
   culturalData?: CulturalData;
+  vaudou?: VaudouContext;
 }
 
 export function formatDate(): string {

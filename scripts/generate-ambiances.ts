@@ -15,6 +15,9 @@ import {
 import { computeScores } from '@/lib/scores';
 import type { WeatherData } from '@/app/api/weather/route';
 import type { Edition } from '@/lib/private/maryse-prompt';
+// Import vaudou compatibility
+import { getVaudouCompatibility, mergeCompatibilities } from '@/lib/private/vaudou-compatibility';
+import { getVaudouContextForSign, SIGN_TO_LOA, SIGN_TO_VAUDOU_CONTEXT } from '@/lib/private/vaudou-mappings';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
@@ -162,6 +165,28 @@ async function generateAmbience(
   const luneMaison = getAmbianceMaison(signId, today);
   const luneJardinage = getAmbianceJardinage(signId, today);
 
+  // ============================================
+  // CONTEXTE VAUDOU
+  // ============================================
+  const vaudouContext = getVaudouContextForSign(signId);
+  const loa = SIGN_TO_LOA[signId];
+  const signVaudouContext = SIGN_TO_VAUDOU_CONTEXT[signId];
+  
+  // Récupérer la compatibilité vaudou
+  const vaudouCompat = getVaudouCompatibility(signId);
+  
+  // Sélectionner 2 signes compatibles selon le vaudou
+  // Priorité : amour > amitié > éviter les conflits
+  const compatibleSigns = [
+    ...vaudouCompat.love.filter(s => s !== signId),
+    ...vaudouCompat.friendship.filter(s => s !== signId && !vaudouCompat.love.includes(s))
+  ].slice(0, 2);
+  
+  // Si pas assez de compatibles vaudou, compléter avec des signes aléatoires
+  const finalCompatibleSigns = compatibleSigns.length >= 2 
+    ? compatibleSigns.slice(0, 2)
+    : [...compatibleSigns, ...otherSigns.filter(s => !vaudouCompat.conflict.includes(s))].slice(0, 2);
+
   // Calcul des scores (réutilisation de la même logique que dans l'API)
   const weatherData: WeatherData = {
     tmin: 24,
@@ -183,16 +208,25 @@ Météo à Pointe-à-Pitre : ${weather}
 
 ${culturalContext}
 
+🔮 **CONTEXTE VAUDOU GUADELOUPÉEN** :
+📌 Signe ${sign.name} → Loa principal : **${loa || 'Legba'}** (${signVaudouContext?.famille || 'Rada'})
+   Énergie : ${signVaudouContext?.energie || 'Harmonie et équilibre'}
+   Couleurs sacrées : ${(signVaudouContext?.couleurs || ['blanc']).join(', ')}
+   Symbole : ${signVaudouContext?.emoji || '🔮'}
+
 Scores énergétiques du jour (FIXES — calculés depuis les cycles planétaires, la météo et le calendrier guadeloupéen) :
 Amour ${scores.amour}% · Travail ${scores.travail}% · Bien-être ${scores.bienetre}% · Vie sociale ${scores.vieSociale}% · Finances ${scores.finances}%
 
-Tiens compte de ces scores dans ton ambiance : commente brièvement les domaines forts (>75) et faibles (<50).
+Tiens compte de ces scores et du contexte vaudou dans ton ambiance : commente brièvement les domaines forts (>75) et faibles (<50). Intègre au moins UNE référence vaudou (loa, couleur, plante ou animal sacré) dans l'ambiance.
 
 Réponds avec un objet JSON valide et ces clés exactes :
 {
-  "ambiance": "2-3 phrases sur l'énergie du jour, ancrées dans les références culturelles ci-dessus et cohérentes avec les scores",
+  "ambiance": "2-3 phrases sur l'énergie du jour, ancrées dans les références culturelles ci-dessus et cohérentes avec les scores. Intègre au moins 1 référence vaudou (loa, couleur, symbole).",
   "chiffrePorteBonheur": <entier 1-99, de préférence un nombre premier (2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97)>
   "compatibilite": ["<signId1>", "<signId2>"],
+  "loa": "${loa || 'Legba'}",
+  "familleVaudou": "${signVaudouContext?.famille || 'Rada'}",
+  "couleursSacrees": ["${(signVaudouContext?.couleurs || ['blanc']).join('", "')}"],
   "lune": {
     "bienetre": "conseil bien-être ancré sur le rimèd razié du jour : ${luneBienetre.nomCreole} (${luneBienetre.nomFr}) — ${luneBienetre.usage}. Mentionne le nom créole et son usage pour le corps. 2 phrases.",
     "beaute": "conseil beauté/soin naturel ancré sur la plante du jour : ${luneBeaute.nomCreole} (${luneBeaute.nomFr}) — ${luneBeaute.culture}. Mentionne le nom créole et son usage beauté ou soin. 2 phrases.",
@@ -202,7 +236,8 @@ Réponds avec un objet JSON valide et ces clés exactes :
   }
 }
 
-Pour "compatibilite" choisis exactement 2 valeurs parmi : ${otherSigns.join(', ')}.
+Pour "compatibilite" choisis exactement 2 valeurs parmi : ${finalCompatibleSigns.join(', ')} (basé sur la compatibilité vaudou via les loas).
+Utilise 1 mot créole max par phrase, TOUJOURS avec traduction entre parenthèses.
 Sans markdown dans les valeurs JSON.`;
 
   // Délai pour éviter le rate limit Mistral

@@ -16,6 +16,8 @@ interface SigneDuJour {
   nomCreole: string;
   nomCommun: string;
   phrase: string;
+  loa?: string;
+  familleVaudou?: string;
 }
 
 const PHASE_EMOJI = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'];
@@ -75,7 +77,11 @@ export default function EnergyBanner() {
     {
       icon: signeEmoji,
       label: 'Signe du jour',
-      value: signe ? signe.nomCreole : '…',
+      value: signe ? (
+        signe.loa && signe.familleVaudou
+          ? `${signe.nomCreole} (${signe.loa}, ${signe.familleVaudou})`
+          : signe.nomCreole
+      ) : '…',
     },
   ];
 

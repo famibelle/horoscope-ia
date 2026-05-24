@@ -7,6 +7,9 @@ import { fauneData } from '@/lib/private/faune-data';
 import { todayGuadeloupe } from '@/lib/edition';
 import { MARYSE_SYSTEM } from '@/lib/private/maryse-prompt';
 import signeData from '@/lib/private/signe-du-jour-data.json';
+// Importer les données vaudou
+import { plantesData, animauxData } from '@/lib/private/vaudou-data';
+import { SIGN_TO_VAUDOU_CONTEXT } from '@/lib/private/vaudou-mappings';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
@@ -114,22 +117,96 @@ function pickEntry(
   return source[Math.floor(Math.random() * source.length)];
 }
 
+// Fonction pour choisir une entrée vaudou si possible
+function pickVaudouEntry(
+  type: 'flore' | 'faune',
+  weatherTags: string[],
+  edition: string,
+  signId: string,
+): SigneEntry | null {
+  const signVaudou = SIGN_TO_VAUDOU_CONTEXT[signId];
+  if (!signVaudou) return null;
+  
+  // Obtenir les plantes ou animaux sacrés pour ce signe
+  const vaudouPlantes = plantesData.filter(p => 
+    p.famille.toLowerCase() === signVaudou.famille.toLowerCase()
+  );
+  const vaudouAnimaux = animauxData.filter(a => 
+    a.famille.toLowerCase() === signVaudou.famille.toLowerCase()
+  );
+  
+  const vaudouPool = type === 'flore' ? vaudouPlantes : vaudouAnimaux;
+  if (vaudouPool.length === 0) return null;
+  
+  // Trouver une correspondance dans la pool principale
+  const effectiveEdition = edition === 'midi' ? 'matin' : edition;
+  
+  // Esayer de trouver une entrée qui correspond aux conditions météo
+  const matchingVaudou = vaudouPool.filter((v) => {
+    const poolKey = type === 'flore' ? 'flora' : 'faune';
+    const nomCreoleMatch = (typedData as any)[poolKey].find((e: any) => 
+      e.nom_creole.toLowerCase().includes(v.nomCreole.toLowerCase())
+    );
+    if (!nomCreoleMatch) return false;
+    
+    const editionOk = nomCreoleMatch.editions.length === 0 || 
+      nomCreoleMatch.editions.includes(effectiveEdition);
+    const condOk = nomCreoleMatch.conditions.length === 0 ||
+      nomCreoleMatch.conditions.some((c: string) => weatherTags.includes(c));
+    return editionOk && condOk;
+  });
+  
+  if (matchingVaudou.length > 0) {
+    const pickedVaudou = matchingVaudou[Math.floor(Math.random() * matchingVaudou.length)];
+    const poolKey = type === 'flore' ? 'flora' : 'faune';
+    const nomCreoleMatch = (typedData as any)[poolKey].find((e: any) => 
+      e.nom_creole.toLowerCase().includes(pickedVaudou.nomCreole.toLowerCase())
+    );
+    return nomCreoleMatch || null;
+  }
+  
+  // Sinon, choisir une entrée vaudou aléatoire
+  const randomVaudou = vaudouPool[Math.floor(Math.random() * vaudouPool.length)];
+  const poolKey = type === 'flore' ? 'flora' : 'faune';
+  const nomCreoleMatch = (typedData as any)[poolKey].find((e: any) => 
+    e.nom_creole.toLowerCase().includes(randomVaudou.nomCreole.toLowerCase())
+  );
+  return nomCreoleMatch || null;
+}
+
 function buildSigneDuJourUserPrompt(
   type: 'flore' | 'faune',
   nomCommun: string,
   nomCreole: string,
   savoir: string,
   weather: string,
+  loa?: string,
+  familleVaudou?: string,
 ): string {
+  const vaudouSection = loa && familleVaudou 
+    ? `🔮 **CONTEXTE VAUDOU** :
+Loa associé : **${loa}** (${familleVaudou})
+Intègre une référence subtile au loa ou à son énergie dans ta phrase.`
+    : '';
+  
   return `${type === 'flore' ? 'PLANTE' : 'ANIMAL'} : ${nomCommun} (${nomCreole})
 MÉTÉO DU JOUR : ${weather || 'Temps variable'}
-SAVOIR : ${savoir}`;
+SAVOIR : ${savoir}
+${vaudouSection}
+
+RÈGLES :
+- Commence OBLIGATOIREMENT par "Si tu croises"
+- 1 phrase courte, s'arrêter après le premier point
+- Sans titre, sans formule introductive
+- 1 mot créole max, TOUJOURS avec traduction entre parenthèses`;
 }
 
 async function generatePhrase(
   type: 'flore' | 'faune',
   entry: SigneEntry,
   weather: string,
+  loa?: string,
+  familleVaudou?: string,
 ): Promise<string | null> {
   const apiKey = process.env.MISTRAL_API_KEY;
   if (!apiKey) {
@@ -162,6 +239,8 @@ async function generatePhrase(
             entry.nom_creole,
             entry.savoir,
             weather,
+            loa,
+            familleVaudou,
           ),
         },
       ],
@@ -236,16 +315,57 @@ export async function generateSigneDuJour() {
   const edition = 'matin'; // Générer pour le matin par défaut
 
   const weatherTags = weatherToConditions(weather);
-  const entry = pickEntry(pool, weatherTags, edition);
+  
+  // D'abord essayer de trouver une entrée vaudou correspondante
+  let entry: SigneEntry | null = null;
+  for (const sign of Object.keys(SIGN_TO_VAUDOU_CONTEXT)) {
+    entry = pickVaudouEntry(type, weatherTags, edition, sign);
+    if (entry) {
+      logVerbose(`Entrée vaudou trouvée pour signe ${sign}: ${entry.nom_creole}`);
+      break;
+    }
+  }
+  
+  // Si pas d'entrée vaudou trouvée, utiliser la sélection normale
+  if (!entry) {
+    entry = pickEntry(pool, weatherTags, edition);
+  }
 
   if (!entry) {
     console.log(`❌ Aucun signe disponible pour ${type} avec les conditions ${weatherTags.join(', ')}`);
     return;
   }
 
-  console.log(`🎯 Type: ${type}, Entry: ${entry.nom_creole}`);
+  // Déterminer le contexte vaudou pour cette entrée
+  let loa: string | undefined;
+  let familleVaudou: string | undefined;
+  
+  // Essayer de trouver le loa et famille associés
+  const vaudouPlante = plantesData.find(p => p.nomCreole.toLowerCase() === entry.nom_creole.toLowerCase());
+  const vaudouAnimal = animauxData.find(a => a.nomCreole.toLowerCase() === entry.nom_creole.toLowerCase());
+  
+  if (vaudouPlante) {
+    // Trouver le signe associé à cette famille vaudou
+    const matchingSign = Object.entries(SIGN_TO_VAUDOU_CONTEXT).find(([_, ctx]) => 
+      ctx.famille.toLowerCase() === vaudouPlante.famille.toLowerCase()
+    );
+    if (matchingSign) {
+      loa = SIGN_TO_VAUDOU_CONTEXT[matchingSign[0]].loa;
+      familleVaudou = SIGN_TO_VAUDOU_CONTEXT[matchingSign[0]].famille;
+    }
+  } else if (vaudouAnimal) {
+    const matchingSign = Object.entries(SIGN_TO_VAUDOU_CONTEXT).find(([_, ctx]) => 
+      ctx.famille.toLowerCase() === vaudouAnimal.famille.toLowerCase()
+    );
+    if (matchingSign) {
+      loa = SIGN_TO_VAUDOU_CONTEXT[matchingSign[0]].loa;
+      familleVaudou = SIGN_TO_VAUDOU_CONTEXT[matchingSign[0]].famille;
+    }
+  }
 
-  const phrase = await generatePhrase(type, entry, weather);
+  console.log(`🎯 Type: ${type}, Entry: ${entry.nom_creole}, Loa: ${loa || 'Aucun'}, Famille: ${familleVaudou || 'Aucune'}`);
+
+  const phrase = await generatePhrase(type, entry, weather, loa, familleVaudou);
 
   const result = {
     date: today,
@@ -254,6 +374,8 @@ export async function generateSigneDuJour() {
     nomCommun: entry.nom_commun,
     phrase: phrase ?? `Si tu croises ${entry.nom_creole} aujourd'hui, écoute ce que la terre te dit.`,
     edition,
+    loa: loa || undefined,
+    familleVaudou: familleVaudou || undefined,
   };
 
   await saveToFile(today, result);

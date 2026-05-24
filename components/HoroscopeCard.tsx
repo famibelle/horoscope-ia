@@ -273,6 +273,32 @@ function FilledCard({
           <p className="text-white text-xs leading-relaxed italic">{sign.spirituel}</p>
         </motion.div>
 
+        {/* Contexte Vaudou */}
+        {data.vaudou && (
+          <motion.div
+            className="mt-2 rounded-2xl p-4"
+            style={{
+              background: `linear-gradient(135deg, rgba(138,43,226,0.12), rgba(75,0,130,0.10))`,
+              border: `1px solid rgba(138,43,226,0.22)`,
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.52, duration: 0.5 }}
+          >
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className="text-lg">{data.vaudou.emoji}</span>
+              <p className="text-white text-xs uppercase tracking-widest">
+                Protection Vaudou
+              </p>
+            </div>
+            <p className="text-white text-xs leading-relaxed">
+              <span className="font-semibold text-ancestral-gold">{data.vaudou.loa}</span> ({data.vaudou.famille}) vous accompagne aujourd'hui. 
+              Énergie : {data.vaudou.energie}. 
+              Couleurs sacrées : {data.vaudou.couleurs.join(', ')}.
+            </p>
+          </motion.div>
+        )}
+
         {/* Météo + source */}
         {data.weather && (
           <div className="flex items-center gap-1.5 pt-2">

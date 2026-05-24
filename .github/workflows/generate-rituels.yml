@@ -1,0 +1,65 @@
+name: Générer les données rituelles vaudou
+
+on:
+  schedule:
+    - cron: '0 4 * * *'   # Tous les jours à 4h UTC = minuit heure Guadeloupe (UTC-4)
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Mode de génération'
+        required: false
+        default: 'normal'
+        type: choice
+        options:
+        - normal
+        - verbose
+        - force
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Configurer SSH pour le sous-module privé
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SUBMODULE_DEPLOY_KEY }}
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm install
+
+      - name: Régénérer les données vaudou (si nécessaire)
+        run: |
+          # Vérifier si le fichier vaudou-data.ts existe déjà
+          if [ ! -f lib/private/vaudou-data.ts ]; then
+            echo "Génération de vaudou-data.ts..."
+            npx tsx lib/private/parse-vaudou-ref.ts
+          else
+            echo "vaudou-data.ts existe déjà, sauté."
+          fi
+
+      - name: Générer les rituels par défaut (dates rituelles)
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+        run: |
+          # Pour l'instant, les rituels sont générés à la volée via l'API
+          # On pourrait ajouter un script de pré-génération ici si nécessaire
+          echo "Les rituels sont générés à la demande via /api/rituel/[sign]"
+
+      - name: Commit les changements (si nécessaire)
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add lib/private/vaudou-data.ts || true
+          git diff --staged --quiet || git commit -m "chore: régénération données vaudou ($(date +%Y-%m-%d))"
+          git push --force-with-lease origin main || true

@@ -3,6 +3,9 @@ import { MARYSE_SYSTEM, buildSigneDuJourUserPrompt } from '@/lib/private/maryse-
 import { detectEdition, todayGuadeloupe } from '@/lib/edition';
 import type { Edition } from '@/lib/private/maryse-prompt';
 import signeData from '@/lib/private/signe-du-jour-data.json';
+// Import vaudou data for context
+import { plantesData, animauxData } from '@/lib/private/vaudou-data';
+import { SIGN_TO_VAUDOU_CONTEXT } from '@/lib/private/vaudou-mappings';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
@@ -98,6 +101,8 @@ async function generatePhrase(
   entry: SigneEntry,
   weather: string,
   edition: Edition,
+  loa?: string,
+  familleVaudou?: string,
 ): Promise<string | null> {
   const apiKey = process.env.MISTRAL_API_KEY;
   if (!apiKey) return null;
@@ -123,6 +128,8 @@ async function generatePhrase(
             entry.savoir,
             weather,
             edition,
+            loa,
+            familleVaudou,
           ),
         },
       ],
@@ -163,7 +170,32 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Aucun signe disponible' }, { status: 404 });
   }
 
-  const phrase = await generatePhrase(type, entry, weather, edition);
+  // Déterminer le contexte vaudou pour cette entrée
+  let loa: string | undefined;
+  let familleVaudou: string | undefined;
+  
+  const vaudouPlante = plantesData.find(p => p.nomCreole.toLowerCase() === entry.nom_creole.toLowerCase());
+  const vaudouAnimal = animauxData.find(a => a.nomCreole.toLowerCase() === entry.nom_creole.toLowerCase());
+  
+  if (vaudouPlante) {
+    const matchingSign = Object.entries(SIGN_TO_VAUDOU_CONTEXT).find(([_, ctx]) => 
+      ctx.famille.toLowerCase() === vaudouPlante.famille.toLowerCase()
+    );
+    if (matchingSign) {
+      loa = SIGN_TO_VAUDOU_CONTEXT[matchingSign[0]].loa;
+      familleVaudou = SIGN_TO_VAUDOU_CONTEXT[matchingSign[0]].famille;
+    }
+  } else if (vaudouAnimal) {
+    const matchingSign = Object.entries(SIGN_TO_VAUDOU_CONTEXT).find(([_, ctx]) => 
+      ctx.famille.toLowerCase() === vaudouAnimal.famille.toLowerCase()
+    );
+    if (matchingSign) {
+      loa = SIGN_TO_VAUDOU_CONTEXT[matchingSign[0]].loa;
+      familleVaudou = SIGN_TO_VAUDOU_CONTEXT[matchingSign[0]].famille;
+    }
+  }
+
+  const phrase = await generatePhrase(type, entry, weather, edition, loa, familleVaudou);
 
   return NextResponse.json(
     {
@@ -172,6 +204,8 @@ export async function GET(req: NextRequest) {
       nomCommun: entry.nom_commun,
       phrase: phrase ?? `Si tu croises ${entry.nom_creole} aujourd'hui, écoute ce que la terre te dit.`,
       edition,
+      loa: loa || undefined,
+      familleVaudou: familleVaudou || undefined,
     },
     {
       headers: {
