@@ -1,10 +1,9 @@
 # Configuration Netlify pour Horoscope Karukera
-# Optimisée pour la génération et le déploiement des horoscopes
-# Note: Next.js 14 est utilisé (le plugin Next.js a été désactivé)
+# Utilise Next.js 15 avec le plugin officiel @netlify/plugin-nextjs
 
 [build]
-  # Commande de build : next build (sans prebuild)
-  command = "next build"
+  # Commande de build avec prebuild
+  command = "npm run prebuild && next build"
   
   # Dossier à déployer (généré par Next.js)
   publish = ".next"
@@ -14,7 +13,6 @@
 
 # Configuration du processing
 [build.processing]
-  # Ne pas traiter les fichiers JSON comme des assets
   skip_processing = false
 
 # Variables d'environnement par défaut
@@ -30,16 +28,21 @@
   
   # URL de base pour le fetch des fichiers
   NETLIFY_URL = "https://horoscope-karukera.netlify.app"
-  
-  # Clé API Mistral (à configurer dans les secrets Netlify)
-  # MISTRAL_API_KEY = "sk_..."
+
+# ============================================================
+# PLUGINS
+# ============================================================
+
+# Plugin Next.js officiel pour Netlify
+# Version 5.15.11 compatible avec Next.js 15
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
 # ============================================================
 # HEADERS : Configuration du cache
 # ============================================================
 
 # Désactiver le cache pour les fichiers d'horoscopes
-# Ces fichiers doivent être frais à chaque requête
 [[headers]]
   for = "/data/horoscopes/*.json"
   [headers.values]
@@ -88,56 +91,44 @@
     Cache-Control = "public, max-age=31536000, immutable"
 
 # ============================================================
-# REDIRECTS : Redirections utiles
+# REDIRECTS
 # ============================================================
 
 # Rediriger /health vers l'endpoint de santé
-# NOTE: Utilisation de _health pour éviter les conflits avec la route [sign]
 [[redirects]]
   from = "/health"
-  to = "/api/horoscope/_health"
+  to = "/api/horoscope/health"
   status = 307
   force = false
 
 [[redirects]]
   from = "/health/*"
-  to = "/api/horoscope/_health/:splat"
+  to = "/api/horoscope/health/:splat"
   status = 307
   force = false
-
-# ============================================================
-# PLUGINS : Aucun plugin nécessaire
-# Netlify a un support natif pour Next.js 14
-# ============================================================
-
-# Note: Le plugin @netlify/plugin-nextjs a été désactivé car incompatible
-# avec Next.js 14. Netlify gère Next.js nativement.
 
 # ============================================================
 # CONTEXTES DE DÉPLOIEMENT
 # ============================================================
 
-# Pour la branche main (production)
 [context.production]
-  command = "next build"
+  command = "npm run prebuild && next build"
   [context.production.environment]
     NODE_ENV = "production"
     ENABLE_ON_DEMAND_GENERATION = "true"
     ENABLE_BACKGROUND_GENERATION = "true"
     SKIP_PREBUILD = "true"
 
-# Pour les branches de prévisualisation (deploy previews)
 [context.deploy-preview]
-  command = "next build"
+  command = "npm run prebuild && next build"
   [context.deploy-preview.environment]
     NODE_ENV = "production"
     ENABLE_ON_DEMAND_GENERATION = "true"
     ENABLE_BACKGROUND_GENERATION = "false"
     SKIP_PREBUILD = "true"
 
-# Pour les branches (branch deploys)
 [context.branch-deploy]
-  command = "next build"
+  command = "npm run prebuild && next build"
   [context.branch-deploy.environment]
     NODE_ENV = "production"
     ENABLE_ON_DEMAND_GENERATION = "false"

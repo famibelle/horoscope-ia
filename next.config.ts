@@ -5,8 +5,9 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
   
-  // Configuration pour le déploiement sur Netlify
-  output: process.env.NODE_ENV === 'production' ? 'standalone' : undefined,
+  // Désactiver le mode standalone pour éviter les problèmes avec Netlify
+  // output: process.env.NODE_ENV === 'production' ? 'standalone' : undefined,
+  output: undefined,
   
   // Désactiver le cache pour les fichiers d'horoscopes
   // Ces fichiers doivent être frais à chaque requête
@@ -55,19 +56,18 @@ const nextConfig: NextConfig = {
     ];
   },
   
-  // Rediriger /health vers /api/horoscope/_health pour le monitoring
-  // NOTE: _health évite le conflit avec la route dynamique [sign]
+  // Rediriger /health vers /api/horoscope/health pour le monitoring
   async redirects() {
     return [
       {
         source: '/health',
-        destination: '/api/horoscope/_health',
+        destination: '/api/horoscope/health',
         permanent: false,
         statusCode: 307,
       },
       {
         source: '/health/:path*',
-        destination: '/api/horoscope/_health/:path*',
+        destination: '/api/horoscope/health/:path*',
         permanent: false,
         statusCode: 307,
       },
@@ -89,15 +89,13 @@ const nextConfig: NextConfig = {
     ],
   },
   
-  // Configuration pour le build standalone (Netlify)
-  // Permet de déployer sans serveur Node.js
-  standaloneConfig: {
-    // Copier les fichiers data/ dans le build
-    fs: {
-      // Ne pas inclure les fichiers data/ dans le build standalone
-      // Ils seront servis comme assets statiques
-      exclude: ['data/**'],
-    },
+  // Configuration explicite des alias pour @/*
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': require('path').resolve(__dirname, '.'),
+    };
+    return config;
   },
 };
 

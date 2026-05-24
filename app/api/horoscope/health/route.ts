@@ -4,7 +4,7 @@
  * Vérifie que tous les horoscopes pour la date du jour sont disponibles.
  * Utilisé pour le monitoring et la vérification post-déploiement.
  * 
- * GET /api/horoscope/_health
+ * GET /api/horoscope/health
  * 
  * Query params:
  * - date: Date à vérifier (YYYY-MM-DD). Par défaut: aujourd'hui (Guadeloupe)
@@ -193,7 +193,7 @@ export async function GET(req: NextRequest) {
 
 /**
  * Endpoint pour forcer la régénération d'un horoscope spécifique
- * POST /api/horoscope/_health/regenerate
+ * POST /api/horoscope/health/regenerate
  * 
  * Body: { date?: string, sign?: string, edition?: string }
  */
