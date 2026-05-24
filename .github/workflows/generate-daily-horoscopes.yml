@@ -29,6 +29,7 @@ on:
     branches: [main]
     paths:
       - 'scripts/generate-horoscopes.ts'
+      - 'scripts/generate-ambiances.ts'
       - 'scripts/generate-signe-du-jour.ts'
       - 'lib/private/maryse-prompt.ts'
       - 'lib/cultural-context.ts'
@@ -96,6 +97,34 @@ jobs:
           NETLIFY_URL: https://horoscope-karukera.netlify.app
           NODE_ENV: production
       
+      - name: Generate ambiances
+        id: generate-ambiance
+        run: |
+          echo "🎨 Génération des ambiances pour ${{ steps.date.outputs.DATE }}"
+          
+          # Construire la commande
+          AMB_COMMAND="npx tsx scripts/generate-ambiances.ts --date=${{ steps.date.outputs.DATE }} --force"
+          
+          # Ajouter --verbose si c'est un workflow manuel
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            AMB_COMMAND="$AMB_COMMAND --verbose"
+          fi
+          
+          echo "Commande: $AMB_COMMAND"
+          
+          # Exécuter
+          if $AMB_COMMAND; then
+            echo "AMB_SUCCESS=true" >> $GITHUB_OUTPUT
+            echo "✅ Génération ambiances terminée avec succès!"
+          else
+            echo "AMB_SUCCESS=false" >> $GITHUB_OUTPUT
+            echo "⚠️  Échec de la génération ambiances (non bloquant)"
+          fi
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          NETLIFY_URL: https://horoscope-karukera.netlify.app
+          NODE_ENV: production
+      
       - name: Generate signe-du-jour
         id: generate-signe
         run: |
@@ -139,6 +168,11 @@ jobs:
             # Ajouter les fichiers générés
             git add public/data/horoscopes/${DATE}.json
             
+            # Ajouter les ambiances si générées avec succès
+            if [ "${{ steps.generate-ambiance.outputs.AMB_SUCCESS }}" = "true" ] || [ -f "public/data/ambiance/${DATE}.json" ]; then
+              git add public/data/ambiance/${DATE}.json
+            fi
+            
             # Ajouter le signe du jour si généré avec succès
             if [ "${{ steps.generate-signe.outputs.SDJ_SUCCESS }}" = "true" ] || [ -f "public/data/signe-du-jour/${DATE}.json" ]; then
               git add public/data/signe-du-jour/${DATE}.json
@@ -148,7 +182,7 @@ jobs:
             if git diff --cached --quiet; then
               echo "Aucun changement à commiter"
             else
-              git commit -m "chore: horoscopes et signe du jour du ${DATE} [auto-generated]"
+              git commit -m "chore: horoscopes, ambiances et signe du jour du ${DATE} [auto-generated]"
               git push
               echo "✅ Commit et push effectués"
             fi
@@ -178,6 +212,15 @@ jobs:
           else
             echo "❌ Fichier horoscopes non trouvé: $HORO_FILE"
             exit 1
+          fi
+          
+          # Vérifier les ambiances (optionnel)
+          AMB_FILE="public/data/ambiance/${DATE}.json"
+          if [ -f "$AMB_FILE" ]; then
+            AMB_COUNT=$(jq '. | length' "$AMB_FILE")
+            echo "✅ Fichier ambiances trouvé: $AMB_FILE ($AMB_COUNT entrées)"
+          else
+            echo "ℹ️  Fichier ambiances non généré (optionnel)"
           fi
           
           # Vérifier le signe du jour (optionnel)
