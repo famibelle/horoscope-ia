@@ -265,6 +265,31 @@ async function generateWithMistral(
   });
   
   logVerbose('===== FIN DÉTAILS CULTURELS =====');
+  
+  // ==========================================
+  // CONTEXTE VAUDOU - Logs explicites
+  // ==========================================
+  const { getVaudouContextForSign } = await import('@/lib/private/vaudou-mappings');
+  const vaudouContext = getVaudouContextForSign(signId);
+  
+  logVerbose('✨ CONTEXTE VAUDOU (pour enrichir le prompt Mistral)', {
+    signe: signId,
+    loa: vaudouContext.loa,
+    famille: vaudouContext.famille,
+    couleurs: vaudouContext.couleurs,
+    plante: vaudouContext.plante,
+    animal: vaudouContext.animal,
+    objet: vaudouContext.objet,
+    lieu: vaudouContext.lieu,
+    rituel: vaudouContext.rituel,
+    emoji: vaudouContext.emoji,
+    energie: vaudouContext.energie
+  });
+  
+  // Logs pour les loas pertinents
+  const { SIGN_TO_LOA } = await import('@/lib/private/vaudou-mappings');
+  const loasPertinents = [SIGN_TO_LOA[signId], ...Object.values(SIGN_TO_LOA).filter(l => l !== SIGN_TO_LOA[signId])].slice(0, 3);
+  logVerbose('📚 LOAS PERTINENTS (pour le prompt)', loasPertinents);
 
   const userPrompt = buildHoroscopeUserPrompt(sign, rawText, weather, edition, undefined, undefined);
   logVerbose(`Prompt utilisateur généré (${userPrompt.length} caractères)`);
