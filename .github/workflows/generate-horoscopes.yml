@@ -57,7 +57,7 @@ jobs:
           echo "🔒 Ultimate Safety Check: Vérification du workflow..."
           
           # Chercher tous les 'git push' sans 'origin' dans ce workflow
-          DANGEROUS_PUSHES=$(grep -n "^[[:space:]]*git push[[:space:]]*$" .github/workflows/generate-horoscopes.yml)
+          DANGEROUS_PUSHES=$(grep -n "^[[:space:]]*git push[[:space:]]*$" .github/workflows/generate-horoscopes.yml || true)
           
           if [ -n "$DANGEROUS_PUSHES" ]; then
             echo "❌ ERREUR CRITIQUE: Le workflow contient des 'git push' sans branche spécifiée !"
@@ -74,10 +74,10 @@ jobs:
           
           # Vérifier aussi les autres fichiers de workflow
           echo "🔍 Scan des autres workflows..."
-          ALL_WORKFLOWS=$(find .github/workflows -name "*.yml" -o -name "*.yaml")
+          ALL_WORKFLOWS=$(find .github/workflows -name "*.yml" -o -name "*.yaml" || true)
           for workflow in $ALL_WORKFLOWS; do
             if [ "$workflow" != ".github/workflows/generate-horoscopes.yml" ]; then
-              DANGEROUS=$(grep -n "^[[:space:]]*git push[[:space:]]*$" "$workflow")
+              DANGEROUS=$(grep -n "^[[:space:]]*git push[[:space:]]*$" "$workflow" || true)
               if [ -n "$DANGEROUS" ]; then
                 echo "⚠️  Avertissement: $workflow contient des 'git push' non sécurisés:"
                 echo "$DANGEROUS"
