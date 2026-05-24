@@ -8,6 +8,9 @@ import { lieuxData } from '@/lib/private/lieux-data';
 import { kreyolData } from '@/lib/private/kreyol-data';
 import { histoireData } from '@/lib/private/histoire-data';
 
+// Importer le système de garde-fous de sécurité
+import { applySafetyFilters, applySafetyFiltersToObject } from '@/lib/private/safety-filter';
+
 // Parser les arguments en ligne de commande
 const args = process.argv.slice(2);
 const options = {
@@ -333,7 +336,28 @@ async function generateWithMistral(
   try {
     const parsed = JSON.parse(content);
     logVerbose('JSON valide parsé avec succès', Object.keys(parsed));
-    return parsed;
+    
+    // ==========================================
+    // 🛡️ APPLICATION DES GARDE-FOUS DE SÉCURITÉ
+    // ==========================================
+    logVerbose('🛡️  Application des garde-fous de sécurité...');
+    const { filtered: safeParsed, warnings, stats } = applySafetyFiltersToObject(
+      parsed,
+      { logWarnings: true, includeStats: true }
+    );
+    
+    if (warnings.length > 0) {
+      logVerbose(`✅ ${warnings.length} garde-fous appliqués pour ${signId} (${edition})`, {
+        highPriority: stats.highPriority,
+        mediumPriority: stats.mediumPriority,
+        lowPriority: stats.lowPriority,
+        totalReplacements: stats.totalReplacements,
+      });
+    } else {
+      logVerbose(`✅ Aucun garde-fou nécessaire pour ${signId} (${edition})`);
+    }
+    
+    return safeParsed;
   } catch (e) {
     console.log(`❌ JSON invalide pour ${signId}`);
     logVerboseError('Échec parsing JSON', e instanceof Error ? e.message : e);

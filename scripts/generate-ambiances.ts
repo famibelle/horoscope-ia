@@ -19,6 +19,9 @@ import type { Edition } from '@/lib/private/maryse-prompt';
 import { getVaudouCompatibility, mergeCompatibilities } from '@/lib/private/vaudou-compatibility';
 import { getVaudouContextForSign, SIGN_TO_LOA, SIGN_TO_VAUDOU_CONTEXT } from '@/lib/private/vaudou-mappings';
 
+// Importer le système de garde-fous de sécurité
+import { applySafetyFilters, applySafetyFiltersToObject } from '@/lib/private/safety-filter';
+
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
 // Parser les arguments en ligne de commande
@@ -275,7 +278,28 @@ Sans markdown dans les valeurs JSON.`;
   try {
     const parsed = JSON.parse(content);
     logVerbose('JSON valide parsé avec succès', Object.keys(parsed));
-    return { ...parsed, scores };
+    
+    // ==========================================
+    // 🛡️ APPLICATION DES GARDE-FOUS DE SÉCURITÉ
+    // ==========================================
+    logVerbose('🛡️  Application des garde-fous de sécurité...');
+    const { filtered: safeParsed, warnings, stats } = applySafetyFiltersToObject(
+      parsed,
+      { logWarnings: true, includeStats: true }
+    );
+    
+    if (warnings.length > 0) {
+      logVerbose(`✅ ${warnings.length} garde-fous appliqués pour ${signId} (${edition})`, {
+        highPriority: stats.highPriority,
+        mediumPriority: stats.mediumPriority,
+        lowPriority: stats.lowPriority,
+        totalReplacements: stats.totalReplacements,
+      });
+    } else {
+      logVerbose(`✅ Aucun garde-fou nécessaire pour ${signId} (${edition})`);
+    }
+    
+    return { ...safeParsed, scores };
   } catch (e) {
     console.log(`❌ JSON invalide pour ${signId} ${edition}`);
     logError('Échec parsing JSON', e instanceof Error ? e.message : e);
