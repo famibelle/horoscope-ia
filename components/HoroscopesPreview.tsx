@@ -42,11 +42,12 @@ export default function HoroscopesPreview() {
           if (!cancelled) setPreviews(previewData);
         } else {
           // 2. Charger tous les signes en parallèle
+          const hour = new Date().getHours();
           const results = await Promise.all(
             signs.map(async (sign) => {
               if (cancelled) return null;
               try {
-                const res = await fetch(`/api/horoscope/${sign.id}?date=${todayISO()}&edition=${edition}`);
+                const res = await fetch(`/api/horoscope/${sign.id}?date=${todayISO()}&userHour=${hour}&edition=${edition}`);
                 if (!res.ok) return null;
                 const horoscope = await res.json();
                 // Utiliser teaser si disponible, sinon ouverture (même si source est 'raw')

@@ -123,9 +123,13 @@ export default function HoroscopeSignPage() {
     setHoroscope(null);
     setAmbiance(null);
     
+    // Get visitor's local date and hour
+    const date = new Date().toISOString().split('T')[0];
+    const hour = new Date().getHours();
+    
     Promise.all([
-      fetch(`/api/horoscope/${signId}?edition=${edition}`).then((r) => r.json()),
-      fetch(`/api/ambiance/${signId}?edition=${edition}`).then((r) => r.json()),
+      fetch(`/api/horoscope/${signId}?date=${date}&userHour=${hour}&edition=${edition}`).then((r) => r.json()),
+      fetch(`/api/ambiance/${signId}?userDate=${date}&edition=${edition}`).then((r) => r.json()),
     ])
       .then(([h, a]) => {
         setHoroscope(h as HoroscopeResponse);

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run prebuild && next build",
     "start": "next start",
     "lint": "next lint",
     "flore:parse": "npx tsx lib/private/parse-flore-ref.ts",
@@ -14,6 +14,7 @@
     "histoire:parse": "npx tsx lib/private/parse-histoire-ref.ts",
     "data:parse": "npm run flore:parse && npm run faune:parse && npm run lieux:parse && npm run kreyol:parse && npm run histoire:parse",
     "postinstall": "npm run data:parse",
+    "prebuild": "node scripts/prebuild-horoscopes.mjs",
     "send-test-newsletter": "npx tsx scripts/send-test-newsletter.ts",
     "send-brevo-test": "npx tsx scripts/send-brevo-test.ts",
     "test-newsletter-templates": "npx tsx scripts/test-newsletter-templates.ts",

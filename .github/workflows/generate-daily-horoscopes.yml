@@ -1,0 +1,212 @@
+name: Generate Daily Horoscopes
+
+# Ce workflow génère automatiquement les horoscopes du jour
+# Il s'exécute tous les jours à 20h00 UTC (16h00 Heure de Guadeloupe)
+# ce qui permet d'avoir les horoscopes prêts pour la journée suivante en Guadeloupe
+# et pour les visiteurs dans d'autres fuseaux horaires
+
+on:
+  # Tous les jours à 20h00 UTC = 16h00 en Guadeloupe (UTC-4)
+  # Cela permet de générer les horoscopes du lendemain pour la Guadeloupe
+  # et d'avoir les horoscopes du jour pour les visiteurs en Europe/Asie
+  schedule:
+    - cron: '0 20 * * *'  # 20h00 UTC = 16h00 Guadeloupe
+  
+  # Permettre le déclenchement manuel
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Date à générer (YYYY-MM-DD). Par défaut: aujourd"hui'
+        required: false
+      force:
+        description: 'Forcer la régénération'
+        required: false
+        default: 'false'
+
+  # Déclencher aussi lors d'un push sur main (pour les tests)
+  # Mais uniquement si des fichiers pertinents ont changé
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/generate-horoscopes.ts'
+      - 'lib/private/maryse-prompt.ts'
+      - 'lib/cultural-context.ts'
+      - '.github/workflows/generate-daily-horoscopes.yml'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Récupérer tout l'historique pour les tags
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Configure date for generation
+        id: date
+        run: |
+          # Si une date est fournie via workflow_dispatch, l'utiliser
+          if [ -n "${{ github.event.inputs.date }}" ]; then
+            echo "DATE=${{ github.event.inputs.date }}" >> $GITHUB_OUTPUT
+          else
+            # Sinon, utiliser la date de demain en Guadeloupe (UTC-4)
+            # Cela permet d'avoir les horoscopes prêts pour le lendemain
+            TOMORROW_GUADELOUPE=$(date -u -d '+4 hours' +%Y-%m-%d)
+            echo "DATE=$TOMORROW_GUADELOUPE" >> $GITHUB_OUTPUT
+            echo "Génération pour demain (Guadeloupe): $TOMORROW_GUADELOUPE"
+          fi
+      
+      - name: Generate horoscopes
+        id: generate
+        run: |
+          echo "🚀 Démarrage de la génération pour ${{ steps.date.outputs.DATE }}"
+          
+          # Construire la commande
+          COMMAND="npx tsx scripts/generate-horoscopes.ts --date=${{ steps.date.outputs.DATE }} --force"
+          
+          # Ajouter --verbose si c'est un workflow manuel
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            COMMAND="$COMMAND --verbose"
+          fi
+          
+          echo "Commande: $COMMAND"
+          
+          # Exécuter
+          if $COMMAND; then
+            echo "SUCCESS=true" >> $GITHUB_OUTPUT
+            echo "✅ Génération terminée avec succès!"
+          else
+            echo "SUCCESS=false" >> $GITHUB_OUTPUT
+            echo "❌ Échec de la génération"
+            exit 1
+          fi
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          NETLIFY_URL: https://horoscope-karukera.netlify.app
+          NODE_ENV: production
+      
+      - name: Commit and push changes
+        if: steps.generate.outputs.SUCCESS == 'true'
+        run: |
+          echo "📝 Commit des horoscopes générés"
+          
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          
+          # Vérifier s'il y a des changements
+          if [ -n "$(git status --porcelain)" ]; then
+            DATE=${{ steps.date.outputs.DATE }}
+            git add public/data/horoscopes/${DATE}.json
+            
+            # Vérifier si le fichier existe bien
+            if git diff --cached --quiet; then
+              echo "Aucun changement à commiter"
+            else
+              git commit -m "chore: horoscopes du ${DATE} [auto-generated]"
+              git push
+              echo "✅ Commit et push effectués"
+            fi
+          else
+            echo "Aucun fichier à commiter"
+          fi
+      
+      - name: Verify generation
+        if: steps.generate.outputs.SUCCESS == 'true'
+        run: |
+          echo "🔍 Vérification des horoscopes générés"
+          
+          DATE=${{ steps.date.outputs.DATE }}
+          FILE="public/data/horoscopes/${DATE}.json"
+          
+          if [ -f "$FILE" ]; then
+            COUNT=$(jq '. | length' "$FILE")
+            echo "✅ Fichier trouvé: $FILE ($COUNT entrées)"
+            
+            # Vérifier qu'on a bien 48 entrées (12 signes × 4 éditions)
+            if [ "$COUNT" -eq 48 ]; then
+              echo "✅ Nombre d'entrées correct: 48"
+            else
+              echo "⚠️  Nombre d'entrées inattendu: $COUNT (attendu: 48)"
+            fi
+          else
+            echo "❌ Fichier non trouvé: $FILE"
+            exit 1
+          fi
+
+  # Job supplémentaire pour vérifier le déploiement
+  verify:
+    needs: generate
+    if: always() && steps.generate.outputs.SUCCESS == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run verification script
+        run: node scripts/verify-deployment.mjs
+        env:
+          NETLIFY_URL: https://horoscope-karukera.netlify.app
+
+  # Job pour nettoyer les anciens fichiers (optionnel)
+  cleanup:
+    needs: verify
+    if: success()
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Remove old horoscope files
+        run: |
+          echo "🧹 Nettoyage des anciens fichiers d'horoscopes"
+          
+          # Garder seulement les fichiers des 7 derniers jours
+          # et ceux du mois en cours
+          find public/data/horoscopes/ -name "*.json" -type f | while read file; do
+            filename=$(basename "$file" .json)
+            
+            # Convertir le nom de fichier en date
+            if [[ "$filename" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+              filedate="$filename"
+              
+              # Calculer l'âge en jours
+              age=$(( ($(date +%s) - $(date -d "$filedate" +%s)) / 86400 ))
+              
+              # Supprimer si plus vieux que 7 jours
+              if [ "$age" -gt 7 ]; then
+                echo "Suppression: $file ($age jours)"
+                git rm "$file" 2>/dev/null || rm "$file"
+              fi
+            fi
+          done
+          
+          # Commit le nettoyage
+          if [ -n "$(git status --porcelain)" ]; then
+            git config --global user.name "GitHub Actions"
+            git config --global user.email "actions@github.com"
+            git add -A
+            git commit -m "chore: nettoyage des anciens horoscopes [auto]"
+            git push
+          fi

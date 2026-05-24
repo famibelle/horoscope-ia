@@ -1,9 +1,142 @@
+# Configuration Netlify pour Horoscope Karukera
+# Optimisée pour la génération et le déploiement des horoscopes
+
 [build]
+  # Commande de build : exécute prebuild puis build Next.js
   command = "npm run build"
+  
+  # Dossier à déployer (généré par Next.js)
   publish = ".next"
+  
+  # Fonctions serverless (Next.js API routes)
+  functions = ".next"
 
-[build.processing.git]
-  submodules = false
+# Configuration du processing
+[build.processing]
+  # Ne pas traiter les fichiers JSON comme des assets
+  skip_processing = false
 
+# Variables d'environnement par défaut
 [build.environment]
   NODE_VERSION = "20"
+  
+  # Activation des fonctionnalités de génération
+  ENABLE_ON_DEMAND_GENERATION = "true"
+  ENABLE_BACKGROUND_GENERATION = "true"
+  
+  # URL de base pour le fetch des fichiers
+  NETLIFY_URL = "https://horoscope-karukera.netlify.app"
+  
+  # Clé API Mistral (à configurer dans les secrets Netlify)
+  # MISTRAL_API_KEY = "sk_..."
+
+# ============================================================
+# HEADERS : Configuration du cache
+# ============================================================
+
+# Désactiver le cache pour les fichiers d'horoscopes
+# Ces fichiers doivent être frais à chaque requête
+[[headers]]
+  for = "/data/horoscopes/*.json"
+  [headers.values]
+    Cache-Control = "no-store, max-age=0, must-revalidate"
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, OPTIONS"
+
+# Désactiver le cache pour les fichiers de signe-du-jour
+[[headers]]
+  for = "/data/signe-du-jour/*.json"
+  [headers.values]
+    Cache-Control = "no-store, max-age=0, must-revalidate"
+    Access-Control-Allow-Origin = "*"
+
+# Désactiver le cache pour les fichiers d'ambiance
+[[headers]]
+  for = "/data/ambiance/*.json"
+  [headers.values]
+    Cache-Control = "no-store, max-age=0, must-revalidate"
+    Access-Control-Allow-Origin = "*"
+
+# Cache normal pour les autres assets statiques
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# ============================================================
+# REDIRECTS : Redirections utiles
+# ============================================================
+
+# Rediriger /health vers l'endpoint de santé
+[[redirects]]
+  from = "/health"
+  to = "/api/horoscope/health"
+  status = 307
+  force = false
+
+[[redirects]]
+  from = "/health/*"
+  to = "/api/horoscope/health/:splat"
+  status = 307
+  force = false
+
+# ============================================================
+# PLUGINS : Plugin Next.js pour Netlify
+# ============================================================
+
+[[plugins]]
+  # Plugin officiel Next.js pour Netlify
+  package = "@netlify/plugin-nextjs"
+  
+  # Configuration du plugin
+  [plugins.inputs]
+    # Ne pas utiliser le cache Next.js pour les API routes
+    nextConfigPath = "next.config.ts"
+
+# ============================================================
+# CONTEXTES DE DÉPLOIEMENT
+# ============================================================
+
+# Pour la branche main (production)
+[context.production]
+  command = "npm run build"
+  [context.production.environment]
+    NODE_ENV = "production"
+    ENABLE_ON_DEMAND_GENERATION = "true"
+    ENABLE_BACKGROUND_GENERATION = "true"
+
+# Pour les branches de prévisualisation (deploy previews)
+[context.deploy-preview]
+  command = "npm run build"
+  [context.deploy-preview.environment]
+    NODE_ENV = "production"
+    ENABLE_ON_DEMAND_GENERATION = "true"
+    ENABLE_BACKGROUND_GENERATION = "false"
+
+# Pour les branches (branch deploys)
+[context.branch-deploy]
+  command = "npm run build"
+  [context.branch-deploy.environment]
+    NODE_ENV = "production"
+    ENABLE_ON_DEMAND_GENERATION = "false"
+    ENABLE_BACKGROUND_GENERATION = "false"

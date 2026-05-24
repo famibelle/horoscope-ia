@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { MARYSE_SYSTEM, buildSigneDuJourUserPrompt } from '@/lib/private/maryse-prompt';
-import { detectEdition, todayGuadeloupe } from '@/lib/edition';
+import { detectEdition, todayGuadeloupe, getGuadeloupeHour } from '@/lib/edition';
 import type { Edition } from '@/lib/private/maryse-prompt';
 import signeData from '@/lib/private/signe-du-jour-data.json';
-import { loadDateCache, getFromCache } from '@/lib/private/horoscope-file-cache';
+import { loadSigneDuJourData } from '@/lib/private/horoscope-file-cache';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
