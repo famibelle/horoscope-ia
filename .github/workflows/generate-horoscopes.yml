@@ -351,6 +351,18 @@ jobs:
               exit 1
             fi
           fi
+      
+      # ========================================================================
+      # 💾 UPLOAD ARTIFACTS POUR RÉCUPÉRATION EN CAS D'ÉCHEC
+      # ========================================================================
+      - name: Upload generated data as artifact
+        if: always()  # Upload même si la vérification échoue
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-data-${{ steps.date.outputs.DATE }}
+          path: public/data/
+          retention-days: 7
+          compression-level: 0  # Pas de compression pour accès rapide
 
   # Job supplémentaire pour vérifier le déploiement
   verify:
