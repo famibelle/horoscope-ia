@@ -9,7 +9,7 @@ import { kreyolData } from '@/lib/private/kreyol-data';
 import { histoireData } from '@/lib/private/histoire-data';
 
 // Importer le système de garde-fous de sécurité
-import { applySafetyFilters, applySafetyFiltersToObject } from '@/lib/private/safety-filter';
+import { applySafetyFiltersToObject } from '@/lib/private/safety-filter';
 
 // Parser les arguments en ligne de commande
 const args = process.argv.slice(2);

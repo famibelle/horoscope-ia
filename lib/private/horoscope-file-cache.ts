@@ -16,11 +16,36 @@
 
 import { promises as fs } from 'fs';
 import path from 'path';
+import { applySafetyFiltersToObject, type SafetyWarning } from './safety-filter';
 
 type CacheData = Record<string, any>;
 
 // Cache en mémoire pour éviter les lectures répétées
 const inMemoryCache: Record<string, CacheData> = {};
+
+// Statistiques globales pour le monitoring
+let SAFETY_FILTER_STATS = {
+  totalFiltered: 0,
+  totalWarnings: 0,
+  byCategory: {} as Record<string, number>,
+};
+
+/**
+ * Applique les garde-fous à une donnée
+ */
+function applySafetyToData(data: any, key: string): { safeData: any; warnings: SafetyWarning[] } {
+  if (!data) return { safeData: null, warnings: [] };
+  const result = applySafetyFiltersToObject(data, { logWarnings: false, includeStats: false });
+  SAFETY_FILTER_STATS.totalFiltered++;
+  SAFETY_FILTER_STATS.totalWarnings += result.warnings.length;
+  result.warnings.forEach(w => {
+    SAFETY_FILTER_STATS.byCategory[w.category] = (SAFETY_FILTER_STATS.byCategory[w.category] || 0) + 1;
+  });
+  if (result.warnings.length > 0) {
+    console.log(`[SAFETY FILTER] ✅ ${result.warnings.length} garde-fous appliqués sur ${key}`);
+  }
+  return { safeData: result.filtered, warnings: result.warnings };
+}
 
 /**
  * Charge les données d'horoscope pour une date donnée depuis le filesystem
@@ -167,7 +192,8 @@ export async function loadHoroscopeData(
           
           if (allData[key]) {
             console.log(`[CACHE] ✅ FETCH HIT: ${key}`);
-            return allData[key];
+            const { safeData } = applySafetyToData(allData[key], key);
+            return safeData;
           } else {
             // La clé n'existe pas dans le fichier
             console.warn(`[CACHE] ⚠️  FETCH: Clé ${key} NON TROUVÉE dans le fichier`);
@@ -233,7 +259,8 @@ export async function loadHoroscopeData(
         
         if (allData[key]) {
           console.log(`[CACHE] ✅ FILESYSTEM HIT: ${key}`);
-          return allData[key];
+          const { safeData } = applySafetyToData(allData[key], key);
+          return safeData;
         } else {
           console.warn(`[CACHE] Filesystem: Clé ${key} NON TROUVÉE`);
           console.warn(`[CACHE] Clés disponibles:`, allKeys.slice(0, 5));
@@ -306,7 +333,8 @@ export async function loadSigneDuJourData(date: string, req?: any): Promise<any 
         const content = await fs.readFile(filePath, 'utf-8');
         const data = JSON.parse(content);
         console.log(`[SIGNE-DU-JOUR] ✅ FILESYSTEM HIT: ${date}`);
-        return data;
+        const { safeData } = applySafetyToData(data, date);
+        return safeData;
       }
     } catch (err) {
       console.error(`[SIGNE-DU-JOUR] Filesystem:`, err instanceof Error ? err.message : err);
@@ -429,6 +457,11 @@ export async function saveSingleHoroscope(
     return true;
   } catch (err) {
     console.error(`[SAVE] ❌ Erreur:`, err instanceof Error ? err.message : err);
+    return false;
+  }
+}
+}
+: err);
     return false;
   }
 }

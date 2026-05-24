@@ -230,6 +230,37 @@ jobs:
           else
             echo "ℹ️  Fichier signe du jour non généré (optionnel)"
           fi
+      
+      - name: Vérification de sécurité
+        if: steps.generate.outputs.SUCCESS == 'true'
+        run: |
+          echo "🔒 Vérification des garde-fous..."
+          DATE=${{ steps.date.outputs.DATE }}
+          DANGEROUS_PATTERNS=(
+            "allume.*bougie"
+            "brûle.*encens"
+            "mange.*plante"
+            "bois.*rhum"
+            "prends.*couteau"
+            "sacrifie.*animal"
+            "soigne.*toi"
+          )
+          HORO_FILE="public/data/horoscopes/${DATE}.json"
+          if [ -f "$HORO_FILE" ]; then
+            FOUND=false
+            for pattern in "${DANGEROUS_PATTERNS[@]}"; do
+              if grep -i -E "$pattern" "$HORO_FILE"; then
+                echo "❌ Pattern dangereux: $pattern"
+                FOUND=true
+              fi
+            done
+            if [ "$FOUND" = false ]; then
+              echo "✅ Aucun contenu dangereux détecté"
+            else
+              echo "❌ Contenu dangereux détecté!"
+              exit 1
+            fi
+          fi
 
   # Job supplémentaire pour vérifier le déploiement
   verify:

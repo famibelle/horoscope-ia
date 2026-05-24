@@ -4,6 +4,7 @@ config(); // Charger les variables d'environnement depuis .env
 import { signs } from '@/lib/signs-data';
 import { todayGuadeloupe } from '@/lib/edition';
 import { MARYSE_SYSTEM } from '@/lib/private/maryse-prompt';
+import { applySafetyFiltersToObject } from '@/lib/private/safety-filter';
 import {
   getCulturalContext,
   getAmbianceBienetre,
