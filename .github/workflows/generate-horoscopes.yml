@@ -428,5 +428,62 @@ jobs:
             git config --global user.email "actions@github.com"
             git add -A
             git commit -m "chore: nettoyage des anciens horoscopes [auto]"
-            git push origin HEAD
+            git push https://x-access-token:${{ secrets.GITHUB_PAT }}@github.com/famibelle/horoscope-ia.git HEAD
+          fi
+
+  # ========================================================================
+  # 🛡️ JOB DE RÉCUPÉRATION AUTOMATIQUE
+  # S'exécute si la génération a réussi mais le push a échoué
+  # ========================================================================
+  recovery:
+    needs: generate
+    if: failure() && needs.generate.result == 'success'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_PAT }}
+      
+      - name: Download generated data artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: generated-data-${{ needs.generate.outputs.DATE }}
+          path: public/data/
+      
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+      
+      - name: Verify files exist
+        id: verify-files
+        run: |
+          DATE=${{ needs.generate.outputs.DATE }}
+          if [ -f "public/data/horoscopes/${DATE}.json" ] || \
+             [ -f "public/data/ambiance/${DATE}.json" ] || \
+             [ -f "public/data/signe-du-jour/${DATE}.json" ]; then
+            echo "files_exist=true" >> $GITHUB_OUTPUT
+            echo "✅ Fichiers artefacts trouvés"
+          else
+            echo "files_exist=false" >> $GITHUB_OUTPUT
+            echo "❌ Aucun fichier artefact trouvé"
+            exit 1
+          fi
+      
+      - name: Commit and push recovered data
+        if: steps.verify-files.outputs.files_exist == 'true'
+        run: |
+          DATE=${{ needs.generate.outputs.DATE }}
+          
+          git add public/data/horoscopes/${DATE}.json public/data/ambiance/${DATE}.json public/data/signe-du-jour/${DATE}.json
+          
+          if git diff --cached --quiet; then
+            echo "Aucun changement à commiter"
+          else
+            git commit -m "chore: récupération des données du ${DATE} [auto-recovered]"
+            git push https://x-access-token:${{ secrets.GITHUB_PAT }}@github.com/famibelle/horoscope-ia.git HEAD
+            echo "✅ Récupération et push réussis !"
           fi
