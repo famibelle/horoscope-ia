@@ -54,6 +54,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
+      - name: Verify branch exists on remote
+        run: |
+          if ! git ls-remote --heads origin ${{ github.ref_name }} | grep -q "refs/heads/${{ github.ref_name }}"; then
+            echo "⚠️  Branche ${{ github.ref_name }} n'existe pas sur origin"
+            echo "Création de la branche..."
+            git push origin HEAD:${{ github.ref_name }}
+          else
+            echo "✅ Branche ${{ github.ref_name }} existe sur origin"
+          fi
+      
       - name: Configure date for generation
         id: date
         run: |
@@ -183,8 +193,8 @@ jobs:
               echo "Aucun changement à commiter"
             else
               git commit -m "chore: horoscopes, ambiances et signe du jour du ${DATE} [auto-generated]"
-              git push
-              echo "✅ Commit et push effectués"
+              git push origin HEAD
+              echo "✅ Commit et push effectués sur ${{ github.ref_name }}"
             fi
           else
             echo "Aucun fichier à commiter"
