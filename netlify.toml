@@ -24,6 +24,9 @@
   ENABLE_ON_DEMAND_GENERATION = "true"
   ENABLE_BACKGROUND_GENERATION = "true"
   
+  # Désactiver le prebuild en production (GitHub Actions génère déjà les fichiers)
+  SKIP_PREBUILD = "true"
+  
   # URL de base pour le fetch des fichiers
   NETLIFY_URL = "https://horoscope-karukera.netlify.app"
   
@@ -129,6 +132,7 @@
     NODE_ENV = "production"
     ENABLE_ON_DEMAND_GENERATION = "true"
     ENABLE_BACKGROUND_GENERATION = "false"
+    SKIP_PREBUILD = "true"
 
 # Pour les branches (branch deploys)
 [context.branch-deploy]
@@ -137,3 +141,4 @@
     NODE_ENV = "production"
     ENABLE_ON_DEMAND_GENERATION = "false"
     ENABLE_BACKGROUND_GENERATION = "false"
+    SKIP_PREBUILD = "true"
