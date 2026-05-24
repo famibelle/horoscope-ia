@@ -45,6 +45,37 @@ jobs:
         with:
           fetch-depth: 0  # Récupérer tout l'historique pour les tags
       
+      - name: Ultimate safety check - Scan workflow for bare git push
+        run: |
+          echo "🔒 Ultimate Safety Check: Vérification du workflow..."
+          
+          # Chercher tous les 'git push' sans 'origin' dans ce workflow
+          DANGEROUS_PUSHES=$(grep -n "^[[:space:]]*git push[[:space:]]*$" .github/workflows/generate-daily-horoscopes.yml)
+          
+          if [ -n "$DANGEROUS_PUSHES" ]; then
+            echo "❌ ERREUR CRITIQUE: Le workflow contient des 'git push' sans branche spécifiée !"
+            echo "Les commandes problématiques:"
+            echo "$DANGEROUS_PUSHES"
+            echo ""
+            echo "Utilisez 'git push origin HEAD' ou 'git push origin <branch>' à la place"
+            echo ""
+            echo "Cela éviterait de gaspiller ~24€ en appels Mistral !"
+            exit 1
+          else
+            echo "✅ Aucun 'git push' dangereux détecté dans le workflow"
+          fi
+          
+          # Vérifier aussi les autres fichiers de workflow
+          echo "🔍 Scan des autres workflows..."
+          ALL_WORKFLOWS=$(find .github/workflows -name "*.yml" -o -name "*.yaml")
+          for workflow in $ALL_WORKFLOWS; do
+            DANGEROUS=$(grep -n "^[[:space:]]*git push[[:space:]]*$" "$workflow")
+            if [ -n "$DANGEROUS" ]; then
+              echo "⚠️  Avertissement: $workflow contient des 'git push' non sécurisés:"
+              echo "$DANGEROUS"
+            fi
+          done
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
