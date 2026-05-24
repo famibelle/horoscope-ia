@@ -460,8 +460,3 @@ export async function saveSingleHoroscope(
     return false;
   }
 }
-}
-: err);
-    return false;
-  }
-}
