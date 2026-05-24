@@ -106,12 +106,9 @@
 
 [[plugins]]
   # Plugin officiel Next.js pour Netlify
+  # NOTE: Ce plugin ne nécessite AUCUNE configuration (inputs)
+  # La version 5.15.11 a changé et n'accepte plus nextConfigPath
   package = "@netlify/plugin-nextjs"
-  
-  # Configuration du plugin
-  [plugins.inputs]
-    # Ne pas utiliser le cache Next.js pour les API routes
-    nextConfigPath = "next.config.ts"
 
 # ============================================================
 # CONTEXTES DE DÉPLOIEMENT
