@@ -91,15 +91,16 @@
 # ============================================================
 
 # Rediriger /health vers l'endpoint de santé
+# NOTE: Utilisation de _health pour éviter les conflits avec la route [sign]
 [[redirects]]
   from = "/health"
-  to = "/api/horoscope/health"
+  to = "/api/horoscope/_health"
   status = 307
   force = false
 
 [[redirects]]
   from = "/health/*"
-  to = "/api/horoscope/health/:splat"
+  to = "/api/horoscope/_health/:splat"
   status = 307
   force = false
 
@@ -124,6 +125,7 @@
     NODE_ENV = "production"
     ENABLE_ON_DEMAND_GENERATION = "true"
     ENABLE_BACKGROUND_GENERATION = "true"
+    SKIP_PREBUILD = "true"
 
 # Pour les branches de prévisualisation (deploy previews)
 [context.deploy-preview]

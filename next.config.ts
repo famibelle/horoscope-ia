@@ -55,18 +55,19 @@ const nextConfig: NextConfig = {
     ];
   },
   
-  // Rediriger /health vers /api/horoscope/health pour le monitoring
+  // Rediriger /health vers /api/horoscope/_health pour le monitoring
+  // NOTE: _health évite le conflit avec la route dynamique [sign]
   async redirects() {
     return [
       {
         source: '/health',
-        destination: '/api/horoscope/health',
+        destination: '/api/horoscope/_health',
         permanent: false,
         statusCode: 307,
       },
       {
         source: '/health/:path*',
-        destination: '/api/horoscope/health/:path*',
+        destination: '/api/horoscope/_health/:path*',
         permanent: false,
         statusCode: 307,
       },
