@@ -163,11 +163,10 @@ export async function GET(req: NextRequest) {
   // LOG DIAGNOSTIC
   console.log(`[SIGNE-DU-JOUR API] Request: date=${today}, edition=${edition}`);
 
-  // 0. Check in-memory cache first (filesystem based)
-  await loadDateCache(today);
-  const cachedData = getFromCache(today, 'signe-du-jour', edition);
+  // 0. Check local file via filesystem cache
+  const cachedData = await loadSigneDuJourData(today, req);
   if (cachedData) {
-    console.log(`[SIGNE-DU-JOUR CACHE HIT] ${today}|signe-du-jour|${edition}`);
+    console.log(`[SIGNE-DU-JOUR CACHE HIT] ${today}`);
     return NextResponse.json(cachedData, {
       headers: { 'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=3600' },
     });

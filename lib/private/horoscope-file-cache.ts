@@ -19,6 +19,98 @@ import path from 'path';
 
 type CacheData = Record<string, any>;
 
+// Cache en mémoire pour éviter les lectures répétées
+const inMemoryCache: Record<string, CacheData> = {};
+
+/**
+ * Charge les données d'horoscope pour une date donnée depuis le filesystem
+ * UNIQUEMENT pour développement local
+ * 
+ * @param date - Date au format YYYY-MM-DD
+ * @returns Les données complètes pour cette date, ou null si non trouvé
+ */
+export async function loadDateCache(date: string): Promise<CacheData | null> {
+  // Déjà en mémoire ?
+  if (inMemoryCache[date]) {
+    console.log(`[CACHE] In-memory hit for date: ${date}`);
+    return inMemoryCache[date];
+  }
+
+  // Essayer de lire depuis le filesystem (public/data/horoscopes/)
+  // UNIQUEMENT en développement
+  if (process.env.NODE_ENV === 'development') {
+    try {
+      const filePath = path.join(process.cwd(), 'public', 'data', 'horoscopes', `${date}.json`);
+      
+      const fileExists = await fs.access(filePath).then(() => true).catch(() => false);
+      if (!fileExists) {
+        console.log(`[CACHE] File not found: ${filePath}`);
+        return null;
+      }
+      
+      const content = await fs.readFile(filePath, 'utf-8');
+      const data = JSON.parse(content) as CacheData;
+      
+      // Stocker en mémoire pour les prochaines requêtes
+      inMemoryCache[date] = data;
+      console.log(`[CACHE] Loaded ${Object.keys(data).length} horoscopes for ${date}`);
+      
+      return data;
+    } catch (err) {
+      console.error(`[CACHE] Error reading file ${date}:`, err instanceof Error ? err.message : err);
+      return null;
+    }
+  } else {
+    console.log(`[CACHE] Skipping filesystem in production for date: ${date}`);
+    return null;
+  }
+}
+
+/**
+ * Récupère un horoscope spécifique depuis le cache
+ * 
+ * @param date - Date au format YYYY-MM-DD
+ * @param signId - Identifiant du signe (ex: 'belier')
+ * @param edition - Édition (matin, midi, soir, nuit)
+ * @returns L'horoscope ou null si non trouvé
+ */
+export function getFromCache(date: string, signId: string, edition: string): any | null {
+  const key = `${date}|${signId}|${edition}`;
+  const data = inMemoryCache[date];
+  
+  if (!data) {
+    console.log(`[CACHE] No data in cache for ${date}`);
+    return null;
+  }
+  
+  const result = data[key];
+  if (result) {
+    console.log(`[CACHE HIT] ${key}`);
+  } else {
+    console.warn(`[CACHE MISS] Key ${key} not found. Available keys:`, Object.keys(data).slice(0, 5));
+  }
+  
+  return result || null;
+}
+
+/**
+ * Force le rechargement du cache pour une date (utile après régénération)
+ * 
+ * @param date - Date au format YYYY-MM-DD
+ */
+export async function reloadDateCache(date: string): Promise<void> {
+  delete inMemoryCache[date];
+  await loadDateCache(date);
+}
+
+/**
+ * Efface complètement le cache (pour tests ou redémarrage)
+ */
+export function clearCache(): void {
+  Object.keys(inMemoryCache).forEach(key => delete inMemoryCache[key]);
+  console.log(`[CACHE] Cache cleared (${Object.keys(inMemoryCache).length} entries)`);
+}
+
 /**
  * Charge les données d'horoscope pour une date donnée
  * Priorité au fetch HTTP (production), filesystem en fallback (dev seulement)

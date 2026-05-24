@@ -2,8 +2,9 @@
 # Utilise Next.js 15 avec le plugin officiel @netlify/plugin-nextjs
 
 [build]
-  # Commande de build avec prebuild
-  command = "npm run prebuild && next build"
+  # Commande de build : GitHub Actions génère déjà les fichiers
+  # Le prebuild est désactivé car les fichiers sont générés par GitHub Actions
+  command = "next build"
   
   # Dossier à déployer (généré par Next.js)
   publish = ".next"
@@ -112,7 +113,7 @@
 # ============================================================
 
 [context.production]
-  command = "npm run prebuild && next build"
+  command = "next build"
   [context.production.environment]
     NODE_ENV = "production"
     ENABLE_ON_DEMAND_GENERATION = "true"
@@ -120,7 +121,7 @@
     SKIP_PREBUILD = "true"
 
 [context.deploy-preview]
-  command = "npm run prebuild && next build"
+  command = "next build"
   [context.deploy-preview.environment]
     NODE_ENV = "production"
     ENABLE_ON_DEMAND_GENERATION = "true"
@@ -128,7 +129,7 @@
     SKIP_PREBUILD = "true"
 
 [context.branch-deploy]
-  command = "npm run prebuild && next build"
+  command = "next build"
   [context.branch-deploy.environment]
     NODE_ENV = "production"
     ENABLE_ON_DEMAND_GENERATION = "false"

@@ -13,7 +13,7 @@ import {
 import { computeScores } from '@/lib/scores';
 import type { WeatherData } from '@/app/api/weather/route';
 import type { Edition } from '@/lib/private/maryse-prompt';
-import { loadDateCache, getFromCache } from '@/lib/private/horoscope-file-cache';
+import { loadAmbianceData } from '@/lib/private/horoscope-file-cache';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
@@ -103,9 +103,8 @@ export async function GET(
   // LOG DIAGNOSTIC
   console.log(`[AMBIANCE API] Request: sign=${signId}, date=${userDate}, edition=${edition}`);
 
-  // 0. Check in-memory cache first (filesystem based)
-  await loadDateCache(userDate);
-  const cachedData = getFromCache(userDate, signId, edition);
+  // 0. Check local file via filesystem cache
+  const cachedData = await loadAmbianceData(userDate, signId, edition, req);
   if (cachedData) {
     console.log(`[AMBIANCE CACHE HIT] ${cacheKey}`);
     return NextResponse.json(cachedData, {
