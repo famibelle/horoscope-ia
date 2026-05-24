@@ -19,8 +19,8 @@ const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 /* ── Local file helper ────────────────────────────────────────────────────── */
 async function getFromLocalFile(date: string, signId: string, edition: Edition, req: NextRequest): Promise<any | null> {
   try {
-    // Utiliser URL absolue via req.url pour fonctionner en production (Netlify)
-    const url = new URL(`/data/ambiance/${date}.json`, req.url);
+    // Utiliser l'origine du domaine pour construire l'URL correcte (evite /api/ prefix)
+    const url = new URL(`/data/ambiance/${date}.json`, req.nextUrl.origin);
     const response = await fetch(url.toString(), { next: { revalidate: 28800 } });
     if (!response.ok) return null;
     const allAmbiances = await response.json();

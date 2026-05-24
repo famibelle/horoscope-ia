@@ -190,8 +190,8 @@ async function rewriteWithMistral(
 
 async function getFromLocalFile(date: string, signId: string, edition: Edition, req: NextRequest): Promise<HoroscopeResponse | null> {
   try {
-    // Utiliser URL absolue via req.url pour fonctionner en production (Netlify)
-    const url = new URL(`/data/horoscopes/${date}.json`, req.url);
+    // Utiliser l'origine du domaine pour construire l'URL correcte (evite /api/horoscope/ prefix)
+    const url = new URL(`/data/horoscopes/${date}.json`, req.nextUrl.origin);
     const response = await fetch(url.toString(), { next: { revalidate: 28800 } });
     if (!response.ok) return null;
     const allHoroscopes = await response.json();

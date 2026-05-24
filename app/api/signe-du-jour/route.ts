@@ -10,7 +10,8 @@ const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
 async function getFromLocalFile(date: string, req: NextRequest): Promise<any | null> {
   try {
-    const url = new URL(`/data/signe-du-jour/${date}.json`, req.url);
+    // Utiliser l'origine du domaine pour construire l'URL correcte (evite /api/ prefix)
+    const url = new URL(`/data/signe-du-jour/${date}.json`, req.nextUrl.origin);
     const response = await fetch(url.toString(), { next: { revalidate: 28800 } });
     if (!response.ok) return null;
     return await response.json();
