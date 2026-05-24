@@ -13,6 +13,7 @@ import {
 import { detectEdition, detectEditionWithNight, todayGuadeloupe } from '@/lib/edition';
 import type { Edition } from '@/lib/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
+import { loadDateCache, getFromCache } from '@/lib/private/horoscope-file-cache';
 
 const HOROSCOPE_API = 'https://freehoroscopeapi.com/api/v1/get-horoscope/daily';
 const MISTRAL_URL   = 'https://api.mistral.ai/v1/chat/completions';
@@ -186,18 +187,39 @@ async function rewriteWithMistral(
   try { return JSON.parse(content); } catch { return null; }
 }
 
-/* ── Local file helpers ──────────────────────────────────────────────────── */
+/* ── Local file helpers with enhanced logging ──────────────────────────────── */
 
+/**
+ * Récupère les horoscopes depuis le fichier JSON local via fetch HTTP
+ * Utilisé comme fallback si le cache filesystem n'est pas disponible
+ */
 async function getFromLocalFile(date: string, signId: string, edition: Edition, req: NextRequest): Promise<HoroscopeResponse | null> {
+  const key = `${date}|${signId}|${edition}`;
+  
   try {
-    // Utiliser l'origine du domaine pour construire l'URL correcte (evite /api/horoscope/ prefix)
-    const url = new URL(`/data/horoscopes/${date}.json`, req.nextUrl.origin);
+    // Construire l'URL avec l'origine du domaine
+    const baseUrl = process.env.VERCEL_URL || process.env.NETLIFY_URL || req.nextUrl.origin;
+    const url = new URL(`/data/horoscopes/${date}.json`, baseUrl);
+    
+    console.log(`[FILE FETCH] Attempting: ${url.toString()}`); // LOG DIAGNOSTIC
+    
     const response = await fetch(url.toString(), { next: { revalidate: 28800 } });
-    if (!response.ok) return null;
+    
+    console.log(`[FILE FETCH] Response: ${response.status} ${response.statusText}`); // LOG DIAGNOSTIC
+    
+    if (!response.ok) {
+      console.warn(`[FILE FETCH] Failed: ${response.status}`); // LOG DIAGNOSTIC
+      return null;
+    }
+    
     const allHoroscopes = await response.json();
-    const key = `${date}|${signId}|${edition}`;
+    const found = !!allHoroscopes[key];
+    
+    console.log(`[FILE FETCH] Key ${key} found: ${found}, available keys: ${Object.keys(allHoroscopes).slice(0, 5).join(', ')}${Object.keys(allHoroscopes).length > 5 ? '...' : ''}`); // LOG DIAGNOSTIC
+    
     return allHoroscopes[key] || null;
-  } catch {
+  } catch (err) {
+    console.error(`[FILE FETCH] Error:`, err instanceof Error ? err.message : err); // LOG DIAGNOSTIC
     return null;
   }
 }
@@ -227,7 +249,19 @@ export async function GET(
   const date = userDate || todayGuadeloupe();
   const blobKey = `${date}|${signId}|${edition}`;
 
-  // 1. Check local file first (fastest)
+  // LOG DIAGNOSTIC: Afficher les paramètres utilisés
+  console.log(`[API] Request: sign=${signId}, date=${date}, edition=${edition}, userDate=${userDate || 'none'}`);
+
+  // 0. Check in-memory cache first (FASTEST - filesystem based)
+  await loadDateCache(date);
+  const cachedData = getFromCache(date, signId, edition);
+  if (cachedData) {
+    return NextResponse.json(cachedData, {
+      headers: { 'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' },
+    });
+  }
+
+  // 1. Fallback: Check local file via HTTP fetch
   const localData = await getFromLocalFile(date, signId, edition, req);
   if (localData) {
     return NextResponse.json(localData, {
@@ -235,13 +269,17 @@ export async function GET(
     });
   }
 
-  // 2. Check Blobs cache
+  // 2. Fallback: Check Blobs cache
   const cached = await getCached(blobKey);
   if (cached) {
+    console.log(`[BLOBS HIT] ${blobKey}`);
     return NextResponse.json(cached, {
       headers: { 'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' },
     });
   }
+
+  // LOG DIAGNOSTIC: Si on arrive ici, c'est que toutes les sources ont échoué
+  console.warn(`[API] All cache sources missed for ${blobKey}. Falling back to Mistral.`);
 
   // === DONNÉES CULTURELLES ENRICHIES (depuis signs-data.ts) ===
   const signData = signs.find(s => s.id === signId)!;

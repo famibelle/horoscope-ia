@@ -13,20 +13,43 @@ import {
 import { computeScores } from '@/lib/scores';
 import type { WeatherData } from '@/app/api/weather/route';
 import type { Edition } from '@/lib/private/maryse-prompt';
+import { loadDateCache, getFromCache } from '@/lib/private/horoscope-file-cache';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
-/* ── Local file helper ────────────────────────────────────────────────────── */
+/* ── Local file helper with enhanced logging ──────────────────────────────── */
+
+/**
+ * Récupère les ambiances depuis le fichier JSON local via fetch HTTP
+ * Utilisé comme fallback si le cache filesystem n'est pas disponible
+ */
 async function getFromLocalFile(date: string, signId: string, edition: Edition, req: NextRequest): Promise<any | null> {
+  const key = `${date}|${signId}|${edition}`;
+  
   try {
-    // Utiliser l'origine du domaine pour construire l'URL correcte (evite /api/ prefix)
-    const url = new URL(`/data/ambiance/${date}.json`, req.nextUrl.origin);
+    // Construire l'URL avec l'origine du domaine
+    const baseUrl = process.env.VERCEL_URL || process.env.NETLIFY_URL || req.nextUrl.origin;
+    const url = new URL(`/data/ambiance/${date}.json`, baseUrl);
+    
+    console.log(`[AMBIANCE FETCH] Attempting: ${url.toString()}`); // LOG DIAGNOSTIC
+    
     const response = await fetch(url.toString(), { next: { revalidate: 28800 } });
-    if (!response.ok) return null;
+    
+    console.log(`[AMBIANCE FETCH] Response: ${response.status} ${response.statusText}`); // LOG DIAGNOSTIC
+    
+    if (!response.ok) {
+      console.warn(`[AMBIANCE FETCH] Failed: ${response.status}`); // LOG DIAGNOSTIC
+      return null;
+    }
+    
     const allAmbiances = await response.json();
-    const key = `${date}|${signId}|${edition}`;
+    const found = !!allAmbiances[key];
+    
+    console.log(`[AMBIANCE FETCH] Key ${key} found: ${found}, available keys: ${Object.keys(allAmbiances).slice(0, 5).join(', ')}${Object.keys(allAmbiances).length > 5 ? '...' : ''}`); // LOG DIAGNOSTIC
+    
     return allAmbiances[key] || null;
-  } catch {
+  } catch (err) {
+    console.error(`[AMBIANCE FETCH] Error:`, err instanceof Error ? err.message : err); // LOG DIAGNOSTIC
     return null;
   }
 }
@@ -77,13 +100,30 @@ export async function GET(
   const cacheKey = `${userDate}|${signId}|${edition}`;
   const today = todayGuadeloupe();
 
-  // 1. Check local file first (fastest - static files)
+  // LOG DIAGNOSTIC
+  console.log(`[AMBIANCE API] Request: sign=${signId}, date=${userDate}, edition=${edition}`);
+
+  // 0. Check in-memory cache first (filesystem based)
+  await loadDateCache(userDate);
+  const cachedData = getFromCache(userDate, signId, edition);
+  if (cachedData) {
+    console.log(`[AMBIANCE CACHE HIT] ${cacheKey}`);
+    return NextResponse.json(cachedData, {
+      headers: { 'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' },
+    });
+  }
+
+  // 1. Fallback: Check local file via HTTP fetch
   const localData = await getFromLocalFile(userDate, signId, edition, req);
   if (localData) {
+    console.log(`[AMBIANCE FILE HIT] ${cacheKey}`);
     return NextResponse.json(localData, {
       headers: { 'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' },
     });
   }
+
+  // LOG DIAGNOSTIC: Si on arrive ici, toutes les sources locales ont échoué
+  console.warn(`[AMBIANCE] All local sources missed for ${cacheKey}. Trying Blobs...`);
 
   // 2. Try Netlify Blobs cache (for backwards compatibility)
   const blobStore = await getAmbienceCache();

@@ -82,5 +82,47 @@
     "edition": "midi",
     "teaser": "Ce midi, laisse la pluie des manguiers caresser ta peau comme une confidence qui t’invite à danser sous les feuilles. Aujourd’hui, ton cœur pulse au rythme de la marée, prêt à déborder de désir et de patience.",
     "source": "mistral"
+  },
+  "2026-05-24|taureau|soir": {
+    "ouverture": "Ce soir la pluie sur les feuilles de mangrove murmure comme un secret des anciens, écoute bien avant de fermer les yeux.",
+    "amour": "Ton cœur est comme le krab tè ce soir, solide et généreux, mais prêt à se cacher si on le blesse. Laisse-toi aimer sans te refermer. Les crabes savent quand il faut sortir de leur trou, toi aussi.",
+    "travail": "Aujourd’hui tu as travaillé comme le kwikwi sous la terre, sans bruit mais sans relâche. Les sources de Sofaïa te rappellent que même l’eau la plus discrète creuse la pierre. Demain tu verras le résultat de ta patience.",
+    "argent": "Regarde tes sous comme on regarde pousser un pied de manyòk, avec attention mais sans avidité. Les racines savent qu’elles donneront des tubercules quand le temps sera venu. Fais confiance au cycle.",
+    "amitie": "Ce soir les embouchures des rivières mélangent l’eau douce et l’eau salée sans se disputer. Tes amis sont comme ça, différents mais complémentaires. Laissez les courants se rencontrer sans chercher à tout contrôler.",
+    "sante": "",
+    "prediction": "Les urakans tournent haut dans le ciel ce soir, signe que les vents vont bientôt changer de direction.",
+    "signFr": "Taureau",
+    "weather": "23–27°C, pluie modérée, vent faible (18 km/h)",
+    "edition": "soir",
+    "teaser": "Ce soir, ton cœur bat comme les racines qui cherchent l’eau sous la terre, mais laisse-toi porter par les courants doux de l’amour qui t’attendent.",
+    "source": "mistral"
+  },
+  "2026-05-24|gemeaux|nuit": {
+    "ouverture": "Cette nuit la lune se reflète dans les flaques comme un woucou posé sur l’eau, prêt à guider ceux qui savent écouter les murmures des ancêtres.",
+    "amour": "Ton cœur bat au rythme des tambours lointains du bain des Amours, là où l’eau chaude efface les vieilles blessures. Laisse-toi porter par cette énergie qui répare sans demander d’explications. Comme le papillon nwè qui entre sans frapper, un amour ancien pourrait revenir te visiter cette nuit.",
+    "travail": "Le mabouya glisse sur les murs de ta case en silence, rappelant que certaines choses se font mieux dans l’ombre. Cette nuit prépare tes plans comme les marrons préparaient leurs caches dans les mornes, avec patience et discrétion. Demain tu agiras sous la lumière mais ce soir travaille dans le secret.",
+    "argent": "L’iyam dort sous la terre, gonflé de promesses, attendant son heure pour nourrir ceux qui l’ont planté. Tes efforts d’aujourd’hui sont comme ces tubercules, invisibles mais en train de mûrir. Rappelle-toi comment nos ancêtres ont transformé le manyòk en liberté, même quand les maîtres croyaient tout contrôler.",
+    "amitie": "Les rires résonnent près de la rivière du Plessis où les pierres gardent les histoires des Arawaks. Cette nuit tes amis sont comme ces eaux vives, ils emportent tes peines sans même que tu aies à les nommer. Un lyannaj se tisse dans l’invisible, plus fort que les serments prononcés à voix haute.",
+    "sante": "",
+    "prediction": "Les nuages bas sur la Soufrière annoncent une semaine où ce qui était caché va remonter à la surface, comme les pétroglyphes sous la pluie.",
+    "signFr": "Gémeaux",
+    "weather": "23–27°C, pluie modérée, vent faible (18 km/h)",
+    "edition": "nuit",
+    "teaser": "Cette nuit, les étoiles chuchotent ton nom comme une caresse entre deux mondes tu vas danser avec tes désirs les plus secrets",
+    "source": "mistral"
+  },
+  "2026-05-24|gemeaux|matin": {
+    "ouverture": "Ce matin la pluie danse sur les feuilles de l’iyam comme un message des ancêtres, Gémeaux, écoute bien ce que l’eau murmure avant le jour.",
+    "amour": "Ton cœur est léger comme le papillon nwè qui entre sans frapper, ne le chasse pas, c’est peut-être l’âme d’un proche qui vient te visiter. Laisse-toi surprendre par ce qui arrive sans prévenir, comme la brise qui tourne sans raison.",
+    "travail": "Aujourd’hui tu es comme le mabouya sur le mur de la case, discret mais toujours là, prêt à bondir quand l’occasion se présente. La cascade aux Écrevisses t’attend pour te laver des doutes, va t’y ressourcer avant de commencer.",
+    "argent": "Le manioc t’a nourri dans les temps difficiles, souviens-toi que la vraie richesse pousse sous terre, pas dans les comptes en banque. Plante quelque chose aujourd’hui, même un woucou dans un pot, ça te rappellera que tout ce qui compte repousse.",
+    "amitie": "Le lyannaj ce matin c’est comme un crabe dans la mangrove, chacun dans son trou mais tous reliés par la même eau. Passe au Saut de la Lézarde avec un ami, l’eau qui tombe là-bas lave plus que les corps, elle nettoie les malentendus.",
+    "sante": "",
+    "prediction": "Les prochains jours seront comme la rivière du Plessis, pleine de pétroglyphes invisibles qui ne demandent qu’à être lus si tu sais regarder sous la surface.",
+    "signFr": "Gémeaux",
+    "weather": "23–27°C, pluie modérée, vent faible (18 km/h)",
+    "edition": "matin",
+    "teaser": "Ce matin, l’eau murmure des secrets à ton oreille de Gémeaux, écoute… et laisse-toi emporter par la brise qui change d’humeur sans prévenir. La cascade t’appelle, mais c’est sous la surface que tu trouveras les vraies réponses",
+    "source": "mistral"
   }
 }
