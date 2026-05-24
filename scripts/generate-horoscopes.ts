@@ -11,6 +11,14 @@ import { histoireData } from '@/lib/private/histoire-data';
 // Importer le système de garde-fous de sécurité
 import { applySafetyFiltersToObject } from '@/lib/private/safety-filter';
 
+// Importer le système de glossaire
+import {
+  extractGlossaryTerms,
+  updateGlossary,
+  removeRedundantParentheses,
+  loadGlossary
+} from '@/lib/private/glossaire';
+
 // Parser les arguments en ligne de commande
 const args = process.argv.slice(2);
 const options = {
@@ -333,11 +341,85 @@ async function generateWithMistral(
   const content: string = data.choices?.[0]?.message?.content ?? '';
   logVerbose(`Contenu brut reçu: ${content.substring(0, 200)}${content.length > 200 ? '...' : ''}`);
   
+    // 🛡️ APPLICATION DES GARDE-FOUS DE SÉCURITÉ
+    // ==========================================
+    logVerbose('🛡️  Application des garde-fous de sécurité...');
+    const { filtered: safeParsed, warnings, stats } = applySafetyFiltersToObject(
+      parsed,
+      { logWarnings: true, includeStats: true }
+    );
+    
+    if (warnings.length > 0) {
+      logVerbose(`✅ ${warnings.length} garde-fous appliqués pour ${signId} (${edition})`, {
+        highPriority: stats.highPriority,
+        mediumPriority: stats.mediumPriority,
+        lowPriority: stats.lowPriority,
+        totalReplacements: stats.totalReplacements,
+      });
+    } else {
+      logVerbose(`✅ Aucun garde-fou nécessaire pour ${signId} (${edition})`);
+    }
+    
+    return safeParsed;
+  } catch (e) {
+=======
   try {
     const parsed = JSON.parse(content);
     logVerbose('JSON valide parsé avec succès', Object.keys(parsed));
     
     // ==========================================
+    // 📚 EXTRACTION DES TERMES POUR LE GLOSSAIRE
+    // ==========================================
+    logVerbose('📚 Extraction des termes pour le glossaire...');
+    
+    // Convertir l'objet en texte pour extraction
+    const textForGlossary = JSON.stringify(parsed);
+    const terms = extractGlossaryTerms(textForGlossary);
+    
+    if (terms.length > 0) {
+      const dateToday = new Date().toISOString().split('T')[0];
+      const sourceFile = `horoscopes/${todayGuadeloupe()}.json`;
+      updateGlossary(terms, dateToday, sourceFile);
+    } else {
+      logVerbose('ℹ️  Aucun terme entre parenthèses détecté pour le glossaire');
+    }
+    
+    // ==========================================
+    // 🗑️  SUPPRESSION DES PARENTHÈSES REDONDANTES
+    // ==========================================
+    logVerbose('🗑️  Suppression des parenthèses pour les termes connus...');
+    const parsedWithCleanedText = JSON.parse(
+      JSON.stringify(parsed).replace(/(\w[\w'\-]*)\s*\(([^)]+)\)/g, (match, term) => {
+        const glossary = loadGlossary();
+        if (glossary[term]) {
+          return term; // Supprime les parenthèses
+        }
+        return match; // Garde l'original
+      })
+    );
+    
+    // ==========================================
+    // 🛡️ APPLICATION DES GARDE-FOUS DE SÉCURITÉ
+    // ==========================================
+    logVerbose('🛡️  Application des garde-fous de sécurité...');
+    const { filtered: safeParsed, warnings, stats } = applySafetyFiltersToObject(
+      parsedWithCleanedText,
+      { logWarnings: true, includeStats: true }
+    );
+    
+    if (warnings.length > 0) {
+      logVerbose(`✅ ${warnings.length} garde-fous appliqués pour ${signId} (${edition})`, {
+        highPriority: stats.highPriority,
+        mediumPriority: stats.mediumPriority,
+        lowPriority: stats.lowPriority,
+        totalReplacements: stats.totalReplacements,
+      });
+    } else {
+      logVerbose(`✅ Aucun garde-fou nécessaire pour ${signId} (${edition})`);
+    }
+    
+    return safeParsed;
+  } catch (e) {==========================================
     // 🛡️ APPLICATION DES GARDE-FOUS DE SÉCURITÉ
     // ==========================================
     logVerbose('🛡️  Application des garde-fous de sécurité...');
@@ -424,7 +506,23 @@ async function generateTeaser(
   }
 
   const data = await res.json();
-  const teaser = data.choices?.[0]?.message?.content?.trim() ?? '';
+  let teaser = data.choices?.[0]?.message?.content?.trim() ?? '';
+  
+  // ==========================================
+  // 📚 EXTRACTION DES TERMES POUR LE GLOSSAIRE (TEASER)
+  // ==========================================
+  const teaserTerms = extractGlossaryTerms(teaser);
+  if (teaserTerms.length > 0) {
+    const dateToday = new Date().toISOString().split('T')[0];
+    const sourceFile = `horoscopes/${todayGuadeloupe()}.json`;
+    updateGlossary(teaserTerms, dateToday, sourceFile);
+  }
+  
+  // ==========================================
+  // 🗑️  SUPPRESSION DES PARENTHÈSES (TEASER)
+  // ==========================================
+  teaser = removeRedundantParentheses(teaser);
+  
   logVerbose(`Teaser généré: "${teaser}"`);
   return teaser;
 }

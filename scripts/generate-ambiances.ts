@@ -23,6 +23,14 @@ import { getVaudouContextForSign, SIGN_TO_LOA, SIGN_TO_VAUDOU_CONTEXT } from '@/
 // Importer le système de garde-fous de sécurité
 import { applySafetyFilters, applySafetyFiltersToObject } from '@/lib/private/safety-filter';
 
+// Importer le système de glossaire
+import {
+  extractGlossaryTerms,
+  updateGlossary,
+  removeRedundantParentheses,
+  loadGlossary
+} from '@/lib/private/glossaire';
+
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
 // Parser les arguments en ligne de commande
@@ -273,6 +281,25 @@ Sans markdown dans les valeurs JSON.`;
     return null;
   }
 
+    // 🛡️ APPLICATION DES GARDE-FOUS DE SÉCURITÉ
+    // ==========================================
+    logVerbose('🛡️  Application des garde-fous de sécurité...');
+    const { filtered: safeParsed, warnings, stats } = applySafetyFiltersToObject(
+      parsed,
+      { logWarnings: true, includeStats: true }
+    );
+    
+    if (warnings.length > 0) {
+      logVerbose(`✅ ${warnings.length} garde-fous appliqués pour ${signId} (${edition})`, {
+        highPriority: stats.highPriority,
+        mediumPriority: stats.mediumPriority,
+        lowPriority: stats.lowPriority,
+        totalReplacements: stats.totalReplacements,
+      });
+    } else {
+      logVerbose(`✅ Aucun garde-fou nécessaire pour ${signId} (${edition})`);
+    }
+=======
   const data = await res.json();
   const content = data.choices?.[0]?.message?.content ?? '{}';
 
@@ -281,6 +308,55 @@ Sans markdown dans les valeurs JSON.`;
     logVerbose('JSON valide parsé avec succès', Object.keys(parsed));
     
     // ==========================================
+    // 📚 EXTRACTION DES TERMES POUR LE GLOSSAIRE
+    // ==========================================
+    logVerbose('📚 Extraction des termes pour le glossaire...');
+    
+    const textForGlossary = JSON.stringify(parsed);
+    const terms = extractGlossaryTerms(textForGlossary);
+    
+    if (terms.length > 0) {
+      const dateToday = new Date().toISOString().split('T')[0];
+      const today = todayGuadeloupe();
+      const sourceFile = `ambiance/${today}.json`;
+      updateGlossary(terms, dateToday, sourceFile);
+    } else {
+      logVerbose('ℹ️  Aucun terme entre parenthèses détecté pour le glossaire');
+    }
+    
+    // ==========================================
+    // 🗑️  SUPPRESSION DES PARENTHÈSES REDONDANTES
+    // ==========================================
+    logVerbose('🗑️  Suppression des parenthèses pour les termes connus...');
+    const parsedWithCleanedText = JSON.parse(
+      JSON.stringify(parsed).replace(/(\w[\w'\-]*)\s*\(([^)]+)\)/g, (match, term) => {
+        const glossary = loadGlossary();
+        if (glossary[term]) {
+          return term;
+        }
+        return match;
+      })
+    );
+    
+    // ==========================================
+    // 🛡️ APPLICATION DES GARDE-FOUS DE SÉCURITÉ
+    // ==========================================
+    logVerbose('🛡️  Application des garde-fous de sécurité...');
+    const { filtered: safeParsed, warnings, stats } = applySafetyFiltersToObject(
+      parsedWithCleanedText,
+      { logWarnings: true, includeStats: true }
+    );
+    
+    if (warnings.length > 0) {
+      logVerbose(`✅ ${warnings.length} garde-fous appliqués pour ${signId} (${edition})`, {
+        highPriority: stats.highPriority,
+        mediumPriority: stats.mediumPriority,
+        lowPriority: stats.lowPriority,
+        totalReplacements: stats.totalReplacements,
+      });
+    } else {
+      logVerbose(`✅ Aucun garde-fou nécessaire pour ${signId} (${edition})`);
+    }==========================================
     // 🛡️ APPLICATION DES GARDE-FOUS DE SÉCURITÉ
     // ==========================================
     logVerbose('🛡️  Application des garde-fous de sécurité...');

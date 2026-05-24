@@ -11,6 +11,14 @@ import signeData from '@/lib/private/signe-du-jour-data.json';
 import { plantesData, animauxData } from '@/lib/private/vaudou-data';
 import { SIGN_TO_VAUDOU_CONTEXT } from '@/lib/private/vaudou-mappings';
 
+// Importer le système de glossaire
+import {
+  extractGlossaryTerms,
+  updateGlossary,
+  removeRedundantParentheses,
+  loadGlossary
+} from '@/lib/private/glossaire';
+
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
 // Parser les arguments en ligne de commande
@@ -365,7 +373,29 @@ export async function generateSigneDuJour() {
 
   console.log(`🎯 Type: ${type}, Entry: ${entry.nom_creole}, Loa: ${loa || 'Aucun'}, Famille: ${familleVaudou || 'Aucune'}`);
 
-  const phrase = await generatePhrase(type, entry, weather, loa, familleVaudou);
+  let phrase = await generatePhrase(type, entry, weather, loa, familleVaudou);
+  
+  // ==========================================
+  // 📚 EXTRACTION DES TERMES POUR LE GLOSSAIRE
+  // ==========================================
+  if (phrase) {
+    logVerbose('📚 Extraction des termes pour le glossaire (signe du jour)...');
+    const terms = extractGlossaryTerms(phrase);
+    
+    if (terms.length > 0) {
+      const dateToday = new Date().toISOString().split('T')[0];
+      const sourceFile = `signe-du-jour/${today}.json`;
+      updateGlossary(terms, dateToday, sourceFile);
+    } else {
+      logVerbose('ℹ️  Aucun terme entre parenthèses détecté pour le glossaire');
+    }
+    
+    // ==========================================
+    // 🗑️  SUPPRESSION DES PARENTHÈSES REDONDANTES
+    // ==========================================
+    logVerbose('🗑️  Suppression des parenthèses pour les termes connus...');
+    phrase = removeRedundantParentheses(phrase);
+  }
 
   const result = {
     date: today,
@@ -377,6 +407,11 @@ export async function generateSigneDuJour() {
     loa: loa || undefined,
     familleVaudou: familleVaudou || undefined,
   };
+
+  // Appliquer aussi sur le résultat final (au cas où nomCreole/nomCommun ont des parenthèses)
+  if (result.phrase) {
+    result.phrase = removeRedundantParentheses(result.phrase);
+  }
 
   await saveToFile(today, result);
 
