@@ -29,6 +29,7 @@ on:
     branches: [main]
     paths:
       - 'scripts/generate-horoscopes.ts'
+      - 'scripts/generate-signe-du-jour.ts'
       - 'lib/private/maryse-prompt.ts'
       - 'lib/cultural-context.ts'
       - '.github/workflows/generate-daily-horoscopes.yml'
@@ -84,7 +85,7 @@ jobs:
           # Exécuter
           if $COMMAND; then
             echo "SUCCESS=true" >> $GITHUB_OUTPUT
-            echo "✅ Génération terminée avec succès!"
+            echo "✅ Génération horoscopes terminée avec succès!"
           else
             echo "SUCCESS=false" >> $GITHUB_OUTPUT
             echo "❌ Échec de la génération"
@@ -95,10 +96,38 @@ jobs:
           NETLIFY_URL: https://horoscope-karukera.netlify.app
           NODE_ENV: production
       
+      - name: Generate signe-du-jour
+        id: generate-signe
+        run: |
+          echo "🌿 Génération du signe du jour pour ${{ steps.date.outputs.DATE }}"
+          
+          # Construire la commande
+          SDJ_COMMAND="npx tsx scripts/generate-signe-du-jour.ts --date=${{ steps.date.outputs.DATE }} --force"
+          
+          # Ajouter --verbose si c'est un workflow manuel
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            SDJ_COMMAND="$SDJ_COMMAND --verbose"
+          fi
+          
+          echo "Commande: $SDJ_COMMAND"
+          
+          # Exécuter
+          if $SDJ_COMMAND; then
+            echo "SDJ_SUCCESS=true" >> $GITHUB_OUTPUT
+            echo "✅ Génération signe du jour terminée avec succès!"
+          else
+            echo "SDJ_SUCCESS=false" >> $GITHUB_OUTPUT
+            echo "⚠️  Échec de la génération signe du jour (non bloquant)"
+          fi
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          NETLIFY_URL: https://horoscope-karukera.netlify.app
+          NODE_ENV: production
+      
       - name: Commit and push changes
         if: steps.generate.outputs.SUCCESS == 'true'
         run: |
-          echo "📝 Commit des horoscopes générés"
+          echo "📝 Commit des fichiers générés"
           
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
@@ -106,13 +135,20 @@ jobs:
           # Vérifier s'il y a des changements
           if [ -n "$(git status --porcelain)" ]; then
             DATE=${{ steps.date.outputs.DATE }}
+            
+            # Ajouter les fichiers générés
             git add public/data/horoscopes/${DATE}.json
+            
+            # Ajouter le signe du jour si généré avec succès
+            if [ "${{ steps.generate-signe.outputs.SDJ_SUCCESS }}" = "true" ] || [ -f "public/data/signe-du-jour/${DATE}.json" ]; then
+              git add public/data/signe-du-jour/${DATE}.json
+            fi
             
             # Vérifier si le fichier existe bien
             if git diff --cached --quiet; then
               echo "Aucun changement à commiter"
             else
-              git commit -m "chore: horoscopes du ${DATE} [auto-generated]"
+              git commit -m "chore: horoscopes et signe du jour du ${DATE} [auto-generated]"
               git push
               echo "✅ Commit et push effectués"
             fi
@@ -123,14 +159,15 @@ jobs:
       - name: Verify generation
         if: steps.generate.outputs.SUCCESS == 'true'
         run: |
-          echo "🔍 Vérification des horoscopes générés"
+          echo "🔍 Vérification des fichiers générés"
           
           DATE=${{ steps.date.outputs.DATE }}
-          FILE="public/data/horoscopes/${DATE}.json"
           
-          if [ -f "$FILE" ]; then
-            COUNT=$(jq '. | length' "$FILE")
-            echo "✅ Fichier trouvé: $FILE ($COUNT entrées)"
+          # Vérifier les horoscopes
+          HORO_FILE="public/data/horoscopes/${DATE}.json"
+          if [ -f "$HORO_FILE" ]; then
+            COUNT=$(jq '. | length' "$HORO_FILE")
+            echo "✅ Fichier horoscopes trouvé: $HORO_FILE ($COUNT entrées)"
             
             # Vérifier qu'on a bien 48 entrées (12 signes × 4 éditions)
             if [ "$COUNT" -eq 48 ]; then
@@ -139,8 +176,16 @@ jobs:
               echo "⚠️  Nombre d'entrées inattendu: $COUNT (attendu: 48)"
             fi
           else
-            echo "❌ Fichier non trouvé: $FILE"
+            echo "❌ Fichier horoscopes non trouvé: $HORO_FILE"
             exit 1
+          fi
+          
+          # Vérifier le signe du jour (optionnel)
+          SDJ_FILE="public/data/signe-du-jour/${DATE}.json"
+          if [ -f "$SDJ_FILE" ]; then
+            echo "✅ Fichier signe du jour trouvé: $SDJ_FILE"
+          else
+            echo "ℹ️  Fichier signe du jour non généré (optionnel)"
           fi
 
   # Job supplémentaire pour vérifier le déploiement
