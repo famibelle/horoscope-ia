@@ -1,9 +1,10 @@
 # Configuration Netlify pour Horoscope Karukera
 # Optimisée pour la génération et le déploiement des horoscopes
+# Note: Next.js 14 est utilisé (le plugin Next.js a été désactivé)
 
 [build]
-  # Commande de build : exécute prebuild puis build Next.js
-  command = "npm run build"
+  # Commande de build : next build (sans prebuild)
+  command = "next build"
   
   # Dossier à déployer (généré par Next.js)
   publish = ".next"
@@ -105,14 +106,12 @@
   force = false
 
 # ============================================================
-# PLUGINS : Plugin Next.js pour Netlify
+# PLUGINS : Aucun plugin nécessaire
+# Netlify a un support natif pour Next.js 14
 # ============================================================
 
-[[plugins]]
-  # Plugin officiel Next.js pour Netlify
-  # NOTE: Ce plugin ne nécessite AUCUNE configuration (inputs)
-  # La version 5.15.11 a changé et n'accepte plus nextConfigPath
-  package = "@netlify/plugin-nextjs"
+# Note: Le plugin @netlify/plugin-nextjs a été désactivé car incompatible
+# avec Next.js 14. Netlify gère Next.js nativement.
 
 # ============================================================
 # CONTEXTES DE DÉPLOIEMENT
@@ -120,7 +119,7 @@
 
 # Pour la branche main (production)
 [context.production]
-  command = "npm run build"
+  command = "next build"
   [context.production.environment]
     NODE_ENV = "production"
     ENABLE_ON_DEMAND_GENERATION = "true"
@@ -129,7 +128,7 @@
 
 # Pour les branches de prévisualisation (deploy previews)
 [context.deploy-preview]
-  command = "npm run build"
+  command = "next build"
   [context.deploy-preview.environment]
     NODE_ENV = "production"
     ENABLE_ON_DEMAND_GENERATION = "true"
@@ -138,7 +137,7 @@
 
 # Pour les branches (branch deploys)
 [context.branch-deploy]
-  command = "npm run build"
+  command = "next build"
   [context.branch-deploy.environment]
     NODE_ENV = "production"
     ENABLE_ON_DEMAND_GENERATION = "false"
