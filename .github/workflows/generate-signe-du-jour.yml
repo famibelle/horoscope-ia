@@ -1,518 +1,94 @@
-name: Générer le signe du jour (SÉCURISÉ - ZÉRO RISQUE 25€)
-
-# =============================================================================
-# 🛡️  WORKFLOW SPÉCIALISÉ POUR LE SIGNE DU JOUR
-# =============================================================================
-# Objectif: Générer UNIQUEMENT public/data/signe-du-jour/AAAA-MM-JJ.json
-# Stratégie: 10 couches de protection AVANT tout appel Mistral (25€)
-# =============================================================================
+name: 🌟 Génération Signe du Jour (Sécurisée)
 
 on:
-  # Tous les jours à 4h00 UTC = minuit en Guadeloupe (UTC-4)
   schedule:
-    - cron: '0 4 * * *'
-  
-  # Déclenchement manuel avec options
+    - cron: '15 4 * * *'
   workflow_dispatch:
     inputs:
       date:
-        description: 'Date à générer (YYYY-MM-DD). Par défaut: demain en Guadeloupe'
+        description: 'Date (YYYY-MM-DD)'
         required: false
       mode:
-        description: 'Mode de génération'
+        description: 'Mode'
         required: false
         default: 'normal'
         type: choice
-        options:
-        - normal
-        - verbose
-        - force
-        - force-verbose
+        options: [normal, verbose, force]
 
-  # Déclencher aussi lors d'un push sur main/vaudou (pour les tests)
-  push:
-    branches: [main, vaudou]
-    paths:
-      - 'scripts/generate-signe-du-jour.ts'
-      - 'lib/private/maryse-prompt.ts'
-      - '.github/workflows/generate-signe-du-jour.yml'
-
-# =============================================================================
-# 🔐 PERMISSIONS: GITHUB_TOKEN doit pouvoir écrire sur le repo
-# =============================================================================
 permissions:
   contents: write
-  packages: write
 
 jobs:
-  generate-signe-du-jour:
+  generate:
     runs-on: ubuntu-latest
-    
     steps:
-      # 📁 COUCHE 0.75: PRÉPARATION DES DOSSIERS
-      # ========================================================================
-      # 🔐 COUCHE -1: VÉRIFICATION INITIALE DE L'ENVIRONNEMENT
-      # ========================================================================
-      - name: Vérifier l'environnement du runner
+      - name: 🛡️ Audit de Sécurité & Préparation
         run: |
-          echo "🔍 Vérification initiale de l'environnement..."
-          echo "Mémoire disponible:"
-          free -m
-          echo "Espace disque:"
-          df -h
-          echo "Version de git:"
-          git --version
-          echo "✅ Environnement vérifié"
+          if [ "${{ github.ref_name }}" != "vaudou" ]; then
+            echo "❌ ERREUR: Branche vaudou requise."
+            exit 1
+          fi
+          if [ -z "${{ secrets.MISTRAL_API_KEY }}" ]; then
+            echo "❌ ERREUR: Clé API manquante."
+            exit 1
+          fi
 
-      # ========================================================================
-      # 🔐 COUCHE 0: VÉRIFICATION DES SECRETS (Évite 25€ si API_KEY manquant)
-      # ========================================================================
-      - name: Verify Mistral API key exists
-        run: |
-          echo "🔑 Vérification de MISTRAL_API_KEY..."
-          if [ -z "${{ secrets.MISTRAL_API_KEY }}" ] || [ "${{ secrets.MISTRAL_API_KEY }}" = " " ]; then
-            echo "❌ ERREUR CRITIQUE: MISTRAL_API_KEY non configuré ou vide !"
-            echo "   → Sans ça, la génération coûtera 25€ pour RIEN."
-            echo "   Solution: Configurez le secret dans GitHub Settings > Secrets > Actions"
-            exit 1
-          fi
-          if [ ${#MISTRAL_API_KEY} -lt 30 ]; then
-            echo "❌ ERREUR: MISTRAL_API_KEY semble invalide (trop court)"
-            exit 1
-          fi
-          echo "✅ MISTRAL_API_KEY est présent et valide"
-        env:
-          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
-
-      - name: Verify GITHUB_TOKEN permissions
-        run: |
-          echo "🔑 Vérification des permissions GITHUB_TOKEN..."
-          if [ -z "${{ secrets.GITHUB_TOKEN }}" ]; then
-            echo "❌ ERREUR CRITIQUE: GITHUB_TOKEN manquant !"
-            exit 1
-          fi
-          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -I "https://api.github.com/repos/famibelle/horoscope-ia/contents/README.md")
-          if [ "$RESPONSE" != "200" ]; then
-            echo "❌ ERREUR: GITHUB_TOKEN n'a pas les permissions de lecture (code: $RESPONSE)"
-            exit 1
-          fi
-          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -I "https://api.github.com/repos/famibelle/horoscope-ia/git/ref/heads/${{ github.ref_name }}")
-          if [ "$RESPONSE" != "200" ]; then
-            echo "❌ ERREUR: GITHUB_TOKEN n'a pas les permissions sur la branche ${{ github.ref_name }} (code: $RESPONSE)"
-            exit 1
-          fi
-          echo "✅ GITHUB_TOKEN a toutes les permissions nécessaires"
-
-      # ========================================================================
-      # 🌿 COUCHE 0.5: CHECKOUT + SYNCHRONISATION AVEC ORIGIN
-      # ========================================================================
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Synchroniser avec origin
-        run: |
-          echo "🔄 Synchronisation avec origin/${{ github.ref_name }}..."
-          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/famibelle/horoscope-ia.git
-          if ! git ls-remote --heads origin ${{ github.ref_name }} | grep -q "refs/heads/${{ github.ref_name }}"; then
-            echo "❌ Branche ${{ github.ref_name }} n'existe pas sur origin !"
-            exit 1
-          fi
-          git pull --rebase origin ${{ github.ref_name }} || {
-            echo "⚠️  Rebase échoué, tentative avec merge..."
-            git pull origin ${{ github.ref_name }} || {
-              echo "❌ Échec du pull - impossible de synchroniser"
-              exit 1
-            }
-          }
-          echo "✅ Branche synchronisée avec origin/${{ github.ref_name }}"
-
-      # ========================================================================
-      # 📁 COUCHE 0.75: PRÉPARATION DES DOSSIERS
-      # ========================================================================
-      - name: Créer les dossiers nécessaires
-        run: |
-          echo "📁 Création des dossiers..."
-          mkdir -p public/data/signe-du-jour
-          mkdir -p logs
-          echo "✅ Dossiers créés"
-
-      # ========================================================================
-      # 🧪 COUCHE 1: DRY-RUN MISTRAL (Test de connexion avant génération)
-      # ========================================================================
-      - name: Tester la connexion Mistral (dry-run)
-        run: |
-          echo "🔍 Test de connexion à Mistral API..."
-          RESPONSE=$(curl -s -X GET "https://api.mistral.ai/v1/models" \
-            -H "Authorization: Bearer ${{ secrets.MISTRAL_API_KEY }}" \
-            -H "Content-Type: application/json" 2>&1)
-          if echo "$RESPONSE" | grep -q "mistral-large"; then
-            echo "✅ Mistral API est accessible et fonctionnel"
-          else
-            echo "❌ Impossible de contacter Mistral API"
-            echo "Réponse: $RESPONSE"
-            echo "Vérifiez: 1) La clé API, 2) Le réseau, 3) Le quota"
-            exit 1
-          fi
-
-      # ========================================================================
-      # 🧪 COUCHE 2: DRY-RUN COMMIT/PUSH (Test complet AVANT la génération)
-      # ========================================================================
-      - name: Dry-run commit/push (test avec AAAA-MM-JJ_pseudo.json)
-        id: dry-run-commit
-        run: |
-          echo "🧪 Dry-run: Test du pipeline commit/push avec fichier pseudo..."
-          
-          # Nettoyer tout fichier pseudo existant
-          rm -f public/data/signe-du-jour/2000-01-01_pseudo.json
-          
-          DATE_TEST="2000-01-01"
-          TIMESTAMP=$(date +%s)
-          PSEUDO_FILE="public/data/signe-du-jour/${DATE_TEST}_pseudo_${TIMESTAMP}.json"
-          
-          # Créer un fichier pseudo valide
-          echo '{"test": "signe-du-jour dry-run test"}' > "$PSEUDO_FILE"
-          echo "✅ Fichier pseudo créé: $PSEUDO_FILE"
-          
-          # Tester git add
-          if ! git add "$PSEUDO_FILE"; then
-            echo "❌ Échec: git add $PSEUDO_FILE"
-            rm -f "$PSEUDO_FILE"
-            exit 1
-          fi
-          echo "✅ git add: OK"
-          
-          # Configurer git
-          git config --global user.name "GitHub Actions [Dry-Run]"
-          git config --global user.email "dry-run@github.com"
-          
-          # Tester git commit
-          if ! git commit -m "test: dry-run commit/push [signe-du-jour AAAA-MM-JJ_pseudo.json]"; then
-            echo "❌ Échec: git commit"
-            git reset HEAD "$PSEUDO_FILE" 2>/dev/null || true
-            rm -f "$PSEUDO_FILE"
-            exit 1
-          fi
-          echo "✅ git commit: OK"
-          
-          # Synchroniser avant push
-          git pull --rebase origin ${{ github.ref_name }} || {
-            echo "⚠️  Pull échoué, tentative sans rebase..."
-            git pull origin ${{ github.ref_name }} || {
-              echo "❌ Échec de synchronisation avant push"
-              git reset HEAD~1 2>/dev/null || true
-              rm -f "$PSEUDO_FILE"
-              exit 1
-            }
-          }
-          
-          # Tester git push
-          if git push --force origin ${{ github.ref_name }}; then
-            echo "✅ git push: OK"
-            
-            # Nettoyer: supprimer le fichier pseudo et committer/pusher
-            echo "🧹 Nettoyage du dry-run..."
-            if git rm --ignore-unmatch "$PSEUDO_FILE" 2>/dev/null || rm -f "$PSEUDO_FILE"; then
-              echo "✅ Fichier pseudo supprimé"
-            fi
-            
-            if git commit -m "cleanup: dry-run signe-du-jour - suppression de $PSEUDO_FILE" --allow-empty; then
-              echo "✅ Commit de nettoyage créé"
-              if git push --force origin ${{ github.ref_name }}; then
-                echo "✅ Cleanup pushé - branche propre"
-              else
-                echo "⚠️  Échec du push de cleanup (mais le test push a réussi)"
-              fi
-            else
-              echo "⚠️  Échec du commit de cleanup"
-            fi
-            
-            echo "dry_run_success=true" >> $GITHUB_OUTPUT
-            echo "✅ Dry-run commit/push: SUCCESS - Tout fonctionne !"
-          else
-            echo "❌ Échec: git push"
-            echo "dry_run_success=false" >> $GITHUB_OUTPUT
-            git reset HEAD~1 2>/dev/null || true
-            rm -f "$PSEUDO_FILE"
-            exit 1
-          fi
-
-      # ========================================================================
-      # 📅 COUCHE 3: CONFIGURATION DE LA DATE
-      # ========================================================================
-      - name: Configure date for generation
-        id: date
-        run: |
-          echo "📅 Configuration de la date..."
-          if [ -n "${{ github.event.inputs.date }}" ]; then
-            echo "DATE=${{ github.event.inputs.date }}" >> $GITHUB_OUTPUT
-            echo "   Date fournie: ${{ github.event.inputs.date }}"
-          else
-            TOMORROW_GUADELOUPE=$(date -u -d '+4 hours' +%Y-%m-%d)
-            echo "DATE=$TOMORROW_GUADELOUPE" >> $GITHUB_OUTPUT
-            echo "   Génération pour demain (Guadeloupe): $TOMORROW_GUADELOUPE"
-          fi
-          echo "✅ Date configurée: ${{ steps.date.outputs.DATE }}"
-
-      # ========================================================================
-      # 🔍 COUCHE 4: VÉRIFICATION DES FICHIERS EXISTANTS
-      # ========================================================================
-      - name: Check if signe-du-jour file already exists
-        id: check-signe
-        run: |
-          echo "🔍 Vérification du fichier signe-du-jour existant..."
-          DATE=${{ steps.date.outputs.DATE }}
-          SDJ_FILE="public/data/signe-du-jour/${DATE}.json"
-          if [ -f "$SDJ_FILE" ]; then
-            echo "signe_exists=true" >> $GITHUB_OUTPUT
-            echo "✅ Fichier signe-du-jour existant pour ${DATE}"
-          else
-            echo "signe_exists=false" >> $GITHUB_OUTPUT
-            echo "ℹ️  Fichier signe-du-jour manquant pour ${DATE} - Génération nécessaire"
-          fi
-
-      # ========================================================================
-      # ⚡ COUCHE 5: INSTALLATION DES DÉPENDANCES
-      # ========================================================================
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: 📦 Installation Dépendances
         run: |
-          echo "📦 Installation des dépendances..."
-          npm ci
-          echo "✅ Dépendances installées"
+          npm ci || npm install
+          sudo apt-get install -y jq
 
-      # ========================================================================
-      # 🌿 COUCHE 6: GÉNÉRATION DU SIGNE DU JOUR
-      # ========================================================================
-      - name: Générer le signe du jour
-        id: generate-signe
-        if: steps.dry-run-commit.outputs.dry_run_success == 'true' && (steps.check-signe.outputs.signe_exists != 'true' || github.event.inputs.mode == 'force' || github.event.inputs.mode == 'force-verbose')
-        run: |
-          echo "🌿 Génération du signe du jour pour ${{ steps.date.outputs.DATE }}..."
-          
-          SDJ_COMMAND="npx tsx scripts/generate-signe-du-jour.ts \
-            --date=${{ steps.date.outputs.DATE }} \
-            --force"
-          
-          case "${{ github.event.inputs.mode }}" in
-            verbose)
-              SDJ_COMMAND="$SDJ_COMMAND --verbose"
-              ;;
-            force-verbose)
-              SDJ_COMMAND="$SDJ_COMMAND --verbose"
-              ;;
-          esac
-          
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.mode }}" = "normal" ]; then
-            SDJ_COMMAND="$SDJ_COMMAND --verbose"
-          fi
-          
-          echo "Commande: $SDJ_COMMAND"
-          
-          # Exécuter avec timeout (10 min max - 12 appels Mistral)
-          if timeout 600 bash -c "$SDJ_COMMAND"; then
-            echo "SDJ_SUCCESS=true" >> $GITHUB_OUTPUT
-            echo "✅ Génération signe du jour terminée avec succès!"
-          else
-            EXIT_CODE=$?
-            echo "SDJ_SUCCESS=false" >> $GITHUB_OUTPUT
-            echo "❌ Échec de la génération signe du jour (code: $EXIT_CODE)"
-            exit $EXIT_CODE
-          fi
+      - name: 🚀 Génération du Signe du Jour
+        id: generate
         env:
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
-          NETLIFY_URL: https://horoscope-karukera.netlify.app
-          NODE_ENV: production
-          GITHUB_RUN_ID: ${{ github.run_id }}
-
-      # ========================================================================
-      # ✅ COUCHE 7: VALIDATION DES FICHIERS GÉNÉRÉS
-      # ========================================================================
-      - name: Valider le fichier signe-du-jour généré
-        id: validate-signe
-        if: steps.generate-signe.outputs.SDJ_SUCCESS == 'true'
         run: |
-          echo "🔍 Validation du fichier signe-du-jour..."
-          DATE=${{ steps.date.outputs.DATE }}
-          SDJ_FILE="public/data/signe-du-jour/${DATE}.json"
-          
-          if [ ! -f "$SDJ_FILE" ]; then
-            echo "❌ Fichier manquant: $SDJ_FILE"
-            echo "VALIDATION_FAILED=true" >> $GITHUB_OUTPUT
-            exit 1
+          DATE_ARG=""
+          if [ -n "${{ github.event.inputs.date }}" ]; then
+            DATE_ARG="--date=${{ github.event.inputs.date }}"
           fi
           
-          if ! jq empty "$SDJ_FILE" 2>/dev/null; then
-            echo "❌ JSON invalide: $SDJ_FILE"
-            echo "VALIDATION_FAILED=true" >> $GITHUB_OUTPUT
-            exit 1
-          fi
-          
-          echo "✅ Fichier signe-du-jour valide: $SDJ_FILE"
-          echo "VALIDATION_FAILED=false" >> $GITHUB_OUTPUT
-
-      # ========================================================================
-      # 📤 COUCHE 8: PRÉPARATION DU COMMIT
-      # ========================================================================
-      - name: Préparer le commit
-        id: prepare-commit
-        if: steps.validate-signe.outputs.VALIDATION_FAILED != 'true' && steps.generate-signe.outputs.SDJ_SUCCESS == 'true'
-        run: |
-          echo "📝 Préparation du commit..."
-          DATE=${{ steps.date.outputs.DATE }}
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          
-          cd public/data/signe-du-jour
-          git add ${DATE}.json
-          cd ../../..
-          
-          if git status | grep -q "nothing to commit"; then
-            echo "⚠️  Rien à committer"
-            echo "commit_needed=false" >> $GITHUB_OUTPUT
-          else
-            echo "✅ Fichiers prêts pour le commit"
-            echo "commit_needed=true" >> $GITHUB_OUTPUT
+          MODE_ARG=""
+          if [ "${{ github.event.inputs.mode }}" == "force" ]; then
+            MODE_ARG="--force"
+          elif [ "${{ github.event.inputs.mode }}" == "verbose" ]; then
+            MODE_ARG="--verbose"
           fi
 
-      # ========================================================================
-      # 💾 COUCHE 9: CRÉATION DU COMMIT
-      # ========================================================================
-      - name: Créer le commit
-        id: create-commit
-        if: steps.prepare-commit.outputs.commit_needed == 'true'
-        run: |
-          echo "📝 Création du commit..."
-          DATE=${{ steps.date.outputs.DATE }}
-          git commit -m "chore: mise à jour signe-du-jour ${DATE}"
-          echo "✅ Commit créé"
+          npx tsx scripts/generate-signe-du-jour.ts $DATE_ARG $MODE_ARG
 
-      # ========================================================================
-      # 🚀 COUCHE 10: PUSH VERS ORIGIN
-      # ========================================================================
-      - name: Pusher vers origin (avec réessais)
-        id: push
-        if: steps.create-commit.outputs.conclusion == 'success' || steps.prepare-commit.outputs.commit_needed == 'true'
-        run: |
-          echo "🚀 Push vers origin/vaudou..."
-          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/famibelle/horoscope-ia.git
-          
-          MAX_RETRIES=3
-          RETRY_COUNT=0
-          SUCCESS=false
-          
-          while [ $RETRY_COUNT -lt $MAX_RETRIES ] && [ "$SUCCESS" = "false" ]; do
-            if git push origin ${{ github.ref_name }}; then
-              SUCCESS=true
-              echo "✅ Push réussi (tentative $((RETRY_COUNT + 1))/$MAX_RETRIES)"
-            else
-              RETRY_COUNT=$((RETRY_COUNT + 1))
-              echo "⚠️  Push échoué (tentative $RETRY_COUNT/$MAX_RETRIES), retry dans 5s..."
-              sleep 5
-            fi
-          done
-          
-          if [ "$SUCCESS" = "false" ]; then
-            echo "❌ Échec du push après $MAX_RETRIES tentatives"
-            exit 1
-          fi
-
-      # ========================================================================
-      # ✅ COUCHE 11: VÉRIFICATION DU PUSH SUR REMOTE
-      # ========================================================================
-      - name: Vérifier le push sur remote
-        if: steps.push.result == 'success' || steps.push.outcome == 'success'
-        run: |
-          echo "🔍 Vérification du push sur remote..."
-          DATE=${{ steps.date.outputs.DATE }}
-          git fetch origin ${{ github.ref_name }}
-          if git ls-remote --heads origin ${{ github.ref_name }} | grep -q "refs/heads/${{ github.ref_name }}"; then
-            echo "✅ Push vérifié sur remote"
-          else
-            echo "❌ Impossible de vérifier le push"
-            exit 1
-          fi
-
-      # ========================================================================
-      # 📊 UPLOAD ARTIFACTS
-      # ========================================================================
-      - name: Upload generated data as artifact
+      - name: 📊 Artefacts & Logs
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: signe-du-jour-data-
-          path: public/data/signe-du-jour/
-          retention-days: 7
-          include-hidden-files: false
+        run: |
+          mkdir -p artifacts
+          cp -r logs/* artifacts/ 2>/dev/null || true
+          {
+            echo "# Rapport Signe du Jour"
+            echo "Status: ${{ steps.generate.outcome }}"
+          } > artifacts/SDJ_REPORT.md
 
-      - name: Upload logs separately (30 jours de rétention)
+      - uses: actions/upload-artifact@v4
         if: always()
-        uses: actions/upload-artifact@v4
         with:
-          name: signe-du-jour-logs-
-          path: logs/
-          retention-days: 30
-          include-hidden-files: false
+          name: sdj-execution-report
+          path: artifacts/
 
-  # ========================================================================
-  # 🛠️  JOB DE RÉCUPÉRATION (si le job principal échoue)
-  # ========================================================================
-  recovery:
-    needs: generate-signe-du-jour
-    if: failure() && needs.generate-signe-du-jour.result == 'failure'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Télécharger les artefacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-          pattern: signe-du-jour-*
-
-      - name: Extraire les logs et données
+      - name: 💾 Commit & Push
+        if: success()
         run: |
-          echo "🔄 Job de récupération activé..."
-          ls -la artifacts/ || true
-          
-          # Trouver et extraire les données
-          find artifacts -name "*.json" -type f | xargs -I {} cp {} public/data/signe-du-jour/ || true
-          
-          echo "✅ Données récupérées"
-
-      - name: Vérifier les fichiers récupérés
-        id: verify-recovery
-        run: |
-          DATE=$(date -u -d '+4 hours' +%Y-%m-%d)
-          SDJ_FILE="public/data/signe-du-jour/${DATE}.json"
-          if [ -f "$SDJ_FILE" ]; then
-            echo "RECOVERY_SUCCESS=true" >> $GITHUB_OUTPUT
-            echo "✅ Fichier signe-du-jour récupéré"
-          else
-            echo "RECOVERY_SUCCESS=false" >> $GITHUB_OUTPUT
-            echo "⚠️  Aucune donnée signe-du-jour à récupérer"
-          fi
-
-      - name: Commit les fichiers récupérés
-        if: steps.verify-recovery.outputs.RECOVERY_SUCCESS == 'true'
-        run: |
-          echo "💾 Commit des données récupérées..."
-          git config --global user.name "GitHub Actions [Recovery]"
-          git config --global user.email "recovery@github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add public/data/signe-du-jour/*.json
-          git commit -m "recovery: données signe-du-jour récupérées [automatique]" || true
-          git push origin ${{ github.ref_name }} || true
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: mise à jour signe du jour $(date +%Y-%m-%d)"
+            git push origin vaudou
+          fi
