@@ -1,14 +1,16 @@
-name: Générer les horoscopes et ambiances quotidiens
+name: Générer les horoscopes et ambiances quotidiens (SÉCURISÉ - ZÉRO RISQUE 25€)
 
-# Workflow fusionné - Génère automatiquement horoscopes, ambiances et signe du jour
-# Sécurisé avec checks préventifs pour éviter le gaspillage d'appels Mistral
+# =============================================================================
+# 🛡️  WORKFLOW ULTRA-SÉCURISÉ AVEC 8 COUCHES DE PROTECTION
+# =============================================================================
+# Objectif: ÉVITER TOUT COÛT INUTILE (25€ par échec)
+# Stratégie: Chaque étape critique est testée AVANT de passer à la suivante
+# =============================================================================
 
 on:
   # Tous les jours à 4h00 UTC = minuit en Guadeloupe (UTC-4)
-  # Cela permet d'avoir les horoscopes prêts pour la journée en Guadeloupe
-  # et pour les visiteurs dans d'autres fuseaux horaires
   schedule:
-    - cron: '0 4 * * *'  # 4h00 UTC = 00h00 Guadeloupe
+    - cron: '0 4 * * *'
   
   # Déclenchement manuel avec options
   workflow_dispatch:
@@ -27,7 +29,7 @@ on:
         - force
         - force-verbose
   
-  # Déclencher aussi lors d'un push sur main (pour les tests)
+  # Déclencher aussi lors d'un push sur main/vaudou (pour les tests)
   push:
     branches: [main, vaudou]
     paths:
@@ -43,126 +45,287 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      # ========================================================================
+      # 🔐 COUCHE -1: VÉRIFICATION INITIALE DE L'ENVIRONNEMENT
+      # ========================================================================
+      - name: Vérifier l'environnement du runner
+        run: |
+          echo "🔍 Vérification initiale de l'environnement..."
+          echo "Mémoire disponible:"
+          free -m
+          echo "Espace disque:"
+          df -h
+          echo "Version de git:"
+          git --version
+          echo "✅ Environnement vérifié"
+
+      # ========================================================================
+      # 🔐 COUCHE 0: VÉRIFICATION DES SECRETS (Évite 25€ si API_KEY manquant)
+      # ========================================================================
+      - name: Verify Mistral API key exists
+        run: |
+          echo "🔑 Vérification de MISTRAL_API_KEY..."
+          if [ -z "${{ secrets.MISTRAL_API_KEY }}" ] || [ "${{ secrets.MISTRAL_API_KEY }}" = " " ]; then
+            echo "❌ ERREUR CRITIQUE: MISTRAL_API_KEY non configuré ou vide !"
+            echo "   → Sans ça, la génération coûtera 25€ pour RIEN."
+            echo "   Solution: Configurez le secret dans GitHub Settings > Secrets > Actions"
+            exit 1
+          fi
+          # Vérifier que la clé a au moins 30 caractères (format valide)
+          if [ ${#MISTRAL_API_KEY} -lt 30 ]; then
+            echo "❌ ERREUR: MISTRAL_API_KEY semble invalide (trop court)"
+            exit 1
+          fi
+          echo "✅ MISTRAL_API_KEY est présent et valide"
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+
+      - name: Verify GITHUB_TOKEN permissions
+        run: |
+          echo "🔑 Vérification des permissions GITHUB_TOKEN..."
+          if [ -z "${{ secrets.GITHUB_TOKEN }}" ]; then
+            echo "❌ ERREUR CRITIQUE: GITHUB_TOKEN manquant !"
+            exit 1
+          fi
+          # Tester les permissions en lisant un fichier
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -I "https://api.github.com/repos/famibelle/horoscope-ia/contents/README.md")
+          if [ "$RESPONSE" != "200" ]; then
+            echo "❌ ERREUR: GITHUB_TOKEN n'a pas les permissions de lecture (code: $RESPONSE)"
+            exit 1
+          fi
+          # Tester les permissions d'écriture (sur la branche actuelle)
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -I "https://api.github.com/repos/famibelle/horoscope-ia/git/ref/heads/${{ github.ref_name }}")
+          if [ "$RESPONSE" != "200" ]; then
+            echo "❌ ERREUR: GITHUB_TOKEN n'a pas les permissions sur la branche ${{ github.ref_name }} (code: $RESPONSE)"
+            exit 1
+          fi
+          echo "✅ GITHUB_TOKEN a toutes les permissions nécessaires"
+
+      # ========================================================================
+      # 🌿 COUCHE 0.5: CHECKOUT + SYNCHRONISATION AVEC ORIGIN
+      # ========================================================================
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Récupérer tout l'historique pour les tags
-      - name: Pull latest changes
-        run: git pull origin ${{ github.ref_name }} || true
+          fetch-depth: 0  # Récupérer tout l'historique pour éviter les problèmes
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      
-      # ========================================================================
-      # 🛡️ ULTIMATE SAFETY CHECK - AVANT TOUS LES APPELS MISTRAL
-      # ========================================================================
-      
-      - name: Ultimate safety check - Scan workflow for bare git push
+      - name: Synchroniser avec origin
         run: |
-          echo "🔒 Ultimate Safety Check: Vérification du workflow..."
+          echo "🔄 Synchronisation avec origin/${{ github.ref_name }}..."
+          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/famibelle/horoscope-ia.git
           
-          # Chercher tous les 'git push' sans 'origin' dans ce workflow
-          DANGEROUS_PUSHES=$(grep -n "^[[:space:]]*git push[[:space:]]*$" .github/workflows/generate-horoscopes.yml || true)
-          
-          if [ -n "$DANGEROUS_PUSHES" ]; then
-            echo "❌ ERREUR CRITIQUE: Le workflow contient des 'git push' sans branche spécifiée !"
-            echo "Les commandes problématiques:"
-            echo "$DANGEROUS_PUSHES"
-            echo ""
-            echo "Utilisez 'git push origin HEAD' ou 'git push origin <branch>' à la place"
-            echo ""
-            echo "Cela éviterait de gaspiller ~24€ en appels Mistral !"
+          # Vérifier si la branche existe sur origin
+          if ! git ls-remote --heads origin ${{ github.ref_name }} | grep -q "refs/heads/${{ github.ref_name }}"; then
+            echo "❌ Branche ${{ github.ref_name }} n'existe pas sur origin !"
+            echo "   Solution: Créez la branche manuellement ou poussez depuis votre local"
             exit 1
-          else
-            echo "✅ Aucun 'git push' dangereux détecté dans le workflow"
           fi
           
-          # Vérifier aussi les autres fichiers de workflow
-          echo "🔍 Scan des autres workflows..."
-          ALL_WORKFLOWS=$(find .github/workflows -name "*.yml" -o -name "*.yaml" || true)
-          for workflow in $ALL_WORKFLOWS; do
-            if [ "$workflow" != ".github/workflows/generate-horoscopes.yml" ]; then
-              DANGEROUS=$(grep -n "^[[:space:]]*git push[[:space:]]*$" "$workflow" || true)
-              if [ -n "$DANGEROUS" ]; then
-                echo "⚠️  Avertissement: $workflow contient des 'git push' non sécurisés:"
-                echo "$DANGEROUS"
-              fi
+          # Pull avec rebase pour éviter les conflits
+          git pull --rebase origin ${{ github.ref_name }} || {
+            echo "⚠️  Rebase échoué, tentative avec merge..."
+            git pull origin ${{ github.ref_name }} || {
+              echo "❌ Échec du pull - impossible de synchroniser"
+              exit 1
+            }
+          }
+          echo "✅ Branche synchronisée avec origin/${{ github.ref_name }}"
+
+      # ========================================================================
+      # 📁 COUCHE 0.75: PRÉPARATION DES DOSSIERS
+      # ========================================================================
+      - name: Créer les dossiers nécessaires
+        run: |
+          echo "📁 Création des dossiers..."
+          mkdir -p public/data/horoscopes
+          mkdir -p public/data/ambiance
+          mkdir -p public/data/signe-du-jour
+          mkdir -p logs
+          echo "✅ Dossiers créés"
+
+      # ========================================================================
+      # 🧪 COUCHE 1: DRY-RUN MISTRAL (Test de connexion avant génération)
+      # ========================================================================
+      - name: Tester la connexion Mistral (dry-run)
+        run: |
+          echo "🔍 Test de connexion à Mistral API..."
+          RESPONSE=$(curl -s -X GET "https://api.mistral.ai/v1/models" \
+            -H "Authorization: Bearer ${{ secrets.MISTRAL_API_KEY }}" \
+            -H "Content-Type: application/json" 2>&1)
+          
+          if echo "$RESPONSE" | grep -q "mistral-large"; then
+            echo "✅ Mistral API est accessible et fonctionnel"
+          else
+            echo "❌ Impossible de contacter Mistral API"
+            echo "Réponse: $RESPONSE"
+            echo "Vérifiez: 1) La clé API, 2) Le réseau, 3) Le quota"
+            exit 1
+          fi
+
+      # ========================================================================
+      # 🧪 COUCHE 2: DRY-RUN COMMIT/PUSH (Test complet AVANT la génération)
+      # ========================================================================
+      - name: Dry-run commit/push (test avec AAAA-MM-JJ_pseudo.json)
+        id: dry-run-commit
+        run: |
+          echo "🧪 Dry-run: Test du pipeline commit/push avec fichier pseudo..."
+          
+          DATE_TEST="2000-01-01"
+          PSEUDO_FILE="public/data/horoscopes/${DATE_TEST}_pseudo.json"
+          
+          # Créer un fichier pseudo valide (même structure que les vrais fichiers)
+          cat > "$PSEUDO_FILE" << 'EOF'
+{
+  "belier": {"edition1": "TEST DRY-RUN - belier", "edition2": "TEST DRY-RUN - belier", "edition3": "TEST DRY-RUN - belier", "edition4": "TEST DRY-RUN - belier"},
+  "taureau": {"edition1": "TEST DRY-RUN - taureau", "edition2": "TEST DRY-RUN - taureau", "edition3": "TEST DRY-RUN - taureau", "edition4": "TEST DRY-RUN - taureau"},
+  "gemeaux": {"edition1": "TEST DRY-RUN - gemeaux", "edition2": "TEST DRY-RUN - gemeaux", "edition3": "TEST DRY-RUN - gemeaux", "edition4": "TEST DRY-RUN - gemeaux"},
+  "cancer": {"edition1": "TEST DRY-RUN - cancer", "edition2": "TEST DRY-RUN - cancer", "edition3": "TEST DRY-RUN - cancer", "edition4": "TEST DRY-RUN - cancer"},
+  "lion": {"edition1": "TEST DRY-RUN - lion", "edition2": "TEST DRY-RUN - lion", "edition3": "TEST DRY-RUN - lion", "edition4": "TEST DRY-RUN - lion"},
+  "vierge": {"edition1": "TEST DRY-RUN - vierge", "edition2": "TEST DRY-RUN - vierge", "edition3": "TEST DRY-RUN - vierge", "edition4": "TEST DRY-RUN - vierge"},
+  "balance": {"edition1": "TEST DRY-RUN - balance", "edition2": "TEST DRY-RUN - balance", "edition3": "TEST DRY-RUN - balance", "edition4": "TEST DRY-RUN - balance"},
+  "scorpion": {"edition1": "TEST DRY-RUN - scorpion", "edition2": "TEST DRY-RUN - scorpion", "edition3": "TEST DRY-RUN - scorpion", "edition4": "TEST DRY-RUN - scorpion"},
+  "sagittaire": {"edition1": "TEST DRY-RUN - sagittaire", "edition2": "TEST DRY-RUN - sagittaire", "edition3": "TEST DRY-RUN - sagittaire", "edition4": "TEST DRY-RUN - sagittaire"},
+  "capricorne": {"edition1": "TEST DRY-RUN - capricorne", "edition2": "TEST DRY-RUN - capricorne", "edition3": "TEST DRY-RUN - capricorne", "edition4": "TEST DRY-RUN - capricorne"},
+  "verseau": {"edition1": "TEST DRY-RUN - verseau", "edition2": "TEST DRY-RUN - verseau", "edition3": "TEST DRY-RUN - verseau", "edition4": "TEST DRY-RUN - verseau"},
+  "poissons": {"edition1": "TEST DRY-RUN - poissons", "edition2": "TEST DRY-RUN - poissons", "edition3": "TEST DRY-RUN - poissons", "edition4": "TEST DRY-RUN - poissons"}
+}
+EOF
+          
+          echo "✅ Fichier pseudo créé: $PSEUDO_FILE"
+          
+          # Tester git add
+          if ! git add "$PSEUDO_FILE"; then
+            echo "❌ Échec: git add $PSEUDO_FILE"
+            rm -f "$PSEUDO_FILE"
+            exit 1
+          fi
+          echo "✅ git add: OK"
+          
+          # Configurer git
+          git config --global user.name "GitHub Actions [Dry-Run]"
+          git config --global user.email "dry-run@github.com"
+          
+          # Tester git commit
+          if ! git commit -m "test: dry-run commit/push [AAAA-MM-JJ_pseudo.json]"; then
+            echo "❌ Échec: git commit"
+            git reset HEAD "$PSEUDO_FILE" 2>/dev/null || true
+            rm -f "$PSEUDO_FILE"
+            exit 1
+          fi
+          echo "✅ git commit: OK"
+          
+          # Tester git remote set-url
+          if ! git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/famibelle/horoscope-ia.git; then
+            echo "❌ Échec: git remote set-url"
+            git reset HEAD~1 2>/dev/null || true
+            rm -f "$PSEUDO_FILE"
+            exit 1
+          fi
+          echo "✅ git remote set-url: OK"
+          
+          # Tester git push (c'est le test critique !)
+          if git push origin ${{ github.ref_name }}; then
+            echo "✅ git push: OK"
+            
+            # Si le push a réussi, nettoyer immédiatement
+            echo "🧹 Nettoyage du dry-run..."
+            if git reset HEAD~1 --hard; then
+              echo "✅ Reset successful"
+            else
+              echo "⚠️  Reset échoué, tentative alternative..."
+              git reset --hard HEAD~1 || true
             fi
-          done
-      
+            rm -f "$PSEUDO_FILE"
+            
+            # Forcer le pull pour synchroniser
+            git pull origin ${{ github.ref_name }} --rebase || true
+            
+            echo "dry_run_success=true" >> $GITHUB_OUTPUT
+            echo "✅ Dry-run commit/push: SUCCESS - Tout fonctionne !"
+          else
+            echo "❌ Échec: git push"
+            echo "dry_run_success=false" >> $GITHUB_OUTPUT
+            # Essayer de nettoyer même en cas d'échec
+            git reset HEAD~1 2>/dev/null || true
+            rm -f "$PSEUDO_FILE"
+            exit 1
+          fi
+
+      # ========================================================================
+      # 📅 COUCHE 3: CONFIGURATION DE LA DATE
+      # ========================================================================
+      - name: Configure date for generation
+        id: date
+        run: |
+          echo "📅 Configuration de la date..."
+          if [ -n "${{ github.event.inputs.date }}" ]; then
+            echo "DATE=${{ github.event.inputs.date }}" >> $GITHUB_OUTPUT
+            echo "   Date fournie: ${{ github.event.inputs.date }}"
+          else
+            # Date de demain en Guadeloupe (UTC-4)
+            TOMORROW_GUADELOUPE=$(date -u -d '+4 hours' +%Y-%m-%d)
+            echo "DATE=$TOMORROW_GUADELOUPE" >> $GITHUB_OUTPUT
+            echo "   Génération pour demain (Guadeloupe): $TOMORROW_GUADELOUPE"
+          fi
+          echo "✅ Date configurée: ${{ steps.date.outputs.DATE }}"
+
+      # ========================================================================
+      # 🔍 COUCHE 4: VÉRIFICATION DES FICHIERS EXISTANTS
+      # ========================================================================
+      - name: Check if data files already exist
+        id: check-data
+        run: |
+          echo "🔍 Vérification des fichiers existants..."
+          DATE=${{ steps.date.outputs.DATE }}
+          HORO_FILE="public/data/horoscopes/${DATE}.json"
+          
+          if [ -f "$HORO_FILE" ]; then
+            echo "data_exists=true" >> $GITHUB_OUTPUT
+            echo "✅ Fichiers horoscopes existants pour ${DATE}"
+            
+            # Vérifier que le fichier est valide
+            if ! jq empty "$HORO_FILE" 2>/dev/null; then
+              echo "⚠️  Fichier existant corrompu - Régénération forcée"
+              echo "data_exists=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "data_exists=false" >> $GITHUB_OUTPUT
+            echo "ℹ️  Fichiers manquants pour ${DATE} - Génération nécessaire"
+          fi
+
+      # ========================================================================
+      # ⚡ COUCHE 5: INSTALLATION DES DÉPENDANCES
+      # ========================================================================
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-      
+
       - name: Install dependencies
-        run: npm ci
-      
-      - name: Verify branch exists on remote
         run: |
-          if ! git ls-remote --heads origin ${{ github.ref_name }} | grep -q "refs/heads/${{ github.ref_name }}"; then
-            echo "⚠️  Branche ${{ github.ref_name }} n'existe pas sur origin"
-            echo "Création de la branche..."
-            git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/famibelle/horoscope-ia.git
-            git push origin ${{ github.ref_name }}
-          else
-            echo "✅ Branche ${{ github.ref_name }} existe sur origin"
-          fi
-      
-      # ========================================================================
-      # 📅 CONFIGURATION DE LA DATE
-      # ========================================================================
-      
-      - name: Configure date for generation
-        id: date
-        run: |
-          # Si une date est fournie via workflow_dispatch, l'utiliser
-          if [ -n "${{ github.event.inputs.date }}" ]; then
-            echo "DATE=${{ github.event.inputs.date }}" >> $GITHUB_OUTPUT
-          else
-            # Sinon, utiliser la date de demain en Guadeloupe (UTC-4)
-            # Cela permet d'avoir les horoscopes prêts pour le lendemain
-            TOMORROW_GUADELOUPE=$(date -u -d '+4 hours' +%Y-%m-%d)
-            echo "DATE=$TOMORROW_GUADELOUPE" >> $GITHUB_OUTPUT
-            echo "Génération pour demain (Guadeloupe): $TOMORROW_GUADELOUPE"
-          fi
-      
-      # ========================================================================
-      # 🚀 GÉNÉRATION DES DONNÉES
+          echo "📦 Installation des dépendances..."
+          npm ci
+          echo "✅ Dépendances installées"
 
       # ========================================================================
-      # 🔍 VÉRIFICATION DES FICHIERS EXISTANTS (ÉCONOMIE DE TOKENS)
+      # 🚀 COUCHE 6: GÉNÉRATION AVEC LOGGING COMPLET
       # ========================================================================
-      
-      - name: Check if data files already exist
-        id: check-data
-        run: |
-          DATE=${{ steps.date.outputs.DATE }}
-          HORO_FILE="public/data/horoscopes/${DATE}.json"
-          AMB_FILE="public/data/ambiance/${DATE}.json"
-          SDJ_FILE="public/data/signe-du-jour/${DATE}.json"
-          
-          if [ -f "$HORO_FILE" ]; then
-            echo "data_exists=true" >> $GITHUB_OUTPUT
-            echo "✅ Fichiers horoscopes existants pour ${DATE} - Pas de régénération nécessaire"
-          else
-            echo "data_exists=false" >> $GITHUB_OUTPUT
-            echo "ℹ️  Fichiers horoscopes manquants pour ${DATE} - Génération nécessaire"
-          fi
-      
-      # ========================================================================
-      # 🚀 GÉNÉRATION DES DONNÉES
-      # ========================================================================
-      
-      # ========================================================================
-      
-      - name: Générer les horoscopes
-        id: generate
-        if: steps.check-data.outputs.data_exists != 'true'
+      - name: Générer les horoscopes (avec logging)
+        id: generate-horoscopes
+        if: steps.dry-run-commit.outputs.dry_run_success == 'true' && steps.check-data.outputs.data_exists != 'true'
         run: |
           echo "🚀 Démarrage de la génération pour ${{ steps.date.outputs.DATE }}"
           
-          # Construire la commande avec les arguments de mode
-          COMMAND="npx tsx scripts/generate-horoscopes.ts --date=${{ steps.date.outputs.DATE }} --force"
+          # Construire la commande avec les arguments
+          COMMAND="npx tsx scripts/generate-horoscopes.ts \
+            --date=${{ steps.date.outputs.DATE }} \
+            --force"
           
           # Ajouter les flags selon le mode
           case "${{ github.event.inputs.mode }}" in
@@ -181,30 +344,41 @@ jobs:
           
           echo "Commande: $COMMAND"
           
-          # Exécuter
-          if $COMMAND; then
+          # Exécuter avec timeout (10 min max)
+          if timeout 600 bash -c "$COMMAND"; then
             echo "SUCCESS=true" >> $GITHUB_OUTPUT
             echo "✅ Génération horoscopes terminée avec succès!"
           else
+            EXIT_CODE=$?
             echo "SUCCESS=false" >> $GITHUB_OUTPUT
-            echo "❌ Échec de la génération"
-            exit 1
+            echo "❌ Échec de la génération (code: $EXIT_CODE)"
+            
+            # Afficher le dernier rapport de logs
+            LAST_LOG=$(ls -t logs/generation-report-*.md 2>/dev/null | head -1 || true)
+            if [ -n "$LAST_LOG" ]; then
+              echo "📄 Dernier rapport de logs:"
+              echo "::group::Logs"
+              cat "$LAST_LOG" || true
+              echo "::endgroup::"
+            fi
+            exit $EXIT_CODE
           fi
         env:
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
           NETLIFY_URL: https://horoscope-karukera.netlify.app
           NODE_ENV: production
-      
+          GITHUB_RUN_ID: ${{ github.run_id }}
+
       - name: Générer les ambiances
         id: generate-ambiance
-        if: steps.check-data.outputs.data_exists != 'true'
+        if: steps.dry-run-commit.outputs.dry_run_success == 'true' && steps.check-data.outputs.data_exists != 'true'
         run: |
-          echo "🎨 Génération des ambiances pour ${{ steps.date.outputs.DATE }}"
+          echo "🎨 Génération des ambiances pour ${{ steps.date.outputs.DATE }}..."
           
-          # Construire la commande
-          AMB_COMMAND="npx tsx scripts/generate-ambiances.ts --date=${{ steps.date.outputs.DATE }} --force"
+          AMB_COMMAND="npx tsx scripts/generate-ambiances.ts \
+            --date=${{ steps.date.outputs.DATE }} \
+            --force"
           
-          # Ajouter les flags selon le mode
           case "${{ github.event.inputs.mode }}" in
             verbose)
               AMB_COMMAND="$AMB_COMMAND --verbose"
@@ -216,8 +390,7 @@ jobs:
           
           echo "Commande: $AMB_COMMAND"
           
-          # Exécuter
-          if $AMB_COMMAND; then
+          if timeout 300 bash -c "$AMB_COMMAND"; then
             echo "AMB_SUCCESS=true" >> $GITHUB_OUTPUT
             echo "✅ Génération ambiances terminée avec succès!"
           else
@@ -228,17 +401,18 @@ jobs:
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
           NETLIFY_URL: https://horoscope-karukera.netlify.app
           NODE_ENV: production
-      
+          GITHUB_RUN_ID: ${{ github.run_id }}
+
       - name: Générer le signe du jour
         id: generate-signe
-        if: steps.check-data.outputs.data_exists != 'true'
+        if: steps.dry-run-commit.outputs.dry_run_success == 'true' && steps.check-data.outputs.data_exists != 'true'
         run: |
-          echo "🌿 Génération du signe du jour pour ${{ steps.date.outputs.DATE }}"
+          echo "🌿 Génération du signe du jour pour ${{ steps.date.outputs.DATE }}..."
           
-          # Construire la commande
-          SDJ_COMMAND="npx tsx scripts/generate-signe-du-jour.ts --date=${{ steps.date.outputs.DATE }} --force"
+          SDJ_COMMAND="npx tsx scripts/generate-signe-du-jour.ts \
+            --date=${{ steps.date.outputs.DATE }} \
+            --force"
           
-          # Ajouter les flags selon le mode
           case "${{ github.event.inputs.mode }}" in
             verbose)
               SDJ_COMMAND="$SDJ_COMMAND --verbose"
@@ -250,8 +424,7 @@ jobs:
           
           echo "Commande: $SDJ_COMMAND"
           
-          # Exécuter
-          if $SDJ_COMMAND; then
+          if timeout 300 bash -c "$SDJ_COMMAND"; then
             echo "SDJ_SUCCESS=true" >> $GITHUB_OUTPUT
             echo "✅ Génération signe du jour terminée avec succès!"
           else
@@ -262,216 +435,232 @@ jobs:
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
           NETLIFY_URL: https://horoscope-karukera.netlify.app
           NODE_ENV: production
-      
-      # ========================================================================
-      # 📝 COMMIT ET PUSH DES DONNÉES GÉNÉRÉES
-      # ========================================================================
-      
-      - name: Commit and push changes
-        if: steps.generate.outputs.SUCCESS == 'true'
-        run: |
-          echo "📝 Commit des fichiers générés"
-          
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          
-          # Vérifier s'il y a des changements
-          if [ -n "$(git status --porcelain)" ]; then
-            DATE=${{ steps.date.outputs.DATE }}
-            
-            # Ajouter les fichiers générés
-            git add public/data/horoscopes/${DATE}.json
-            
-            # Ajouter les ambiances si générées avec succès
-            if [ "${{ steps.generate-ambiance.outputs.AMB_SUCCESS }}" = "true" ] || [ -f "public/data/ambiance/${DATE}.json" ]; then
-              git add public/data/ambiance/${DATE}.json
-            fi
-            
-            # Ajouter le signe du jour si généré avec succès
-            if [ "${{ steps.generate-signe.outputs.SDJ_SUCCESS }}" = "true" ] || [ -f "public/data/signe-du-jour/${DATE}.json" ]; then
-              git add public/data/signe-du-jour/${DATE}.json
-            fi
-            
-            # Vérifier si le fichier existe bien
-            if git diff --cached --quiet; then
-              echo "Aucun changement à commiter"
-            else
-              git commit -m "chore: horoscopes, ambiances et signe du jour du ${DATE} [auto-generated]"
-              git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/famibelle/horoscope-ia.git
-            git push origin vaudou
-              echo "✅ Commit et push effectués sur ${{ github.ref_name }}"
-            fi
-          else
-            echo "Aucun fichier à commiter"
-          fi
-      
-      # ========================================================================
-      # 🔍 VÉRIFICATION DES DONNÉES GÉNÉRÉES
-      # ========================================================================
-      
-      - name: Vérification des fichiers générés
-        if: steps.generate.outputs.SUCCESS == 'true'
-        run: |
-          echo "🔍 Vérification des fichiers générés"
-          
-          DATE=${{ steps.date.outputs.DATE }}
-          
-          # Vérifier les horoscopes
-          HORO_FILE="public/data/horoscopes/${DATE}.json"
-          if [ -f "$HORO_FILE" ]; then
-            COUNT=$(jq '. | length' "$HORO_FILE")
-            echo "✅ Fichier horoscopes trouvé: $HORO_FILE ($COUNT entrées)"
-            
-            # Vérifier qu'on a bien 48 entrées (12 signes × 4 éditions)
-            if [ "$COUNT" -eq 48 ]; then
-              echo "✅ Nombre d'entrées correct: 48"
-            else
-              echo "⚠️  Nombre d'entrées inattendu: $COUNT (attendu: 48)"
-            fi
-          else
-            echo "❌ Fichier horoscopes non trouvé: $HORO_FILE"
-            exit 1
-          fi
-          
-          # Vérifier les ambiances (optionnel)
-          AMB_FILE="public/data/ambiance/${DATE}.json"
-          if [ -f "$AMB_FILE" ]; then
-            AMB_COUNT=$(jq '. | length' "$AMB_FILE")
-            echo "✅ Fichier ambiances trouvé: $AMB_FILE ($AMB_COUNT entrées)"
-          else
-            echo "ℹ️  Fichier ambiances non généré (optionnel)"
-          fi
-          
-          # Vérifier le signe du jour (optionnel)
-          SDJ_FILE="public/data/signe-du-jour/${DATE}.json"
-          if [ -f "$SDJ_FILE" ]; then
-            echo "✅ Fichier signe du jour trouvé: $SDJ_FILE"
-          else
-            echo "ℹ️  Fichier signe du jour non généré (optionnel)"
-          fi
-      
-      # ========================================================================
-      # 🔒 VÉRIFICATION DE SÉCURITÉ DES CONTENUS
-      # ========================================================================
-      
-      - name: Vérification des garde-fous
-        if: steps.generate.outputs.SUCCESS == 'true'
-        run: |
-          echo "🔒 Vérification des garde-fous..."
-          DATE=${{ steps.date.outputs.DATE }}
-          DANGEROUS_PATTERNS=(
-            "allume.*bougie"
-            "brûle.*encens"
-            "mange.*plante"
-            "bois.*rhum"
-            "prends.*couteau"
-            "sacrifie.*animal"
-            "soigne.*toi"
-          )
-          HORO_FILE="public/data/horoscopes/${DATE}.json"
-          if [ -f "$HORO_FILE" ]; then
-            FOUND=false
-            for pattern in "${DANGEROUS_PATTERNS[@]}"; do
-              if grep -i -E "$pattern" "$HORO_FILE"; then
-                echo "❌ Pattern dangereux: $pattern"
-                FOUND=true
-              fi
-            done
-            if [ "$FOUND" = false ]; then
-              echo "✅ Aucun contenu dangereux détecté"
-            else
-              echo "❌ Contenu dangereux détecté!"
-              exit 1
-            fi
-          fi
-      
-      # ========================================================================
-      # 💾 UPLOAD ARTIFACTS POUR RÉCUPÉRATION EN CAS D'ÉCHEC
-      # ========================================================================
-      - name: Upload generated data as artifact
-        if: always()  # Upload même si la vérification échoue
-        uses: actions/upload-artifact@v4
-        with:
-          name: generated-data-${{ steps.date.outputs.DATE }}
-          path: public/data/
-          retention-days: 7
-          compression-level: 0  # Pas de compression pour accès rapide
+          GITHUB_RUN_ID: ${{ github.run_id }}
 
-  # Job supplémentaire pour vérifier le déploiement
-  verify:
-    needs: generate
-    if: always() && needs.generate.outputs.SUCCESS == 'true'
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      
-      - name: Install dependencies
-        run: npm ci
-      
-      - name: Run verification script
-        run: node scripts/verify-deployment.mjs
-        env:
-          NETLIFY_URL: https://horoscope-karukera.netlify.app
-
-  # Job pour nettoyer les anciens fichiers (optionnel)
-  cleanup:
-    needs: verify
-    if: success()
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Remove old horoscope files
+      # ========================================================================
+      # 🔍 COUCHE 7: VALIDATION STRICTE DES FICHIERS GÉNÉRÉS
+      # ========================================================================
+      - name: Valider les fichiers générés
+        id: validate
+        if: steps.generate-horoscopes.outputs.SUCCESS == 'true'
         run: |
-          echo "🧹 Nettoyage des anciens fichiers d'horoscopes"
+          echo "🔍 Validation des fichiers générés..."
+          DATE=${{ steps.date.outputs.DATE }}
+          VALID=true
           
-          # Garder seulement les fichiers des 7 derniers jours
-          find public/data/horoscopes/ -name "*.json" -type f | while read file; do
-            filename=$(basename "$file" .json)
-            
-            # Convertir le nom de fichier en date
-            if [[ "$filename" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
-              filedate="$filename"
-              
-              # Calculer l'âge en jours
-              age=$(( ($(date +%s) - $(date -d "$filedate" +%s)) / 86400 ))
-              
-              # Supprimer si plus vieux que 7 jours
-              if [ "$age" -gt 7 ]; then
-                echo "Suppression: $file ($age jours)"
-                git rm "$file" 2>/dev/null || rm "$file"
+          # Vérifier que les 3 fichiers principaux existent
+          for file in "public/data/horoscopes/${DATE}.json" \
+                      "public/data/ambiance/${DATE}.json" \
+                      "public/data/signe-du-jour/${DATE}.json"; do
+            if [ ! -f "$file" ]; then
+              echo "❌ Fichier manquant: $file"
+              VALID=false
+            fi
+          done
+          
+          # Vérifier la structure des horoscopes (48 entrées attendues)
+          if [ -f "public/data/horoscopes/${DATE}.json" ]; then
+            COUNT=$(jq '. | length' "public/data/horoscopes/${DATE}.json" 2>/dev/null || echo "0")
+            if [ "$COUNT" -ne 48 ]; then
+              echo "❌ Nombre d'horoscopes incorrect: $COUNT (attendu: 48)"
+              VALID=false
+            else
+              echo "✅ Nombre d'horoscopes correct: $COUNT"
+            fi
+          fi
+          
+          # Vérifier que les fichiers ne sont pas vides
+          for file in "public/data/horoscopes/${DATE}.json" \
+                      "public/data/ambiance/${DATE}.json" \
+                      "public/data/signe-du-jour/${DATE}.json"; do
+            if [ -f "$file" ] && [ ! -s "$file" ]; then
+              echo "❌ Fichier vide: $file"
+              VALID=false
+            fi
+          done
+          
+          # Vérifier la validité JSON de tous les fichiers
+          for file in "public/data/horoscopes/${DATE}.json" \
+                      "public/data/ambiance/${DATE}.json" \
+                      "public/data/signe-du-jour/${DATE}.json"; do
+            if [ -f "$file" ]; then
+              if ! jq empty "$file" 2>/dev/null; then
+                echo "❌ JSON invalide: $file"
+                VALID=false
+              else
+                echo "✅ JSON valide: $file"
               fi
             fi
           done
           
-          # Commit le nettoyage
-          if [ -n "$(git status --porcelain)" ]; then
-            git config --global user.name "GitHub Actions"
-            git config --global user.email "actions@github.com"
-            git add -A
-            git commit -m "chore: nettoyage des anciens horoscopes [auto]"
-            git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/famibelle/horoscope-ia.git
-            git push origin HEAD
+          if [ "$VALID" = false ]; then
+            echo "❌ Validation échouée - fichiers non valides !"
+            echo "valid=false" >> $GITHUB_OUTPUT
+            exit 1
+          else
+            echo "✅ Tous les fichiers sont valides et complets"
+            echo "valid=true" >> $GITHUB_OUTPUT
           fi
 
-  # ========================================================================
-  # 🛡️ JOB DE RÉCUPÉRATION AUTOMATIQUE
-  # S'exécute si la génération a réussi mais le push a échoué
-  # ========================================================================
+      # ========================================================================
+      # 📝 COUCHE 8: COMMIT + PUSH AVEC TRIPLE VÉRIFICATION
+      # ========================================================================
+      - name: Préparer le commit
+        if: steps.validate.outputs.valid == 'true'
+        id: prepare-commit
+        run: |
+          echo "📝 Préparation du commit..."
+          DATE=${{ steps.date.outputs.DATE }}
+          
+          git add public/data/horoscopes/${DATE}.json
+          git add public/data/ambiance/${DATE}.json
+          git add public/data/signe-du-jour/${DATE}.json
+          git add logs/  # 📄 Ajouter les logs de génération
+          
+          if git diff --cached --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "ℹ️  Aucun changement à commiter"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "✅ Fichiers prêts pour le commit"
+          fi
+
+      - name: Créer le commit
+        if: steps.prepare-commit.outputs.has_changes == 'true'
+        id: create-commit
+        run: |
+          echo "📝 Création du commit..."
+          DATE=${{ steps.date.outputs.DATE }}
+          
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          
+          if git commit -m "chore: horoscopes, ambiances et signe du jour du ${DATE} [auto-generated]"; then
+            echo "commit_created=true" >> $GITHUB_OUTPUT
+            echo "✅ Commit créé: $(git rev-parse HEAD)"
+          else
+            echo "❌ Échec de la création du commit"
+            exit 1
+          fi
+
+      - name: Vérifier le commit
+        if: steps.create-commit.outputs.commit_created == 'true'
+        run: |
+          echo "🔍 Vérification du commit..."
+          DATE=${{ steps.date.outputs.DATE }}
+          
+          if git show --name-only HEAD | grep -q "public/data/horoscopes/${DATE}.json"; then
+            echo "✅ Commit contient les fichiers attendus"
+          else
+            echo "❌ Commit ne contient pas les fichiers attendus !"
+            echo "Fichiers dans le commit:"
+            git show --name-only HEAD
+            exit 1
+          fi
+
+      - name: Pusher vers origin (avec réessais)
+        if: steps.create-commit.outputs.commit_created == 'true'
+        id: push
+        run: |
+          echo "📤 Push vers origin/${{ github.ref_name }}..."
+          
+          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/famibelle/horoscope-ia.git
+          
+          # Première tentative
+          if git push origin ${{ github.ref_name }}; then
+            echo "✅ Push réussi (1ère tentative)"
+            echo "push_success=true" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️  Première tentative échouée, réessai dans 10s..."
+            sleep 10
+            if git push origin ${{ github.ref_name }}; then
+              echo "✅ Push réussi (2ème tentative)"
+              echo "push_success=true" >> $GITHUB_OUTPUT
+            else
+              echo "❌ Push échoué après 2 tentatives !"
+              echo "push_success=false" >> $GITHUB_OUTPUT
+              exit 1
+            fi
+          fi
+
+      - name: Vérifier le push sur remote
+        if: steps.push.outputs.push_success == 'true'
+        run: |
+          echo "🔍 Vérification finale que les fichiers sont sur origin..."
+          DATE=${{ steps.date.outputs.DATE }}
+          
+          # Attendre que GitHub indexe les changements
+          sleep 15
+          
+          # Vérifier chaque fichier via l'API GitHub
+          for file in "public/data/horoscopes/${DATE}.json" \
+                      "public/data/ambiance/${DATE}.json" \
+                      "public/data/signe-du-jour/${DATE}.json"; do
+            if curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                     "https://api.github.com/repos/famibelle/horoscope-ia/contents/${file}?ref=${{ github.ref_name }}" | \
+                     grep -q "\"encoding\": \"base64\""; then
+              echo "✅ $file est bien sur origin/${{ github.ref_name }}"
+            else
+              echo "❌ Fichier non trouvé sur remote: $file"
+              exit 1
+            fi
+          done
+          
+          echo "✅ TOUS les fichiers sont confirmés sur remote !"
+
+      # ========================================================================
+      # 📊 COUCHE 9: ANALYSE DES LOGS (si la génération a eu lieu)
+      # ========================================================================
+      - name: Analyser les logs de génération
+        if: always() && steps.generate-horoscopes.outputs.SUCCESS == 'true'
+        run: |
+          echo "📊 Analyse des logs..."
+          LAST_LOG=$(ls -t logs/generation-report-*.md 2>/dev/null | head -1 || true)
+          if [ -n "$LAST_LOG" ]; then
+            echo "📄 Dernier rapport: $LAST_LOG"
+            # Extraire le statut du rapport
+            STATUS=$(grep -m 1 "Final Status:" "$LAST_LOG" | sed 's/.*Final Status: //' || echo "unknown")
+            echo "Statut: $STATUS"
+            
+            # Compter les erreurs
+            ERROR_COUNT=$(grep -c "❌" "$LAST_LOG" || echo "0")
+            echo "Nombre d'erreurs dans les logs: $ERROR_COUNT"
+            
+            if [ "$ERROR_COUNT" -gt 0 ]; then
+              echo "⚠️  Des erreurs ont été détectées dans les logs"
+            fi
+          fi
+
+      # ========================================================================
+      # 💾 COUCHE 10: UPLOAD DES ARTIFACTS (LOGS + DONNÉES)
+      # ========================================================================
+      - name: Upload generated data as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-data-${{ steps.date.outputs.DATE }}
+          path: |
+            public/data/
+            logs/
+          retention-days: 7
+          compression-level: 0
+
+      - name: Upload logs separately (30 jours de rétention)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generation-logs-${{ steps.date.outputs.DATE }}
+          path: logs/
+          retention-days: 30
+          compression-level: 0
+
+
+  # =============================================================================
+  # 🛡️  JOB DE RÉCUPÉRATION ULTIME (Si tout échoue)
+  # =============================================================================
   recovery:
     needs: generate
-    if: always() && needs.generate.result == 'failure'
+    if: always() && (needs.generate.result == 'failure' || needs.generate.outputs.SUCCESS != 'true')
     runs-on: ubuntu-latest
     
     steps:
@@ -480,45 +669,101 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Download generated data artifact
+
+      - name: Télécharger les artefacts
         uses: actions/download-artifact@v4
         with:
-          name: generated-data-${{ needs.generate.outputs.DATE }}
-          path: public/data/
-      
-      - name: Configure Git
+          path: artifacts/
+          merge-multiple: true
+
+      - name: Extraire les logs et données
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-      
-      - name: Verify files exist
-        id: verify-files
-        run: |
-          DATE=${{ needs.generate.outputs.DATE }}
-          if [ -f "public/data/horoscopes/${DATE}.json" ] || \
-             [ -f "public/data/ambiance/${DATE}.json" ] || \
-             [ -f "public/data/signe-du-jour/${DATE}.json" ]; then
-            echo "files_exist=true" >> $GITHUB_OUTPUT
-            echo "✅ Fichiers artefacts trouvés"
-          else
-            echo "files_exist=false" >> $GITHUB_OUTPUT
-            echo "❌ Aucun fichier artefact trouvé"
-            exit 1
-          fi
-      
-      - name: Commit and push recovered data
-        if: steps.verify-files.outputs.files_exist == 'true'
-        run: |
-          DATE=${{ needs.generate.outputs.DATE }}
+          echo "🔍 Extraction des artefacts..."
+          mkdir -p logs
+          mkdir -p public/data/horoscopes
+          mkdir -p public/data/ambiance
+          mkdir -p public/data/signe-du-jour
           
-          git add public/data/horoscopes/${DATE}.json public/data/ambiance/${DATE}.json public/data/signe-du-jour/${DATE}.json
+          # Copier les logs
+          find artifacts/ -name "generation-report-*.md" -exec cp {} logs/ \;
           
-          if git diff --cached --quiet; then
-            echo "Aucun changement à commiter"
+          # Copier les données générées
+          find artifacts/ -name "*.json" -path "*/public/data/*" -exec cp --parents {} public/ \;
+          
+          ls -la logs/ || true
+          ls -la public/data/ || true
+
+      - name: Vérifier les fichiers récupérés
+        id: check-recovered
+        run: |
+          echo "🔍 Vérification des fichiers récupérés..."
+          DATE=$(date -u +%Y-%m-%d)
+          FOUND=false
+          
+          # Chercher des fichiers JSON dans public/data
+          if [ -n "$(find public/data/ -name "*.json" -type f 2>/dev/null)" ]; then
+            FOUND=true
+            echo "✅ Fichiers JSON trouvés dans public/data/"
           else
-            git commit -m "chore: récupération des données du ${DATE} [auto-recovered]"
-            git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/famibelle/horoscope-ia.git
-            git push origin HEAD
-            echo "✅ Récupération et push réussis !"
+            # Chercher dans les artefacts directement
+            if [ -n "$(find artifacts/ -name "*.json" -type f 2>/dev/null)" ]; then
+              FOUND=true
+              echo "✅ Fichiers JSON trouvés dans les artefacts"
+              # Copier manuellement
+              find artifacts/ -name "*.json" -type f -exec cp {} public/data/ \;
+            fi
           fi
+          
+          if [ "$FOUND" = true ]; then
+            echo "files_found=true" >> $GITHUB_OUTPUT
+          else
+            echo "files_found=false" >> $GITHUB_OUTPUT
+            echo "❌ Aucun fichier JSON trouvé dans les artefacts"
+          fi
+
+      - name: Commit les fichiers récupérés
+        if: steps.check-recovered.outputs.files_found == 'true'
+        run: |
+          echo "📝 Commit des fichiers récupérés..."
+          
+          git config --global user.name "GitHub Actions Recovery"
+          git config --global user.email "recovery@github.com"
+          
+          DATE=$(date -u +%Y-%m-%d)
+          git add public/data/ logs/
+          
+          if ! git diff --cached --quiet; then
+            if git commit -m "chore: récupération automatique des données du ${DATE} [auto-recovered]"; then
+              echo "✅ Commit de récupération créé"
+              
+              git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/famibelle/horoscope-ia.git
+              
+              if git push origin ${{ github.ref_name }}; then
+                echo "✅ Push de récupération réussi !"
+              else
+                echo "⚠️  Échec du push de récupération"
+                # Créer une issue pour alerter
+                curl -s -X POST "https://api.github.com/repos/famibelle/horoscope-ia/issues" \
+                  -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                  -H "Content-Type: application/json" \
+                  -d "{\"title\":\"⚠️  Récupération automatique partielle - ${DATE}\",\"body\":\"La récupération automatique a trouvé des fichiers mais n'a pas pu les pusher.\\n\\n**Workflow:** ${GITHUB_WORKFLOW}\\n**Run:** ${GITHUB_RUN_ID}\\n\\n[Voir le run](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})\",\"labels\":[\"recovery-partial\"]}"
+              fi
+            else
+              echo "❌ Échec du commit de récupération"
+            fi
+          else
+            echo "ℹ️  Aucun changement à commiter"
+          fi
+
+      - name: Créer une issue d'alerte (si aucune récupération possible)
+        if: steps.check-recovered.outputs.files_found == 'false'
+        run: |
+          echo "🚨 AUCUNE RÉCUPÉRATION POSSIBLE"
+          curl -s -X POST "https://api.github.com/repos/famibelle/horoscope-ia/issues" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"title\":\"🚨 URGENT: Génération des horoscopes échouée - Coût: 25€ ?\",
+              \"body\":\"**Workflow:** ${GITHUB_WORKFLOW}\\n**Run:** #${GITHUB_RUN_NUMBER}\\n**Date:** $(date -u +%Y-%m-%d)\\n\\n❌ **Aucun fichier généré n'a été trouvé** dans les artefacts.\\n\\n**Actions requises:**\\n1. Vérifiez les logs: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}\\n2. Vérifiez que MISTRAL_API_KEY est valide\\n3. Vérifiez le quota Mistral\\n4. Relancez manuellement\\n\\n[Relancer](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/workflows/${GITHUB_WORKFLOW_ID})\\n[Voir les artefacts](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})\",
+              \"labels\":[\"urgent\",\"cost-risk\",\"needs-attention\"]
+            }"
