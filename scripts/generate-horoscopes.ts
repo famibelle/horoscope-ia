@@ -345,95 +345,85 @@ async function generateWithMistral(
   logVerbose(`Prompt utilisateur généré (${userPrompt.length} caractères)`);
   logVerbose(`Modèle: mistral-large-latest, Temp: 0.75, Max tokens: 900`);
 
-  const startTime = Date.now();
-  const res = await fetchWithRetry(
-    MISTRAL_URL,
-    {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'mistral-large-latest',
-        temperature: 0.75,
-        max_tokens: 900,
-        response_format: { type: 'json_object' },
-        messages: [
-          { role: 'system', content: MARYSE_SYSTEM },
-          { role: 'user', content: userPrompt },
-        ],
-      }),
-    },
-    3,
-    `Mistral-large pour ${signId} ${edition}`
-  );
-
-  logVerbose(`Réponse Mistral: ${res.status} ${res.statusText} (${Date.now() - startTime}ms)`);
-
-  // fetchWithRetry garantit que res.ok est true, donc on peut sauter la vérification
-
-  const data = await res.json();
-  logVerbose('Réponse Mistral parsée', {
-    hasChoices: !!data.choices,
-    choicesLength: data.choices?.length,
-    finishReason: data.choices?.[0]?.finish_reason,
-    usage: data.usage
-  });
-
-  const content: string = data.choices?.[0]?.message?.content ?? '';
-  logVerbose(`Contenu brut reçu: ${content.substring(0, 200)}${content.length > 200 ? '...' : ''}`);
-  
-  try {
-    const parsed = JSON.parse(content);
-    logVerbose('JSON valide parsé avec succès', Object.keys(parsed));
+  // Wrapper pour Mistral API avec retry complet (HTTP + parsing JSON)
+  async function callMistralWithFullRetry(): Promise<Record<string, string> | null> {
+    const maxAttempts = 3;
+    let lastError: Error | undefined;
     
-    // ==========================================
-    // 📚 EXTRACTION DES TERMES POUR LE GLOSSAIRE
-    // ==========================================
-    const textForGlossary = JSON.stringify(parsed);
-    const terms = extractGlossaryTerms(textForGlossary);
-    if (terms.length > 0) {
-      const dateToday = new Date().toISOString().split('T')[0];
-      const sourceFile = `horoscopes/${todayGuadeloupe()}.json`;
-      updateGlossary(terms, dateToday, sourceFile);
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        const startTime = Date.now();
+        const res = await fetchWithRetry(
+          MISTRAL_URL,
+          {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model: 'mistral-large-latest',
+              temperature: 0.75,
+              max_tokens: 900,
+              response_format: { type: 'json_object' },
+              messages: [
+                { role: 'system', content: MARYSE_SYSTEM },
+                { role: 'user', content: userPrompt },
+              ],
+            }),
+          },
+          3,
+          `Mistral-large pour ${signId} ${edition} (tentative ${attempt}/${maxAttempts})`
+        );
+
+        logVerbose(`Réponse Mistral: ${res.status} ${res.statusText} (${Date.now() - startTime}ms)`);
+
+        const data = await res.json();
+        logVerbose('Réponse Mistral parsée', {
+          hasChoices: !!data.choices,
+          choicesLength: data.choices?.length,
+          finishReason: data.choices?.[0]?.finish_reason,
+          usage: data.usage
+        });
+
+        const content: string = data.choices?.[0]?.message?.content ?? '';
+        logVerbose(`Contenu brut reçu: ${content.substring(0, 200)}${content.length > 200 ? '...' : ''}`);
+        
+        try {
+          const parsed = JSON.parse(content);
+          return parsed;
+        } catch (parseError) {
+          lastError = parseError instanceof Error ? parseError : new Error(String(parseError));
+          logVerboseError(`⚠️  Échec parsing JSON (tentative ${attempt}/${maxAttempts}): ${lastError.message}`);
+          logVerboseError(`Contenu qui a échoué: ${content.substring(0, 500)}...`);
+          
+          if (attempt < maxAttempts) {
+            const retryDelay = 5000 * attempt; // 5s, 10s, 15s
+            logVerbose(`Retry dans ${retryDelay}ms...`);
+            await delay(retryDelay);
+          }
+        }
+      } catch (fetchError) {
+        lastError = fetchError instanceof Error ? fetchError : new Error(String(fetchError));
+        logVerboseError(`⚠️  Échec fetch Mistral (tentative ${attempt}/${maxAttempts}): ${lastError.message}`);
+        
+        if (attempt < maxAttempts) {
+          const retryDelay = 5000 * attempt;
+          logVerbose(`Retry dans ${retryDelay}ms...`);
+          await delay(retryDelay);
+        }
+      }
     }
     
-    // ==========================================
-    // 🗑️  SUPPRESSION DES PARENTHÈSES REDONDANTES
-    // ==========================================
-    const glossary = loadGlossary();
-    const parsedWithCleanedText = JSON.parse(
-      JSON.stringify(parsed).replace(/(\w[\w'\-]*)\s*(([^)]+))/g, (match, term) => {
-        if (glossary[term]) return term;
-        return match;
-      })
-    );
-    
-    // ==========================================
-    // 🛡️ APPLICATION DES GARDE-FOUS DE SÉCURITÉ
-    // ==========================================
-    logVerbose('🛡️  Application des garde-fous de sécurité...');
-    const { filtered: safeParsed, warnings, stats } = applySafetyFiltersToObject(
-      parsedWithCleanedText,
-      { logWarnings: true, includeStats: true }
-    );
-    
-    if (warnings.length > 0) {
-      logVerbose(`✅ ${warnings.length} garde-fous appliqués pour ${signId} (${edition})`, {
-        highPriority: stats.highPriority,
-        mediumPriority: stats.mediumPriority,
-        lowPriority: stats.lowPriority,
-        totalReplacements: stats.totalReplacements,
-      });
-    } else {
-      logVerbose(`✅ Aucun garde-fou nécessaire pour ${signId} (${edition})`);
-    }
-    
-    return safeParsed;
-  } catch (e) {
-    console.log(`❌ JSON invalide pour ${signId}`);
-    logVerboseError('Échec parsing JSON', e instanceof Error ? e.message : e);
-    logVerboseError('Contenu qui a échoué:', content);
+    // Tous les retries ont échoué
+    console.log(`❌ Échec définitif pour ${signId} (${edition}) après ${maxAttempts} tentatives`);
+    logVerboseError(`Dernière erreur: ${lastError?.message || 'Erreur inconnue'}`);
     return null;
   }
+
+  const parsed = await callMistralWithFullRetry();
+  if (!parsed) {
+    return null;
+  }
+  
+  logVerbose('JSON valide parsé avec succès', Object.keys(parsed));
 }
 
 async function generateTeaser(
