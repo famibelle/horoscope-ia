@@ -337,7 +337,7 @@ jobs:
       # ========================================================================
       - name: Générer les horoscopes (avec logging)
         id: generate-horoscopes
-        if: steps.dry-run-commit.outputs.dry_run_success == 'true' && steps.check-data.outputs.data_exists != 'true'
+        if: steps.dry-run-commit.outputs.dry_run_success == 'true' && (steps.check-data.outputs.data_exists != 'true' || github.event.inputs.mode == 'force' || github.event.inputs.mode == 'force-verbose')
         run: |
           echo "🚀 Démarrage de la génération pour ${{ steps.date.outputs.DATE }}"
           
@@ -390,7 +390,7 @@ jobs:
 
       - name: Générer les ambiances
         id: generate-ambiance
-        if: steps.dry-run-commit.outputs.dry_run_success == 'true' && steps.check-data.outputs.data_exists != 'true'
+        if: steps.dry-run-commit.outputs.dry_run_success == 'true' && (steps.check-data.outputs.data_exists != 'true' || github.event.inputs.mode == 'force' || github.event.inputs.mode == 'force-verbose')
         run: |
           echo "🎨 Génération des ambiances pour ${{ steps.date.outputs.DATE }}..."
           
@@ -424,7 +424,7 @@ jobs:
 
       - name: Générer le signe du jour
         id: generate-signe
-        if: steps.dry-run-commit.outputs.dry_run_success == 'true' && steps.check-data.outputs.data_exists != 'true'
+        if: steps.dry-run-commit.outputs.dry_run_success == 'true' && (steps.check-data.outputs.data_exists != 'true' || github.event.inputs.mode == 'force' || github.event.inputs.mode == 'force-verbose')
         run: |
           echo "🌿 Génération du signe du jour pour ${{ steps.date.outputs.DATE }}..."
           
