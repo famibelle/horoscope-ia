@@ -124,10 +124,36 @@ jobs:
       
       # ========================================================================
       # 🚀 GÉNÉRATION DES DONNÉES
+
+      # ========================================================================
+      # 🔍 VÉRIFICATION DES FICHIERS EXISTANTS (ÉCONOMIE DE TOKENS)
+      # ========================================================================
+      
+      - name: Check if data files already exist
+        id: check-data
+        run: |
+          DATE=${{ steps.date.outputs.DATE }}
+          HORO_FILE="public/data/horoscopes/${DATE}.json"
+          AMB_FILE="public/data/ambiance/${DATE}.json"
+          SDJ_FILE="public/data/signe-du-jour/${DATE}.json"
+          
+          if [ -f "$HORO_FILE" ] && [ -f "$AMB_FILE" ] && [ -f "$SDJ_FILE" ]; then
+            echo "data_exists=true" >> $GITHUB_OUTPUT
+            echo "✅ Fichiers existants détectés pour ${DATE} - Pas de régénération nécessaire"
+          else
+            echo "data_exists=false" >> $GITHUB_OUTPUT
+            echo "ℹ️  Fichiers manquants pour ${DATE} - Génération nécessaire"
+          fi
+      
+      # ========================================================================
+      # 🚀 GÉNÉRATION DES DONNÉES
+      # ========================================================================
+      
       # ========================================================================
       
       - name: Générer les horoscopes
         id: generate
+        if: steps.check-data.outputs.data_exists != 'true'
         run: |
           echo "🚀 Démarrage de la génération pour ${{ steps.date.outputs.DATE }}"
           
@@ -167,6 +193,7 @@ jobs:
       
       - name: Générer les ambiances
         id: generate-ambiance
+        if: steps.check-data.outputs.data_exists != 'true'
         run: |
           echo "🎨 Génération des ambiances pour ${{ steps.date.outputs.DATE }}"
           
@@ -200,6 +227,7 @@ jobs:
       
       - name: Générer le signe du jour
         id: generate-signe
+        if: steps.check-data.outputs.data_exists != 'true'
         run: |
           echo "🌿 Génération du signe du jour pour ${{ steps.date.outputs.DATE }}"
           
