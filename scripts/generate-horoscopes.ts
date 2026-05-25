@@ -394,7 +394,10 @@ async function generateWithMistral(
         } catch (parseError) {
           lastError = parseError instanceof Error ? parseError : new Error(String(parseError));
           logVerboseError(`⚠️  Échec parsing JSON (tentative ${attempt}/${maxAttempts}): ${lastError.message}`);
-          logVerboseError(`Contenu qui a échoué: ${content.substring(0, 500)}...`);
+          // LOG COMPLET DU CONTENU BRUT POUR DEBUG
+          console.error(`--- CONTENU BRUT MISTRAL ---`);
+          console.error(content);
+          console.error(`--- FIN CONTENU BRUT ---`);
           
           if (attempt < maxAttempts) {
             const retryDelay = 5000 * attempt; // 5s, 10s, 15s
