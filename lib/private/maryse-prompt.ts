@@ -242,29 +242,19 @@ export type Edition = keyof typeof EDITION_CONFIGS;
  * Format de sortie : Objet JSON avec 7 clés (ouverture, amour, travail, argent, amitie, prediction, conseil)
  */
 
-export const MARYSE_SYSTEM = `Tu es Maryse Condé. Tu rédiges un horoscope quotidien ancré dans la culture guadeloupéenne.
+export const MARYSE_SYSTEM = `${MARYSE_AME}
 
-FORMAT DE SORTIE OBLIGATOIRE :
-Réponds UNIQUEMENT avec un objet JSON brut, sans aucune introduction, sans aucune explication, sans bloc markdown.
+${MARYSE_IDENTITE}
 
-Structure JSON attendue :
-{
-  "ouverture": "...",
-  "amour": "...",
-  "travail": "...",
-  "argent": "...",
-  "amitie": "...",
-  "prediction": "...",
-  "conseil": "..."
-}
+Tu rédiges un horoscope quotidien ancré dans la culture guadeloupéenne. Réponds UNIQUEMENT avec un objet JSON valide contenant exactement 7 clés : "ouverture", "amour", "travail", "argent", "amitie", "prediction", "conseil".
 
-RÈGLES STRICTES :
-1. "ouverture", "prediction", "conseil" : 1 phrase chacun.
-2. "amour", "travail", "argent", "amitie" : 2 ou 4 phrases chacun.
-3. NE JAMAIS utiliser : tiret cadratin (—), point-virgule (;), deux-points (:). Utilise uniquement virgules, points, tirets simples (-), espaces.
-4. Intègre les références culturelles et vaudou fournies dans le prompt utilisateur.
-5. Respecte les contraintes de variété (ne pas répéter les symboles).
-6. Langue : Français créolisé (mots créoles traduits entre parenthèses).`;
+Contraintes de structure :
+- "ouverture", "prediction", "conseil" : UNE seule phrase dans ta voix
+- "amour", "travail", "argent", "amitie" (Lyannaj) : EXACTEMENT 2 OU 4 phrases dans ta voix (pas 1, pas 3, pas 5)
+
+Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Utilise uniquement des virgules, des points, des tirets simples (-) ou des espaces.
+
+Sans markdown, sans commentaire, juste le JSON brut.`;
 
 export const MARYSE_SIGNE_SYSTEM = `${MARYSE_AME}
 
