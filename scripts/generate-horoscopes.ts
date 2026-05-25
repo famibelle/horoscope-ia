@@ -585,36 +585,37 @@ async function saveToLocalFile(today: string, data: Record<string, any>): Promis
   return filePath;
 }
 
+async function loadExistingResults(today: string): Promise<Record<string, any>> {
+  const fs = await import('fs/promises');
+  const path = await import('path');
+  const filePath = path.join(process.cwd(), 'public', 'data', 'horoscopes', `${today}.json`);
+  
+  try {
+    const content = await fs.readFile(filePath, 'utf-8');
+    return JSON.parse(content);
+  } catch {
+    return {};
+  }
+}
+
 export async function generateAllHoroscopes() {
   const today = options.date || todayGuadeloupe();
-  const filePath = `data/horoscopes/${today}.json`;
   
   logVerbose(`Début de la génération`, {
     date: today,
-    forceMode: options.force,
-    outputPath: filePath
+    forceMode: options.force
   });
   
-  // Vérifier si les horoscopes du jour existent déjà (sauf si --force)
-  if (!options.force) {
-    try {
-      const fs = await import('fs/promises');
-      await fs.access(filePath);
-      console.log(`\n⏭️  Les horoscopes pour le ${today} existent déjà (${filePath})`);
-      console.log('   → Pas de régénération nécessaire.\n');
-      console.log('   Pour forcer: passez --force ou -f\n');
-      logVerbose('Fichier existant détecté, génération annulée');
-      return;
-    } catch {
-      // Fichier n'existe pas, continuer la génération
-      logVerbose('Aucun fichier existant trouvé, génération nécessaire');
-    }
-  } else if (options.verbose) {
-    console.log(`\n⚡ Mode force: régénération des horoscopes pour ${today}...\n`);
+  // Charger les résultats existants pour le mode delta (incrémental)
+  const results: Record<string, any> = options.force ? {} : await loadExistingResults(today);
+  const existingCount = Object.keys(results).length;
+  
+  if (existingCount > 0) {
+    console.log(`\n⏭️  Chargé ${existingCount} horoscopes existants pour le ${today}.`);
   }
 
   console.log(`\n📅 ========== GÉNÉRATION DES HOROSCOPES POUR LE ${today} ==========`);
-  logVerbose(`Configuration: ${signs.length} signes × ${4} éditions = ${signs.length * 4} horoscopes à générer`);
+  logVerbose(`Configuration: ${signs.length} signes × ${4} éditions = ${signs.length * 4} horoscopes au total`);
 
   const weather = await fetchWeather();
   console.log(`🌤️  Météo: ${weather}\n`);
@@ -623,9 +624,8 @@ export async function generateAllHoroscopes() {
   const editions: Edition[] = ['nuit', 'matin', 'midi', 'soir'];
   const total = signs.length * editions.length;
   let generated = 0;
-  let skipped = 0;
+  let skipped = existingCount;
 
-  const results: Record<string, any> = {};
   logVerbose(`Initialisation: ${total} horoscopes à traiter`);
 
   try {
@@ -637,6 +637,14 @@ export async function generateAllHoroscopes() {
     for (const sign of signs) {
       for (const edition of editions) {
         const blobKey = `${today}|${sign.id}|${edition}`;
+        
+        // Vérifier si déjà dans les résultats chargés (delta local)
+        if (results[blobKey]) {
+          console.log(`✅ [${generated + skipped + 1}/${total}] ${sign.id} (${edition}) - Déjà en résultats locaux`);
+          logVerbose(`Skip: ${blobKey} présent dans résultats locaux`);
+          continue;
+        }
+
         logVerbose(`Traitement: ${sign.id} (${edition}) [${generated + skipped + 1}/${total}]`);
 
         // Vérifier le cache
@@ -644,6 +652,7 @@ export async function generateAllHoroscopes() {
         if (cached) {
           console.log(`✅ [${generated + skipped + 1}/${total}] ${sign.id} (${edition}) - Déjà en cache Netlify`);
           logVerbose(`Cache hit pour ${blobKey}`);
+          results[blobKey] = cached; // Importante mise à jour
           skipped++;
           continue;
         }
