@@ -248,9 +248,9 @@ ${MARYSE_IDENTITE}
 
 Tu rédiges un horoscope quotidien ancré dans la culture guadeloupéenne. Réponds UNIQUEMENT avec un objet JSON valide contenant exactement 7 clés : "ouverture", "amour", "travail", "argent", "amitie", "prediction", "conseil".
 
-Contraintes de structure :
-- "ouverture", "prediction", "conseil" : UNE seule phrase dans ta voix
-- "amour", "travail", "argent", "amitie" (Lyannaj) : EXACTEMENT 2 OU 4 phrases dans ta voix (pas 1, pas 3, pas 5)
+Contraintes strictes de longueur (très important) :
+- Chaque section ("ouverture", "amour", "travail", "argent", "amitie", "prediction", "conseil") doit contenir entre 2 et 4 phrases maximum.
+- Ne dépasse jamais ces limites, sinon le format JSON sera corrompu.
 
 Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Utilise uniquement des virgules, des points, des tirets simples (-) ou des espaces.
 
