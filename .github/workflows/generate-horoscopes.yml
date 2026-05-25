@@ -140,12 +140,12 @@ jobs:
           AMB_FILE="public/data/ambiance/${DATE}.json"
           SDJ_FILE="public/data/signe-du-jour/${DATE}.json"
           
-          if [ -f "$HORO_FILE" ] && [ -f "$AMB_FILE" ] && [ -f "$SDJ_FILE" ]; then
+          if [ -f "$HORO_FILE" ]; then
             echo "data_exists=true" >> $GITHUB_OUTPUT
-            echo "✅ Fichiers existants détectés pour ${DATE} - Pas de régénération nécessaire"
+            echo "✅ Fichiers horoscopes existants pour ${DATE} - Pas de régénération nécessaire"
           else
             echo "data_exists=false" >> $GITHUB_OUTPUT
-            echo "ℹ️  Fichiers manquants pour ${DATE} - Génération nécessaire"
+            echo "ℹ️  Fichiers horoscopes manquants pour ${DATE} - Génération nécessaire"
           fi
       
       # ========================================================================
