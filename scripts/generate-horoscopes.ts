@@ -353,6 +353,11 @@ async function generateWithMistral(
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       try {
         const startTime = Date.now();
+        // LOG DU PROMPT ENVOYÉ
+        console.error(`!!! DEBUG: PROMPT SENT TO MISTRAL !!!`);
+        console.error(userPrompt);
+        console.error(`!!! FIN PROMPT !!!`);
+        
         const res = await fetchWithRetry(
           MISTRAL_URL,
           {
