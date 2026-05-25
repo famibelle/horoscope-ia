@@ -251,7 +251,8 @@ jobs:
           }
            
           # Tester git push (c'est le test critique !)
-          if git push origin ${{ github.ref_name }}; then
+          # Utiliser --force-with-lease pour gérer les pushes simultanés
+          if git push --force-with-lease origin ${{ github.ref_name }}; then
             echo "✅ git push: OK"
             
             # Nettoyer: supprimer le fichier pseudo et committer/pusher
@@ -265,7 +266,7 @@ jobs:
             if git commit -m "cleanup: dry-run - suppression de $PSEUDO_FILE" --allow-empty; then
               echo "✅ Commit de nettoyage créé"
               # Pusher le commit de nettoyage
-              if git push origin ${{ github.ref_name }}; then
+              if git push --force-with-lease origin ${{ github.ref_name }}; then
                 echo "✅ Cleanup pushé - branche propre"
               else
                 echo "⚠️  Échec du push de cleanup (mais le test push a réussi)"
