@@ -387,7 +387,9 @@ async function generateWithMistral(
         logVerbose(`Contenu brut reçu: ${content.substring(0, 200)}${content.length > 200 ? '...' : ''}`);
         
         try {
-          const parsed = JSON.parse(content);
+          // Robustesse: retirer les blocs markdown ```json ... ```
+          const cleanContent = content.replace(/^```json\s*/, '').replace(/```\s*$/, '').trim();
+          const parsed = JSON.parse(cleanContent);
           return parsed;
         } catch (parseError) {
           lastError = parseError instanceof Error ? parseError : new Error(String(parseError));
