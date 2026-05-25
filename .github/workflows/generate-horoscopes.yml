@@ -99,7 +99,7 @@ jobs:
           if ! git ls-remote --heads origin ${{ github.ref_name }} | grep -q "refs/heads/${{ github.ref_name }}"; then
             echo "⚠️  Branche ${{ github.ref_name }} n'existe pas sur origin"
             echo "Création de la branche..."
-            git push origin HEAD:${{ github.ref_name }}
+            git push https://x-access-token:${{ secrets.PUSH_TOKEN }}@github.com/famibelle/horoscope-ia.git HEAD:${{ github.ref_name }}
           else
             echo "✅ Branche ${{ github.ref_name }} existe sur origin"
           fi
@@ -265,7 +265,7 @@ jobs:
               echo "Aucun changement à commiter"
             else
               git commit -m "chore: horoscopes, ambiances et signe du jour du ${DATE} [auto-generated]"
-              git push origin HEAD
+              git push https://x-access-token:${{ secrets.PUSH_TOKEN }}@github.com/famibelle/horoscope-ia.git HEAD:vaudou
               echo "✅ Commit et push effectués sur ${{ github.ref_name }}"
             fi
           else
