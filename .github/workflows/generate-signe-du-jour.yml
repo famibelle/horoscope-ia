@@ -1,9 +1,9 @@
-name: Générer les horoscopes quotidiens (SÉCURISÉ - ZÉRO RISQUE 25€)
+name: Générer le signe du jour (SÉCURISÉ - ZÉRO RISQUE 25€)
 
 # =============================================================================
-# 🛡️  WORKFLOW SPÉCIALISÉ POUR LES HOROSCOPES
+# 🛡️  WORKFLOW SPÉCIALISÉ POUR LE SIGNE DU JOUR
 # =============================================================================
-# Objectif: Générer UNIQUEMENT public/data/horoscopes/AAAA-MM-JJ.json
+# Objectif: Générer UNIQUEMENT public/data/signe-du-jour/AAAA-MM-JJ.json
 # Stratégie: 10 couches de protection AVANT tout appel Mistral (25€)
 # =============================================================================
 
@@ -33,10 +33,9 @@ on:
   push:
     branches: [main, vaudou]
     paths:
-      - 'scripts/generate-horoscopes.ts'
+      - 'scripts/generate-signe-du-jour.ts'
       - 'lib/private/maryse-prompt.ts'
-      - 'lib/cultural-context.ts'
-      - '.github/workflows/generate-horoscopes.yml'
+      - '.github/workflows/generate-signe-du-jour.yml'
 
 # =============================================================================
 # 🔐 PERMISSIONS: GITHUB_TOKEN doit pouvoir écrire sur le repo
@@ -46,7 +45,7 @@ permissions:
   packages: write
 
 jobs:
-  generate-horoscopes:
+  generate-signe-du-jour:
     runs-on: ubuntu-latest
     
     steps:
@@ -139,7 +138,7 @@ jobs:
       - name: Créer les dossiers nécessaires
         run: |
           echo "📁 Création des dossiers..."
-          mkdir -p public/data/horoscopes
+          mkdir -p public/data/signe-du-jour
           mkdir -p logs
           echo "✅ Dossiers créés"
 
@@ -170,28 +169,14 @@ jobs:
           echo "🧪 Dry-run: Test du pipeline commit/push avec fichier pseudo..."
           
           # Nettoyer tout fichier pseudo existant
-          rm -f public/data/horoscopes/2000-01-01_pseudo.json
+          rm -f public/data/signe-du-jour/2000-01-01_pseudo.json
           
           DATE_TEST="2000-01-01"
           TIMESTAMP=$(date +%s)
-          PSEUDO_FILE="public/data/horoscopes/${DATE_TEST}_pseudo_${TIMESTAMP}.json"
+          PSEUDO_FILE="public/data/signe-du-jour/${DATE_TEST}_pseudo_${TIMESTAMP}.json"
           
           # Créer un fichier pseudo valide
-          echo '{
-            "belier": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
-            "taureau": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
-            "gemeaux": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
-            "cancer": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
-            "lion": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
-            "vierge": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
-            "balance": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
-            "scorpion": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
-            "sagittaire": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
-            "capricorne": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
-            "verseau": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
-            "poissons": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"}
-          }' > "$PSEUDO_FILE"
-          
+          echo '{"test": "signe-du-jour dry-run test"}' > "$PSEUDO_FILE"
           echo "✅ Fichier pseudo créé: $PSEUDO_FILE"
           
           # Tester git add
@@ -207,7 +192,7 @@ jobs:
           git config --global user.email "dry-run@github.com"
           
           # Tester git commit
-          if ! git commit -m "test: dry-run commit/push [horoscopes AAAA-MM-JJ_pseudo.json]"; then
+          if ! git commit -m "test: dry-run commit/push [signe-du-jour AAAA-MM-JJ_pseudo.json]"; then
             echo "❌ Échec: git commit"
             git reset HEAD "$PSEUDO_FILE" 2>/dev/null || true
             rm -f "$PSEUDO_FILE"
@@ -236,7 +221,7 @@ jobs:
               echo "✅ Fichier pseudo supprimé"
             fi
             
-            if git commit -m "cleanup: dry-run horoscopes - suppression de $PSEUDO_FILE" --allow-empty; then
+            if git commit -m "cleanup: dry-run signe-du-jour - suppression de $PSEUDO_FILE" --allow-empty; then
               echo "✅ Commit de nettoyage créé"
               if git push --force origin ${{ github.ref_name }}; then
                 echo "✅ Cleanup pushé - branche propre"
@@ -277,18 +262,18 @@ jobs:
       # ========================================================================
       # 🔍 COUCHE 4: VÉRIFICATION DES FICHIERS EXISTANTS
       # ========================================================================
-      - name: Check if horoscopes file already exists
-        id: check-horoscopes
+      - name: Check if signe-du-jour file already exists
+        id: check-signe
         run: |
-          echo "🔍 Vérification des fichiers horoscopes existants..."
+          echo "🔍 Vérification du fichier signe-du-jour existant..."
           DATE=${{ steps.date.outputs.DATE }}
-          HORO_FILE="public/data/horoscopes/${DATE}.json"
-          if [ -f "$HORO_FILE" ]; then
-            echo "horoscopes_exists=true" >> $GITHUB_OUTPUT
-            echo "✅ Fichiers horoscopes existants pour ${DATE}"
+          SDJ_FILE="public/data/signe-du-jour/${DATE}.json"
+          if [ -f "$SDJ_FILE" ]; then
+            echo "signe_exists=true" >> $GITHUB_OUTPUT
+            echo "✅ Fichier signe-du-jour existant pour ${DATE}"
           else
-            echo "horoscopes_exists=false" >> $GITHUB_OUTPUT
-            echo "ℹ️  Fichiers horoscopes manquants pour ${DATE} - Génération nécessaire"
+            echo "signe_exists=false" >> $GITHUB_OUTPUT
+            echo "ℹ️  Fichier signe-du-jour manquant pour ${DATE} - Génération nécessaire"
           fi
 
       # ========================================================================
@@ -307,53 +292,41 @@ jobs:
           echo "✅ Dépendances installées"
 
       # ========================================================================
-      # 🚀 COUCHE 6: GÉNÉRATION AVEC LOGGING COMPLET
+      # 🌿 COUCHE 6: GÉNÉRATION DU SIGNE DU JOUR
       # ========================================================================
-      - name: Générer les horoscopes (avec logging)
-        id: generate-horoscopes
-        if: steps.dry-run-commit.outputs.dry_run_success == 'true' && (steps.check-horoscopes.outputs.horoscopes_exists != 'true' || github.event.inputs.mode == 'force' || github.event.inputs.mode == 'force-verbose')
+      - name: Générer le signe du jour
+        id: generate-signe
+        if: steps.dry-run-commit.outputs.dry_run_success == 'true' && (steps.check-signe.outputs.signe_exists != 'true' || github.event.inputs.mode == 'force' || github.event.inputs.mode == 'force-verbose')
         run: |
-          echo "🚀 Démarrage de la génération pour ${{ steps.date.outputs.DATE }}"
+          echo "🌿 Génération du signe du jour pour ${{ steps.date.outputs.DATE }}..."
           
-          # Construire la commande avec les arguments
-          COMMAND="npx tsx scripts/generate-horoscopes.ts \
+          SDJ_COMMAND="npx tsx scripts/generate-signe-du-jour.ts \
             --date=${{ steps.date.outputs.DATE }} \
             --force"
           
-          # Ajouter les flags selon le mode
           case "${{ github.event.inputs.mode }}" in
             verbose)
-              COMMAND="$COMMAND --verbose"
+              SDJ_COMMAND="$SDJ_COMMAND --verbose"
               ;;
             force-verbose)
-              COMMAND="$COMMAND --verbose"
+              SDJ_COMMAND="$SDJ_COMMAND --verbose"
               ;;
           esac
           
-          # Ajouter --verbose si c'est un workflow manuel sans mode spécifié
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.mode }}" = "normal" ]; then
-            COMMAND="$COMMAND --verbose"
+            SDJ_COMMAND="$SDJ_COMMAND --verbose"
           fi
           
-          echo "Commande: $COMMAND"
+          echo "Commande: $SDJ_COMMAND"
           
-          # Exécuter avec timeout (25 min max - 48 appels Mistral)
-          if timeout 1500 bash -c "$COMMAND"; then
-            echo "HORO_SUCCESS=true" >> $GITHUB_OUTPUT
-            echo "✅ Génération horoscopes terminée avec succès!"
+          # Exécuter avec timeout (10 min max - 12 appels Mistral)
+          if timeout 600 bash -c "$SDJ_COMMAND"; then
+            echo "SDJ_SUCCESS=true" >> $GITHUB_OUTPUT
+            echo "✅ Génération signe du jour terminée avec succès!"
           else
             EXIT_CODE=$?
-            echo "HORO_SUCCESS=false" >> $GITHUB_OUTPUT
-            echo "❌ Échec de la génération horoscopes (code: $EXIT_CODE)"
-            
-            # Afficher le dernier rapport de logs
-            LAST_LOG=$(ls -t logs/generation-report-*.md 2>/dev/null | head -1 || true)
-            if [ -n "$LAST_LOG" ]; then
-              echo "📄 Dernier rapport de logs:"
-              echo "::group::Logs"
-              cat "$LAST_LOG" || true
-              echo "::endgroup::"
-            fi
+            echo "SDJ_SUCCESS=false" >> $GITHUB_OUTPUT
+            echo "❌ Échec de la génération signe du jour (code: $EXIT_CODE)"
             exit $EXIT_CODE
           fi
         env:
@@ -365,37 +338,27 @@ jobs:
       # ========================================================================
       # ✅ COUCHE 7: VALIDATION DES FICHIERS GÉNÉRÉS
       # ========================================================================
-      - name: Valider les fichiers horoscopes générés
-        id: validate-horoscopes
-        if: steps.generate-horoscopes.outputs.HORO_SUCCESS == 'true'
+      - name: Valider le fichier signe-du-jour généré
+        id: validate-signe
+        if: steps.generate-signe.outputs.SDJ_SUCCESS == 'true'
         run: |
-          echo "🔍 Validation des fichiers horoscopes..."
+          echo "🔍 Validation du fichier signe-du-jour..."
           DATE=${{ steps.date.outputs.DATE }}
-          HORO_FILE="public/data/horoscopes/${DATE}.json"
+          SDJ_FILE="public/data/signe-du-jour/${DATE}.json"
           
-          # Vérifier que le fichier existe
-          if [ ! -f "$HORO_FILE" ]; then
-            echo "❌ Fichier manquant: $HORO_FILE"
+          if [ ! -f "$SDJ_FILE" ]; then
+            echo "❌ Fichier manquant: $SDJ_FILE"
             echo "VALIDATION_FAILED=true" >> $GITHUB_OUTPUT
             exit 1
           fi
           
-          # Vérifier que le JSON est valide
-          if ! jq empty "$HORO_FILE" 2>/dev/null; then
-            echo "❌ JSON invalide: $HORO_FILE"
+          if ! jq empty "$SDJ_FILE" 2>/dev/null; then
+            echo "❌ JSON invalide: $SDJ_FILE"
             echo "VALIDATION_FAILED=true" >> $GITHUB_OUTPUT
             exit 1
           fi
           
-          # Vérifier le nombre d'entrées (12 signes × 4 éditions = 48)
-          COUNT=$(jq '. | to_entries | length' "$HORO_FILE" 2>/dev/null || echo "0")
-          if [ "$COUNT" -ne 48 ]; then
-            echo "❌ Nombre d'horoscopes incorrect: $COUNT (attendu: 48)"
-            echo "VALIDATION_FAILED=true" >> $GITHUB_OUTPUT
-            exit 1
-          fi
-          
-          echo "✅ Fichiers horoscopes valides: $HORO_FILE ($COUNT entrées)"
+          echo "✅ Fichier signe-du-jour valide: $SDJ_FILE"
           echo "VALIDATION_FAILED=false" >> $GITHUB_OUTPUT
 
       # ========================================================================
@@ -403,14 +366,14 @@ jobs:
       # ========================================================================
       - name: Préparer le commit
         id: prepare-commit
-        if: steps.validate-horoscopes.outputs.VALIDATION_FAILED != 'true' && steps.generate-horoscopes.outputs.HORO_SUCCESS == 'true'
+        if: steps.validate-signe.outputs.VALIDATION_FAILED != 'true' && steps.generate-signe.outputs.SDJ_SUCCESS == 'true'
         run: |
           echo "📝 Préparation du commit..."
           DATE=${{ steps.date.outputs.DATE }}
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           
-          cd public/data/horoscopes
+          cd public/data/signe-du-jour
           git add ${DATE}.json
           cd ../../..
           
@@ -431,7 +394,7 @@ jobs:
         run: |
           echo "📝 Création du commit..."
           DATE=${{ steps.date.outputs.DATE }}
-          git commit -m "chore: mise à jour horoscopes ${DATE}"
+          git commit -m "chore: mise à jour signe-du-jour ${DATE}"
           echo "✅ Commit créé"
 
       # ========================================================================
@@ -487,8 +450,8 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: horoscopes-data-
-          path: public/data/horoscopes/
+          name: signe-du-jour-data-
+          path: public/data/signe-du-jour/
           retention-days: 7
           include-hidden-files: false
 
@@ -496,7 +459,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: horoscopes-logs-
+          name: signe-du-jour-logs-
           path: logs/
           retention-days: 30
           include-hidden-files: false
@@ -505,8 +468,8 @@ jobs:
   # 🛠️  JOB DE RÉCUPÉRATION (si le job principal échoue)
   # ========================================================================
   recovery:
-    needs: generate-horoscopes
-    if: failure() && needs.generate-horoscopes.result == 'failure'
+    needs: generate-signe-du-jour
+    if: failure() && needs.generate-signe-du-jour.result == 'failure'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -518,7 +481,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: artifacts
-          pattern: horoscopes-*
+          pattern: signe-du-jour-*
 
       - name: Extraire les logs et données
         run: |
@@ -526,7 +489,7 @@ jobs:
           ls -la artifacts/ || true
           
           # Trouver et extraire les données
-          find artifacts -name "*.json" -type f | xargs -I {} cp {} public/data/horoscopes/ || true
+          find artifacts -name "*.json" -type f | xargs -I {} cp {} public/data/signe-du-jour/ || true
           
           echo "✅ Données récupérées"
 
@@ -534,13 +497,13 @@ jobs:
         id: verify-recovery
         run: |
           DATE=$(date -u -d '+4 hours' +%Y-%m-%d)
-          HORO_FILE="public/data/horoscopes/${DATE}.json"
-          if [ -f "$HORO_FILE" ]; then
+          SDJ_FILE="public/data/signe-du-jour/${DATE}.json"
+          if [ -f "$SDJ_FILE" ]; then
             echo "RECOVERY_SUCCESS=true" >> $GITHUB_OUTPUT
-            echo "✅ Fichier horoscopes récupéré"
+            echo "✅ Fichier signe-du-jour récupéré"
           else
             echo "RECOVERY_SUCCESS=false" >> $GITHUB_OUTPUT
-            echo "⚠️  Aucune donnée horoscopes à récupérer"
+            echo "⚠️  Aucune donnée signe-du-jour à récupérer"
           fi
 
       - name: Commit les fichiers récupérés
@@ -549,6 +512,6 @@ jobs:
           echo "💾 Commit des données récupérées..."
           git config --global user.name "GitHub Actions [Recovery]"
           git config --global user.email "recovery@github.com"
-          git add public/data/horoscopes/*.json
-          git commit -m "recovery: données horoscopes récupérées [automatique]" || true
+          git add public/data/signe-du-jour/*.json
+          git commit -m "recovery: données signe-du-jour récupérées [automatique]" || true
           git push origin ${{ github.ref_name }} || true
