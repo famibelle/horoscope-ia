@@ -9,7 +9,8 @@
  * Exemple: "matoutou (fricassée de crabes)" → "matoutou" (après première occurrence)
  */
 
-import { promises as fs } from 'fs';
+import fs from 'fs';
+import { promises as fsPromises } from 'fs';
 import path from 'path';
 
 const GLOSSARY_PATH = path.join(__dirname, 'glossaire.json');
