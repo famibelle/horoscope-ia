@@ -40,6 +40,13 @@ on:
       - 'lib/cultural-context.ts'
       - '.github/workflows/generate-horoscopes.yml'
 
+# =============================================================================
+# 🔐 PERMISSIONS: GITHUB_TOKEN doit pouvoir écrire sur le repo
+# =============================================================================
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   generate:
     runs-on: ubuntu-latest
