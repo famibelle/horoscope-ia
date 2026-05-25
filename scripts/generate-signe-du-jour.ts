@@ -224,8 +224,8 @@ async function generatePhrase(
 
   logVerbose(`Génération phrase pour ${entry.nom_creole}...`);
 
-  // Délai pour éviter le rate limit
-  await delay(3000);
+  // Délai pour éviter le rate limit (réduit de 3s à 2s)
+  await delay(2000);
 
   const res = await fetch(MISTRAL_URL, {
     method: 'POST',

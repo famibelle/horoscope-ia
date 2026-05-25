@@ -110,15 +110,59 @@ function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// Fonction utilitaire pour retry avec exponentiel backoff
+async function retry<T>(
+  operation: () => Promise<T>,
+  maxRetries: number = 3,
+  baseDelay: number = 1000,
+  operationName: string = 'operation'
+): Promise<T> {
+  let lastError: Error | undefined;
+  
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+      const delayMs = baseDelay * Math.pow(2, attempt - 1);
+      logVerboseError(`⚠️  Tentative ${attempt}/${maxRetries} échouée pour ${operationName}: ${lastError.message}. Retry dans ${delayMs}ms...`);
+      await delay(delayMs);
+    }
+  }
+  
+  throw new Error(`❌ Échec après ${maxRetries} tentatives pour ${operationName}: ${lastError?.message || 'Erreur inconnue'}`);
+}
+
+// Wrapper pour fetch avec retry automatique
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit,
+  maxRetries: number = 3,
+  operationName: string = 'fetch'
+): Promise<Response> {
+  return retry(
+    async () => {
+      const res = await fetch(url, options);
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+      }
+      return res;
+    },
+    maxRetries,
+    2000, // base delay 2s
+    operationName
+  );
+}
+
 async function generateWithMistral(
   signId: string,
   rawText: string,
   weather: string,
   edition: Edition
 ): Promise<Record<string, string> | null> {
-  logVerbose(`Démarrage délai 10s avant appel Mistral pour ${signId}...`);
-  // Délai pour éviter le rate limit Mistral
-  await delay(10000);
+  logVerbose(`Démarrage délai 3s avant appel Mistral pour ${signId}...`);
+  // Délai pour éviter le rate limit Mistral (réduit de 10s à 3s)
+  await delay(3000);
   logVerbose(`Délai terminé, appel Mistral imminent`);
 
   const apiKey = process.env.MISTRAL_API_KEY;
@@ -302,28 +346,29 @@ async function generateWithMistral(
   logVerbose(`Modèle: mistral-large-latest, Temp: 0.75, Max tokens: 900`);
 
   const startTime = Date.now();
-  const res = await fetch(MISTRAL_URL, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'mistral-large-latest',
-      temperature: 0.75,
-      max_tokens: 900,
-      response_format: { type: 'json_object' },
-      messages: [
-        { role: 'system', content: MARYSE_SYSTEM },
-        { role: 'user', content: userPrompt },
-      ],
-    }),
-  });
+  const res = await fetchWithRetry(
+    MISTRAL_URL,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'mistral-large-latest',
+        temperature: 0.75,
+        max_tokens: 900,
+        response_format: { type: 'json_object' },
+        messages: [
+          { role: 'system', content: MARYSE_SYSTEM },
+          { role: 'user', content: userPrompt },
+        ],
+      }),
+    },
+    3,
+    `Mistral-large pour ${signId} ${edition}`
+  );
 
   logVerbose(`Réponse Mistral: ${res.status} ${res.statusText} (${Date.now() - startTime}ms)`);
 
-  if (!res.ok) {
-    console.log(`❌ Mistral large échoué: ${res.status}`);
-    logVerboseError('Échec appel Mistral large', { status: res.status, statusText: res.statusText });
-    return null;
-  }
+  // fetchWithRetry garantit que res.ok est true, donc on peut sauter la vérification
 
   const data = await res.json();
   logVerbose('Réponse Mistral parsée', {
@@ -395,9 +440,9 @@ async function generateTeaser(
   signName: string,
   structured: Record<string, string>
 ): Promise<string> {
-  logVerbose(`Démarrage délai 5s avant appel Mistral small pour teaser ${signName}...`);
-  // Délai pour éviter le rate limit Mistral
-  await delay(5000);
+  logVerbose(`Démarrage délai 2s avant appel Mistral small pour teaser ${signName}...`);
+  // Délai pour éviter le rate limit Mistral (réduit de 5s à 2s)
+  await delay(2000);
   logVerbose(`Délai terminé, appel Mistral small imminent`);
 
   const apiKey = process.env.MISTRAL_API_KEY;
@@ -422,31 +467,32 @@ async function generateTeaser(
   logVerbose(`Modèle: mistral-small-latest, Temp: 0.8, Max tokens: 120`);
 
   const startTime = Date.now();
-  const res = await fetch(MISTRAL_URL, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'mistral-small-latest',
-      temperature: 0.8,
-      max_tokens: 120,
-      messages: [
-        {
-          role: 'system',
-          content:
-            `Tu es Maryse CondAI. Rédige une accroche de 2 phrases maximum à partir de l'horoscope du ${signName}, en voix directe et sensuelle, qui donne envie de lire la suite sans tout révéler. Pas de titre, pas de ponctuation finale superflue.`,
-        },
-        { role: 'user', content: fullText },
-      ],
-    }),
-  });
+  const res = await fetchWithRetry(
+    MISTRAL_URL,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'mistral-small-latest',
+        temperature: 0.8,
+        max_tokens: 120,
+        messages: [
+          {
+            role: 'system',
+            content:
+              `Tu es Maryse CondAI. Rédige une accroche de 2 phrases maximum à partir de l'horoscope du ${signName}, en voix directe et sensuelle, qui donne envie de lire la suite sans tout révéler. Pas de titre, pas de ponctuation finale superflue.`,
+          },
+          { role: 'user', content: fullText },
+        ],
+      }),
+    },
+    3,
+    `Mistral-small teaser pour ${signName}`
+  );
 
   logVerbose(`Réponse Mistral small: ${res.status} ${res.statusText} (${Date.now() - startTime}ms)`);
 
-  if (!res.ok) {
-    console.log(`❌ Mistral small échoué: ${res.status}`);
-    logVerboseError('Échec appel Mistral small', { status: res.status });
-    return '';
-  }
+  // fetchWithRetry garantit que res.ok est true
 
   const data = await res.json();
   let teaser = data.choices?.[0]?.message?.content?.trim() ?? '';
@@ -698,6 +744,11 @@ export async function generateAllHoroscopes() {
       total,
       successRate: `${((generated / total) * 100).toFixed(1)}%`
     });
+    
+    // VALIDATION: Vérifier que tous les horoscopes ont été générés
+    if (generated + skipped < total) {
+      throw new Error(`❌ VALIDATION ÉCHOUÉE: Seulement ${generated + skipped}/${total} horoscopes générés`);
+    }
   } catch (error) {
     logVerbose('Netlify Blobs non disponible, bascule en mode local', {
       error: error instanceof Error ? error.message : String(error)
@@ -808,6 +859,11 @@ export async function generateAllHoroscopes() {
       totalExpected: total,
       successRate: `${((Object.keys(results).length / total) * 100).toFixed(1)}%`
     });
+    
+    // VALIDATION: Vérifier que tous les horoscopes ont été générés
+    if (Object.keys(results).length < total) {
+      throw new Error(`❌ VALIDATION ÉCHOUÉE: Seulement ${Object.keys(results).length}/${total} horoscopes générés`);
+    }
   }
 }
 

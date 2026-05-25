@@ -252,9 +252,9 @@ Pour "compatibilite" choisis exactement 2 valeurs parmi : ${finalCompatibleSigns
 Utilise 1 mot créole max par phrase, TOUJOURS avec traduction entre parenthèses.
 Sans markdown dans les valeurs JSON.`;
 
-  // Délai pour éviter le rate limit Mistral
-  logVerbose(`Délai 5s avant appel Mistral pour ${signId} ${edition}...`);
-  await delay(5000);
+  // Délai pour éviter le rate limit Mistral (réduit de 5s à 2s)
+  logVerbose(`Délai 2s avant appel Mistral pour ${signId} ${edition}...`);
+  await delay(2000);
   logVerbose(`Délai terminé, appel Mistral`);
 
   const startTime = Date.now();
