@@ -178,23 +178,22 @@ jobs:
           DATE_TEST="2000-01-01"
           PSEUDO_FILE="public/data/horoscopes/${DATE_TEST}_pseudo.json"
           
-          # Créer un fichier pseudo valide (même structure que les vrais fichiers)
-          cat > "$PSEUDO_FILE" << 'EOF'
-{
-  "belier": {"edition1": "TEST DRY-RUN - belier", "edition2": "TEST DRY-RUN - belier", "edition3": "TEST DRY-RUN - belier", "edition4": "TEST DRY-RUN - belier"},
-  "taureau": {"edition1": "TEST DRY-RUN - taureau", "edition2": "TEST DRY-RUN - taureau", "edition3": "TEST DRY-RUN - taureau", "edition4": "TEST DRY-RUN - taureau"},
-  "gemeaux": {"edition1": "TEST DRY-RUN - gemeaux", "edition2": "TEST DRY-RUN - gemeaux", "edition3": "TEST DRY-RUN - gemeaux", "edition4": "TEST DRY-RUN - gemeaux"},
-  "cancer": {"edition1": "TEST DRY-RUN - cancer", "edition2": "TEST DRY-RUN - cancer", "edition3": "TEST DRY-RUN - cancer", "edition4": "TEST DRY-RUN - cancer"},
-  "lion": {"edition1": "TEST DRY-RUN - lion", "edition2": "TEST DRY-RUN - lion", "edition3": "TEST DRY-RUN - lion", "edition4": "TEST DRY-RUN - lion"},
-  "vierge": {"edition1": "TEST DRY-RUN - vierge", "edition2": "TEST DRY-RUN - vierge", "edition3": "TEST DRY-RUN - vierge", "edition4": "TEST DRY-RUN - vierge"},
-  "balance": {"edition1": "TEST DRY-RUN - balance", "edition2": "TEST DRY-RUN - balance", "edition3": "TEST DRY-RUN - balance", "edition4": "TEST DRY-RUN - balance"},
-  "scorpion": {"edition1": "TEST DRY-RUN - scorpion", "edition2": "TEST DRY-RUN - scorpion", "edition3": "TEST DRY-RUN - scorpion", "edition4": "TEST DRY-RUN - scorpion"},
-  "sagittaire": {"edition1": "TEST DRY-RUN - sagittaire", "edition2": "TEST DRY-RUN - sagittaire", "edition3": "TEST DRY-RUN - sagittaire", "edition4": "TEST DRY-RUN - sagittaire"},
-  "capricorne": {"edition1": "TEST DRY-RUN - capricorne", "edition2": "TEST DRY-RUN - capricorne", "edition3": "TEST DRY-RUN - capricorne", "edition4": "TEST DRY-RUN - capricorne"},
-  "verseau": {"edition1": "TEST DRY-RUN - verseau", "edition2": "TEST DRY-RUN - verseau", "edition3": "TEST DRY-RUN - verseau", "edition4": "TEST DRY-RUN - verseau"},
-  "poissons": {"edition1": "TEST DRY-RUN - poissons", "edition2": "TEST DRY-RUN - poissons", "edition3": "TEST DRY-RUN - poissons", "edition4": "TEST DRY-RUN - poissons"}
-}
-EOF
+          # Créer un fichier pseudo valide (méthode compatible sans jq)
+          # On crée un JSON minimal avec echo pour éviter les dépendances
+          echo '{
+            "belier": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
+            "taureau": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
+            "gemeaux": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
+            "cancer": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
+            "lion": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
+            "vierge": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
+            "balance": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
+            "scorpion": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
+            "sagittaire": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
+            "capricorne": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
+            "verseau": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"},
+            "poissons": {"edition1": "TEST", "edition2": "TEST", "edition3": "TEST", "edition4": "TEST"}
+          }' > "$PSEUDO_FILE"
           
           echo "✅ Fichier pseudo créé: $PSEUDO_FILE"
           
