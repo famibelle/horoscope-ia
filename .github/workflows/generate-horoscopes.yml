@@ -239,6 +239,17 @@ jobs:
           fi
           echo "✅ git remote set-url: OK"
           
+          # Synchroniser avant push (au cas où la branche a bougé)
+          git pull --rebase origin ${{ github.ref_name }} || {
+            echo "⚠️  Pull échoué, tentative sans rebase..."
+            git pull origin ${{ github.ref_name }} || {
+              echo "❌ Échec de synchronisation avant push"
+              git reset HEAD~1 2>/dev/null || true
+              rm -f "$PSEUDO_FILE"
+              exit 1
+            }
+          }
+           
           # Tester git push (c'est le test critique !)
           if git push origin ${{ github.ref_name }}; then
             echo "✅ git push: OK"
