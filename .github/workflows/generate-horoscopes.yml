@@ -182,8 +182,13 @@ jobs:
         run: |
           echo "🧪 Dry-run: Test du pipeline commit/push avec fichier pseudo..."
           
+          # Nettoyer tout fichier pseudo existant (évite les conflits avec les runs précédents)
+          rm -f public/data/horoscopes/2000-01-01_pseudo.json
+          
           DATE_TEST="2000-01-01"
-          PSEUDO_FILE="public/data/horoscopes/${DATE_TEST}_pseudo.json"
+          # Utiliser un timestamp pour éviter les conflits entre runs simultanés
+          TIMESTAMP=$(date +%s)
+          PSEUDO_FILE="public/data/horoscopes/${DATE_TEST}_pseudo_${TIMESTAMP}.json"
           
           # Créer un fichier pseudo valide (méthode compatible sans jq)
           # On crée un JSON minimal avec echo pour éviter les dépendances
@@ -238,18 +243,26 @@ jobs:
           if git push origin ${{ github.ref_name }}; then
             echo "✅ git push: OK"
             
-            # Si le push a réussi, nettoyer immédiatement
+            # Nettoyer: supprimer le fichier pseudo et committer/pusher
+            # Cela garantit que la branche reste propre après le dry-run
             echo "🧹 Nettoyage du dry-run..."
-            if git reset HEAD~1 --hard; then
-              echo "✅ Reset successful"
-            else
-              echo "⚠️  Reset échoué, tentative alternative..."
-              git reset --hard HEAD~1 || true
+            if git rm --ignore-unmatch "$PSEUDO_FILE" 2>/dev/null || rm -f "$PSEUDO_FILE"; then
+              echo "✅ Fichier pseudo supprimé"
             fi
-            rm -f "$PSEUDO_FILE"
             
-            # Forcer le pull pour synchroniser
-            git pull origin ${{ github.ref_name }} --rebase || true
+            # Committer la suppression
+            if git commit -m "cleanup: dry-run - suppression de $PSEUDO_FILE" --allow-empty; then
+              echo "✅ Commit de nettoyage créé"
+              # Pusher le commit de nettoyage
+              if git push origin ${{ github.ref_name }}; then
+                echo "✅ Cleanup pushé - branche propre"
+              else
+                echo "⚠️  Échec du push de cleanup (mais le test push a réussi)"
+                # Ce n'est pas bloquant, le dry-run a validé le push
+              fi
+            else
+              echo "⚠️  Échec du commit de cleanup (mais le test push a réussi)"
+            fi
             
             echo "dry_run_success=true" >> $GITHUB_OUTPUT
             echo "✅ Dry-run commit/push: SUCCESS - Tout fonctionne !"
