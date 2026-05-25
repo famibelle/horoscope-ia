@@ -384,7 +384,10 @@ async function generateWithMistral(
         });
 
         const content: string = data.choices?.[0]?.message?.content ?? '';
-        logVerbose(`Contenu brut reçu: ${content.substring(0, 200)}${content.length > 200 ? '...' : ''}`);
+        // LOG ABSOLU : CONTENU BRUT AVANT TOUTE MANIPULATION
+        console.error(`!!! DEBUG: RAW MISTRAL RESPONSE START !!!`);
+        console.error(content);
+        console.error(`!!! DEBUG: RAW MISTRAL RESPONSE END !!!`);
         
         try {
           // Robustesse: retirer les blocs markdown ```json ... ```
@@ -394,10 +397,6 @@ async function generateWithMistral(
         } catch (parseError) {
           lastError = parseError instanceof Error ? parseError : new Error(String(parseError));
           logVerboseError(`⚠️  Échec parsing JSON (tentative ${attempt}/${maxAttempts}): ${lastError.message}`);
-          // LOG COMPLET DU CONTENU BRUT POUR DEBUG
-          console.error(`--- CONTENU BRUT MISTRAL ---`);
-          console.error(content);
-          console.error(`--- FIN CONTENU BRUT ---`);
           
           if (attempt < maxAttempts) {
             const retryDelay = 5000 * attempt; // 5s, 10s, 15s
