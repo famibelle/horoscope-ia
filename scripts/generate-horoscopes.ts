@@ -684,17 +684,16 @@ export async function generateAllHoroscopes() {
         console.log(`   🤖 Appel Mistral (small) pour teaser...`);
         logVerbose(`Génération teaser pour ${sign.name}`);
         const teaser = await generateTeaser(sign.name, cleanedContent);
-        console.log(`   ✓ Teaser généré: "${teaser.substring(0, 60)}..."`);
-        logVerbose(`Teaser: "${teaser}"`);
+        console.log(`   ✓ Teaser: OK`);;
 
         // Sauvegarder
         const response = {
-          horoscope: cleanedContent, // Le texte brut intégral de Mistral (JSON parfait)
-          teaser: teaser || undefined,
+          horoscope: content,
+          teaser: teaser,
           signFr: sign.name,
           weather,
           edition,
-          source: 'mistral-raw',
+          source: "mistral-raw"
         };
 
         results[blobKey] = response;
@@ -786,23 +785,17 @@ export async function generateAllHoroscopes() {
 
         console.log(`   ✓ Mistral: OK`);
 
-        const teaser = await generateTeaser(sign.name, structured);
+        const teaser = await generateTeaser(sign.name, content);
         console.log(`   ✓ Teaser: OK`);
         logVerbose(`Teaser généré en mode local: "${teaser}"`);
 
         const response = {
-          ouverture: structured.ouverture,
-          amour: structured.amour,
-          travail: structured.travail,
-          argent: structured.argent ?? '',
-          amitie: structured.amitie ?? '',
-          sante: structured.sante ?? '',
-          prediction: structured.prediction ?? '',
+          horoscope: content,
+          teaser: teaser,
           signFr: sign.name,
           weather,
           edition,
-          teaser: teaser || undefined,
-          source: 'mistral',
+          source: "mistral-raw"
         };
 
         results[blobKey] = response;
