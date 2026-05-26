@@ -383,23 +383,13 @@ async function generateWithMistral(
           usage: data.usage
         });
 
-        const content: string = data.choices?.[0]?.message?.content ?? '';
-        logVerbose(`Contenu brut reçu: ${content.substring(0, 200)}${content.length > 200 ? '...' : ''}`);
+        const rawContent: string = data.choices?.[0]?.message?.content ?? '';
         
-        try {
-          const parsed = JSON.parse(content);
-          return parsed;
-        } catch (parseError) {
-          lastError = parseError instanceof Error ? parseError : new Error(String(parseError));
-          logVerboseError(`⚠️  Échec parsing JSON (tentative ${attempt}/${maxAttempts}): ${lastError.message}`);
-          logVerboseError(`Contenu qui a échoué: ${content.substring(0, 500)}...`);
-          
-          if (attempt < maxAttempts) {
-            const retryDelay = 5000 * attempt; // 5s, 10s, 15s
-            logVerbose(`Retry dans ${retryDelay}ms...`);
-            await delay(retryDelay);
-          }
-        }
+        // Nettoyage minimal : extrait le bloc JSON et supprime les markdown
+        const match = rawContent.match(/\{[\s\S]*\}/);
+        const cleaned = match ? match[0].replace(/```json\s*/, '').replace(/```\s*$/, '').trim() : '{}';
+        
+        return JSON.parse(cleaned);
       } catch (fetchError) {
         lastError = fetchError instanceof Error ? fetchError : new Error(String(fetchError));
         logVerboseError(`⚠️  Échec fetch Mistral (tentative ${attempt}/${maxAttempts}): ${lastError.message}`);
