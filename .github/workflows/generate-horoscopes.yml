@@ -101,6 +101,7 @@ jobs:
         run: |
           mkdir -p artifacts
           cp -r logs/* artifacts/ 2>/dev/null || true
+          cp -r lib/private/logs/* artifacts/ 2>/dev/null || true
           
           # Création d'une note détaillée
           {
@@ -111,6 +112,9 @@ jobs:
             echo "---"
             if [ -d "logs" ]; then
               ls -la logs/
+            fi
+            if [ -d "lib/private/logs" ]; then
+              ls -la lib/private/logs/
             fi
           } > artifacts/EXECUTION_REPORT.md
 

@@ -71,6 +71,7 @@ jobs:
         run: |
           mkdir -p artifacts
           cp -r logs/* artifacts/ 2>/dev/null || true
+          cp -r lib/private/logs/* artifacts/ 2>/dev/null || true
           {
             echo "# Rapport Ambiances"
             echo "Status: ${{ steps.generate.outcome }}"
