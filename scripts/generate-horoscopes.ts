@@ -362,7 +362,7 @@ async function generateWithMistral(
   logVerbose(`Prompt utilisateur généré (${userPrompt.length} caractères)`);
   logVerbose(`Modèle: mistral-large-latest, Temp: 0.75, Max tokens: 900`);
 
-  // Wrapper pour Mistral API avec retry complet (HTTP + parsing JSON)
+  // Wrapper pour Mistral API avec retry complet
   async function callMistralWithFullRetry(): Promise<Record<string, string> | null> {
     const maxAttempts = 3;
     let lastError: Error | undefined;
@@ -398,24 +398,18 @@ async function generateWithMistral(
         logVerbose(`Réponse Mistral: ${res.status} ${res.statusText} (${Date.now() - startTime}ms)`);
 
         const data = await res.json();
-        logVerbose('Réponse Mistral parsée', {
-          hasChoices: !!data.choices,
-          choicesLength: data.choices?.length,
-          finishReason: data.choices?.[0]?.finish_reason,
-          usage: data.usage
-        });
-
+        
         const content: string = data.choices?.[0]?.message?.content ?? '';
         
         // Log persistent dans lib/private/logs/
         await logRawData('generate-horoscopes', userPrompt, content);
 
-        // LOG ABSOLU : CONTENU BRUT AVANT TOUTE MANIPULATION
+        // LOG ABSOLU : CONTENU BRUT
         console.error(`!!! DEBUG: RAW MISTRAL RESPONSE START !!!`);
         console.error(content);
         console.error(`!!! DEBUG: RAW MISTRAL RESPONSE END !!!`);
         
-        // Retourne le contenu brut sans aucun parsing
+        // RETOUR DIRECT DU CONTENU BRUT SANS PARSING
         return {
           ouverture: content,
           amour: "...",
