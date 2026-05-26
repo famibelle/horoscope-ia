@@ -146,6 +146,23 @@ async function saveToLocalFile(today: string, data: Record<string, any>): Promis
   return filePath;
 }
 
+async function logRawData(filename: string, prompt: string, response: string) {
+  const fs = await import('fs/promises');
+  const path = await import('path');
+  const dir = path.join(process.cwd(), 'lib', 'private', 'logs');
+  await fs.mkdir(dir, { recursive: true });
+  const filePath = path.join(dir, `${filename}_${new Date().toISOString().split('T')[0]}.log`);
+  
+  const content = `
+--- PROMPT SENT ---
+${prompt}
+--- RAW RESPONSE ---
+${response}
+------------------
+`;
+  await fs.appendFile(filePath, content);
+}
+
 async function generateAmbience(
   signId: string,
   edition: Edition,
