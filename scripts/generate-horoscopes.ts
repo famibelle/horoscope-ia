@@ -446,9 +446,9 @@ async function generateTeaser(
     return '';
   }
 
-  const fullText = rawContent;
+  const fullText = String(rawContent);
 
-  logVerbose(`Texte complet pour teaser: ${fullText.substring(0, 150)}${fullText.length > 150 ? '...' : ''}`);
+  logVerbose(`Texte complet pour teaser: ${fullText.length > 150 ? fullText.substring(0, 150) + '...' : fullText}`);
   logVerbose(`Modèle: mistral-small-latest, Temp: 0.8, Max tokens: 120`);
 
   const startTime = Date.now();
