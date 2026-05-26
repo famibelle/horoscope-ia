@@ -1,6 +1,770 @@
 {
-  "2026-05-26|belier|nuit": "```json\n{\n  \"ouverture\": \"La nuit tombe sur Karukera comme un drap de feu vert et rouge, Ogoun souffle sur les braises de tes rêves et prépare ton chemin.\",\n  \"amour\": \"Ton cœur bat comme les feuilles de bwa d'Ind dans le vent, elles murmurent des secrets que seul ton âme sœur entendra ce soir. Laisse Ezili Freda poser sa main sur ton épaule, elle t'apprendra à aimer sans compter. Une bougie blanche près de ton lit éclairera les visages aimés disparus, ils veillent sur tes choix.\",\n  \"travail\": \"Ce soir, marche jusqu'aux bains chauds de Bouillante, l'eau géothermale lavera tes doutes comme elle lave les pierres volcaniques. Ogoun te rappelle que chaque effort est un pas vers la justice, même si personne ne te voit travailler. Demain, tes mains seront plus fortes que tes peurs.\",\n  \"argent\": \"Le lalo dans ton jardin pousse sans que tu aies besoin de le regarder, il te rappelle que la prospérité vient aussi de ce que tu ne contrôles pas. Les luttes pour la reconnaissance des crimes de l'esclavage t'ont appris une chose, l'argent doit circuler comme le rhum sur l'autel de Gede. Mets une pièce verte sous ton oreiller, elle attirera les opportunités invisibles.\",\n  \"amitie\": \"Au Trou a Diab', les offrandes des anciens marrons brillent encore sous la lune, elles te disent de ne pas oublier ceux qui t'ont tendu la main. Les paniers en latanyé que tu tisses avec tes amis valent plus que tous les discours, ils portent la mémoire de vos mains unies. Ce soir, appelle un ami et parle-lui comme si c'était la dernière fois, Gede écoute les mots sincères.\",\n  \"prediction\": \"Une boule de feu traversera ton ciel cette semaine, ne crains pas, c'est le soukouyan qui te montre le chemin à suivre.\",\n  \"conseil\": \"Écrase des feuilles de zéb omega dans un peu d'eau, passe cette mixture sur tes poignets avant de dormir, elle purifiera tes rêves et te protégera des mauvais sorts.\"\n}\n```",
-  "2026-05-26|belier|matin": "```json\n{\n  \"ouverture\": \"Ce matin, Legba ouvre les chemins comme le fromager déploie ses branches au-dessus des cases, laissez le vent du large guider vos premiers pas.\",\n  \"amour\": \"Votre cœur bat comme les feuilles de zéb omega sous la pluie, prêt à désinfecter les vieilles blessures. Ogoun vous souffle de marcher droit vers ce qui vous fait vibrer, sans détour. Les bwa d'Ind dans votre bouillon rappellent que l'amour se nourrit aussi de patience et de rituels.\",\n  \"travail\": \"Aujourd'hui, soyez comme le soukouyan qui travaille la nuit - invisible mais puissant. Les bains chauds de Bouillante vous rappellent que l'effort doit aussi se mêler au réconfort. Tracez un vèvè d'Ogoun avant de commencer, pour que chaque geste porte sa force.\",\n  \"argent\": \"L'argent circule comme le lalo dans les jardins des anciens, il faut savoir le cultiver sans l'étouffer. Les luttes pour la reconnaissance des crimes de l'esclavage vous rappellent que votre prospérité est aussi une réparation. Gardez une pièce verte et rouge dans votre poche, couleurs d'Ogoun pour attirer l'abondance.\",\n  \"amitie\": \"Retrouvez vos proches à la Pointe des Châteaux, face à l'immensité, pour partager des mots qui comptent vraiment. Le latanyé de vos liens doit être tissé serré, comme les paniers de nos grands-mères. Offrez un peu de kòb (argent) aux esprits en signe de gratitude pour vos amitiés.\",\n  \"prediction\": \"Les prochains jours verront vos efforts fleurir comme le flamboyant après la saison des pluies, rouge et triomphant.\",\n  \"conseil\": \"Ce matin, allumez une bougie blanche et tracez un vèvè de Legba devant votre porte, pour ouvrir tous les chemins de la journée.\"\n}\n```",
-  "2026-05-26|belier|midi": "```json\n{\n  \"ouverture\": \"Ce midi Ogoun danse dans le vent chaud de Pointe-à-Pitre, sa machette invisible taille les doutes comme on coupe la canne à sucre sous le soleil de mai.\",\n  \"amour\": \"Ton cœur bat comme les tambours du gwoka quand tu croises son regard, mais attention - le soukouyan rôde la nuit et vole les peaux trop tendres. Protège-toi avec des feuilles de bwa d'Ind sous ton oreiller, elles éloignent les illusions amères. Ogoun te rappelle que l'amour vrai se forge dans le feu, pas dans les rêves.\",\n  \"travail\": \"Aujourd'hui tu es fort comme le morne de Dubuisson qui résiste aux cyclones, chaque pas en avant est une victoire sur l'esclavage des bureaux étroits. Va aux bains chauds de Bouillante après ta journée, l'eau-fire te lavera de la fatigue et te rendra ta puissance. Ogoun te regarde avec fierté quand tu travailles sans te plaindre.\",\n  \"argent\": \"L'argent coule comme la sève du latanyé aujourd'hui, tes mains savent tisser des opportunités que les autres ne voient même pas. Mais rappelle-toi - le zéb omega soignait les plaies des marrons, ton portefeuille doit aussi guérir tes blessures anciennes. Mets une pièce verte (kòb) dans ta poche pour honorer Ogoun et attirer la prospérité.\",\n  \"amitie\": \"Tes amis sont comme les feuilles de lalo dans ton bouillon - indispensables et nourrissantes, mais choisis ceux qui résistent à l'ébullition. Retrouve-les à la Pointe des Châteaux ce week-end, le vent de l'Atlantique portera vos rires vers les ancêtres. Ogoun bénit les alliances solides, pas les amitiés de circonstance.\",\n  \"prediction\": \"La lune croissante te promet une semaine où tes efforts porteront des fruits plus sucrés que les mangues de juillet, surtout si tu honores les esprits avec un peu de rhum versé à terre.\",\n  \"conseil\": \"Porte un bracelet rouge et vert aujourd'hui, les couleurs d'Ogoun, et trace un vèvè simple dans ta paume avec de la farine avant de commencer ta journée - ça te donnera la force d'un guerrier sans armure.\"\n}\n```",
-  "2026-05-26|belier|soir": "```json\n{\n  \"ouverture\": \"Ce soir, Baron Samedi danse sur les braises de ta journée, souffle chaud de la Soufrière sur tes épaules fatiguées, il te rappelle que même les cendres savent renaître.\",\n  \"amour\": \"Ton cœur bat comme les tambours du gwo ka sous la lune, Ogoun te murmure de ne pas craindre la passion qui brûle. Mais attention, l’amour ce soir sent le soukouyan, méfie-toi des peaux qui se détachent trop vite. Les bwa d’Ind dans ton bain apaiseront les blessures, laisse leurs feuilles te laver des mensonges.\",\n  \"travail\": \"Tu as marché toute la journée comme un marron sur les sentiers du morne de Dubuisson, chaque pas une offrande à Ogoun. Les bains chauds de Bouillante t’attendent pour dissoudre la fatigue, l’eau-fire-mer te purifiera des efforts inutiles. Ce soir, laisse les esprits du Trou a Diab’ veiller sur ton repos.\",\n  \"argent\": \"Ton porte-monnaie a tremblé comme les feuilles de zéb omega sous le vent de l’alizé, mais Ogoun te rappelle que la vraie richesse pousse dans les jardins cachés. Le lalo de ce soir sera ton bouclier contre les dettes, mange-le en pensant à ceux qui ont cultivé avant toi. La poudre de pwen nwa (poudre noire) sur ton seuil attirera la prospérité.\",\n  \"amitie\": \"Tes amis sont comme les latanyé tressés en panier, solides et souples à la fois. Ce soir, partage un bouillon de bwa d’Ind avec eux, les feuilles aromatiques lieront vos cœurs. À la Pointe des Châteaux, le vent portera vos rires vers les ancêtres, ils en ont besoin pour danser.\",\n  \"prediction\": \"Les flammes de ton flamboyant intérieur vont crépiter plus fort demain, prépare-toi à danser avec le feu sans te brûler.\",\n  \"conseil\": \"Avant de dormir, allume une bougie verte pour Ogoun et dépose une feuille de zéb omega sous ton oreiller, elle gardera tes rêves des mauvais esprits.\"\n}\n```"
+  "2026-05-26|belier|nuit": {
+    "horoscope": {
+      "ouverture": "Ce soir la lune danse avec les esprits sur les branches du fromager, Ogoun veille et les soukouyans glissent entre les feuilles comme des ombres bienveillantes.",
+      "amour": "Ton cœur bat au rythme des tambours rada ce soir, laisse Ezili Freda te rappeler que l'amour vrai ne se force pas, il se cultive comme un jardin de lalo. Si ton cœur est lourd, écrase des feuilles de zéb omega dans ton bain pour purifier tes émotions.",
+      "travail": "Ogoun t'appelle à l'action demain, mais ce soir prépare ton vèvè avec du charbon sur ta table de travail. Les bains chauds de Bouillante t'attendent pour laver la fatigue, l'eau et le feu te donneront la force de demain.",
+      "argent": "Ton kòb (argent) circule mieux quand tu partages, comme les feuilles de latanyé qui servent à tous. Les luttes pour la justice économique continuent, mais ta prospérité viendra de ta débrouillardise, pas des promesses.",
+      "amitie": "Retrouve tes proches près du Trou a Diab' ce week-end, les offrandes aux mwon (esprits) vous protégeront. Le lyannaj (solidarité) se renforce quand on écoute les ancêtres ensemble, allume une bouji (bougie) pour eux.",
+      "prediction": "Demain le vent portera tes prières vers la Pointe des Châteaux, tes efforts seront bénis comme les vagues qui embrassent les rochers.",
+      "conseil": "Ce soir avant de dormir, place une branche de bwa d'Ind (bois d'inde) sous ton oreiller pour chasser les mauvais rêves et attirer les conseils des ancêtres."
+    },
+    "teaser": "\"Ce Bélier, tu as le feu aux joues et une énergie à faire trembler les étoiles ce mois-ci... mais chut, je te laisse découvrir ce que Vénus murmure à ton oreille rebelle. \"",
+    "signFr": "Bélier",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "nuit",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|belier|matin": {
+    "horoscope": {
+      "ouverture": "Ce matin, Legba ouvre les barrières pour toi, trace un vèvè de chance dans la rosée avant que le soleil ne monte, Ogoun allume le feu sous tes pas.",
+      "amour": "Ton cœur bat comme les tambours du gwo ka ce matin, laisse Ezili Freda glisser ses pétales de flamboyant sur tes rêves d’amour. Un mot doux murmuré en créole fera plus qu’un long discours, écoute le chant du kòk (coq) à l’aube, il te rappelle que l’amour se dit sans attendre.",
+      "travail": "Aujourd’hui, sois comme le soukouyan, travaille dans l’ombre mais brille quand le moment vient. Les bains chauds de Bouillante t’attendent ce soir pour laver la fatigue, Ogoun te donne la force de tenir la cadence sans te brûler.",
+      "argent": "L’argent coule comme l’eau des sources de Basse-Terre, ne le retiens pas trop fort. Plante une feuille de bwa d’Ind (bois d’Inde) dans ta poche pour attirer la prospérité, les ancêtres savent que tu mérites ta part.",
+      "amitie": "Retrouve tes proches près de la grotte de la Pointe Allègre, partage un repas de lalo et de zéb omega, ces liens nourrissent plus que le corps. Legba veille sur vos échanges, chaque mot compte comme une offrande.",
+      "prediction": "Les jours à venir te réservent une rencontre aussi surprenante qu’un soukouyan au clair de lune, prépare-toi à saisir l’inattendu.",
+      "conseil": "Ce matin, allume une bougie verte pour Ogoun et demande-lui de te donner la force de commencer ce que tu as à faire, sans hésiter."
+    },
+    "teaser": "Ce Bélier-là ne te laissera pas de répit cette semaine, prépare-toi à brûler sans retenue sous ses coups de foudre imprévisibles… Veux-tu vraiment rater ce que le destin a glissé dans ton lit tonight",
+    "signFr": "Bélier",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "matin",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|belier|midi": {
+    "horoscope": {
+      "ouverture": "Ce midi, Ogoun allume son feu sous la pluie, et la machette de ton esprit tranche les doutes comme lianes sèches.",
+      "amour": "Ton cœur bat au rythme du tambour rada, rouge et vert comme les couleurs d’Ogoun. Laisse-toi guider par Ezili Freda, elle t’enveloppe de douceur malgré l’averse. Un mot tendre aujourd’hui vaut plus qu’un serment sous le fromager.",
+      "travail": "À Pointe des Châteaux, le vent porte ta voix vers l’horizon. Ogoun te rappelle que chaque tâche est une bataille à gagner, pas à craindre. Comme les marrons de la grotte de Pointe Allègre, travaille en silence mais avec force.",
+      "argent": "Les feuilles de bois d’Inde parfument tes économies ce midi. Ogoun te souffle de ne pas gaspiller ton kòb (argent), mais de l’investir comme on plante du lalo pour demain.",
+      "amitie": "Les bains chauds de Bouillante attendent ceux qui savent partager. Invite un ami à se réchauffer près de toi, comme on se réchauffe près d’un feu de camp après la pluie.",
+      "prediction": "La soukouyan a accroché sa peau au fromager, signe que les obstacles d’hier ne te suivront pas demain.",
+      "conseil": "Porte un clou dans ta poche aujourd’hui, symbole d’Ogoun, pour ancrer ta détermination dans le métal et le feu."
+    },
+    "teaser": "\"Ce Bélier, la passion te guette dans l’ombre des étoiles ce soir… Prépare-toi à succomber à un désir qui ne te laissera aucun répit\"",
+    "signFr": "Bélier",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "midi",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|belier|soir": {
+    "horoscope": {
+      "ouverture": "Ce soir, la lune se reflète dans les bains chauds de Bouillante, comme un vèvè (dessin sacré) tracé par les esprits pour clore cette journée.",
+      "amour": "Ton cœur bat au rythme d’Ezili Freda, déesse de l’amour, mais attention aux illusions, comme le soukouyan qui se cache sous une apparence trompeuse. Laisse tomber les masques ce soir, montre-toi tel que tu es. Les feuilles de bwa d’Ind (bois d’inde) dans ton bain apaiseront les tensions.",
+      "travail": "Ogoun, loa du travail, t’a porté toute la journée, mais ce soir, il te rappelle que même le zandoli lâche sa queue pour survivre. Lâche ce qui ne sert plus, comme les marrons qui abandonnaient leurs traces dans la grotte de la Pointe Allègre.",
+      "argent": "Ton porte-monnaie a travaillé dur, mais Baron Samedi te murmure de ne pas t’attacher aux kòb (argent). Comme le lalo, cultive ce qui te nourrit vraiment, pas ce qui brille. La reconnaissance des crimes de l’esclavage nous rappelle que la richesse ne se mesure pas qu’en billets.",
+      "amitie": "Ce soir, tes amis sont comme les feuilles de latanyé, tissées ensemble pour former un bouclier. Partage un bouillon de zéb omega, plante de résistance, et laisse les blessures du jour se dissoudre. Le morne de Dubuisson veille sur vos confidences.",
+      "prediction": "Les esprits te préparent une nuit où les rêves seront des messages, comme les coquillages déposés au Trou a Diab’ pour apaiser les mwon (esprits malveillants).",
+      "conseil": "Allume une bougie verte pour Ogoun, place un peu de pwen nwa (poudre noire) près de ton lit, et laisse Baron Samedi te guider vers un sommeil réparateur."
+    },
+    "teaser": "\"Ce Bélier, je le sens frémir sous mon regard brûlant... Laisse-moi te révéler ce que Mars murmure à ton oreille ce soir\"",
+    "signFr": "Bélier",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "soir",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|taureau|nuit": {
+    "horoscope": {
+      "ouverture": "Cette nuit, la lune danse avec Simbi Andezo dans les eaux profondes, les esprits murmurent sous la pluie douce de Karukera.",
+      "amour": "Ton cœur est comme le krab tè, ancré et patient, mais prêt à danser quand l’amour frappe à ta porte. Azaka te rappelle que la terre fertile attend tes graines. Écoute les signes, les rêves te guideront vers ce qui est vrai. Une bouji verte allumée ce soir ouvrira les chemins du cœur.",
+      "travail": "Comme l’igwann péyi, tu sais disparaître pour mieux revenir. Cette nuit, laisse les idées mûrir en silence près des sources de Sofaïa. Azaka veille sur tes récoltes, même celles que tu ne vois pas encore. Demain, la terre te donnera ce que tu as semé dans l’ombre.",
+      "argent": "L’urakan ne demande pas la permission pour voler, mais toi, tu dois préparer ton envol. Les luttes passées pour la justice te rappellent que l’argent est un outil, pas un maître. Place une pièce verte sous ton oreiller cette nuit, Azaka bénit ceux qui savent attendre.",
+      "amitie": "Les mangroves de Guadeloupe te rappellent que les liens se tissent dans l’entre-deux. Cette nuit, les ancêtres chuchotent à tes amis les mots que tu n’oses pas dire. Un rhum partagé sous les étoiles scellera les alliances invisibles. Gede sourit à ceux qui osent se montrer vulnérables.",
+      "prediction": "Comme le wasou remonte les rivières, une opportunité cachée remontera vers toi dans les jours à venir.",
+      "conseil": "Ce soir, trace un vèvè (symbole sacré) de riz et de maïs devant ta porte pour honorer Azaka, et laisse une offrande de rhum aux esprits."
+    },
+    "teaser": "\"Ce soir, Vénus te murmure des promesses envoûtantes… mais attention, ton cœur sait déjà ce qu’il veut, et il n’a pas fini de jouer\"",
+    "signFr": "Taureau",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "nuit",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|taureau|matin": {
+    "horoscope": {
+      "ouverture": "Ce matin, trace un vèvè de Legba dans ta cour avec de la farine de manioc, les chemins s’ouvrent comme les feuilles de l’awokasié après la pluie.",
+      "amour": "Ton cœur est une mangrove ce matin, entre terre et mer, entre solitude et désir. Laisse l’urakan t’apprendre à voler sans t’excuser. Azaka veille sur tes racines, ne les arrache pas pour plaire.",
+      "travail": "Comme le kwikwi sous la terre, avance sans bruit mais sans t’arrêter. Les sources de Sofaïa murmurent que la patience est une récolte, pas une attente. Travaille avec les mains, pas seulement avec la tête.",
+      "argent": "Le kòb (argent) circule aujourd’hui comme l’eau des embouchures, douce et salée à la fois. Plante une bouture de bwa bandé (bois bandé) près de ta porte, Azaka bénit ceux qui préparent l’avenir sans compter.",
+      "amitie": "Retrouve tes proches près de la Pointe Allègre, là où la mer écoute mieux que les hommes. Offre-leur du matoutou de krab tè (crabe de terre), la vraie richesse se partage sans calcul.",
+      "prediction": "Les nuages bas sur la Soufrière annoncent une semaine où ce qui était caché va germer comme le wasou (ouassou) dans les rivières après l’orage.",
+      "conseil": "Allume une bougie jaune pour Azaka et laisse brûler une feuille de vanilier, son parfum attire la prospérité comme le miel attire les abeilles."
+    },
+    "teaser": "Ce soir, Vénus te souffle un secret à l’oreille... Laisse-toi guider par le désir qui monte en toi, Taureau, sans résister",
+    "signFr": "Taureau",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "matin",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|taureau|midi": {
+    "horoscope": {
+      "ouverture": "Azaka dépose une gerbe de maïs vert à tes pieds ce midi, signe que la terre te nourrit aujourd’hui sans compter.",
+      "amour": "Comme le krab tè qui danse sous la pluie de mai, ton cœur cherche un rythme partagé. Laisse-toi guider par les pas des autres sans perdre ton équilibre. Ogoun veille sur les unions qui osent avancer.",
+      "travail": "Ce matin, les sources de Sofaïa murmurent que ta persévérance porte ses fruits. Bois leur eau claire pour purifier tes efforts. Une machette symbolique dans ta poche te rappellera que chaque tâche mérite d’être tranchée net.",
+      "argent": "Le wasou des rivières t’invite à pêcher avec patience. Tes finances ont besoin de temps pour grandir, comme cette crevette qui se cache avant de bondir. Azaka bénit ceux qui savent attendre sans lâcher prise.",
+      "amitie": "L’urakan ne vole jamais seul. Aujourd’hui, cherche la chaleur des lyannaj (alliances) qui te portent. Un mot créole glissé dans la conversation, comme anmwe (nous), scellera les liens mieux qu’un serment.",
+      "prediction": "La mangrove de Guadeloupe te chuchote que les eaux troubles vont bientôt s’éclaircir, révélant un chemin que tu ne voyais pas.",
+      "conseil": "Porte un ruban jaune et vert aujourd’hui, couleurs d’Azaka, pour attirer la prospérité. Et si tu doutes, trace un vèvè (symbole sacré) dans la terre avec ton doigt avant de décider."
+    },
+    "teaser": "Ce soir, Vénus te murmure des promesses que même tes doigts tremblants n’oseront pas ignorer… Laisse-toi porter par ce courant chaud, tu vas brûler sans même sentir les flammes.",
+    "signFr": "Taureau",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "midi",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|taureau|soir": {
+    "horoscope": {
+      "ouverture": "Ce soir la lune se reflète dans l’eau des mangroves comme un vèvè (dessin sacré) tracé par Baron Samedi pour te rappeler que chaque fin est un passage.",
+      "amour": "Ton cœur est lourd comme un krab tè (crabe de terre) après la pluie, mais souviens-toi que même les crabes savent lâcher leur carapace pour grandir. Azaka veille sur tes racines, laisse-le t’aider à nourrir ce qui compte vraiment.",
+      "travail": "Tu as labouré ta journée comme un champ de manyòk (manioc) sous le soleil de Sofaïa, et maintenant la terre te rend ce que tu as semé. Ne force pas l’arrachage ce soir, la récolte viendra en son temps.",
+      "argent": "L’argent glisse entre tes doigts comme le sable de Pointe Allègre, mais ce n’est pas une perte, c’est une offrande. Azaka te murmure de compter tes kòb (pièces) sans avidité, car la vraie richesse est dans ce que tu donnes.",
+      "amitie": "Tes amis sont comme les wasou (ouassous) d’une même rivière, liés par des courants invisibles. Ce soir, laissez les eaux de vos vies se mélanger sans résistance, même si la marée est basse.",
+      "prediction": "Un urakan (frégate) passera dans ton ciel cette nuit, signe que ce qui doit s’envoler le fera sans ton effort.",
+      "conseil": "Allume une bougie verte pour Azaka et dépose une feuille de bwa bandé (bois bandé) sous ton oreiller pour ancrer tes rêves dans la terre."
+    },
+    "teaser": "Ce soir, Vénus te murmure des promesses envoûtantes à l’oreille… Prépare-toi à succomber à tes désirs les plus secrets",
+    "signFr": "Taureau",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "soir",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|gemeaux|nuit": {
+    "horoscope": {
+      "ouverture": "Cette nuit, Papa Legba ouvre les chemins, les esprits chuchotent dans le vent de la Soufrière, prépare-toi à écouter les messages des ancêtres.",
+      "amour": "Ton cœur bat comme le tambour du gwo ka sous la lune, laisse Ezili Freda te guider vers ce qui te fait vibrer. Un papillon nwè s’est posé sur ton rebord de fenêtre, c’est un signe, ne le chasse pas. Les mots doux murmurés ce soir porteront leurs fruits demain, comme les graines de woucou qui colorent nos vies.",
+      "travail": "Comme le mabouya qui se cache pour mieux observer, prends ce moment pour réfléchir à tes projets. La rivière du Plessis t’invite à purifier tes idées, plonge tes mains dans l’eau et laisse-la emporter tes doutes. Legba te rappelle que chaque carrefour est une opportunité, choisis avec sagesse.",
+      "argent": "Ton kòb (argent) circule comme la sève du gommié blan, invisible mais essentiel. L’histoire des jardins de case nous enseigne que l’autonomie nourrit l’âme et le portefeuille. Plante une graine de manyòk aujourd’hui, même symboliquement, elle te rappellera que la prospérité vient de la terre et du travail.",
+      "amitie": "Les liens se tissent comme les racines de l’iyam, profondes et résistantes. Rejoins tes amis près du Bain des Amours, l’eau y lave les malentendus et renforce les alliances. Comme les crabes de la mangrove, soutenez-vous mutuellement, ensemble vous traverserez les marées.",
+      "prediction": "Un rêve te révélera une vérité cachée cette nuit, écoute les murmures de Gede, il te montrera la voie.",
+      "conseil": "Allume une bouji (bougie) rouge et noire ce soir, place-la près de ton lit et demande à Legba de t’éclairer, les réponses viendront dans ton sommeil."
+    },
+    "teaser": "Ce matin, tu frôles des énergies si envoûtantes que même les étoiles retiennent leur souffle quand tu passes… Prends garde, car ce soir, la lune te murmure des secrets à l’oreille, et ils pourraient bien bouleverser ton cœur",
+    "signFr": "Gémeaux",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "nuit",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|gemeaux|matin": {
+    "horoscope": {
+      "ouverture": "Ce matin, Legba ouvre les chemins comme la pluie ouvre les feuilles du gommié blan, laisse entrer la lumière entre les gouttes.",
+      "amour": "Ton cœur bat comme le papillon nwè qui danse sous l’averse, chaque battement est une visite d’un ancêtre qui te rappelle que l’amour est sacré. Ne le chasse pas, même s’il te surprend.",
+      "travail": "Aujourd’hui, travaille comme les fourmis foumi manyok, silencieuses et tenaces, chaque grain compte. La rivière du Plessis murmure que la patience creuse la roche.",
+      "argent": "L’iyam dans ton jardin rappelle que la richesse vient de la terre et de la mémoire. En 1794, les esclaves libérés plantaient pour survivre, toi aussi, sème aujourd’hui.",
+      "amitie": "Retrouve tes proches près du Saut de la Lézarde, l’eau lave les malentendus. Le manikou chassé en secret unit ceux qui partagent un repas sans mots inutiles.",
+      "prediction": "Les prochains jours, le vent portera l’odeur du woucou, signe que tes efforts porteront des fruits colorés et invisibles aux yeux des autres.",
+      "conseil": "Trace un vèvè de Legba avec de la farine de manioc devant ta porte, et demande-lui d’ouvrir les chemins de ta journée."
+    },
+    "teaser": "Tu sens cette étincelle dans l’air ce soir, Gémeaux… Elle te murmure des secrets aussi changeants que ton humeur. Laisse-toi guider par l’inconnu, il te réserve bien plus qu’une simple aventure",
+    "signFr": "Gémeaux",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "matin",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|gemeaux|midi": {
+    "horoscope": {
+      "ouverture": "Papa Legba ouvre les chemins aujourd hui comme la pluie ouvre les feuilles du manyòk, laisse entrer la lumière et les possibles.",
+      "amour": "Ezili Freda danse dans ton cœur ce midi, porte une fleur d alpinia à ton poignet pour attirer la douceur, les mots justes viendront comme l eau claire du Saut de la Lézarde.",
+      "travail": "Ogoun te donne la force de la machette aujourd hui, coupe les branches mortes de tes projets comme on coupe la canne, net et précis, la sève nouvelle coulera toute seule.",
+      "argent": "L iyam dans ton jardin te rappelle que la vraie richesse pousse sous terre, pas dans les livres de comptes, cultive ta patience comme on cultive la terre avant la saison des pluies.",
+      "amitie": "Les fourmis manioc travaillent en silence ce midi, ton lyannaj (lien) se renforce dans l effort partagé, un repas de vivaneau rouge scellera cette alliance.",
+      "prediction": "Un papillon nwè passera près de toi dans les prochains jours, signe qu un ancêtre veille et approuve ton chemin.",
+      "conseil": "Porte un objet en métal aujourd hui pour canaliser l énergie d Ogoun, une clé dans ta poche ou un bracelet en fer te protégera et te donnera la force."
+    },
+    "teaser": "Ce soir, Vénus t’enveloppe d’un voile de désir et Mercure chuchote à ton oreille des promesses à faire frissonner même les étoiles",
+    "signFr": "Gémeaux",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "midi",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|gemeaux|soir": {
+    "horoscope": {
+      "ouverture": "Ce soir Legba ouvre les chemins derrière toi, laisse les portes battantes de ta journée se refermer avec le chant des grenouilles sous la pluie.",
+      "amour": "Ton cœur a dansé comme le papillon nwè qui entre sans frapper, ne le chasse pas ce soir. Il porte un message des ancêtres, écoute ses ailes battre contre les murs de ta case. Ezili Freda t’enveloppe de douceur, allume une bougie rose pour honorer tes désirs.",
+      "travail": "Tu as labouré comme le manikou dans les mornes, sans bruit mais avec une force qui déplace les montagnes. Ce soir Baron Samedi te rappelle que même les racines du gommié blan ont besoin de repos. Lave tes mains dans l’eau de la rivière du Plessis pour purifier tes efforts.",
+      "argent": "L’iyam dans ton jardin t’a nourri toute l’année, ne crains pas la disette. Les pièces que tu as semées reviendront comme les graines de woucou, rouges et généreuses. Legba veille sur ton kòb (argent), ne compte pas ce soir, laisse-le respirer.",
+      "amitie": "Vous avez partagé le crabe sous la varangue, les rires ont résonné comme les tambours du koudmen. Ce soir la cascade aux Écrevisses murmure ton nom, va te baigner en pensée pour laver les malentendus. Les liens tissés aujourd’hui sont plus solides que les lianes du fromager.",
+      "prediction": "La lune se cache derrière les nuages comme le soukouyan derrière son arbre, mais demain elle brillera plus fort pour toi.",
+      "conseil": "Écrase une feuille de piment bouc entre tes doigts avant de dormir, son parfum éloignera les mauvais rêves et attirera les bénédictions de Damballa."
+    },
+    "teaser": "Aujourd’hui, ton charme naturel va faire des étincelles, Gémeaux… Prépare-toi à recevoir des regards qui en disent long avant même qu’un mot ne soit prononcé.",
+    "signFr": "Gémeaux",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "soir",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|cancer|nuit": {
+    "horoscope": {
+      "ouverture": "Ce soir la lune danse avec Mami Dlo sur les vagues du lambi, écoute le chant bleu-vert qui berce les rêves des Touloulou endormis dans leur coquille.",
+      "amour": "Ton cœur est comme le kolibri madè ce soir, attiré par les fleurs de balisier qui s’ouvrent seulement la nuit. Laisse-toi guider par cette lumière pourpre qui ne ment jamais. Les ancêtres chuchotent que l’amour vrai se reconnaît aux frissons qui parcourent l’échine comme une caresse de vent marin. N’aie pas peur de ces émotions qui montent comme la marée, c’est le signe que ton âme se souvient.",
+      "travail": "Demain les Bains Jaunes t’attendent pour purifier tes projets. Plonge tes mains dans l’eau soufrée à 41 degrés et sens comme elle dissout les blocages. Le pic de Gwadloup tambourine dans les arbres pour te rappeler que la persévérance est une prière qui finit toujours par être entendue. Gede te murmure à l’oreille de noter tes idées cette nuit, les esprits les amplifieront pendant ton sommeil.",
+      "argent": "Le pwa dlo (pois d’eau) que tu as planté près de ta porte commence à germer, signe que la prospérité cherche son chemin vers toi. Les luttes pour la reconnaissance des crimes de l’esclavage ont ouvert des portes invisibles, regarde bien autour de toi. Mami Dlo te conseille de jeter trois pièces dans un bol d’eau salée avant de dormir, pour attirer la chance financière. L’argent vient quand on sait l’accueillir comme une vague, sans résistance.",
+      "amitie": "Ce soir les douches de Matouba appellent tes amis les plus fidèles. Prépare une infusion de citronnelle et de gingembre, partage-la sous les étoiles en mémoire de ceux qui ont lutté pour votre liberté. Le lyannaj (solidarité) se renforce quand on se réunit près des eaux qui ont vu couler tant de larmes et de sueur. Gede rit en voyant vos mains se serrer, il adore les alliances qui défient le temps.",
+      "prediction": "Un sucrier jaune se posera demain sur ton rebord de fenêtre, annonçant une nouvelle aussi douce que le sirop de canne de ton enfance.",
+      "conseil": "Allume une bouji (bougie) bleue devant ton miroir ce soir, et dis trois fois le nom de Mami Dlo en regardant ton reflet danser avec les flammes."
+    },
+    "teaser": "Aujourd’hui, Vénus frôle ta Lune comme une caresse douce, Cancer mon chéri… Laisse-toi porter par ce courant chaud qui murmure des promesses sous les draps de la nuit.",
+    "signFr": "Cancer",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "nuit",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|cancer|matin": {
+    "horoscope": {
+      "ouverture": "Ce matin, Legba ouvre les chemins comme le frou-fwou ouvre les fleurs du jardin, laisse entrer la lumière bleue de Mami Dlo dans ton cœur.",
+      "amour": "Ton cœur est une mangrove aujourd’hui, les racines s’entrelacent sous l’eau salée. Comme le kolibri fal vèt, ton amour change de couleur selon la lumière. Offre une fleur de balisier à celui qui te fait vibrer, même si c’est toi-même. Mami Dlo veille sur les cœurs qui osent battre à contre-courant.",
+      "travail": "La Soufrière fume ce matin, signe que l’énergie monte. Comme le pélikan qui plonge sans hésiter, attaque tes tâches une par une. Les Bains Jaunes t’attendent après l’effort, leurs eaux soufrées laveront la fatigue. Legba a tracé ton vèvè ce matin, suis ses lignes sans peur.",
+      "argent": "L’iyam dans ton jardin rappelle que la vraie richesse pousse sous terre. Comme les ancêtres qui cachaient des graines dans leurs cheveux, sème discrètement tes économies. La couleur verte de Damballa attire la prospérité, porte un lambi (coquillage) dans ta poche pour attirer kòb (argent).",
+      "amitie": "Les douches de Matouba appellent à la purification collective. Comme les foumi manyok, organise un lyannaj (entraide) pour partager ce que tu as. Un simple café sous le fromager peut chasser les ombres du soukouyan. Ezili Freda sourit quand les amis se rassemblent sans calcul.",
+      "prediction": "Le pic de Gwadloup tambourine sur l’arbre de la semaine à venir, son rythme annonce des nouvelles qui feront danser tes racines.",
+      "conseil": "Trace un vèvè de Legba avec de la farine de manioc devant ta porte, et laisse brûler une bougie blanche jusqu’à ce que la pluie l’éteigne."
+    },
+    "teaser": "Ce mois-ci, le Cancer, ton cœur brûle d’un désir qui ne demande qu’à être chuchoté… Laisse-toi emporter par une passion qui pourrait bien tout changer.",
+    "signFr": "Cancer",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "matin",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|cancer|midi": {
+    "horoscope": {
+      "ouverture": "Mami Dlo t’enveloppe aujourd’hui dans son bleu profond comme les eaux des Bains Jaunes, ce midi où la Soufrière murmure tes vérités à travers la pluie.",
+      "amour": "Un kolibri fal vèt danse devant ta fenêtre ce matin, signe que l’amour change de couleur selon la lumière. Laisse Ezili Freda glisser sa douceur dans tes gestes, même les plus simples. Porte du bleu ou du vert pour honorer son énergie, et ton cœur s’ouvrira sans effort. Les mots créoles que tu gardes en toi, comme *lanmou* (amour), sont des offrandes à ceux qui savent écouter.",
+      "travail": "Ogoun t’attend aux carrefours de tes tâches, machette à la main pour couper les hésitations. Ce midi, le pic de Gwadloup tambourine sur l’arbre de ta détermination, rappelle-toi que chaque coup de bec est un pas vers l’avant. Va aux Douches de Matouba si tu peux, l’eau soufrée lavera tes doutes et te rendra plus forte. Une clé dans ta poche, et tu avanceras comme l’urakan, sans toucher terre.",
+      "argent": "Le pwa dlo (pois d’eau) que tu plantes aujourd’hui portera ses fruits avant la prochaine lune. Les luttes pour la justice économique depuis 2000 t’ont appris une chose, ton argent est un *kòb* (monnaie) sacré. Offre une pièce à Legba ce midi, même symbolique, et les portes s’ouvriront. Le fromager de ton quartier veille sur tes économies, ne crains pas de demander son aide.",
+      "amitie": "Ce midi, le lyannaj (lien) se tisse comme les racines des palétuviers dans la mangrove. Va au Saut de la Lézarde avec ceux qui comptent, l’eau emportera ce qui ne sert plus. Le sucrier chante dans les branches, signe que la joie est proche si tu partages un repas. Ogoun bénit les alliances forgées dans l’action, pas dans les mots.",
+      "prediction": "Les prochains jours, tu marcheras comme le manikou, silencieux mais invincible, chaque pas t’éloignant des pièges du passé.",
+      "conseil": "Ce midi, trace un vèvè d’Ogoun dans la terre ou sur un papier avec de la farine, et demande-lui la force de finir ce que tu as commencé."
+    },
+    "teaser": "Ce mois-ci, Vénus glisse sous votre signe comme une caresse de soie tu ne pourras plus résister à vos envies de douceur...",
+    "signFr": "Cancer",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "midi",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|cancer|soir": {
+    "horoscope": {
+      "ouverture": "Ce soir la lune se baigne dans les eaux de Mami Dlo, et ton cœur se souvient de tout ce qu’il a porté aujourd’hui.",
+      "amour": "Comme le kolibri madè qui danse au-dessus des fleurs sans jamais se poser, ton âme cherche une tendresse qui ne pèse pas. Laisse-toi aimer sans calcul, comme l’eau qui coule entre les doigts. Ezili Freda te murmure que la beauté est une offrande, pas une monnaie d’échange.",
+      "travail": "Les douches de Matouba t’attendent pour laver la fatigue de la journée. L’eau chaude sur tes épaules est un message de Damballa, le serpent qui te rappelle que la sagesse vient avec le temps. Ce soir, dépose tes outils comme on dépose un fardeau au pied du fromager.",
+      "argent": "Le pwa dlo (pois d’eau) que tu as semé ce matin commence à germer sous la pluie. Baron Samedi te rappelle que l’argent est un esprit capricieux, il vient et s’en va comme la marée. Ne compte pas tes kòb (pièces) ce soir, compte tes bénédictions.",
+      "amitie": "Le saut de la Lézarde a vu passer tes amis aujourd’hui, leurs rires se mêlant au bruit de l’eau. Comme les foumi manyok (fourmis manioc), vous avez construit quelque chose de solide sans même y penser. Ce soir, envoie un message à celui qui te manque, sans raison.",
+      "prediction": "La nuit portera les murmures des ancêtres, et demain tu te réveilleras avec une réponse que tu connaissais déjà.",
+      "conseil": "Allume une bougie bleue près de ton lit et laisse-la brûler jusqu’à ce que la cire forme un vèvè (symbole sacré) éphémère. Mami Dlo veillera sur ton sommeil."
+    },
+    "teaser": "Ce mois-ci, ton cœur bat à l’unisson des secrets que la Lune murmure à ton oreille quand la nuit s’étire",
+    "signFr": "Cancer",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "soir",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|lion|nuit": {
+    "horoscope": {
+      "ouverture": "Ce soir la lune danse avec Ezili Freda sur les vagues de la Pointe de la Grande Vigie, les ancêtres chuchotent dans le vent qui caresse les feuilles de bwa d'Ind.",
+      "amour": "Ton cœur bat au rythme des tambours rada ce soir, comme un pijòn zepòl (oiseau à épaulettes) qui cherche son nid. Laisse Ezili Freda te guider vers la tendresse, mais garde un œil ouvert comme le soukouyan qui veille dans l'ombre. L'amour ce soir est doux comme le lalo cuit à petit feu, mais attention à ne pas te brûler les ailes.",
+      "travail": "Demain les projets mûriront comme les fruits du gommié blan sous le soleil de Bouillante. Ce soir prépare ton vèvè (dessin sacré) sur le sol avec de la farine, trace les chemins que tu veux emprunter. Les esprits du Trou a Diab' te protégeront si tu travailles avec honnêteté, comme les marrons qui préparaient leur fuite dans l'obscurité.",
+      "argent": "Ton kòb (argent) circule mieux quand tu partages comme les pêcheurs partagent leurs prises. Ce soir allume une bouji blanche devant ta porte pour attirer la prospérité d'Ezili. Les feuilles de zéb omega sous ton oreiller t'aideront à garder tes finances en santé, comme elles soignaient les plaies des anciens.",
+      "amitie": "Les lyannaj (liens) se renforcent ce soir autour d'un bol de soupe au lalo et aux crabes de terre. Comme les fourmis foumi manyok qui travaillent ensemble, tes amis et toi pouvez déplacer des montagnes. Rendez-vous demain aux bains chauds de Bouillante pour célébrer ces alliances, là où l'eau et le feu se rencontrent.",
+      "prediction": "Une porte invisible s'ouvrira demain, comme la grotte de la Pointe Allègre qui révèle ses secrets à marée basse.",
+      "conseil": "Ce soir avant de dormir, bois une infusion de bwa d'Ind et demande à Papa Legba d'ouvrir les chemins de ta semaine."
+    },
+    "teaser": "Ce mois-ci, Vénus te murmure des mots doux à l’oreille, Lion… Prépare-toi à succomber aux tentations qui dansent autour de toi",
+    "signFr": "Lion",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "nuit",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|lion|matin": {
+    "horoscope": {
+      "ouverture": "Ce matin Legba ouvre les chemins comme la mer ouvre les bras à Pointe de la Grande Vigie, laissez l'énergie rose d'Ezili Freda vous envelopper comme un bougainvillier en fleur.",
+      "amour": "Ton cœur bat au rythme des tambours rada ce matin, comme le soukouyan qui danse entre les mondes. Offre un collier de perles bleues à Ezili Freda pour attirer l'amour qui te respecte. Les feuilles de bwa d'Ind dans ton bain purifieront tes intentions, laisse leur parfum guider tes pas vers ceux qui te méritent.",
+      "travail": "Aujourd'hui le soleil de ton signe brille sur les bains chauds de Bouillante, plonge dans le travail comme dans cette eau sacrée. Comme le pélican qui plonge pour pêcher, prends ce dont tu as besoin sans hésiter. Trace un vèvè de Legba sur ton bureau avec de la farine pour ouvrir les opportunités.",
+      "argent": "L'argent circule aujourd'hui comme la sève du flamboyant en juillet. Les luttes passées pour l'autonomie économique portent leurs fruits, cueille-les sans culpabilité. Garde une feuille de zéb omega dans ton portefeuille pour protéger tes finances, cette plante des marrons te rappellera ta force.",
+      "amitie": "Les liens se tissent aujourd'hui comme les feuilles de latanyé en panier. Rejoins tes amis près du Trou a Diab' pour des échanges sincères, les esprits du lieu béniront vos conversations. Offrez ensemble un peu de rhum et des fleurs blanches à Ezili pour sceller vos alliances.",
+      "prediction": "Les prochains jours verront ton aura briller comme le plumage du pijòn zepòl au petit matin, prépare-toi à être vu.",
+      "conseil": "Ce soir avant de dormir, écris tes désirs sur une feuille de balizié et brûle-la en offrande à Ezili Freda, ses cendres porteront tes vœux vers les cieux."
+    },
+    "teaser": "Aujourd'hui, Vénus t'offre un sourire envoûtant, Lion, et Mars murmure des promesses de passions torrides sous les étoiles qui t’appartiennent",
+    "signFr": "Lion",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "matin",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|lion|midi": {
+    "horoscope": {
+      "ouverture": "Ce midi Ogoun allume le feu sous vos pas, comme les bains chauds de Bouillante qui dansent entre eau et lave, vous êtes prêt à forger votre jour.",
+      "amour": "Ezili Freda souffle son parfum de rose sur vos relations, comme les feuilles de bwa d'Ind qui parfument les bains d'amour. Laissez votre cœur s'ouvrir sans crainte, les soukouyans ne rôdent que la nuit. Aujourd'hui l'amour est lumière, pas ombre.",
+      "travail": "La mache d'Ogoun coupe les obstacles comme les lianes du morne de Dubuisson. Avancez droit vers vos objectifs, ce lieu de résistance marron vous rappelle que chaque effort construit votre liberté. Pas de détour, la ligne droite est votre alliée.",
+      "argent": "Le lalo dans votre assiette nourrit plus que le corps, il porte la mémoire des jardins d'esclaves. Votre argent aujourd'hui est une graine de zéb omega - plantez-le avec soin, il guérira demain. Les luttes passées vous rappellent que chaque kòb (pièce) compte.",
+      "amitie": "Au Trou a Diab', les offrandes de coquillages scellent les alliances comme vos liens d'aujourd'hui. Le lyannaj (solidarité) se tisse dans l'action, pas dans les mots. Soyez ce rocher où les autres peuvent s'appuyer sans crainte des vagues.",
+      "prediction": "Comme le gran pélikan qui plane au-dessus des eaux, votre vision s'élèvera au-dessus des doutes ces prochains jours.",
+      "conseil": "Portez un objet en métal aujourd'hui et tracez un vèvè (symbole sacré) d'Ogoun dans votre paume avec de la farine de manioc pour canaliser votre force."
+    },
+    "teaser": "Ce mois-ci, Vénus te murmure des promesses enflammées à l’oreille Lion… Prêt·e à succomber à la tentation des étoiles",
+    "signFr": "Lion",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "midi",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|lion|soir": {
+    "horoscope": {
+      "ouverture": "Ce soir la lune se reflète dans les bains chauds de Bouillante comme un vèvè d’Ezili Freda tracé sur l’eau, rose et bleu se mêlent à la vapeur qui monte des profondeurs de la terre.",
+      "amour": "Ton cœur bat au rythme des tambours rada ce soir, comme si Ezili Freda y déposait ses doigts parfumés. Laisse-toi emporter par cette douceur, même si le vent porte des murmures de soukouyan entre les fromagers. L’amour ce soir n’est pas une prison, c’est une danse où tu choisis tes pas. Les feuilles de zéb omega sous ton oreiller apaiseront les blessures que tu portes depuis trop longtemps.",
+      "travail": "Tu as marché toute la journée comme un pêcheur qui rentre avec ses filets pleins de gran pélikan, mais ce soir le travail s’arrête au bord de la Pointe de la Grande Vigie. Les vagues effacent les traces de tes pas, comme Baron Samedi efface les dettes du jour. Demain n’existe pas encore, alors repose-toi. La mer te rappelle que même les falaises tiennent debout sans forcer.",
+      "argent": "Ton porte-monnaie sent encore le lalo que tu as acheté ce matin au marché, cette verdure qui nourrit sans faire de bruit. L’argent ce soir n’est pas une course, c’est comme les latanyé que tu tresses depuis l’enfance, un geste lent qui finit par donner quelque chose de solide. Ezili Freda te murmure que la vraie richesse est dans ce que tu donnes, pas dans ce que tu gardes.",
+      "amitie": "Ce soir les rires de tes amis résonnent comme les coquillages qu’on dépose au Trou a Diab’ pour apaiser les mwon. Tu n’as pas besoin de tout expliquer, ils savent déjà. Le lyannaj ce soir n’est pas dans les grands discours, mais dans ce silence partagé où tout est compris. Comme les marrons qui se retrouvaient dans la grotte de la Pointe Allègre, vous êtes plus forts ensemble que chacun de votre côté.",
+      "prediction": "Demain les nuages porteront les couleurs d’Ezili Freda, rose et bleu, comme un signe que la beauté viendra te chercher là où tu ne l’attends pas.",
+      "conseil": "Avant de dormir, allume une bougie blanche et dépose une feuille de bwa d’Ind sous ton lit, pour que les rêves de cette nuit soient aussi clairs que l’eau des bains chauds de Bouillante."
+    },
+    "teaser": "Aujourd'hui, Vénus frôle ton cœur d'une caresse envoûtante, Lion, et tu sens déjà le frisson du désir te parcourir comme une flamme... Prêt à laisser le destin te guider vers l'inattendu",
+    "signFr": "Lion",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "soir",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|vierge|nuit": {
+    "horoscope": {
+      "ouverture": "Cette nuit, Simbi danse dans les gouttes de pluie sur les feuilles de balisier, et chaque éclaboussure porte un message pour toi, Vierge.",
+      "amour": "Ton cœur est comme le kwikwi sous la terre, discret mais toujours en mouvement. Laisse les mots doux remonter à la surface sans forcer, comme la sève du manguier au petit matin. Simbi te rappelle que l’amour vrai se purifie dans le silence, pas dans les cris.",
+      "travail": "Aujourd’hui, travaille comme l’igwann péyi, avec patience et précision. Les sources de Sofaïa murmurent que tes efforts porteront leurs fruits si tu respectes le rythme de la terre. Gede veille sur tes projets nocturnes, ne crains pas l’obscurité.",
+      "argent": "Ton kòb (argent) circule comme les wasous dans les rivières de Basse-Terre, invisible mais présent. Les luttes passées pour la justice te rappellent que chaque pièce compte, surtout celles que tu partages. Simbi te conseille de purifier tes finances avec une feuille de zerbenn (herbe sacrée) sous ton oreiller.",
+      "amitie": "Comme les crabes de terre après Pâques, tes amis se rassemblent autour de toi sans que tu aies besoin de les appeler. À la Pointe de la Grande Vigie, le vent porte les rires et les confidences, écoute-les. Urakan te souffle que la vraie amitié ne demande pas de permission pour exister.",
+      "prediction": "Les ancêtres chuchotent que tes rêves cette nuit seront des graines, et que demain, tu récolteras ce que tu as semé sans t’en rendre compte.",
+      "conseil": "Allume une bouji (bougie) bleue près de ton lit et place une coquille de tòti karé (tortue imbriquée) sous ton matelas pour attirer la protection de Simbi."
+    },
+    "teaser": "\"Ce soir, la Lune vous murmure des secrets que seul votre cœur peut déchiffrer... Laissez-vous guider par cette énergie qui vous enveloppe d’une douceur envoûtante.\"",
+    "signFr": "Vierge",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "nuit",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|vierge|matin": {
+    "horoscope": {
+      "ouverture": "Ce matin, le vèvè de Legba trace son chemin dans la rosée, ouvre les portes du jour comme on ouvre les bras à la pluie de mai.",
+      "amour": "Simbi murmure à ton oreille, l’amour aujourd’hui se purifie comme l’eau des sources de Sofaïa. Laisse les mots doux couler sans retenue, comme le kwikwi glisse entre les pierres. La tortue caret avance lentement mais sûrement, ton cœur aussi mérite cette patience sacrée.",
+      "travail": "À la Pointe de la Grande Vigie, le vent porte tes projets comme l’urakan porte les rêves des marins. Concentre-toi sur les détails, mais ne laisse pas la perfection t’enchaîner. Les chutes du Carbet rappellent que même les cascades les plus puissantes commencent par une simple goutte.",
+      "argent": "Le kòb (argent) circule aujourd’hui comme les wasous dans les rivières de Basse-Terre. Les luttes pour la justice économique portent leurs fruits, mais il faut savoir attendre comme le manguier attend la saison des pluies. Ne gaspille pas, mais ne garde pas tout pour toi non plus.",
+      "amitie": "Les embouchures de rivières mêlent le doux et le salé, comme tes amitiés mêlent rires et silences complices. À la fête du crabe, partage un matoutou avec ceux qui te comprennent sans mots. L’urakan ne vole jamais seul, et toi non plus.",
+      "prediction": "Les igwann vèt de Petite-Terre te regardent, tu vas bientôt devoir te cacher pour mieux réapparaître, plus forte.",
+      "conseil": "Allume une bougie bleue pour Simbi, et laisse une feuille de fey siwo (herbe sacrée) près de ta porte pour attirer la clarté d’esprit."
+    },
+    "teaser": "Ce mois-ci, Vénus s’invite dans votre ciel, douce Vierge, et vous murmure des promesses envoûtantes… Préparez-vous à vivre des moments où la passion se mêlera à l’intuition comme jamais auparavant",
+    "signFr": "Vierge",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "matin",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|vierge|midi": {
+    "horoscope": {
+      "ouverture": "Ce midi, Simbi souffle sur les vagues de la Soufrière, l’eau bleue se mêle au vert des fougères, et ton esprit s’aiguise comme une lame d’ogoun sous la pluie.",
+      "amour": "Aujourd’hui, ton cœur est comme le kwikwi, discret mais tenace, creusant son chemin sous la terre humide. Laisse-toi surprendre par une rencontre près des sources de Sofaïa, là où l’eau purifie les malentendus. Les mots justes viendront, précis comme les écailles d’un tòti karé.",
+      "travail": "Ogoun te tend une machette ce midi, tranche dans le désordre comme on coupe les lianes des chutes du Carbet. Les tâches en retard ne résisteront pas à ta rigueur, mais prends garde à ne pas épuiser ta force. Une pause près d’un manguier te rendra ta clarté.",
+      "argent": "Ton porte-monnaie frémit comme un wasou dans les eaux vives, prêt à bondir. Les efforts récents porteront leurs fruits, mais méfie-toi des dépenses impulsives. Rappelle-toi, le kòb (argent) se cultive comme le manyòk, avec patience et racines profondes.",
+      "amitie": "Les liens d’aujourd’hui sont légers comme l’urakan, mais solides comme les racines du gommié blan. Retrouve tes proches près d’une embouchure de rivière, là où le doux et le salé se mêlent. Offre un matoutou de krab tè, et les cœurs s’ouvriront.",
+      "prediction": "Dans les jours à venir, une opportunité surgira comme un éclair sur la pointe de la Grande Vigie, aveuglante mais brève.",
+      "conseil": "Porte un objet en métal aujourd’hui, une clé ou une pièce, pour canaliser l’énergie d’Ogoun et garder ton esprit vif comme la rosée du matin."
+    },
+    "teaser": "Ton signe t'invite à écouter cette petite voix intérieure qui murmure des vérités trop belles pour être ignorées... Laisse-toi guider, la magie est à portée de main",
+    "signFr": "Vierge",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "midi",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|vierge|soir": {
+    "horoscope": {
+      "ouverture": "Ce soir, la lune se reflète dans l’eau des rivières comme un vèvè (dessin sacré) tracé par Simbi, elle invite à déposer les poids de la journée au pied des manguiers.",
+      "amour": "Ton cœur est comme le kwikwi, ce petit reptile discret qui avance sans bruit mais sait exactement où il va, même dans l’obscurité. Laisse tomber les doutes qui t’empêchent de voir la tendresse autour de toi. Ce soir, Baron Samedi te rappelle que l’amour vrai ne se contrôle pas, il se vit. Respire, lâche prise, et laisse les ancêtres veiller sur tes liens.",
+      "travail": "Aujourd’hui, tu as couru comme un krab tè (crabe de terre) sous la pluie, sans voir que tes efforts portaient déjà leurs fruits. Les sources de Sofaïa murmurent qu’il est temps de te reposer. Simbi te souffle de ranger tes outils avec soin, comme on plie un linge propre après une longue journée. Demain n’existe pas ce soir, seul compte le calme retrouvé.",
+      "argent": "L’argent glisse entre tes doigts comme les feuilles de fey siwo (plante sucrée) sous la pluie. Ne t’inquiète pas, ce n’est pas de la perte, c’est de la circulation. Baron Samedi te rappelle que les richesses matérielles ne sont que des ombres, et que la vraie abondance se trouve dans ce que tu donnes. Ce soir, allume une bougie bleue pour attirer la prospérité invisible.",
+      "amitie": "Tes amis sont comme les wasou (crevettes d’eau douce) des rivières, ils nagent ensemble sans se perdre. Aujourd’hui, tu as peut-être oublié de leur dire à quel point leur présence te nourrit. Prends un moment pour envoyer un message, un mot, un sourire. L’urakan (frégate) ne vole jamais seul, et toi non plus.",
+      "prediction": "Les nuages bas sur la Soufrière annoncent une période de clarté intérieure, comme si les esprits te soufflaient enfin les réponses que tu cherchais.",
+      "conseil": "Avant de dormir, écris sur un papier ce que tu veux laisser derrière toi, puis brûle-le en pensant à Simbi. La fumée emportera tes fardeaux, et tes rêves seront légers comme une plume de tòti karé (tortue imbriquée)."
+    },
+    "teaser": "Ce mois-ci, ton cœur balance entre raison et passion, mais une étincelle mystérieuse va tout bouleverser… Laisse-moi te révéler ce que Jupiter murmure à ton signe",
+    "signFr": "Vierge",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "soir",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|balance|nuit": {
+    "horoscope": {
+      "ouverture": "Ce soir la lune danse avec Adja sur les vagues de la Rivière Salée, l’eau murmure des équilibres à ceux qui savent écouter les esprits de la nuit.",
+      "amour": "Ton cœur balance comme les ailes du fwou-fwou entre deux branches, mais souviens-toi que l’amour vrai ne se pèse pas, il se sent dans le souffle du vent sur ta peau. Offre une fleur de grangouzie à Ezili Freda ce soir, elle te guidera vers l’harmonie.",
+      "travail": "Demain tu devras choisir entre deux chemins, comme un marron devant la forêt des mornes. Prends le temps de respirer l’air frais du Saut de la Lézarde avant de décider, l’eau te montrera la voie juste.",
+      "argent": "L’argent circule comme le roucou dans les mains des anciens, discret mais puissant. Plante une graine de manyòk dans un coin de ton jardin, elle te rappellera que la vraie richesse pousse en silence.",
+      "amitie": "Les liens se tissent comme les racines du fromager, invisibles mais solides. Invite tes amis près du Bain des Amours, l’eau chaude dissoudra les tensions et renforcera vos lyannaj.",
+      "prediction": "Une porte s’ouvrira demain là où tu ne l’attendais pas, comme un papillon nwè sortant de sa chrysalide au petit matin.",
+      "conseil": "Allume une bouji blanche ce soir et dépose une feuille de zerbenn (herbe sacrée) à tes pieds, les ancêtres te souffleront les réponses dans tes rêves."
+    },
+    "teaser": "Chéri·e Balance, ce mois-ci, ton charisme va faire fondre bien plus que des cœurs... Prépare-toi à des décisions qui vont te faire vibrer comme jamais sous les draps du destin.",
+    "signFr": "Balance",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "nuit",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|balance|matin": {
+    "horoscope": {
+      "ouverture": "Ce matin, trace un vèvè de Legba dans ta cour avec de la farine de manioc, les chemins s’ouvrent comme les ailes d’un fwou-fwou sous la pluie douce de mai.",
+      "amour": "Ton cœur balance comme une feuille de grangouzie dans le vent, écoute Ezili Freda chuchoter à ton oreille, elle te rappelle que l’amour vrai ne se pèse pas, il se danse. Ce soir, allume une bougie jaune près de ton lit, laisse la cire couler comme un serment.",
+      "travail": "À la Rivière du Plessis, les pierres gardent la mémoire des mains qui ont construit avant toi, aujourd’hui, tes efforts doivent couler comme l’eau, sans forcer. Adja te souffle de trouver l’équilibre entre donner et recevoir, comme un pêcheur de vivaneau qui sait quand lancer son filet.",
+      "argent": "Le manyòk que tes ancêtres ont cultivé en secret te rappelle que la vraie richesse ne s’affiche pas, elle se cache dans les jardins de case. Ce mois-ci, mets de côté un peu de kòb (argent) comme on enterre un tubercule d’iyam, il germera quand tu en auras besoin.",
+      "amitie": "Au Bain des Amours, les rires résonnent encore, aujourd’hui, cherche ceux qui te font sentir léger comme un zandoli sur un mur chaud. Un vrai lyannaj (lien) se reconnaît à la façon dont il résiste aux orages, comme les racines d’un fromager.",
+      "prediction": "Un papillon nwè traversera ta journée, signe qu’un ancêtre veille et que l’harmonie est à portée de main si tu tends les bras.",
+      "conseil": "Mâche une feuille de zerbenn (herbe sacrée) ce matin, son amertume te protégera des déséquilibres et t’ancrera dans la sagesse de Damballa."
+    },
+    "teaser": "Oh Balance, ce soir la lune te murmure des secrets que même ton cœur n’ose pas encore écouter... Prépare-toi à danser avec les étoiles, mais attention, elles pourraient bien te voler un baiser",
+    "signFr": "Balance",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "matin",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|balance|midi": {
+    "horoscope": {
+      "ouverture": "Ce midi, Adja dépose sa balance d’or sur la table de ta vie, et le fléau danse sous la pluie de mai comme un kolibri ivre de nectar.",
+      "amour": "Ton cœur est un bain des Amours aujourd’hui, l’eau chaude des bassins de Gourbeyre coule entre tes doigts. Laisse Ezili Freda y tremper ses pétales de woucou, elle te montrera comment aimer sans compter. Mais attention, le soukouyan rôde dans l’ombre des fromagers, ne lui offre pas ta peau en cadeau.",
+      "travail": "Ogoun aiguise ta machette ce midi, et la forêt du Parc National murmure ton nom. Va, taille ton chemin dans les lianes du quotidien, chaque coup de lame est un pas vers ta liberté. La cascade aux Écrevisses t’attend pour laver la sueur de l’effort, son eau claire te rappellera que le travail est sacré quand il nourrit l’âme.",
+      "argent": "L’iyam de tes ancêtres frémit sous la terre humide, prête à germer si tu lui offres un peu de sueur et de patience. En 1794, les esclaves libérés plantaient le manioc en secret, aujourd’hui c’est ton tour de cultiver l’abondance loin des regards avides. Porte une pièce de métal dans ta poche, Ogoun te protégera des mauvaises dettes.",
+      "amitie": "Ce midi, le lyannaj (lien sacré) se tisse comme une toile de crabes dans la mangrove. Invite tes proches à partager un vivaneau grillé sous le gommier blanc, les rires seront ton offrande à Papa Legba. Mais méfie-toi des paroles en l’air, le mabouya écoute derrière les murs et rapporte tout aux esprits.",
+      "prediction": "D’ici trois jours, un papillon nwè entrera dans ta case, ne le chasse pas, c’est l’âme d’un ancêtre venu t’annoncer un changement de vent.",
+      "conseil": "Trace un vèvè (symbole sacré) de farine de manioc devant ta porte ce midi, et dépose une clé dessus pour attirer la justice d’Adja dans tes affaires."
+    },
+    "teaser": "Ce soir, Balance, ton charisme électrise l’air autour de toi alors que Vénus te murmure des secrets à l’oreille—mais attention, ton intuition pourrait bien te jouer des tours si tu ne ralentis pas le rythme",
+    "signFr": "Balance",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "midi",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|balance|soir": {
+    "horoscope": {
+      "ouverture": "Ce soir la pluie lave les traces de la journée comme un bain de Zerbenn (herbe sacrée) sous la lune, Baron Samedi veille sur les équilibres brisés.",
+      "amour": "Ton cœur balance comme les ailes du Fwou-fwou (colibri) entre deux branches, Adja te rappelle que l’amour vrai ne se pèse pas. Laisse tomber les mots qui blessent comme des épines de fromager, ils n’ont plus leur place ce soir. Le woucou (roucou) teintait les joues des amants d’autrefois, souviens-toi que la passion se vit sans calcul.",
+      "travail": "Aujourd’hui tu as marché comme un kabrit (cabri) dans les mornes, chaque pas comptait même si la pente était raide. Le Bain des Amours t’attend pour délier tes muscles, l’eau chaude effacera les tensions comme elle efface les peines des amoureux. Adja te sourit, ton labeur a trouvé son équilibre.",
+      "argent": "L’argent glisse entre tes doigts comme le manioc (manyòk) entre les mains des anciens, rappelle-toi que la vraie richesse se cultive en secret. En 1794 les esclaves libérés plantaient leurs propres récoltes, aujourd’hui tu peux faire de même avec tes économies. Une pièce blanche pour Papa Legba, il ouvrira les chemins.",
+      "amitie": "Tes amis sont comme les crabes de la mangrove, chacun dans son trou mais tous reliés par la même eau. Le lyannaj (solidarité) se renforce quand on partage un repas de vivaneau (poisson rouge) grillé, les histoires circulent mieux avec le rhum. Ce soir laisse les soukouyans (vampires créoles) dehors, ils n’ont rien à faire dans les vrais liens.",
+      "prediction": "La nuit portera conseil comme la rivière du Plessis porte les pétroglyphes des anciens, tes choix de demain sont déjà gravés dans l’ombre.",
+      "conseil": "Avant de dormir dessine un vèvè (symbole sacré) de Damballa avec de la farine de manioc sur ta table de nuit, il apaisera tes rêves comme il apaise les serpents de la forêt."
+    },
+    "teaser": "Chéri, ce soir, Vénus t’invite à danser entre deux mondes où tes désirs prendront les rênes… Prépare-toi à frissonner sous les étoiles",
+    "signFr": "Balance",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "soir",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|scorpion|nuit": {
+    "horoscope": {
+      "ouverture": "Cette nuit, Baron Samedi danse sous la pluie, son chapeau noir trempé de souvenirs, et les ancêtres murmurent dans le vent qui caresse les feuilles de gommié blan.",
+      "amour": "Ton cœur est comme le kolibri fal vèt ce soir, changeant sous la lune, prêt à se transformer. Laisse l’amour te surprendre sans chercher à le fixer. Les esprits de Gede veillent sur les cœurs qui osent vibrer sans peur. Une bouji violette près de ton lit éclairera les chemins invisibles.",
+      "travail": "La Soufrière fume doucement, rappelant que même les montagnes se reposent avant d’éclater. Ce soir, range tes outils comme un pêcheur range ses filets après la marée. Demain, l’urakan te portera plus loin que tes efforts solitaires. Offre un peu de rhum à Kalfu pour qu’il ouvre les bons carrefours.",
+      "argent": "L’iyam dans ton jardin te rappelle que la vraie richesse pousse sous terre, loin des regards. Ne compte pas tes kòb (pièces) ce soir, mais sème une graine de zerbenn maron (herbe sacrée) pour attirer l’abondance des ancêtres. Les luttes passées pour la justice te protègent encore aujourd’hui.",
+      "amitie": "Les douches de Matouba attendent ceux qui veulent se purifier avant de retrouver leurs proches. Un bain sous la pluie ce soir lavera les malentendus, comme l’eau emporte les feuilles mortes. Les soukouyans dansent cette nuit, mais ils ne toucheront pas ceux qui marchent avec leurs amis.",
+      "prediction": "Le pélikan rassemble ses petits sous ses ailes, signe que les protections invisibles se renforcent autour de toi.",
+      "conseil": "Écris ton vœu le plus profond sur une feuille d’alowes et dépose-la près d’une bougie noire, Baron Samedi l’emportera dans son royaume."
+    },
+    "teaser": "Tu sens cette étincelle qui te consume déjà, Scorpion ? Prépare-toi à plonger dans les profondeurs de ton destin où chaque secret murmure ton nom",
+    "signFr": "Scorpion",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "nuit",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|scorpion|matin": {
+    "horoscope": {
+      "ouverture": "Ce matin Legba ouvre les barrières pour toi comme le vent ouvre les ailes du kolibri madè, ce matin tu voles léger entre les mondes sans toucher terre.",
+      "amour": "Ton cœur bat comme le tambourinage du pic de Gwadloup contre les arbres sacrés, écoute ses messages avant de parler. Baron Samedi danse autour de tes silences, transforme tes peurs en désir.",
+      "travail": "Va aux bains chauds de Bouillante ce matin, laisse l’eau soufrée laver tes doutes comme elle nettoie les peaux des pêcheurs. Urakan plane au-dessus de toi, rappelle-toi que tu n’as pas besoin de permission pour avancer.",
+      "argent": "L’iyam dans ton jardin te murmure que la vraie richesse pousse sous terre, pas dans les comptes en banque. Ce mois-ci plante quelque chose qui te nourrira, pas seulement ton corps mais ton âme aussi.",
+      "amitie": "Réunis tes proches près des douches de Matouba, l’eau qui tombe là-bas porte les prières des anciens. Comme les foumi manyok tu construis ton réseau grain par grain, sans bruit mais sans faille.",
+      "prediction": "La Soufrière fume ce matin, signe que les esprits préparent un changement aussi profond qu’un volcan qui se réveille.",
+      "conseil": "Trace un vèvè de Legba devant ta porte avec de la farine de manioc, et allume une bougie blanche pour que ta journée soit protégée des mauvais chemins."
+    },
+    "teaser": "Ce soir, la Lune t'invite à explorer des désirs plus profonds que jamais… Prépare-toi à un mélange envoûtant de passion et de mystère qui te fera frissonner.",
+    "signFr": "Scorpion",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "matin",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|scorpion|midi": {
+    "horoscope": {
+      "ouverture": "Ce midi, Baron Samedi danse entre les gouttes de pluie, et son ombre violette te rappelle que chaque fin cache un nouveau commencement.",
+      "amour": "Comme le kolibri madè, ton cœur bat plus fort aujourd’hui, attirant ceux qui savent reconnaître la beauté éphémère. Laisse-toi porter par cette énergie, mais garde tes ailes prêtes à fuir si l’amour devient étouffant. Ogoun veille sur ta passion, allume un feu qui réchauffe sans brûler.",
+      "travail": "Aux Bains Jaunes, l’eau soufrée purifie tes doutes et te redonne force. Ce midi, Ogoun te murmure de saisir ta mache symbolique et d’avancer sans hésiter. Le pic de Gwadloup tambourine dans ta tête, c’est le rythme de ton labeur qui doit résonner aujourd’hui.",
+      "argent": "L’iyam dans ton jardin te rappelle que la vraie richesse pousse sous tes pieds. Ne cours pas après l’argent facile, cultive plutôt ce qui te nourrit durablement. Porte un objet en métal dans ta poche, Ogoun te protégera des pertes inutiles.",
+      "amitie": "Sous le fromager, les liens se tissent comme les racines de l’arbre aux soukounyan. Aujourd’hui, entoure-toi de ceux qui, comme l’urakan, refusent de se poser trop longtemps au même endroit. Partage un repas près de la mer, Marinette veillera sur vos échanges.",
+      "prediction": "Une rencontre inattendue, comme un sucrier jaune traversant ton chemin, apportera une nouvelle lumière dans les jours à venir.",
+      "conseil": "Dessine un vèvè d’Ogoun avec de la farine devant ta porte pour attirer la force et la justice dans tes actions de ce midi."
+    },
+    "teaser": "Chéri, ce mois-ci, ton Scorpion intérieur va frissonner d’un désir brûlant qui te fera perdre le contrôle… Prépare-toi à des révélations qui te hanteront bien après l’aube",
+    "signFr": "Scorpion",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "midi",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|scorpion|soir": {
+    "horoscope": {
+      "ouverture": "Ce soir la pluie tombe comme un vèvè de Baron Samedi, chaque goutte trace un chemin entre les mondes et toi, Scorpion, tu sens l'appel des ancêtres dans le vent qui tourne autour de ta maison.",
+      "amour": "Ton cœur est lourd comme une pierre de rivière après la crue, mais souviens-toi que même le kolibri fal vèt change de couleur selon la lumière. Laisse tomber ce qui ne te nourrit plus, même si ça brille encore. Le soukouyan ne garde jamais la même peau, et toi non plus tu n’es pas obligé de rester prisonnier d’une version de toi-même qui ne te convient plus.",
+      "travail": "Aujourd’hui tu as donné comme le fromager donne son ombre aux soukouyans, sans compter. Mais ce soir, Baron Samedi te rappelle que même les racines de la Soufrière ont besoin de repos. Demain n’existe pas encore, alors laisse les cendres de ce qui a brûlé aujourd’hui se déposer au fond de ton bol de café.",
+      "argent": "L’argent est venu et reparti comme les vagues sur les bains chauds de Bouillante, sans prévenir. Ne cours pas après les pièces qui roulent vers la mer, Scorpion. Le vrai kòb (richesse) ce soir se compte en graines d’iyam dans ton jardin, en souvenirs qui ne coûtent rien et en dettes que tu as enfin osé ne plus payer.",
+      "amitie": "Tes amis sont comme les douches de Matouba, ils savent quand il faut te laisser tremper dans l’eau chaude sans rien dire. Mais attention, même les liens les plus solides ont besoin d’air comme le manikou a besoin de la forêt. Ce soir, envoie un message à celui ou celle qui t’a tendu une main sans rien attendre en retour, juste pour dire 'an nou bwè on ti kafé' (buvons un petit café).",
+      "prediction": "Les prochains jours, tu vas sentir comme une odeur de soufre et de terre mouillée après l’orage, c’est le signe que quelque chose en toi est en train de muer, comme le zandoli laisse sa queue pour repartir plus léger.",
+      "conseil": "Avant de dormir, allume une bougie noire près de ton lit et écris sur un papier ce que tu veux que Baron Samedi emporte cette nuit. Brûle-le dans la flamme et laisse les cendres se disperser comme la fumée des fumerolles de la Soufrière."
+    },
+    "teaser": "\"Ce mois-ci, le Scorpion, votre âme brûlante attire bien des regards... mais attention, sous vos airs mystérieux se cache une passion qui pourrait tout changer.\"",
+    "signFr": "Scorpion",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "soir",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|sagittaire|nuit": {
+    "horoscope": {
+      "ouverture": "Ce soir, la lune danse avec Gran Bwa, et les feuilles de bwa d'Ind chuchotent des secrets sous la pluie, préparez-vous à écouter les esprits de la forêt.",
+      "amour": "Ton cœur bat comme le tambour du gwo ka ce soir, laisse Ezili Freda te guider vers des mots doux et sincères. Les fleurs de lalo, posées près de ton lit, attireront l'affection comme un aimant.",
+      "travail": "Comme l'ouassou remonte la rivière, tu avanceras malgré les obstacles, surtout si tu passes près des bains chauds de Bouillante pour te recharger. Gran Bwa t'offre la force de la forêt pour tes projets.",
+      "argent": "Ton porte-monnaie se remplira comme les paniers tissés de latanyé, avec patience et habileté. Place une pièce verte près de ton autel pour attirer la prospérité de Damballa.",
+      "amitie": "Rendez-vous au Trou a Diab' pour déposer une offrande et renforcer tes liens, les esprits des ancêtres veilleront sur vos promesses. Le zéb omega protégera vos conversations des mauvaises énergies.",
+      "prediction": "Les rêves de cette nuit porteront des messages clairs, écris-les au réveil, ils guideront tes pas demain.",
+      "conseil": "Allume une bouji verte en l'honneur de Gran Bwa et laisse-la brûler toute la nuit pour éclairer ton chemin intérieur."
+    },
+    "teaser": "Ce mois-ci, Vénus te murmure des promesses envoûtantes à l’oreille tu n’as plus qu’à tendre l’oreille et laisser tes désirs te guider",
+    "signFr": "Sagittaire",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "nuit",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|sagittaire|matin": {
+    "horoscope": {
+      "ouverture": "Ce matin, Gran Bwa ouvre les chemins comme un fromager étend ses branches vers le ciel, laisse la pluie de Bouillante laver tes doutes et trace un vèvè de Legba sur ton seuil avec une feuille de bwa d'Ind.",
+      "amour": "Ton cœur est comme le lalo, riche et généreux, mais attention à ne pas te laisser épuiser par ceux qui ne savent pas reconnaître ta valeur. Ezili Freda t'envoie un signe, un parfum de vanille dans le vent, écoute-le.",
+      "travail": "Aujourd'hui, sois comme l'ouassou, remonte la rivière de tes projets avec détermination. Les bains chauds de Bouillante te rappellent que même dans l'effort, il faut savoir se ressourcer.",
+      "argent": "L'argent circule comme la sève du mapou, invisible mais puissant. Plante une graine aujourd'hui, même petite, comme un morceau de latanyé tressé avec soin, et laisse Jupiter faire le reste.",
+      "amitie": "Retrouve tes proches près de la ravine à Malice, là où les eaux murmurent des secrets anciens. Partage un repas de zéb omega, et laisse les rires guérir les malentendus.",
+      "prediction": "Une porte s'ouvrira là où tu voyais un mur, comme la grotte de la Pointe Allègre révèle ses trésors aux marées basses.",
+      "conseil": "Allume une bougie verte pour Gran Bwa et dépose une feuille de bwa d'Ind à tes pieds avant de sortir, pour marcher léger et libre comme le vent dans les mornes."
+    },
+    "teaser": "\"Amoureux Sagittaire, ce mois-ci, ton charme envoûtant va faire chavirer bien des cœurs... Prépare-toi à vivre une passion aussi intense que ton regard brûlant\"",
+    "signFr": "Sagittaire",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "matin",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|sagittaire|midi": {
+    "horoscope": {
+      "ouverture": "Ce midi Ogoun danse dans les flammes de la Soufrière, son mache symbolique tranche les doutes comme lianes sèches, la forêt de Gran Bwa murmure ton nom entre les feuilles de bwa d'Ind.",
+      "amour": "Ton cœur bat comme le tambour ka sous la pluie, Ezili Freda dépose un pétale de marakoudja sur ton oreiller. Ce soir les mots viendront tout seuls, comme lalo qui pousse sans qu’on l’arrose. Laisse-toi porter par cette douceur qui monte des racines, pas besoin de forcer les choses.",
+      "travail": "Aujourd’hui c’est jour de défricher comme les marrons du morne de Dubuisson, ta mache doit couper net les hésitations. Ogoun te prête sa force, alors attaque les dossiers empilés comme on nettoie un champ de zéb omega, sans pitié pour les mauvaises herbes. Les bains chauds de Bouillante t’attendent après l’effort.",
+      "argent": "L’argent circule comme les eaux de la ravine à Malice, ne le retiens pas trop fort. Porte un morceau de métal dans ta poche, Ogoun te protégera des dépenses inutiles. Ce mois-ci les kòb (pièces) iront là où tu en as vraiment besoin, comme le lalo qui nourrit sans qu’on le demande.",
+      "amitie": "Les lyannaj (liens) se reforment aujourd’hui autour d’un plat de ouassou, les rires résonnent comme les vagues contre les rochers de la grotte de Pointe Allègre. Papa Legba ouvre les chemins, alors appelle ce vieux ami que tu as négligé, il t’attend au carrefour.",
+      "prediction": "Les prochains jours te porteront comme l’urakan porte les graines vers de nouvelles terres, prépare-toi à semer sans regarder en arrière.",
+      "conseil": "Écrase une feuille de bwa d’Ind entre tes doigts et respire profondément avant de prendre une décision, Gran Bwa te montrera la voie dans l’odeur."
+    },
+    "teaser": "Ce mois-ci, ton ardeur Sagittaire va embraser bien plus que tes rêves d’évasion tu brûles déjà de désir pour ces rencontres qui vont t’emmener bien au-delà de l’ordinaire",
+    "signFr": "Sagittaire",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "midi",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|sagittaire|soir": {
+    "horoscope": {
+      "ouverture": "Ce soir, la lune se reflète dans les bains chauds de Bouillante, comme un miroir offert par Gran Bwa pour y déposer tes peines du jour.",
+      "amour": "Ton cœur est lourd comme les feuilles de bwa d'Ind après la pluie, mais souviens-toi, même les soukouyans savent revenir à leur peau quand l'aube pointe. Laisse tomber ce qui ne te nourrit plus. Ezili Freda veille sur tes choix ce soir, elle te murmure de choisir la douceur.",
+      "travail": "Aujourd’hui, tu as grimpé comme l’ouassou contre le courant des mornes, mais ce soir, Baron Samedi te rappelle que même les rivières sacrées ont besoin de repos. Les feux du Trou a Diab’ ne brûlent plus pour toi, ils brillent pour éclairer ton chemin vers le repos.",
+      "argent": "L’argent glisse entre tes doigts comme les grains de lalo dans un panier de latanyé, mais ce soir, Jupiter te souffle que la vraie richesse est dans ce que tu as semé. Les luttes pour la reconnaissance ne s’arrêtent pas, mais tes efforts, eux, méritent d’être honorés.",
+      "amitie": "Tes amis sont comme les zéb omega dans la forêt de Dubuisson, ils guérissent tes blessures sans que tu aies besoin de parler. Ce soir, laisse-toi porter par leur présence, comme une offrande déposée à la Grotte de la Pointe Allègre.",
+      "prediction": "Les esprits de la Ravine à Malice chuchotent que ce que tu as lâché ce soir reviendra transformé, comme la marée qui emporte et ramène les coquillages.",
+      "conseil": "Avant de dormir, allume une bougie verte en l’honneur de Gran Bwa et trace un vèvè de Damballa dans l’air avec ton doigt, pour que la sagesse du serpent veille sur tes rêves."
+    },
+    "teaser": "\"Ce mois-ci, Vénus te murmure des promesses enflammées, Sagittaire... Prêt à te laisser guider par le désir qui te consume ?\"",
+    "signFr": "Sagittaire",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "soir",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|capricorne|nuit": {
+    "horoscope": {
+      "ouverture": "Cette nuit, Kafou trace son vèvè (dessin sacré) à l’encre rouge et noire sur ton chemin, Capricorne, comme un carrefour où les esprits chuchotent tes possibles.",
+      "amour": "Ton cœur est une mangrove ce soir, entre terre et mer, entre silence et marée. Laisse l’urakan (frégate) t’apprendre à aimer sans poser les ailes. Les ancêtres voient tes doutes, ils soufflent des réponses dans tes rêves. Écoute.",
+      "travail": "À Pointe Allègre, le vent porte tes projets comme un kwikwi (reptile sans pattes) glisse sous les feuilles. Kafou te rappelle que les carrefours mènent quelque part, même si la route semble invisible. Avance sans bruit, la terre te soutient.",
+      "argent": "Le krab tè (crabe de terre) creuse son terrier avec patience, Capricorne. Tes efforts d’aujourd’hui sont des graines de wasou (crevettes d’eau douce) dans la rivière, elles nourriront demain. Offre une pièce à Gede pour attirer l’abondance discrète.",
+      "amitie": "Aux embouchures de rivières, l’eau douce rencontre le sel, comme tes amis et toi ce soir. Partagez un matoutou (fricassée de crabes) en silence, les liens se tissent mieux sans mots. Les esprits de la mer bénissent ces rencontres.",
+      "prediction": "Demain, la rosée déposera des perles sur les feuilles de chadon béni (piment végétarien), signe que tes efforts porteront des fruits inattendus.",
+      "conseil": "Allume une bouji (bougie) noire et rouge près de ton lit, laisse-la brûler jusqu’à minuit. Kafou ouvrira les portes de tes rêves pour y glisser des réponses."
+    },
+    "teaser": "Aujourd’hui, Vénus t’invite à danser avec le désir dans un jeu de séduction où chaque regard compte sous la lune... Prêt à suivre cette alchimie qui te consume sans même t’en rendre compte",
+    "signFr": "Capricorne",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "nuit",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|capricorne|matin": {
+    "horoscope": {
+      "ouverture": "Ce matin, le vèvè de Legba s’ouvre sous tes pas comme une porte de corail, laisse entrer la lumière rouge et noire de Kafou, le loa des carrefours qui te pousse à avancer sans peur.",
+      "amour": "Ton cœur bat comme le tambour ka sous la pluie, aujourd’hui les mots que tu retiens depuis des lunes doivent sortir, comme le kwikwi sort de terre après l’averse, glissant et libre. Offre une fleur de balisier à celui ou celle qui compte, c’est le langage des esprits qui parlent sans bruit.",
+      "travail": "Ce matin, escalade les mornes de ta tâche comme l’igwann vèt grimpe aux arbres de la forêt de Sofaïa, chaque branche est une étape, chaque feuille un détail à ne pas négliger. La patience du reptile est ta force, ne te presse pas, la victoire est dans la lenteur.",
+      "argent": "L’argent circule comme l’eau des embouchures, aujourd’hui il faut saisir le courant sans hésiter, comme les pêcheurs attrapent le wasou dans les rivières de Basse-Terre. Kafou te murmure de ne pas craindre les risques calculés, la fortune sourit à ceux qui osent.",
+      "amitie": "Aujourd’hui, le lyannaj se renforce comme les racines de la mangrove, tes amis sont tes ancrages, ne les laisse pas s’éloigner. Partage un repas de krab tè sous les alizés, la nourriture lie les cœurs plus fort que les promesses.",
+      "prediction": "Les prochains jours, tu sentiras le vent tourner comme l’urakan qui change de cap, prépare-toi à saisir les opportunités qui se présenteront sans prévenir.",
+      "conseil": "Allume une bougie rouge ce matin et trace un vèvè de Kafou avec de la farine de manioc, demande-lui de t’ouvrir les chemins de l’ambition, il écoute ceux qui osent."
+    },
+    "teaser": "Ce mois-ci, Mars te murmure des promesses de passion et de pouvoir mon cher Capricorne, mais attention à ne pas confondre ambition et désir. Prépare-toi à ressentir une énergie qui pourrait bien bouleverser ton quotidien",
+    "signFr": "Capricorne",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "matin",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|capricorne|midi": {
+    "horoscope": {
+      "ouverture": "Ce midi Ogoun danse dans les lames de ta machette, Capricorne, le métal chante sous tes doigts comme un vèvè tracé dans la terre rouge de Sofaïa.",
+      "amour": "Ton cœur bat au rythme des kwikwi sous les feuilles, ces serpents aveugles qui trouvent leur chemin sans lumière. Laisse-toi guider par cette sagesse nocturne, même en plein jour. Les chouèt kabrit veillent sur tes silences, ces moments où les mots ne suffisent pas. Offre une noix de coco à la mer à Pointe Allègre, et regarde l’eau emporter ce qui ne te sert plus.",
+      "travail": "Aujourd’hui, sois comme l’urakan, vole sans te poser, même si le vent te pousse vers l’inconnu. Les sources de Sofaïa murmurent que tes efforts porteront leurs fruits avant la prochaine lune. Ogoun te rappelle que le travail est une prière, alors taille ta route comme on taille une canne, avec précision et sans hésitation.",
+      "argent": "Le kòb (argent) circule aujourd’hui comme les wasou dans les rivières de Basse-Terre, rapide et insaisissable. Ne le force pas, laisse-le venir à toi comme la marée monte. Les luttes pour la justice économique de ces vingt dernières années t’ont appris une chose, Capricorne, l’argent doit servir, pas asservir. Porte un cauri dans ta poche pour attirer la prospérité.",
+      "amitie": "Les mangroves de Guadeloupe te rappellent que les liens les plus forts sont ceux qui résistent aux marées. Aujourd’hui, cherche ceux qui te tiennent debout quand l’eau monte. Partage un matoutou de krab tè avec ceux qui savent écouter sans juger, comme les anciens écoutaient le chant des tòti karé sur les plages.",
+      "prediction": "Les prochains jours, tu marcheras sur des braises sans te brûler, comme les danseurs de feu de la Saint-Jean, guidé par la main invisible de Kafou.",
+      "conseil": "Plante un bwa kachiman (bois kachiman) devant ta porte pour te protéger des énergies négatives, et laisse Ogoun aiguiser ta détermination comme une lame."
+    },
+    "teaser": "Ce mois-ci, Pluton murmure à ton oreille des secrets de pouvoir que même les étoiles osent à peine chuchoter… Prêt·e à écouter ce que ton ambition murmure dans l’ombre",
+    "signFr": "Capricorne",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "midi",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|capricorne|soir": {
+    "horoscope": {
+      "ouverture": "Ce soir la lune se reflète sur les eaux de la mangrove comme un vèvè tracé par Baron Samedi, le temps s’arrête pour compter les pas du jour.",
+      "amour": "Ton cœur est une source de Sofaïa ce soir, chaude et sulfureuse, mais il faut laisser décanter les mots durs avant de les boire. Comme le krab tè après Pâques, l’amour se savoure en silence, sans hâte. Kafou te rappelle que les carrefours mènent aussi à des rencontres inattendues, même sous la pluie.",
+      "travail": "Tu as grimpé les mornes comme l’igwann péyi, sans bruit, sans te plaindre, et maintenant le vent porte l’odeur de tes efforts jusqu’à Pointe Allègre. Baron Samedi te murmure de lâcher ce qui ne sert plus, comme les feuilles mortes que la rivière emporte. Ce soir, ton labeur est un offrande, pas une dette.",
+      "argent": "L’argent ce soir est comme le wasou dans la rivière, glissant mais présent, il faut savoir où plonger la main sans forcer. Les luttes pour la reconnaissance des crimes de l’esclavage t’ont appris que la vraie richesse ne se compte pas en kòb (pièces) mais en liberté. Kafou te conseille de garder une pièce noire dans ta poche pour honorer les ancêtres.",
+      "amitie": "Ce soir les lyannaj (liens) se resserrent autour d’un feu imaginaire, comme les racines du gommié blan qui refusent de rester en place. Urakan te rappelle que la vraie amitié ne demande pas de permission pour exister, elle vole au-dessus des tempêtes sans se poser. La mangrove te protège, même quand tu ne la vois pas.",
+      "prediction": "Les nuages bas sur la Soufrière annoncent une période où les choses cachées remonteront à la surface, comme les bulles d’une source bouillante.",
+      "conseil": "Avant de dormir, allume une bougie noire près de ton lit et dis merci à Baron Samedi pour les leçons du jour, même celles qui ont fait mal."
+    },
+    "teaser": "Ce mois-ci, Vénus glisse dans ton signe, Capricorne, et réveille des désirs que tu croyais endormis... Laisse-toi guider par cette énergie envoûtante, tu risques de tomber sous le charme d’une rencontre inattendue",
+    "signFr": "Capricorne",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "soir",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|verseau|nuit": {
+    "horoscope": {
+      "ouverture": "La nuit porte un souffle de La Sirène, écoute le clapotis des vagues qui murmurent tes rêves à venir.",
+      "amour": "Ton cœur bat comme le tambour des Gede cette nuit, laisse-toi porter par les émotions sans les craindre. Comme le papillon nwè qui visite ta case, un ancêtre te rappelle que l’amour ne meurt jamais, il se transforme.",
+      "travail": "Ce soir, repose-toi près de la Rivière du Plessis, l’eau emportera tes soucis du jour. Demain, ton énergie sera claire comme l’eau des cascades, prête à nourrir tes projets.",
+      "argent": "Plante une bouture de manyòk dans un coin de ton jardin, même petit. Comme nos ancêtres, sache que la vraie richesse pousse en silence et nourrit sans compter.",
+      "amitie": "Réunis tes proches autour d’un plat de vivaneau grillé, partagez les histoires et les rires. Les liens se renforcent quand on prend le temps de savourer ensemble.",
+      "prediction": "Un fwou-fwou viendra te visiter dans tes rêves, signe que la chance et l’inspiration sont à ta porte.",
+      "conseil": "Allume une bouji verte et or pour La Sirène, dépose une offrande de fleurs près de l’eau et écoute les messages de la nuit."
+    },
+    "teaser": "Chéri, ce soir, ton signe brille d’une énergie unique qui va faire trembler les planètes Laisse-moi te dire ce qui t’attend avec une douceur qui te fera frissonner",
+    "signFr": "Verseau",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "nuit",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|verseau|matin": {
+    "horoscope": {
+      "ouverture": "Ce matin Legba ouvre les chemins comme la rivière du Plessis ouvre ses bras aux pèlerins, laisse l’eau verte et or de La Sirène couler en toi.",
+      "amour": "Aujourd’hui ton cœur bat comme les ailes du fwou-fwou, rapide et léger, mais attention, le soukouyan rôde la nuit, ne laisse pas les vieilles peurs t’empêcher d’aimer librement. Offre un peu de cassave à Ezili Freda, elle te protégera des doutes.",
+      "travail": "Ce matin la forêt du Parc National murmure tes projets, prends ton courage comme les marrons prenaient leur manyòk et fuyaient dans les mornes. Trace un vèvè de Legba dans ta tête avant de commencer, la journée sera claire.",
+      "argent": "L’iyam dans ton jardin te rappelle que la vraie richesse pousse sous la terre, pas dans les banques. Aujourd’hui pense à ce que tes ancêtres ont semé, pas à ce que les autres te doivent. La Sirène te souffle que l’or vient aussi des vagues.",
+      "amitie": "Au Bain des Amours les liens se reforment comme les corps dans l’eau chaude, aujourd’hui appelle un ami comme on appelle un frère de koudmen, sans raison, juste pour partager un moment. Le manikou t’attend pour danser sous la pluie.",
+      "prediction": "Les jours qui viennent seront comme la cascade aux Écrevisses, une eau vive qui emporte tout ce qui ne sert plus, prépare-toi à sauter.",
+      "conseil": "Ce matin allume une bougie blanche et demande à Legba d’ouvrir ta journée, puis bois un thé de zéb lavann (herbe à vanille) pour attirer la douceur."
+    },
+    "teaser": "Ce mois-ci, Vénus t’invite à un jeu de séduction où chaque regard compte et chaque silence devient une promesse Ce soir, laisse-toi guider par l’intuition… et par moi",
+    "signFr": "Verseau",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "matin",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|verseau|midi": {
+    "horoscope": {
+      "ouverture": "Ce midi, la Sirène te murmure depuis les vagues, son chant vert et or t’enveloppe comme l’écume sur les rochers de Pointe Allègre.",
+      "amour": "Ton cœur bat au rythme du soukouyan, ce soir il enlève sa peau pour danser avec toi, mais attention à ne pas te perdre dans ses ombres. Offre-lui une fleur de woucou pour éclairer votre chemin.",
+      "travail": "Ogoun t’attend au carrefour des mornes, machette en main, prêt à fendre les obstacles. Va à la Rivière du Plessis, laisse l’eau emporter tes doutes avant de commencer.",
+      "argent": "L’iyam dans ton jardin rappelle que la vraie richesse pousse sous terre, loin des yeux des maîtres. Plante une racine aujourd’hui, elle nourrira tes lendemains.",
+      "amitie": "Comme les crabes de la mangrove, tes amis et toi formez un rempart contre les marées. Partagez un repas de manikou grillé, la force viendra des rires autour du feu.",
+      "prediction": "Un papillon nwè entrera dans ta case demain, prépare un peu de cassave pour l’accueillir, c’est un ancêtre qui revient.",
+      "conseil": "Porte une clé en métal dans ta poche, Ogoun te donnera la force de tourner les serrures qui te résistent."
+    },
+    "teaser": "Chéri, ce mois-ci la Lune t’enveloppe d’une énergie à la fois mystérieuse et électrisante, comme une promesse qui ne demande qu’à être devinée entre deux regards brûlants...",
+    "signFr": "Verseau",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "midi",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|verseau|soir": {
+    "horoscope": {
+      "ouverture": "Ce soir, Baron Samedi danse sur les tombes avec ses os qui brillent comme la lune sur la mer, et toi, Verseau, tu sens son souffle froid qui te rappelle que tout ce qui pèse doit tomber avant le sommeil.",
+      "amour": "Ton cœur est comme le soukouyan ce soir, il se détache de sa peau pour voler vers l’invisible, laisse tomber les peaux mortes des vieux amours qui ne te servent plus. La Sirène chante dans tes rêves, écoute sa voix verte et dorée, elle te murmure que l’amour vrai ne s’accroche pas, il coule comme la rivière du Plessis.",
+      "travail": "Tu as couru toute la journée comme le fwou-fwou, le colibri, à butiner les tâches sans t’arrêter, mais ce soir, la cascade aux Écrevisses t’attend pour te laver de la fatigue. Pose tes outils, l’eau va emporter la sueur et les soucis, laisse-la faire son travail de purification.",
+      "argent": "L’argent ce soir est comme le manyòk, il pousse sous la terre sans qu’on le voie, et demain tu découvriras peut-être une racine oubliée qui te nourrira. Ne compte pas ce que tu n’as pas encore récolté, fais confiance à la terre qui te porte, elle sait ce qu’elle fait depuis 1789.",
+      "amitie": "Tes amis sont comme les crabes dans la mangrove, ils avancent ensemble sans se marcher dessus, chacun dans son trou mais toujours connectés. Ce soir, au bain des Amours, imagine leurs visages dans l’eau chaude, sens leur présence même s’ils sont loin, les liens du lyannaj ne se brisent pas avec la distance.",
+      "prediction": "Un papillon nwè va entrer dans ta case ce soir, ne le chasse pas, c’est un ancêtre qui vient vérifier que tu as bien lâché ce qui devait l’être.",
+      "conseil": "Allume une bougie verte et dessine un vèvè de La Sirène sur ta table avec de la poudre de woucou, laisse la flamme danser jusqu’à ce qu’elle s’éteigne toute seule, et dors en paix."
+    },
+    "teaser": "\"Ce soir, Vénus te murmure des promesses audacieuses à l’oreille, Verseau… Mais attention, Mars te souffle aussi des tentations qui pourraient bien faire trembler tes certitudes sous les draps\"",
+    "signFr": "Verseau",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "soir",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|poissons|nuit": {
+    "horoscope": {
+      "ouverture": "Cette nuit la lune danse avec Marinette, et l’eau murmure des secrets que seuls les Poissons entendent, comme un kolibri fal vèt qui change de couleur sous les étoiles.",
+      "amour": "Ton cœur est comme un sucrier dans le jardin, discret mais toujours là, chantant même sous la pluie. Laisse-toi porter par les courants, les ancêtres veillent sur tes choix. Une bouji bleue allumée ce soir attirera la tendresse des esprits bienveillants.",
+      "travail": "La Soufrière gronde doucement, signe que tes efforts doivent être aussi patients que l’ascension des Bains Jaunes. Ne force pas, avance comme l’urakan, sans te poser, jusqu’à ce que la solution apparaisse à l’aube.",
+      "argent": "L’iyam dans ton jardin te rappelle que la vraie richesse pousse sous terre, loin des regards. Vérifie tes comptes comme on vérifie les racines, sans précipitation. Une offrande de rhum à Gede ouvrira les portes des opportunités cachées.",
+      "amitie": "Les douches de Matouba attendent ceux qui ont besoin de se purifier avant de retrouver leurs proches. Un bain dans ces eaux soufrées lavera les malentendus, et tes amis reviendront comme la marée.",
+      "prediction": "Le pic de Gwadloup tambourinera demain matin, annonçant un message que tu attendais sans le savoir.",
+      "conseil": "Écris tes rêves sur une feuille de cerasee et place-la sous ton oreiller, les esprits de la nuit les liront et te guideront."
+    },
+    "teaser": "Ce soir, Vénus caresse ton cou comme une brise d'été et tu sens déjà le frisson de l'inattendu... Laisse-toi guider par l'appel des profondeurs, quelque chose t'attend dans l'ombre des étoiles",
+    "signFr": "Poissons",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "nuit",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|poissons|matin": {
+    "horoscope": {
+      "ouverture": "Ce matin, trace un vèvè de Legba dans ta paume avec de l’eau de pluie, laisse les chemins s’ouvrir comme les ailes d’un kolibri madè au premier rayon du soleil.",
+      "amour": "Ton cœur bat comme le tambour du pic de Gwadloup dans la forêt, écoute ses messages avant de répondre. Marinette veille sur tes émotions aujourd’hui, ne crains pas les vagues bleues de tes désirs. Un soukouyan rôde peut-être près de ton fromager, méfie-toi des apparences trop douces.",
+      "travail": "À Bains Jaunes, l’eau chaude te murmure de purifier tes projets avant de les lancer. Comme l’urakan, ne te pose pas trop longtemps sur un seul dossier, laisse ton esprit planer au-dessus des obstacles. Legba t’ouvrira les portes si tu demandes avec respect.",
+      "argent": "L’iyam de ton jardin te rappelle que l’autonomie se cultive dans l’ombre. Vérifie tes comptes comme on vérifie les racines d’un manyòk, sans précipitation. Une opportunité viendra par la mer, comme un poisson offert par Marinette, mais prends garde aux tempêtes.",
+      "amitie": "Retrouve tes proches aux douches de Matouba, l’eau soufrée lavera les malentendus. Comme les fourmis manyok, travaillez en silence pour construire quelque chose de solide. Un ami pourrait te surprendre en révélant une facette cachée, comme un kolibri fal vèt changeant de couleur.",
+      "prediction": "Les nuages bas de ce matin annoncent une semaine où l’intuition parlera plus fort que la raison, écoute les chuchotements de la Soufrière.",
+      "conseil": "Allume une bougie blanche et place une feuille de cerasee (zebenn) sous ton oreiller pour attirer les rêves prophétiques de Marinette."
+    },
+    "teaser": "Oh Poissons, ce soir l’océan des possibles s’agite sous tes doigts... Laisse-toi glisser où le destin t’appelle, avant que la marée ne t’emporte",
+    "signFr": "Poissons",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "matin",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|poissons|midi": {
+    "horoscope": {
+      "ouverture": "Ce midi, l’eau des Bains Jaunes murmure sous la pluie, Ogoun y trempe sa mache pour aiguiser ta volonté, écoute son chant bleu et blanc.",
+      "amour": "Un kolibri fal vèt danse devant ta fenêtre, signe que l’amour se transforme aujourd’hui, laisse-toi surprendre par ses reflets changeants. Marinette veille sur les cœurs qui osent plonger sans filet, porte du bleu pour l’honorer.",
+      "travail": "Le pic de Gwadloup tambourine sur l’arbre à pain, c’est le rythme d’Ogoun qui t’appelle à frapper fort sur tes projets. Va aux Douches de Matouba ce soir, l’eau soufrée lavera tes doutes et te donnera la force des marrons.",
+      "argent": "Le sucrier jaune picore les grains de riz dans ton jardin, signe que l’abondance vient des petites choses accumulées. Mets une pièce de monnaie sous ton oreiller, c’est un vèvè (dessin sacré) pour attirer le kòb (argent) des ancêtres.",
+      "amitie": "Comme les fourmis manioc, tes amis forment une chaîne invisible pour te soutenir aujourd’hui. Partage un repas de bananes plantain aux Bains chauds de Bouillante, l’eau et le feu scelleront vos liens.",
+      "prediction": "La frégate urakan plane au-dessus de la Soufrière, son ombre te rappelle que la liberté est proche, même si le vent souffle fort.",
+      "conseil": "Bois une infusion de cerasee (herbe amère) ce midi, elle purifiera ton esprit comme l’eau des cascades et aiguisera ton intuition pour les choix à venir."
+    },
+    "teaser": "Ce mois-ci, Vénus t’invite à te perdre dans des sensations envoûtantes... Et si tu laissais tes instincts te guider vers des plaisirs plus doux que tu ne l’imaginais",
+    "signFr": "Poissons",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "midi",
+    "source": "mistral-raw"
+  },
+  "2026-05-26|poissons|soir": {
+    "horoscope": {
+      "ouverture": "Ce soir la mer chuchote à Marinette, loa des vagues, et le vent porte l’odeur salée des Bains Jaunes, là où les esprits se baignent avant la nuit.",
+      "amour": "Ton cœur est comme le kolibri fal vèt, changeant sous la lumière, un instant vert, l’autre presque noir. Laisse-toi aimer sans chercher à fixer ce qui danse. Ce soir, allume une bougie bleue pour apaiser les tourments, Marinette veille sur les cœurs fragiles.",
+      "travail": "Tu as peiné comme le pêcheur qui rentre bredouille, mais le pélikan plane encore sur l’eau, signe que la prise viendra. Va te tremper aux Douches de Matouba, l’eau soufrée lavera la fatigue de tes mains. Baron Samedi te rappelle que le repos est aussi un travail sacré.",
+      "argent": "L’argent glisse entre tes doigts comme le sable des plages où l’on cultive l’iyam, ce tubercule qui nourrit sans maître. Relis tes comptes à la lueur d’une bougie blanche, les esprits des ancêtres murmurent des conseils que tu n’entends pas encore. Ce soir, enterre une pièce sous un gommier pour attirer la prospérité.",
+      "amitie": "Les lyannaj (liens) se tissent comme les racines des palétuviers, invisibles mais solides. Ce soir, partage un verre de sirop de corossol avec ceux qui comptent, la douceur apaise les tensions. Souviens-toi, l’urakan ne vole jamais seul, toujours en groupe, même dans la tempête.",
+      "prediction": "La lune se voile ce soir, signe que les secrets remontent à la surface, portés par les vagues de Marinette.",
+      "conseil": "Avant de dormir, trace un vèvè (symbole sacré) de sel devant ta porte pour éloigner les mauvaises énergies, et laisse une assiette de fruits pour les ancêtres."
+    },
+    "teaser": "Chéri, ce soir la Lune danse avec Neptune dans ton ciel et tu sens déjà ce frisson électriser ton être Alors laisse-toi porter par l’énergie envoûtante qui t’attend",
+    "signFr": "Poissons",
+    "weather": "24–28°C, pluie modérée, vent faible (19 km/h)",
+    "edition": "soir",
+    "source": "mistral-raw"
+  }
 }
