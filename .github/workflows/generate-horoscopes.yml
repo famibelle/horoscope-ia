@@ -1,132 +1,85 @@
-name: 🪐 Génération Horoscopes (Sécurisée)
+name: Générer les horoscopes et ambiances quotidiens
 
 on:
   schedule:
-    - cron: '0 4 * * *'
+    - cron: '0 4 * * *'   # Tous les jours à 4h UTC = minuit heure Guadeloupe (UTC-4)
   workflow_dispatch:
     inputs:
-      date:
-        description: 'Date (YYYY-MM-DD)'
-        required: false
       mode:
-        description: 'Mode'
+        description: 'Mode de génération'
         required: false
         default: 'normal'
         type: choice
-        options: [normal, verbose, force]
-
-permissions:
-  contents: write
+        options:
+        - normal
+        - verbose
+        - force
+        - force-verbose
 
 jobs:
   generate:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
     steps:
-      - name: 🛡️ Audit de Sécurité & Préparation
-        run: |
-          echo "🔍 Vérification de la branche..."
-          if [ "${{ github.ref_name }}" != "vaudou" ]; then
-            echo "❌ ERREUR: Ce workflow ne doit s'exécuter que sur la branche 'vaudou'."
-            exit 1
-          fi
-          
-          echo "🔑 Vérification des secrets..."
-          if [ -z "${{ secrets.MISTRAL_API_KEY }}" ]; then
-            echo "❌ ERREUR: MISTRAL_API_KEY manquant. Fin du workflow pour éviter des frais inutiles."
-            exit 1
-          fi
+      - name: Configurer SSH pour le sous-module privé
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SUBMODULE_DEPLOY_KEY }}
 
       - uses: actions/checkout@v4
         with:
+          submodules: recursive
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      - name: 📦 Installation Dépendances
-        run: |
-          npm ci || npm install
-          sudo apt-get install -y jq
+      - run: npm install
 
-      - name: 🧪 Test de Connexion LLM (Dry-Run)
-        run: |
-          echo "📡 Test de l'API Mistral..."
-          RESPONSE=$(curl -s -X GET "https://api.mistral.ai/v1/models" \
-            -H "Authorization: Bearer ${{ secrets.MISTRAL_API_KEY }}")
-          if ! echo "$RESPONSE" | grep -q "mistral-large"; then
-            echo "❌ Échec de connexion à l'API Mistral."
-            exit 1
-          fi
-          echo "✅ Connexion OK."
-
-      - name: 🧪 Test de l'Infrastructure Git
-        run: |
-          echo "📝 Test d'écriture Git..."
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          touch git-test.tmp
-          git add git-test.tmp
-          git commit -m "test: infrastructure git"
-          git push origin vaudou
-          git rm git-test.tmp
-          git commit -m "test: cleanup infrastructure"
-          git push origin vaudou
-          echo "✅ Infrastructure Git OK."
-
-      - name: 🚀 Génération des Horoscopes
-        id: generate
+      - name: Générer les horoscopes
         env:
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
         run: |
-          DATE_ARG=""
-          if [ -n "${{ github.event.inputs.date }}" ]; then
-            DATE_ARG="--date=${{ github.event.inputs.date }}"
-          fi
-          
-          MODE_ARG=""
-          if [ "${{ github.event.inputs.mode }}" == "force" ]; then
-            MODE_ARG="--force"
-          elif [ "${{ github.event.inputs.mode }}" == "verbose" ]; then
-            MODE_ARG="--verbose"
-          fi
+          ARGS=""
+          case "${{ inputs.mode }}" in
+            verbose)   ARGS="--verbose" ;;
+            force)     ARGS="--force" ;;
+            force-verbose) ARGS="--force --verbose" ;;
+          esac
+          npx tsx scripts/generate-horoscopes.ts $ARGS
 
-          echo "🎬 Lancement de la génération..."
-          npx tsx scripts/generate-horoscopes.ts $DATE_ARG $MODE_ARG
-
-      - name: 📊 Collecte des Artefacts & Logs
-        if: always()
+      - name: Générer les ambiances
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
         run: |
-          mkdir -p artifacts
-          cp -r logs/* artifacts/ 2>/dev/null || true
-          
-          # Création d'une note détaillée
-          {
-            echo "# Rapport d'Exécution"
-            echo "Date: $(date)"
-            echo "Branche: ${{ github.ref_name }}"
-            echo "Status Génération: ${{ steps.generate.outcome }}"
-            echo "---"
-            if [ -d "logs" ]; then
-              ls -la logs/
-            fi
-          } > artifacts/EXECUTION_REPORT.md
+          ARGS=""
+          case "${{ inputs.mode }}" in
+            verbose)   ARGS="--verbose" ;;
+            force)     ARGS="--force" ;;
+            force-verbose) ARGS="--force --verbose" ;;
+          esac
+          npx tsx scripts/generate-ambiances.ts $ARGS
 
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: horoscopes-execution-report
-          path: artifacts/
-
-      - name: 💾 Commit & Push des résultats
-        if: success()
+      - name: Générer le signe du jour
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
         run: |
-          git add public/data/horoscopes/*.json
-          if ! git diff --staged --quiet; then
-            git commit -m "chore: mise à jour horoscopes $(date +%Y-%m-%d)"
-            git push origin vaudou
-          else
-            echo "Aucun changement à committer."
-          fi
+          ARGS=""
+          case "${{ inputs.mode }}" in
+            verbose)   ARGS="--verbose" ;;
+            force)     ARGS="--force" ;;
+            force-verbose) ARGS="--force --verbose" ;;
+          esac
+          npx tsx scripts/generate-signe-du-jour.ts $ARGS
+
+      - name: Commit les données générées
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add public/data/horoscopes/*.json public/data/ambiance/*.json public/data/signe-du-jour/*.json
+          git diff --staged --quiet || git commit -m "chore: génération quotidienne horoscopes, ambiances et signe du jour ($(date +%Y-%m-%d))"
+          git push origin vaudou
