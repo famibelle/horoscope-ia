@@ -24,22 +24,24 @@ jobs:
     steps:
       - name: 🛡️ Audit de Sécurité & Préparation
         run: |
-          echo "🔍 Vérification de la branche..."
           if [ "${{ github.ref_name }}" != "vaudou" ]; then
-            echo "❌ ERREUR: Ce workflow ne doit s'exécuter que sur la branche 'vaudou'."
+            echo "❌ ERREUR: Branche vaudou requise."
             exit 1
           fi
-          
-          echo "🔑 Vérification des secrets..."
           if [ -z "${{ secrets.MISTRAL_API_KEY }}" ]; then
-            echo "❌ ERREUR: MISTRAL_API_KEY manquant. Fin du workflow pour éviter des frais inutiles."
+            echo "❌ ERREUR: Clé API manquante."
             exit 1
           fi
+
+      - name: Configurer SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SUBMODULE_DEPLOY_KEY }}
 
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
+          submodules: recursive
 
       - uses: actions/setup-node@v4
         with:
@@ -50,31 +52,6 @@ jobs:
         run: |
           npm ci || npm install
           sudo apt-get install -y jq
-
-      - name: 🧪 Test de Connexion LLM (Dry-Run)
-        run: |
-          echo "📡 Test de l'API Mistral..."
-          RESPONSE=$(curl -s -X GET "https://api.mistral.ai/v1/models" \
-            -H "Authorization: Bearer ${{ secrets.MISTRAL_API_KEY }}")
-          if ! echo "$RESPONSE" | grep -q "mistral-large"; then
-            echo "❌ Échec de connexion à l'API Mistral."
-            exit 1
-          fi
-          echo "✅ Connexion OK."
-
-      - name: 🧪 Test de l'Infrastructure Git
-        run: |
-          echo "📝 Test d'écriture Git..."
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          touch git-test.tmp
-          git add git-test.tmp
-          git commit -m "test: infrastructure git"
-          git push origin vaudou
-          git rm git-test.tmp
-          git commit -m "test: cleanup infrastructure"
-          git push origin vaudou
-          echo "✅ Infrastructure Git OK."
 
       - name: 🚀 Génération des Horoscopes
         id: generate
@@ -93,30 +70,18 @@ jobs:
             MODE_ARG="--verbose"
           fi
 
-          echo "🎬 Lancement de la génération..."
           npx tsx scripts/generate-horoscopes.ts $DATE_ARG $MODE_ARG
 
-      - name: 📊 Collecte des Artefacts & Logs
+      - name: 📊 Artefacts & Logs
         if: always()
         run: |
           mkdir -p artifacts
           cp -r logs/* artifacts/ 2>/dev/null || true
           cp -r lib/private/logs/* artifacts/ 2>/dev/null || true
-          
-          # Création d'une note détaillée
           {
-            echo "# Rapport d'Exécution"
-            echo "Date: $(date)"
-            echo "Branche: ${{ github.ref_name }}"
-            echo "Status Génération: ${{ steps.generate.outcome }}"
-            echo "---"
-            if [ -d "logs" ]; then
-              ls -la logs/
-            fi
-            if [ -d "lib/private/logs" ]; then
-              ls -la lib/private/logs/
-            fi
-          } > artifacts/EXECUTION_REPORT.md
+            echo "# Rapport Horoscopes"
+            echo "Status: ${{ steps.generate.outcome }}"
+          } > artifacts/HORO_REPORT.md
 
       - uses: actions/upload-artifact@v4
         if: always()
@@ -124,13 +89,13 @@ jobs:
           name: horoscopes-execution-report
           path: artifacts/
 
-      - name: 💾 Commit & Push des résultats
+      - name: 💾 Commit & Push
         if: success()
         run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add public/data/horoscopes/*.json
           if ! git diff --staged --quiet; then
             git commit -m "chore: mise à jour horoscopes $(date +%Y-%m-%d)"
             git push origin vaudou
-          else
-            echo "Aucun changement à committer."
           fi
