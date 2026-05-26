@@ -732,7 +732,8 @@ export async function generateAllHoroscopes() {
     if (generated + skipped < total) {
       throw new Error(`❌ VALIDATION ÉCHOUÉE: Seulement ${generated + skipped}/${total} horoscopes générés`);
     }
-  } catch (error) {
+  } // Fermeture du bloc try englobant
+} catch (error) {
     logVerbose('Netlify Blobs non disponible, bascule en mode local', {
       error: error instanceof Error ? error.message : String(error)
     });
