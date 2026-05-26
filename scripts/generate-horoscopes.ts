@@ -386,8 +386,21 @@ async function generateWithMistral(
         const content: string = data.choices?.[0]?.message?.content ?? '';
         logVerbose(`Contenu brut reçu: ${content.substring(0, 200)}${content.length > 200 ? '...' : ''}`);
         
-        // RETOUR DIRECT DU TEXTE BRUT
-        return content;
+        try {
+            const cleanContent = content.replace(/^```json\s*/, '').replace(/```\s*$/, '').trim();
+            return JSON.parse(cleanContent);
+        } catch (parseError) {
+            logVerboseError(`⚠️ Échec parsing JSON, utilisation du fallback`);
+            return {
+              ouverture: content,
+              amour: "...",
+              travail: "...",
+              argent: "...",
+              amitie: "...",
+              prediction: "...",
+              conseil: "..."
+            };
+        }
       } catch (fetchError) {
         lastError = fetchError instanceof Error ? fetchError : new Error(String(fetchError));
         logVerboseError(`⚠️  Échec fetch Mistral (tentative ${attempt}/${maxAttempts}): ${lastError.message}`);
