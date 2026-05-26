@@ -827,35 +827,31 @@ export async function generateAllHoroscopes() {
         // Vérification adoucie
         const requiredFields = ['ouverture', 'amour', 'travail', 'argent', 'amitie', 'prediction', 'conseil'];
         if (structured) {
-          const missingFields = requiredFields.filter(f => !structured[f] || String(structured[f]).trim() === '');
-          if (missingFields.length > 0) {
-            console.log(`⚠️ [${generated + 1}/${total}] ${sign.id} (${edition}) - AVERTISSEMENT: Champs vides détectés: ${missingFields.join(', ')}`);
-          }
-          console.log(`   ✓ Mistral large: OK`);
-        } else {
-          console.log(`❌ [${generated + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Pas de réponse structurée`);
+        // Générer avec Mistral
+        console.log(`   🤖 Appel Mistral (large) pour ${sign.id}...`);
+        const structured = await generateWithMistral(sign.id, rawText, weather, edition);
+        
+        if (!structured) {
+          console.log(`❌ [${generated + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Pas de réponse`);
           continue;
         }
 
-        logVerbose(`JSON valide en mode local pour ${sign.id}`);
+        console.log(`   ✓ Mistral large: OK`);
 
-        const teaser = await generateTeaser(sign.name, structured);
-        console.log(`   ✓ Teaser: OK`);
-        logVerbose(`Teaser généré en mode local: "${teaser}"`);
-
+        // Sauvegarder
         const response = {
-          ouverture: structured.ouverture,
-          amour: structured.amour,
-          travail: structured.travail,
-          argent: structured.argent ?? '',
-          amitie: structured.amitie ?? '',
-          sante: structured.sante ?? '',
-          prediction: structured.prediction ?? '',
+          ouverture: structured,
+          amour: "...",
+          travail: "...",
+          argent: "...",
+          amitie: "...",
+          sante: "...",
+          prediction: "...",
+          conseil: "...",
           signFr: sign.name,
           weather,
           edition,
-          teaser: teaser || undefined,
-          source: 'mistral',
+          source: "mistral-raw"
         };
 
         results[blobKey] = response;
