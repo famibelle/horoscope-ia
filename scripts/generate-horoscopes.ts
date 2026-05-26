@@ -415,22 +415,16 @@ async function generateWithMistral(
         console.error(content);
         console.error(`!!! DEBUG: RAW MISTRAL RESPONSE END !!!`);
         
-        try {
-          // Parsing simple
-          return JSON.parse(content.replace(/^```json\s*/, '').replace(/```\s*$/, '').trim());
-        } catch (parseError) {
-          logVerboseError(`⚠️ Échec parsing JSON, tentative de récupération brute...`);
-          // Retourne un objet avec le contenu brut si JSON.parse échoue
-          return {
-            ouverture: content,
-            amour: "...",
-            travail: "...",
-            argent: "...",
-            amitie: "...",
-            prediction: "...",
-            conseil: "..."
-          };
-        }
+        // Retourne le contenu brut sans parsing
+        return {
+          ouverture: content,
+          amour: "...",
+          travail: "...",
+          argent: "...",
+          amitie: "...",
+          prediction: "...",
+          conseil: "..."
+        };
       } catch (fetchError) {
         lastError = fetchError instanceof Error ? fetchError : new Error(String(fetchError));
         logVerboseError(`⚠️  Échec fetch Mistral (tentative ${attempt}/${maxAttempts}): ${lastError.message}`);
