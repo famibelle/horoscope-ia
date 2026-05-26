@@ -383,13 +383,23 @@ async function generateWithMistral(
           usage: data.usage
         });
 
-        const rawContent: string = data.choices?.[0]?.message?.content ?? '';
+        const content: string = data.choices?.[0]?.message?.content ?? '';
+        logVerbose(`Contenu brut reçu: ${content.substring(0, 200)}${content.length > 200 ? '...' : ''}`);
         
-        // Nettoyage minimal : extrait le bloc JSON et supprime les markdown
-        const match = rawContent.match(/\{[\s\S]*\}/);
-        const cleaned = match ? match[0].replace(/```json\s*/, '').replace(/```\s*$/, '').trim() : '{}';
-        
-        return JSON.parse(cleaned);
+        try {
+          const parsed = JSON.parse(content);
+          return parsed;
+        } catch (parseError) {
+          lastError = parseError instanceof Error ? parseError : new Error(String(parseError));
+          logVerboseError(`⚠️  Échec parsing JSON (tentative ${attempt}/${maxAttempts}): ${lastError.message}`);
+          logVerboseError(`Contenu qui a échoué: ${content.substring(0, 500)}...`);
+          
+          if (attempt < maxAttempts) {
+            const retryDelay = 5000 * attempt; // 5s, 10s, 15s
+            logVerbose(`Retry dans ${retryDelay}ms...`);
+            await delay(retryDelay);
+          }
+        }
       } catch (fetchError) {
         lastError = fetchError instanceof Error ? fetchError : new Error(String(fetchError));
         logVerboseError(`⚠️  Échec fetch Mistral (tentative ${attempt}/${maxAttempts}): ${lastError.message}`);
@@ -635,7 +645,6 @@ export async function generateAllHoroscopes() {
           console.log(`✅ [${generated + skipped + 1}/${total}] ${sign.id} (${edition}) - Déjà en cache Netlify`);
           logVerbose(`Cache hit pour ${blobKey}`);
           skipped++;
-          continue;
         }
         logVerbose(`Cache miss pour ${blobKey}, génération nécessaire`);
 
@@ -646,7 +655,6 @@ export async function generateAllHoroscopes() {
         if (!rawText) {
           console.log(`❌ [${generated + skipped + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Pas de texte brut\n`);
           logVerboseError(`Aucun texte brut reçu pour ${sign.id}`);
-          continue;
         }
         console.log(`   ✓ Horoscope brut reçu (${rawText.length} caractères)`);
         logVerbose(`Texte brut: ${rawText.substring(0, 100)}...`);
@@ -658,13 +666,8 @@ export async function generateAllHoroscopes() {
         
         // Vérifier que tous les 7 champs obligatoires sont présents et non vides
         const requiredFields = ['ouverture', 'amour', 'travail', 'argent', 'amitie', 'prediction', 'conseil'];
-        const hasAllFields = structured && requiredFields.every(field => structured[field] && structured[field].trim() !== '');
         
-        if (!hasAllFields) {
-          const missingFields = requiredFields.filter(f => !structured?.[f] || structured[f].trim() === '');
-          console.log(`❌ [${generated + skipped + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Champs manquants: ${missingFields.join(', ')}\n`);
           logVerboseError(`Champs manquants pour ${sign.id}: ${missingFields.join(', ')}`);
-          continue;
         }
         console.log(`   ✓ Mistral large: OK`);
         logVerbose(`JSON valide reçu avec ${Object.keys(structured).length} champs`);
@@ -765,7 +768,6 @@ export async function generateAllHoroscopes() {
         if (results[blobKey]) {
           console.log(`✅ [${generated + 1}/${total}] ${sign.id} (${edition}) - Déjà présent, sauté\n`);
           logVerbose(`Déjà présent dans results: ${blobKey}`);
-          continue;
         }
 
         console.log(`🔄 [${generated + 1}/${total}] ${sign.id} (${edition})...`);
@@ -774,7 +776,6 @@ export async function generateAllHoroscopes() {
         if (!rawText) {
           console.log(`❌ [${generated + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Pas de texte brut\n`);
           logVerboseError(`Aucun texte brut pour ${sign.id} en mode local`);
-          continue;
         }
         console.log(`   ✓ Horoscope brut reçu`);
         logVerbose(`Texte brut reçu: ${rawText.substring(0, 80)}...`);
@@ -783,13 +784,8 @@ export async function generateAllHoroscopes() {
         
         // Vérifier que tous les 7 champs obligatoires sont présents et non vides
         const requiredFields = ['ouverture', 'amour', 'travail', 'argent', 'amitie', 'prediction', 'conseil'];
-        const hasAllFields = structured && requiredFields.every(field => structured[field] && structured[field].trim() !== '');
         
-        if (!hasAllFields) {
-          const missingFields = requiredFields.filter(f => !structured?.[f] || structured[f].trim() === '');
-          console.log(`❌ [${generated + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Mistral large - Champs manquants: ${missingFields.join(', ')}\n`);
           logVerboseError(`Champs manquants en mode local pour ${sign.id}: ${missingFields.join(', ')}`);
-          continue;
         }
         console.log(`   ✓ Mistral large: OK`);
         logVerbose(`JSON valide en mode local pour ${sign.id}`);
