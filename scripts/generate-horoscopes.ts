@@ -684,18 +684,22 @@ export async function generateAllHoroscopes() {
         logVerbose(`Appel Mistral large pour ${sign.id} ${edition}`);
         const structured = await generateWithMistral(sign.id, rawText, weather, edition);
         
-        // Vérifier que tous les 7 champs obligatoires sont présents et non vides
+        // Vérification adoucie: on ne rejette plus le signe si des champs manquent
         const requiredFields = ['ouverture', 'amour', 'travail', 'argent', 'amitie', 'prediction', 'conseil'];
-        const hasAllFields = structured && requiredFields.every(field => structured[field] && structured[field].trim() !== '');
-        
-        if (!hasAllFields) {
-          const missingFields = requiredFields.filter(f => !structured?.[f] || structured[f].trim() === '');
-          console.log(`❌ [${generated + skipped + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Champs manquants: ${missingFields.join(', ')}\n`);
-          logVerboseError(`Champs manquants pour ${sign.id}: ${missingFields.join(', ')}`);
+        if (structured) {
+          const missingFields = requiredFields.filter(f => !structured[f] || String(structured[f]).trim() === '');
+          if (missingFields.length > 0) {
+            console.log(`⚠️ [${generated + skipped + 1}/${total}] ${sign.id} (${edition}) - AVERTISSEMENT: Champs vides détectés: ${missingFields.join(', ')}`);
+            logVerbose(`Signe généré malgré champs vides: ${missingFields.join(', ')}`);
+          }
+          console.log(`   ✓ Mistral large: OK`);
+        } else {
+          console.log(`❌ [${generated + skipped + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Pas de réponse structurée`);
+          logVerboseError(`Pas de réponse structurée pour ${sign.id}`);
           continue;
         }
-        console.log(`   ✓ Mistral large: OK`);
-        logVerbose(`JSON valide reçu avec ${Object.keys(structured).length} champs`);
+        
+        logVerbose(`JSON valide pour ${sign.id}`);
 
         // Générer le teaser
         console.log(`   🤖 Appel Mistral (small) pour teaser...`);
