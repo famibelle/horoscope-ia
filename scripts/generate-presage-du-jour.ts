@@ -1,23 +1,9 @@
 import { config } from 'dotenv';
-config(); // Charger les variables d'environnement depuis .env
+config();
 
-// Importer les bases de données culturelles
-import { floreData } from '@/lib/private/flore-data';
-import { fauneData } from '@/lib/private/faune-data';
 import { todayGuadeloupe } from '@/lib/edition';
 import { MARYSE_SYSTEM } from '@/lib/private/maryse-prompt';
-import signeData from '@/lib/private/signe-du-jour-data.json';
-// Importer les données vaudou
-import { plantesData, animauxData } from '@/lib/private/vaudou-data';
-import { SIGN_TO_VAUDOU_CONTEXT } from '@/lib/private/vaudou-mappings';
-
-// Importer le système de glossaire
-import {
-  extractGlossaryTerms,
-  updateGlossary,
-  removeRedundantParentheses,
-  loadGlossary
-} from '@/lib/private/glossaire';
+import signeData from '@/lib/private/presage-du-jour-data.json';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
@@ -49,22 +35,21 @@ function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// Types pour les données du signe du jour
-interface SigneEntry {
+// Types pour les données du présage du jour
+interface PresageEntry {
   nom_creole: string;
   nom_commun: string;
-  famille?: string;
   conditions: string[];
   editions: string[];
   savoir: string;
 }
 
-interface SigneData {
-  flora: SigneEntry[];
-  faune: SigneEntry[];
+interface PresageData {
+  flora: PresageEntry[];
+  faune: PresageEntry[];
 }
 
-const typedData = signeData as SigneData;
+const typedData = signeData as PresageData;
 
 function weatherToConditions(weatherSummary: string): string[] {
   const w = weatherSummary.toLowerCase();
@@ -104,11 +89,10 @@ async function fetchWeatherSummary(): Promise<string> {
 }
 
 function pickEntry(
-  pool: SigneEntry[],
+  pool: PresageEntry[],
   weatherTags: string[],
   edition: string,
-): SigneEntry | null {
-  // Fallback pour 'midi' qui n'existe pas dans les données
+): PresageEntry | null {
   const effectiveEdition = edition === 'midi' ? 'matin' : edition;
 
   const matching = pool.filter((e) => {
@@ -125,82 +109,16 @@ function pickEntry(
   return source[Math.floor(Math.random() * source.length)];
 }
 
-// Fonction pour choisir une entrée vaudou si possible
-function pickVaudouEntry(
-  type: 'flore' | 'faune',
-  weatherTags: string[],
-  edition: string,
-  signId: string,
-): SigneEntry | null {
-  const signVaudou = SIGN_TO_VAUDOU_CONTEXT[signId];
-  if (!signVaudou) return null;
-  
-  // Obtenir les plantes ou animaux sacrés pour ce signe
-  const vaudouPlantes = plantesData.filter(p => 
-    p.famille.toLowerCase() === signVaudou.famille.toLowerCase()
-  );
-  const vaudouAnimaux = animauxData.filter(a => 
-    a.famille.toLowerCase() === signVaudou.famille.toLowerCase()
-  );
-  
-  const vaudouPool = type === 'flore' ? vaudouPlantes : vaudouAnimaux;
-  if (vaudouPool.length === 0) return null;
-  
-  // Trouver une correspondance dans la pool principale
-  const effectiveEdition = edition === 'midi' ? 'matin' : edition;
-  
-  // Esayer de trouver une entrée qui correspond aux conditions météo
-  const matchingVaudou = vaudouPool.filter((v) => {
-    const poolKey = type === 'flore' ? 'flora' : 'faune';
-    const nomCreoleMatch = (typedData as any)[poolKey].find((e: any) => 
-      e.nom_creole.toLowerCase().includes(v.nomCreole.toLowerCase())
-    );
-    if (!nomCreoleMatch) return false;
-    
-    const editionOk = nomCreoleMatch.editions.length === 0 || 
-      nomCreoleMatch.editions.includes(effectiveEdition);
-    const condOk = nomCreoleMatch.conditions.length === 0 ||
-      nomCreoleMatch.conditions.some((c: string) => weatherTags.includes(c));
-    return editionOk && condOk;
-  });
-  
-  if (matchingVaudou.length > 0) {
-    const pickedVaudou = matchingVaudou[Math.floor(Math.random() * matchingVaudou.length)];
-    const poolKey = type === 'flore' ? 'flora' : 'faune';
-    const nomCreoleMatch = (typedData as any)[poolKey].find((e: any) => 
-      e.nom_creole.toLowerCase().includes(pickedVaudou.nomCreole.toLowerCase())
-    );
-    return nomCreoleMatch || null;
-  }
-  
-  // Sinon, choisir une entrée vaudou aléatoire
-  const randomVaudou = vaudouPool[Math.floor(Math.random() * vaudouPool.length)];
-  const poolKey = type === 'flore' ? 'flora' : 'faune';
-  const nomCreoleMatch = (typedData as any)[poolKey].find((e: any) => 
-    e.nom_creole.toLowerCase().includes(randomVaudou.nomCreole.toLowerCase())
-  );
-  return nomCreoleMatch || null;
-}
-
-function buildSigneDuJourUserPrompt(
+function buildPresageUserPrompt(
   type: 'flore' | 'faune',
   nomCommun: string,
   nomCreole: string,
   savoir: string,
   weather: string,
-  loa?: string,
-  familleVaudou?: string,
 ): string {
-  const vaudouSection = loa && familleVaudou 
-    ? `🔮 **CONTEXTE VAUDOU** :
-Loa associé : **${loa}** (${familleVaudou})
-Intègre une référence subtile au loa ou à son énergie dans ta phrase.`
-    : '';
-  
   return `${type === 'flore' ? 'PLANTE' : 'ANIMAL'} : ${nomCommun} (${nomCreole})
 MÉTÉO DU JOUR : ${weather || 'Temps variable'}
 SAVOIR : ${savoir}
-${vaudouSection}
 
 RÈGLES :
 - Commence OBLIGATOIREMENT par "Si tu croises"
@@ -228,10 +146,8 @@ ${response}
 
 async function generatePhrase(
   type: 'flore' | 'faune',
-  entry: SigneEntry,
+  entry: PresageEntry,
   weather: string,
-  loa?: string,
-  familleVaudou?: string,
 ): Promise<string | null> {
   const apiKey = process.env.MISTRAL_API_KEY;
   if (!apiKey) {
@@ -241,20 +157,16 @@ async function generatePhrase(
 
   logVerbose(`Génération phrase pour ${entry.nom_creole}...`);
 
-  // Délai pour éviter le rate limit (réduit de 3s à 2s)
   await delay(2000);
 
-  const prompt = buildSigneDuJourUserPrompt(
+  const prompt = buildPresageUserPrompt(
     type,
     entry.nom_commun,
     entry.nom_creole,
     entry.savoir,
     weather,
-    loa,
-    familleVaudou,
   );
   
-  // LOG DU PROMPT ENVOYÉ
   console.error(`!!! DEBUG: PROMPT SENT TO MISTRAL !!!`);
   console.error(prompt);
   console.error(`!!! FIN PROMPT !!!`);
@@ -268,7 +180,8 @@ async function generatePhrase(
     body: JSON.stringify({
       model: 'mistral-small-latest',
       temperature: 0.8,
-      max_tokens: 80,
+      max_tokens: 150,
+      response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: MARYSE_SYSTEM },
         {
@@ -279,23 +192,15 @@ async function generatePhrase(
     }),
   });
 
-  logVerbose(`Réponse Mistral: ${res.status}`);
-
   if (!res.ok) {
     logError(`Mistral échoué: ${res.status}`);
     return null;
   }
 
   const data = await res.json();
-  const content = data.choices?.[0]?.message?.content ?? '';
+  const content = data.choices?.[0]?.message?.content ?? '{}';
   
-  // Log persistent dans lib/private/logs/
-  await logRawData('generate-signe-du-jour', prompt, content);
-  
-  // LOG ABSOLU : CONTENU BRUT AVANT TOUTE MANIPULATION
-  console.error(`!!! DEBUG: RAW MISTRAL RESPONSE START !!!`);
-  console.error(content);
-  console.error(`!!! DEBUG: RAW MISTRAL RESPONSE END !!!`);
+  await logRawData('generate-presage-du-jour', prompt, content);
   
   return content.trim() || null;
 }
@@ -304,7 +209,7 @@ async function saveToFile(today: string, data: any): Promise<string> {
   const fs = await import('fs/promises');
   const path = await import('path');
 
-  const dir = path.join(process.cwd(), 'public', 'data', 'signe-du-jour');
+  const dir = path.join(process.cwd(), 'public', 'data', 'presage-du-jour');
   await fs.mkdir(dir, { recursive: true });
   const filePath = path.join(dir, `${today}.json`);
 
@@ -313,148 +218,85 @@ async function saveToFile(today: string, data: any): Promise<string> {
   return filePath;
 }
 
-export async function generateSigneDuJour() {
+export async function generatePresageDuJour() {
   const today = options.date || todayGuadeloupe();
-  const filePath = `data/signe-du-jour/${today}.json`;
+  const filePath = `data/presage-du-jour/${today}.json`;
 
-  logVerbose(`Début de la génération du signe du jour`, {
+  logVerbose(`Début de la génération du présage du jour`, {
     date: today,
     forceMode: options.force,
     outputPath: filePath
   });
 
-  // Vérifier si le fichier existe déjà (sauf si --force)
   if (!options.force) {
     try {
       const fs = await import('fs/promises');
       const path = await import('path');
       const existingFilePath = path.join(process.cwd(), 'public', filePath);
       await fs.access(existingFilePath);
-      console.log(`\n⏭️  Le signe du jour pour le ${today} existe déjà (${filePath})`);
-      console.log('   → Pas de régénération nécessaire.\n');
-      console.log('   Pour forcer: passez --force ou -f\n');
+      console.log(`
+⏭️  Le présage du jour pour le ${today} existe déjà (${filePath})`);
       return;
     } catch {
-      // Fichier n'existe pas, continuer
       logVerbose('Aucun fichier existant trouvé, génération nécessaire');
     }
-  } else if (options.verbose) {
-    console.log(`\n⚡ Mode force: régénération du signe du jour pour ${today}...\n`);
   }
 
-  console.log(`\n🌿 ========== GÉNÉRATION DU SIGNE DU JOUR POUR LE ${today} ==========`);
+  console.log(`
+🌿 ========== GÉNÉRATION DU PRÉSAGE DU JOUR POUR LE ${today} ==========`);
 
   const weather = await fetchWeatherSummary();
-  console.log(`🌤️  Météo: ${weather}\n`);
-  logVerbose('Météo récupérée avec succès');
+  console.log(`🌤️  Météo: ${weather}
+`);
 
-  // Alterner flora/faune selon le jour (pair/impair)
   const todayDate = new Date(today);
   const useFlora = todayDate.getDate() % 2 === 0;
   const type: 'flore' | 'faune' = useFlora ? 'flore' : 'faune';
   const pool = useFlora ? typedData.flora : typedData.faune;
-  const edition = 'matin'; // Générer pour le matin par défaut
+  const edition = 'matin';
 
   const weatherTags = weatherToConditions(weather);
-  
-  // D'abord essayer de trouver une entrée vaudou correspondante
-  let entry: SigneEntry | null = null;
-  for (const sign of Object.keys(SIGN_TO_VAUDOU_CONTEXT)) {
-    entry = pickVaudouEntry(type, weatherTags, edition, sign);
-    if (entry) {
-      logVerbose(`Entrée vaudou trouvée pour signe ${sign}: ${entry.nom_creole}`);
-      break;
-    }
-  }
-  
-  // Si pas d'entrée vaudou trouvée, utiliser la sélection normale
-  if (!entry) {
-    entry = pickEntry(pool, weatherTags, edition);
-  }
+  const entry = pickEntry(pool, weatherTags, edition);
 
   if (!entry) {
-    console.log(`❌ Aucun signe disponible pour ${type} avec les conditions ${weatherTags.join(', ')}`);
+    console.log(`❌ Aucun présage disponible pour ${type} avec les conditions ${weatherTags.join(', ')}`);
     return;
   }
 
-  // Déterminer le contexte vaudou pour cette entrée
-  let loa: string | undefined;
-  let familleVaudou: string | undefined;
-  
-  // Essayer de trouver le loa et famille associés
-  const vaudouPlante = plantesData.find(p => p.nomCreole.toLowerCase() === entry.nom_creole.toLowerCase());
-  const vaudouAnimal = animauxData.find(a => a.nomCreole.toLowerCase() === entry.nom_creole.toLowerCase());
-  
-  if (vaudouPlante) {
-    // Trouver le signe associé à cette famille vaudou
-    const matchingSign = Object.entries(SIGN_TO_VAUDOU_CONTEXT).find(([_, ctx]) => 
-      ctx.famille.toLowerCase() === vaudouPlante.famille.toLowerCase()
-    );
-    if (matchingSign) {
-      loa = SIGN_TO_VAUDOU_CONTEXT[matchingSign[0]].loa;
-      familleVaudou = SIGN_TO_VAUDOU_CONTEXT[matchingSign[0]].famille;
-    }
-  } else if (vaudouAnimal) {
-    const matchingSign = Object.entries(SIGN_TO_VAUDOU_CONTEXT).find(([_, ctx]) => 
-      ctx.famille.toLowerCase() === vaudouAnimal.famille.toLowerCase()
-    );
-    if (matchingSign) {
-      loa = SIGN_TO_VAUDOU_CONTEXT[matchingSign[0]].loa;
-      familleVaudou = SIGN_TO_VAUDOU_CONTEXT[matchingSign[0]].famille;
-    }
-  }
+  console.log(`🎯 Type: ${type}, Entry: ${entry.nom_creole}`);
 
-  console.log(`🎯 Type: ${type}, Entry: ${entry.nom_creole}, Loa: ${loa || 'Aucun'}, Famille: ${familleVaudou || 'Aucune'}`);
-
-  let phrase = await generatePhrase(type, entry, weather, loa, familleVaudou);
+  let content = await generatePhrase(type, entry, weather);
   
-  // ==========================================
-  // 📚 EXTRACTION DES TERMES POUR LE GLOSSAIRE
-  // ==========================================
-  if (phrase) {
-    logVerbose('📚 Extraction des termes pour le glossaire (signe du jour)...');
-    const terms = extractGlossaryTerms(phrase);
-    
-    if (terms.length > 0) {
-      const dateToday = new Date().toISOString().split('T')[0];
-      const sourceFile = `signe-du-jour/${today}.json`;
-      updateGlossary(terms, dateToday, sourceFile);
-    } else {
-      logVerbose('ℹ️  Aucun terme entre parenthèses détecté pour le glossaire');
-    }
-    
-    // ==========================================
-    // 🗑️  SUPPRESSION DES PARENTHÈSES REDONDANTES
-    // ==========================================
-    logVerbose('🗑️  Suppression des parenthèses pour les termes connus...');
-    phrase = removeRedundantParentheses(phrase);
-  }
-
-  const result = {
+  let result = {
     date: today,
     type,
     nomCreole: entry.nom_creole,
     nomCommun: entry.nom_commun,
-    phrase: phrase ?? `Si tu croises ${entry.nom_creole} aujourd'hui, écoute ce que la terre te dit.`,
-    edition,
-    loa: loa || undefined,
-    familleVaudou: familleVaudou || undefined,
+    presageNaturel: "",
+    interpretation: ""
   };
-
-  // Appliquer aussi sur le résultat final (au cas où nomCreole/nomCommun ont des parenthèses)
-  if (result.phrase) {
-    result.phrase = removeRedundantParentheses(result.phrase);
+  
+  if (content) {
+    try {
+        const parsed = JSON.parse(content);
+        result.presageNaturel = entry.nom_creole;
+        result.interpretation = parsed.interpretation || content;
+    } catch {
+        result.presageNaturel = entry.nom_creole;
+        result.interpretation = content;
+    }
   }
 
   await saveToFile(today, result);
 
-  console.log(`\n✨ ========== TERMINÉ ==========`);
-  console.log(`   Fichier: ${filePath}\n`);
-  logVerbose('Génération complète terminée', result);
+  console.log(`
+✨ ========== TERMINÉ ==========`);
+  console.log(`   Fichier: ${filePath}
+`);
 }
 
 // Exécuter
-generateSigneDuJour()
+generatePresageDuJour()
   .then(() => {
     logVerbose('🎉 Script terminé avec succès');
   })

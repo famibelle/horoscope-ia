@@ -1,4 +1,4 @@
-name: 🌟 Génération Signe du Jour (Sécurisée)
+name: ✨ Génération Présage du Jour (Sécurisée)
 
 on:
   schedule:
@@ -47,7 +47,7 @@ jobs:
           npm ci || npm install
           sudo apt-get install -y jq
 
-      - name: 🚀 Génération du Signe du Jour
+      - name: 🚀 Génération du Présage du Jour
         id: generate
         env:
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
@@ -64,7 +64,7 @@ jobs:
             MODE_ARG="--verbose"
           fi
 
-          npx tsx scripts/generate-signe-du-jour.ts $DATE_ARG $MODE_ARG
+          npx tsx scripts/generate-presage-du-jour.ts $DATE_ARG $MODE_ARG
 
       - name: 📊 Artefacts & Logs
         if: always()
@@ -73,14 +73,14 @@ jobs:
           cp -r logs/* artifacts/ 2>/dev/null || true
           cp -r lib/private/logs/* artifacts/ 2>/dev/null || true
           {
-            echo "# Rapport Signe du Jour"
+            echo "# Rapport Présage du Jour"
             echo "Status: ${{ steps.generate.outcome }}"
-          } > artifacts/SDJ_REPORT.md
+          } > artifacts/PDJ_REPORT.md
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: sdj-execution-report
+          name: pdj-execution-report
           path: artifacts/
 
       - name: 💾 Commit & Push
@@ -88,8 +88,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/data/signe-du-jour/*.json
+          git add public/data/presage-du-jour/*.json
           if ! git diff --staged --quiet; then
-            git commit -m "chore: mise à jour signe du jour $(date +%Y-%m-%d)"
+            git commit -m "chore: mise à jour présage du jour $(date +%Y-%m-%d)"
             git push origin vaudou
           fi
