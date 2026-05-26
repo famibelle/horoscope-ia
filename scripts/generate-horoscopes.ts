@@ -416,7 +416,7 @@ async function generateWithMistral(
         console.error(`!!! DEBUG: RAW MISTRAL RESPONSE END !!!`);
         
         // Retourne le contenu brut sans aucun parsing
-        const result = {
+        return {
           ouverture: content,
           amour: "...",
           travail: "...",
@@ -425,8 +425,6 @@ async function generateWithMistral(
           prediction: "...",
           conseil: "..."
         };
-        console.error(`!!! DEBUG: RETURNING OBJECT FROM MISTRAL: ${JSON.stringify(result)} !!!`);
-        return result;
       } catch (fetchError) {
         lastError = fetchError instanceof Error ? fetchError : new Error(String(fetchError));
         logVerboseError(`⚠️  Échec fetch Mistral (tentative ${attempt}/${maxAttempts}): ${lastError.message}`);
