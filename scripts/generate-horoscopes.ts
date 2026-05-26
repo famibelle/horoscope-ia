@@ -803,15 +803,8 @@ export async function generateAllHoroscopes() {
         logVerbose(`Sauvegarde locale: ${blobKey}`);
 
         console.log(`✅ [${++generated}/${total}] ${sign.id} (${edition}) - SAUVEGARDÉ`);
-        console.log(`   📝 Ouverture: "${structured.ouverture}"`);
-        console.log(`   💘 Amour: "${structured.amour}"`);
-        console.log(`   💼 Travail: "${structured.travail}"`);
-        console.log(`   💰 Argent: "${structured.argent}"`);
-        console.log(`   👫 Amitié: "${structured.amitie}"`);
-        console.log(`   🎯 Prédiction: "${structured.prediction}"`);
-        console.log(`   🌿 Conseil: "${structured.conseil}"`);
         console.log(`   🌟 Teaser: "${teaser}"\n`);
-        logVerbose(`Horoscope complet sauvegardé en mode local pour ${sign.id} ${edition}`);
+        logVerbose(`Horoscope complet sauvegardé pour ${sign.id} ${edition}`);
         console.log('---');
       }
     }
