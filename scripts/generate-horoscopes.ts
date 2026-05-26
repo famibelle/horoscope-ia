@@ -776,9 +776,9 @@ export async function generateAllHoroscopes() {
         console.log(`   ✓ Horoscope brut reçu`);
         logVerbose(`Texte brut reçu: ${rawText.substring(0, 80)}...`);
 
-        const structured = await generateWithMistral(sign.id, rawText, weather, edition);
+        const content = await generateWithMistral(sign.id, rawText, weather, edition);
         
-        if (!structured) {
+        if (!content) {
           console.log(`❌ [${generated + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Pas de réponse`);
           continue;
         }
