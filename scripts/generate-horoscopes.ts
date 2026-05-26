@@ -159,7 +159,7 @@ async function generateWithMistral(
   rawText: string,
   weather: string,
   edition: Edition
-): Promise<Record<string, string> | null> {
+): Promise<string | null> {
   logVerbose(`Démarrage délai 3s avant appel Mistral pour ${signId}...`);
   // Délai pour éviter le rate limit Mistral (réduit de 10s à 3s)
   await delay(3000);
@@ -346,7 +346,7 @@ async function generateWithMistral(
   logVerbose(`Modèle: mistral-large-latest, Temp: 0.75, Max tokens: 900`);
 
   // Wrapper pour Mistral API avec retry complet (HTTP + parsing JSON)
-  async function callMistralWithFullRetry(): Promise<Record<string, string> | null> {
+  async function callMistralWithFullRetry(): Promise<string | null> {
     const maxAttempts = 3;
     let lastError: Error | undefined;
     
@@ -386,20 +386,9 @@ async function generateWithMistral(
         const content: string = data.choices?.[0]?.message?.content ?? '';
         logVerbose(`Contenu brut reçu: ${content.substring(0, 200)}${content.length > 200 ? '...' : ''}`);
         
-        try {
-          const parsed = JSON.parse(content);
-          return parsed;
-        } catch (parseError) {
-          lastError = parseError instanceof Error ? parseError : new Error(String(parseError));
-          logVerboseError(`⚠️  Échec parsing JSON (tentative ${attempt}/${maxAttempts}): ${lastError.message}`);
-          logVerboseError(`Contenu qui a échoué: ${content.substring(0, 500)}...`);
-          
-          if (attempt < maxAttempts) {
-            const retryDelay = 5000 * attempt; // 5s, 10s, 15s
-            logVerbose(`Retry dans ${retryDelay}ms...`);
-            await delay(retryDelay);
-          }
-        }
+        // Nettoyage minimal du JSON
+        const cleaned = content.replace(/^```json\s*/, '').replace(/```\s*$/, '').trim();
+        return cleaned;
       } catch (fetchError) {
         lastError = fetchError instanceof Error ? fetchError : new Error(String(fetchError));
         logVerboseError(`⚠️  Échec fetch Mistral (tentative ${attempt}/${maxAttempts}): ${lastError.message}`);
@@ -423,12 +412,12 @@ async function generateWithMistral(
     return null;
   }
   
-  logVerbose('JSON valide parsé avec succès', Object.keys(parsed));
+  return parsed;
 }
 
 async function generateTeaser(
   signName: string,
-  structured: Record<string, string>
+  rawContent: string
 ): Promise<string> {
   logVerbose(`Démarrage délai 2s avant appel Mistral small pour teaser ${signName}...`);
   // Délai pour éviter le rate limit Mistral (réduit de 5s à 2s)
@@ -441,17 +430,7 @@ async function generateTeaser(
     return '';
   }
 
-  const fullText = [
-    structured.ouverture,
-    structured.amour,
-    structured.travail,
-    structured.argent,
-    structured.amitie,
-    structured.prediction,
-    structured.conseil,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  const fullText = rawContent;
 
   logVerbose(`Texte complet pour teaser: ${fullText.substring(0, 150)}${fullText.length > 150 ? '...' : ''}`);
   logVerbose(`Modèle: mistral-small-latest, Temp: 0.8, Max tokens: 120`);
@@ -645,6 +624,7 @@ export async function generateAllHoroscopes() {
           console.log(`✅ [${generated + skipped + 1}/${total}] ${sign.id} (${edition}) - Déjà en cache Netlify`);
           logVerbose(`Cache hit pour ${blobKey}`);
           skipped++;
+          continue;
         }
         logVerbose(`Cache miss pour ${blobKey}, génération nécessaire`);
 
@@ -655,6 +635,7 @@ export async function generateAllHoroscopes() {
         if (!rawText) {
           console.log(`❌ [${generated + skipped + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Pas de texte brut\n`);
           logVerboseError(`Aucun texte brut reçu pour ${sign.id}`);
+          continue;
         }
         console.log(`   ✓ Horoscope brut reçu (${rawText.length} caractères)`);
         logVerbose(`Texte brut: ${rawText.substring(0, 100)}...`);
@@ -664,36 +645,39 @@ export async function generateAllHoroscopes() {
         logVerbose(`Appel Mistral large pour ${sign.id} ${edition}`);
         const structured = await generateWithMistral(sign.id, rawText, weather, edition);
         
-        // Vérifier que tous les 7 champs obligatoires sont présents et non vides
-        const requiredFields = ['ouverture', 'amour', 'travail', 'argent', 'amitie', 'prediction', 'conseil'];
-        
-          logVerboseError(`Champs manquants pour ${sign.id}: ${missingFields.join(', ')}`);
+        if (!structured) {
+          console.log(`❌ [${generated + skipped + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Pas de réponse\n`);
+          continue;
         }
         console.log(`   ✓ Mistral large: OK`);
-        logVerbose(`JSON valide reçu avec ${Object.keys(structured).length} champs`);
+
+        // ==========================================
+        // 📚 EXTRACTION DES TERMES POUR LE GLOSSAIRE
+        // ==========================================
+        const terms = extractGlossaryTerms(structured);
+        if (terms.length > 0) {
+          const dateToday = new Date().toISOString().split('T')[0];
+          const sourceFile = `horoscopes/${todayGuadeloupe()}.json`;
+          updateGlossary(terms, dateToday, sourceFile);
+        }
+        // Nettoyage des parenthèses redondantes
+        const cleanedContent = removeRedundantParentheses(structured);
 
         // Générer le teaser
         console.log(`   🤖 Appel Mistral (small) pour teaser...`);
         logVerbose(`Génération teaser pour ${sign.name}`);
-        const teaser = await generateTeaser(sign.name, structured);
+        const teaser = await generateTeaser(sign.name, cleanedContent);
         console.log(`   ✓ Teaser généré: "${teaser.substring(0, 60)}..."`);
         logVerbose(`Teaser: "${teaser}"`);
 
         // Sauvegarder
         const response = {
-          ouverture: structured.ouverture,
-          amour: structured.amour,
-          travail: structured.travail,
-          argent: structured.argent ?? '',
-          amitie: structured.amitie ?? '',
-          sante: structured.sante ?? '',
-          prediction: structured.prediction ?? '',
-          conseil: structured.conseil ?? '',
+          horoscope: cleanedContent, // Le texte brut intégral de Mistral (JSON parfait)
+          teaser: teaser || undefined,
           signFr: sign.name,
           weather,
           edition,
-          teaser: teaser || undefined,
-          source: 'mistral',
+          source: 'mistral-raw',
         };
 
         results[blobKey] = response;
@@ -704,13 +688,6 @@ export async function generateAllHoroscopes() {
         await saveToLocalFile(today, results);
 
         console.log(`✅ [${++generated}/${total}] ${sign.id} (${edition}) - SAUVEGARDÉ\n`);
-        console.log(`   📝 Ouverture: "${structured.ouverture}"`);
-        console.log(`   💘 Amour: "${structured.amour}"`);
-        console.log(`   💼 Travail: "${structured.travail}"`);
-        console.log(`   💰 Argent: "${structured.argent}"`);
-        console.log(`   👫 Amitié: "${structured.amitie}"`);
-        console.log(`   🎯 Prédiction: "${structured.prediction}"`);
-        console.log(`   🌿 Conseil: "${structured.conseil}"`);
         console.log(`   🌟 Teaser: "${teaser}"\n`);
         logVerbose(`Horoscope complet sauvegardé pour ${sign.id} ${edition}`);
         console.log('---');
@@ -732,8 +709,8 @@ export async function generateAllHoroscopes() {
     if (generated + skipped < total) {
       throw new Error(`❌ VALIDATION ÉCHOUÉE: Seulement ${generated + skipped}/${total} horoscopes générés`);
     }
-  } // Fermeture du bloc try englobant
-} catch (error) {
+     catch (error) {
+
     logVerbose('Netlify Blobs non disponible, bascule en mode local', {
       error: error instanceof Error ? error.message : String(error)
     });
@@ -769,6 +746,7 @@ export async function generateAllHoroscopes() {
         if (results[blobKey]) {
           console.log(`✅ [${generated + 1}/${total}] ${sign.id} (${edition}) - Déjà présent, sauté\n`);
           logVerbose(`Déjà présent dans results: ${blobKey}`);
+          continue;
         }
 
         console.log(`🔄 [${generated + 1}/${total}] ${sign.id} (${edition})...`);
@@ -777,37 +755,42 @@ export async function generateAllHoroscopes() {
         if (!rawText) {
           console.log(`❌ [${generated + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Pas de texte brut\n`);
           logVerboseError(`Aucun texte brut pour ${sign.id} en mode local`);
+          continue;
         }
         console.log(`   ✓ Horoscope brut reçu`);
         logVerbose(`Texte brut reçu: ${rawText.substring(0, 80)}...`);
 
         const structured = await generateWithMistral(sign.id, rawText, weather, edition);
         
-        // Vérifier que tous les 7 champs obligatoires sont présents et non vides
-        const requiredFields = ['ouverture', 'amour', 'travail', 'argent', 'amitie', 'prediction', 'conseil'];
-        
-          logVerboseError(`Champs manquants en mode local pour ${sign.id}: ${missingFields.join(', ')}`);
+        if (!structured) {
+          console.log(`❌ [${generated + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Pas de réponse\n`);
+          continue;
         }
-        console.log(`   ✓ Mistral large: OK`);
-        logVerbose(`JSON valide en mode local pour ${sign.id}`);
+        console.log(`   ✓ Mistral: OK`);
 
-        const teaser = await generateTeaser(sign.name, structured);
+        // ==========================================
+        // 📚 SYSTÈME DE GLOSSAIRE
+        // ==========================================
+        const terms = extractGlossaryTerms(structured);
+        if (terms.length > 0) {
+          const dateToday = new Date().toISOString().split('T')[0];
+          const sourceFile = `horoscopes/${today}.json`;
+          updateGlossary(terms, dateToday, sourceFile);
+        }
+        // Nettoyage des parenthèses redondantes
+        const cleanedContent = removeRedundantParentheses(structured);
+
+        const teaser = await generateTeaser(sign.name, cleanedContent);
         console.log(`   ✓ Teaser: OK`);
         logVerbose(`Teaser généré en mode local: "${teaser}"`);
 
         const response = {
-          ouverture: structured.ouverture,
-          amour: structured.amour,
-          travail: structured.travail,
-          argent: structured.argent ?? '',
-          amitie: structured.amitie ?? '',
-          sante: structured.sante ?? '',
-          prediction: structured.prediction ?? '',
+          horoscope: cleanedContent, // Le texte brut intégral de Mistral (JSON parfait)
+          teaser: teaser || undefined,
           signFr: sign.name,
           weather,
           edition,
-          teaser: teaser || undefined,
-          source: 'mistral',
+          source: 'mistral-raw',
         };
 
         results[blobKey] = response;
@@ -815,13 +798,6 @@ export async function generateAllHoroscopes() {
         logVerbose(`Sauvegarde locale: ${blobKey}`);
 
         console.log(`✅ [${++generated}/${total}] ${sign.id} (${edition}) - SAUVEGARDÉ`);
-        console.log(`   📝 Ouverture: "${structured.ouverture}"`);
-        console.log(`   💘 Amour: "${structured.amour}"`);
-        console.log(`   💼 Travail: "${structured.travail}"`);
-        console.log(`   💰 Argent: "${structured.argent}"`);
-        console.log(`   👫 Amitié: "${structured.amitie}"`);
-        console.log(`   🎯 Prédiction: "${structured.prediction}"`);
-        console.log(`   🌿 Conseil: "${structured.conseil}"`);
         console.log(`   🌟 Teaser: "${teaser}"\n`);
         logVerbose(`Horoscope complet sauvegardé en mode local pour ${sign.id} ${edition}`);
         console.log('---');
