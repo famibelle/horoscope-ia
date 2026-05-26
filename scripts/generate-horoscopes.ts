@@ -384,26 +384,21 @@ async function generateWithMistral(
         });
 
         const content: string = data.choices?.[0]?.message?.content ?? '';
-        
-        // Affichage intégral dans les logs GitHub Actions
-        console.log(`!!! DEBUG: RAW MISTRAL RESPONSE START !!!`);
-        console.log(content);
-        console.log(`!!! DEBUG: RAW MISTRAL RESPONSE END !!!`);
+        logVerbose(`Contenu brut reçu: ${content.substring(0, 200)}${content.length > 200 ? '...' : ''}`);
         
         try {
-            const cleanContent = content.replace(/^```json\s*/, '').replace(/```\s*$/, '').trim();
-            return JSON.parse(cleanContent);
+          const parsed = JSON.parse(content);
+          return parsed;
         } catch (parseError) {
-            logVerboseError(`⚠️ Échec parsing JSON, utilisation du fallback`);
-            return {
-              ouverture: content,
-              amour: "...",
-              travail: "...",
-              argent: "...",
-              amitie: "...",
-              prediction: "...",
-              conseil: "..."
-            };
+          lastError = parseError instanceof Error ? parseError : new Error(String(parseError));
+          logVerboseError(`⚠️  Échec parsing JSON (tentative ${attempt}/${maxAttempts}): ${lastError.message}`);
+          logVerboseError(`Contenu qui a échoué: ${content.substring(0, 500)}...`);
+          
+          if (attempt < maxAttempts) {
+            const retryDelay = 5000 * attempt; // 5s, 10s, 15s
+            logVerbose(`Retry dans ${retryDelay}ms...`);
+            await delay(retryDelay);
+          }
         }
       } catch (fetchError) {
         lastError = fetchError instanceof Error ? fetchError : new Error(String(fetchError));
@@ -423,17 +418,17 @@ async function generateWithMistral(
     return null;
   }
 
-  const content = await callMistralWithFullRetry();
-  if (!content) {
+  const parsed = await callMistralWithFullRetry();
+  if (!parsed) {
     return null;
   }
   
-  return content; // Retourne le contenu brut
+  logVerbose('JSON valide parsé avec succès', Object.keys(parsed));
 }
 
 async function generateTeaser(
   signName: string,
-  rawContent: string
+  structured: Record<string, string>
 ): Promise<string> {
   logVerbose(`Démarrage délai 2s avant appel Mistral small pour teaser ${signName}...`);
   // Délai pour éviter le rate limit Mistral (réduit de 5s à 2s)
@@ -446,9 +441,19 @@ async function generateTeaser(
     return '';
   }
 
-  const fullText = String(rawContent);
+  const fullText = [
+    structured.ouverture,
+    structured.amour,
+    structured.travail,
+    structured.argent,
+    structured.amitie,
+    structured.prediction,
+    structured.conseil,
+  ]
+    .filter(Boolean)
+    .join(' ');
 
-  logVerbose(`Texte complet pour teaser: ${fullText.length > 150 ? fullText.substring(0, 150) + '...' : fullText}`);
+  logVerbose(`Texte complet pour teaser: ${fullText.substring(0, 150)}${fullText.length > 150 ? '...' : ''}`);
   logVerbose(`Modèle: mistral-small-latest, Temp: 0.8, Max tokens: 120`);
 
   const startTime = Date.now();
@@ -665,35 +670,37 @@ export async function generateAllHoroscopes() {
         const requiredFields = ['ouverture', 'amour', 'travail', 'argent', 'amitie', 'prediction', 'conseil'];
         const hasAllFields = structured && requiredFields.every(field => structured[field] && structured[field].trim() !== '');
         
-
-        console.log(`   ✓ Mistral large: OK`);
-
-        // ==========================================
-        // 📚 EXTRACTION DES TERMES POUR LE GLOSSAIRE
-        // ==========================================
-        const terms = extractGlossaryTerms(structured);
-        if (terms.length > 0) {
-          const dateToday = new Date().toISOString().split('T')[0];
-          const sourceFile = `horoscopes/${todayGuadeloupe()}.json`;
-          updateGlossary(terms, dateToday, sourceFile);
+        if (!hasAllFields) {
+          const missingFields = requiredFields.filter(f => !structured?.[f] || structured[f].trim() === '');
+          console.log(`❌ [${generated + skipped + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Champs manquants: ${missingFields.join(', ')}\n`);
+          logVerboseError(`Champs manquants pour ${sign.id}: ${missingFields.join(', ')}`);
+          continue;
         }
-        // Nettoyage des parenthèses redondantes
-        const cleanedContent = removeRedundantParentheses(structured);
+        console.log(`   ✓ Mistral large: OK`);
+        logVerbose(`JSON valide reçu avec ${Object.keys(structured).length} champs`);
 
         // Générer le teaser
         console.log(`   🤖 Appel Mistral (small) pour teaser...`);
         logVerbose(`Génération teaser pour ${sign.name}`);
-        const teaser = await generateTeaser(sign.name, cleanedContent);
-        console.log(`   ✓ Teaser: OK`);;
+        const teaser = await generateTeaser(sign.name, structured);
+        console.log(`   ✓ Teaser généré: "${teaser.substring(0, 60)}..."`);
+        logVerbose(`Teaser: "${teaser}"`);
 
         // Sauvegarder
         const response = {
-          horoscope: content,
-          teaser: teaser,
+          ouverture: structured.ouverture,
+          amour: structured.amour,
+          travail: structured.travail,
+          argent: structured.argent ?? '',
+          amitie: structured.amitie ?? '',
+          sante: structured.sante ?? '',
+          prediction: structured.prediction ?? '',
+          conseil: structured.conseil ?? '',
           signFr: sign.name,
           weather,
           edition,
-          source: "mistral-raw"
+          teaser: teaser || undefined,
+          source: 'mistral',
         };
 
         results[blobKey] = response;
@@ -704,7 +711,13 @@ export async function generateAllHoroscopes() {
         await saveToLocalFile(today, results);
 
         console.log(`✅ [${++generated}/${total}] ${sign.id} (${edition}) - SAUVEGARDÉ\n`);
-        console.log(`   📝 Contenu: "${cleanedContent.substring(0, 100)}..."`);
+        console.log(`   📝 Ouverture: "${structured.ouverture}"`);
+        console.log(`   💘 Amour: "${structured.amour}"`);
+        console.log(`   💼 Travail: "${structured.travail}"`);
+        console.log(`   💰 Argent: "${structured.argent}"`);
+        console.log(`   👫 Amitié: "${structured.amitie}"`);
+        console.log(`   🎯 Prédiction: "${structured.prediction}"`);
+        console.log(`   🌿 Conseil: "${structured.conseil}"`);
         console.log(`   🌟 Teaser: "${teaser}"\n`);
         logVerbose(`Horoscope complet sauvegardé pour ${sign.id} ${edition}`);
         console.log('---');
@@ -776,26 +789,38 @@ export async function generateAllHoroscopes() {
         console.log(`   ✓ Horoscope brut reçu`);
         logVerbose(`Texte brut reçu: ${rawText.substring(0, 80)}...`);
 
-        const content = await generateWithMistral(sign.id, rawText, weather, edition);
+        const structured = await generateWithMistral(sign.id, rawText, weather, edition);
         
-        if (!content) {
-          console.log(`❌ [${generated + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Pas de réponse`);
+        // Vérifier que tous les 7 champs obligatoires sont présents et non vides
+        const requiredFields = ['ouverture', 'amour', 'travail', 'argent', 'amitie', 'prediction', 'conseil'];
+        const hasAllFields = structured && requiredFields.every(field => structured[field] && structured[field].trim() !== '');
+        
+        if (!hasAllFields) {
+          const missingFields = requiredFields.filter(f => !structured?.[f] || structured[f].trim() === '');
+          console.log(`❌ [${generated + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Mistral large - Champs manquants: ${missingFields.join(', ')}\n`);
+          logVerboseError(`Champs manquants en mode local pour ${sign.id}: ${missingFields.join(', ')}`);
           continue;
         }
+        console.log(`   ✓ Mistral large: OK`);
+        logVerbose(`JSON valide en mode local pour ${sign.id}`);
 
-        console.log(`   ✓ Mistral: OK`);
-
-        const teaser = await generateTeaser(sign.name, content);
+        const teaser = await generateTeaser(sign.name, structured);
         console.log(`   ✓ Teaser: OK`);
         logVerbose(`Teaser généré en mode local: "${teaser}"`);
 
         const response = {
-          horoscope: content,
-          teaser: teaser,
+          ouverture: structured.ouverture,
+          amour: structured.amour,
+          travail: structured.travail,
+          argent: structured.argent ?? '',
+          amitie: structured.amitie ?? '',
+          sante: structured.sante ?? '',
+          prediction: structured.prediction ?? '',
           signFr: sign.name,
           weather,
           edition,
-          source: "mistral-raw"
+          teaser: teaser || undefined,
+          source: 'mistral',
         };
 
         results[blobKey] = response;
@@ -803,8 +828,15 @@ export async function generateAllHoroscopes() {
         logVerbose(`Sauvegarde locale: ${blobKey}`);
 
         console.log(`✅ [${++generated}/${total}] ${sign.id} (${edition}) - SAUVEGARDÉ`);
+        console.log(`   📝 Ouverture: "${structured.ouverture}"`);
+        console.log(`   💘 Amour: "${structured.amour}"`);
+        console.log(`   💼 Travail: "${structured.travail}"`);
+        console.log(`   💰 Argent: "${structured.argent}"`);
+        console.log(`   👫 Amitié: "${structured.amitie}"`);
+        console.log(`   🎯 Prédiction: "${structured.prediction}"`);
+        console.log(`   🌿 Conseil: "${structured.conseil}"`);
         console.log(`   🌟 Teaser: "${teaser}"\n`);
-        logVerbose(`Horoscope complet sauvegardé pour ${sign.id} ${edition}`);
+        logVerbose(`Horoscope complet sauvegardé en mode local pour ${sign.id} ${edition}`);
         console.log('---');
       }
     }
