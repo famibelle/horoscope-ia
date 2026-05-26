@@ -385,14 +385,10 @@ async function generateWithMistral(
 
         const content: string = data.choices?.[0]?.message?.content ?? '';
         
-        // Sauvegarde persistante du contenu brut intégral pour inspection
-        const fs = await import('fs/promises');
-        const path = await import('path');
-        const rawLogsDir = path.join(process.cwd(), 'lib', 'private', 'logs', 'raw_responses');
-        await fs.mkdir(rawLogsDir, { recursive: true });
-        await fs.writeFile(path.join(rawLogsDir, `${sign.id}_${edition}_${Date.now()}.json`), content);
-        
-        logVerbose(`Contenu brut reçu: ${content.substring(0, 200)}${content.length > 200 ? '...' : ''}`);
+        // Affichage intégral dans les logs GitHub Actions
+        console.log(`!!! DEBUG: RAW MISTRAL RESPONSE START !!!`);
+        console.log(content);
+        console.log(`!!! DEBUG: RAW MISTRAL RESPONSE END !!!`);
         
         try {
             const cleanContent = content.replace(/^```json\s*/, '').replace(/```\s*$/, '').trim();
