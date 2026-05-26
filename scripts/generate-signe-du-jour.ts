@@ -209,6 +209,23 @@ RÈGLES :
 - 1 mot créole max, TOUJOURS avec traduction entre parenthèses`;
 }
 
+async function logRawData(filename: string, prompt: string, response: string) {
+  const fs = await import('fs/promises');
+  const path = await import('path');
+  const dir = path.join(process.cwd(), 'lib', 'private', 'logs');
+  await fs.mkdir(dir, { recursive: true });
+  const filePath = path.join(dir, `${filename}_${new Date().toISOString().split('T')[0]}.log`);
+  
+  const content = `
+--- PROMPT SENT ---
+${prompt}
+--- RAW RESPONSE ---
+${response}
+------------------
+`;
+  await fs.appendFile(filePath, content);
+}
+
 async function generatePhrase(
   type: 'flore' | 'faune',
   entry: SigneEntry,
@@ -227,6 +244,21 @@ async function generatePhrase(
   // Délai pour éviter le rate limit (réduit de 3s à 2s)
   await delay(2000);
 
+  const prompt = buildSigneDuJourUserPrompt(
+    type,
+    entry.nom_commun,
+    entry.nom_creole,
+    entry.savoir,
+    weather,
+    loa,
+    familleVaudou,
+  );
+  
+  // LOG DU PROMPT ENVOYÉ
+  console.error(`!!! DEBUG: PROMPT SENT TO MISTRAL !!!`);
+  console.error(prompt);
+  console.error(`!!! FIN PROMPT !!!`);
+
   const res = await fetch(MISTRAL_URL, {
     method: 'POST',
     headers: {
@@ -241,15 +273,7 @@ async function generatePhrase(
         { role: 'system', content: MARYSE_SYSTEM },
         {
           role: 'user',
-          content: buildSigneDuJourUserPrompt(
-            type,
-            entry.nom_commun,
-            entry.nom_creole,
-            entry.savoir,
-            weather,
-            loa,
-            familleVaudou,
-          ),
+          content: prompt,
         },
       ],
     }),
@@ -264,6 +288,15 @@ async function generatePhrase(
 
   const data = await res.json();
   const content = data.choices?.[0]?.message?.content ?? '';
+  
+  // Log persistent dans lib/private/logs/
+  await logRawData('generate-signe-du-jour', prompt, content);
+  
+  // LOG ABSOLU : CONTENU BRUT AVANT TOUTE MANIPULATION
+  console.error(`!!! DEBUG: RAW MISTRAL RESPONSE START !!!`);
+  console.error(content);
+  console.error(`!!! DEBUG: RAW MISTRAL RESPONSE END !!!`);
+  
   return content.trim() || null;
 }
 
