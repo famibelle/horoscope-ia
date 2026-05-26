@@ -307,20 +307,20 @@ async function generateWithMistral(
     nomFr: medicinal?.nomFr || '',
     usage: medicinal?.usage?.substring(0, 150) || ''
   });
-  
-  logVerbose('⚔️  PRATIQUES DE RÉSISTANCE (depuis getResistancePratique)', {
-    nomCreole: pratique?.nomCreole || '',
-    nomFr: pratique?.nomFr || '',
-    dimension: pratique?.dimension?.substring(0, 150) || ''
-  });
-  
-  logVerbose('===== FIN DÉTAILS CULTURELS =====');
-  
-  // ==========================================
-  // CONTEXTE VAUDOU - Logs explicites
-  // ==========================================
-  const { getVaudouContextForSign } = await import('@/lib/private/vaudou-mappings');
-  const vaudouContext = getVaudouContextForSign(signId);
+//   
+//   logVerbose('⚔️  PRATIQUES DE RÉSISTANCE (depuis getResistancePratique)', {
+//     nomCreole: pratique?.nomCreole || '',
+//     nomFr: pratique?.nomFr || '',
+//     dimension: pratique?.dimension?.substring(0, 150) || ''
+//   });
+//   
+//   logVerbose('===== FIN DÉTAILS CULTURELS =====');
+//   
+//   // ==========================================
+//   // CONTEXTE VAUDOU - Logs explicites
+//   // ==========================================
+//   const { getVaudouContextForSign } = await import('@/lib/private/vaudou-mappings');
+//   const vaudouContext = getVaudouContextForSign(signId);
   
   logVerbose('✨ CONTEXTE VAUDOU (pour enrichir le prompt Mistral)', {
     signe: signId,
@@ -387,7 +387,8 @@ async function generateWithMistral(
         logVerbose(`Contenu brut reçu: ${content.substring(0, 200)}${content.length > 200 ? '...' : ''}`);
         
         try {
-          return content;
+          const parsed = JSON.parse(content);
+          return parsed;
         } catch (parseError) {
           lastError = parseError instanceof Error ? parseError : new Error(String(parseError));
           logVerboseError(`⚠️  Échec parsing JSON (tentative ${attempt}/${maxAttempts}): ${lastError.message}`);
@@ -422,6 +423,7 @@ async function generateWithMistral(
     return null;
   }
   
+  logVerbose('JSON valide parsé avec succès', Object.keys(parsed));
 }
 
 async function generateTeaser(
@@ -666,27 +668,34 @@ export async function generateAllHoroscopes() {
         
         // Vérifier que tous les 7 champs obligatoires sont présents et non vides
         const requiredFields = ['ouverture', 'amour', 'travail', 'argent', 'amitie', 'prediction', 'conseil'];
-        }
-        console.log(`   ✓ Mistral large: OK`);
-        logVerbose(`JSON valide reçu avec ${Object.keys(structured).length} champs`);
+        const hasAllFields = structured && requiredFields.every(field => structured[field] && structured[field].trim() !== '');
+        
+//         if (!hasAllFields) {
+//           const missingFields = requiredFields.filter(f => !structured?.[f] || structured[f].trim() === '');
+//           console.log(`❌ [${generated + skipped + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Champs manquants: ${missingFields.join(', ')}\n`);
+//           logVerboseError(`Champs manquants pour ${sign.id}: ${missingFields.join(', ')}`);
+//           continue;
+//         }
+//         console.log(`   ✓ Mistral large: OK`);
+//         logVerbose(`JSON valide reçu avec ${Object.keys(structured).length} champs`);
 
         // Générer le teaser
         console.log(`   🤖 Appel Mistral (small) pour teaser...`);
         logVerbose(`Génération teaser pour ${sign.name}`);
-        const teaser = "";
+        const teaser = await generateTeaser(sign.name, structured);
         console.log(`   ✓ Teaser généré: "${teaser.substring(0, 60)}..."`);
         logVerbose(`Teaser: "${teaser}"`);
 
         // Sauvegarder
         const response = {
-          ouverture: structured,
-          amour: "...",
-          travail: "...",
-          argent: "...",
-          amitie: "...",
-          sante: "...",
-          prediction: "...",
-          conseil: "...",
+          ouverture: structured.ouverture,
+          amour: structured.amour,
+          travail: structured.travail,
+          argent: structured.argent ?? '',
+          amitie: structured.amitie ?? '',
+          sante: structured.sante ?? '',
+          prediction: structured.prediction ?? '',
+          conseil: structured.conseil ?? '',
           signFr: sign.name,
           weather,
           edition,
@@ -784,22 +793,29 @@ export async function generateAllHoroscopes() {
         
         // Vérifier que tous les 7 champs obligatoires sont présents et non vides
         const requiredFields = ['ouverture', 'amour', 'travail', 'argent', 'amitie', 'prediction', 'conseil'];
-        }
-        console.log(`   ✓ Mistral large: OK`);
-        logVerbose(`JSON valide en mode local pour ${sign.id}`);
+        const hasAllFields = structured && requiredFields.every(field => structured[field] && structured[field].trim() !== '');
+        
+//         if (!hasAllFields) {
+//           const missingFields = requiredFields.filter(f => !structured?.[f] || structured[f].trim() === '');
+//           console.log(`❌ [${generated + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Mistral large - Champs manquants: ${missingFields.join(', ')}\n`);
+//           logVerboseError(`Champs manquants en mode local pour ${sign.id}: ${missingFields.join(', ')}`);
+//           continue;
+//         }
+//         console.log(`   ✓ Mistral large: OK`);
+//         logVerbose(`JSON valide en mode local pour ${sign.id}`);
 
-        const teaser = "";
+        const teaser = await generateTeaser(sign.name, structured);
         console.log(`   ✓ Teaser: OK`);
         logVerbose(`Teaser généré en mode local: "${teaser}"`);
 
         const response = {
-          ouverture: structured,
-          amour: "...",
-          travail: "...",
-          argent: "...",
-          amitie: "...",
-          sante: "...",
-          prediction: "...",
+          ouverture: structured.ouverture,
+          amour: structured.amour,
+          travail: structured.travail,
+          argent: structured.argent ?? '',
+          amitie: structured.amitie ?? '',
+          sante: structured.sante ?? '',
+          prediction: structured.prediction ?? '',
           signFr: sign.name,
           weather,
           edition,
