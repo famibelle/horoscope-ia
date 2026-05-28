@@ -52,38 +52,19 @@ const COMMEMORATIONS: Record<string, string> = {
   '03-03': "Mardi Gras — apogée du carnaval, Vaval brûle ce soir.",
 };
 
-export function getHistoricalResonance(date: string): string | null {
+export function getHistoricalResonance(date: string, signId: string = ''): string | null {
   const mmdd = date.slice(5); // 'YYYY-MM-DD' → 'MM-DD'
-  
-  // D'abord, vérifier les commémorations spéciales
+
+  // Commémorations prioritaires (dates fixes ancrées dans l'histoire)
   if (COMMEMORATIONS[mmdd]) {
     return COMMEMORATIONS[mmdd];
   }
-  
-  // Sinon, chercher dans histoireData par année ou mois
-  const [year, month] = date.split('-');
-  const moisNom = new Date(date).toLocaleString('fr-FR', { month: 'long' });
-  
-  // Filtre plus large : cherche des événements dans l'année ou le mois
-  const matchingHistoire = histoireData.find(h => 
-    h.periode.includes(year) ||
-    h.periode.includes(moisNom) ||
-    h.periode.includes(month)
-  );
-  
-  if (matchingHistoire) {
-    return `${matchingHistoire.periode}: ${matchingHistoire.faitHistorique}`;
-  }
-  
-  // Si rien n'est trouvé, retourner un événement aléatoire pour la diversité
-  if (histoireData.length > 0) {
-    const randomIndex = Math.floor(Math.random() * histoireData.length);
-    const randomHistoire = histoireData[randomIndex];
-    return `${randomHistoire.periode}: ${randomHistoire.faitHistorique}`;
-  }
-  
-  // Retourner null si histoireData est vide
-  return null;
+
+  if (histoireData.length === 0) return null;
+
+  // Sélection déterministe via hash(signId + date) — couvre les 76 entrées
+  const entry = histoireData[hash(signId + date) % histoireData.length];
+  return `${entry.periode}: ${entry.faitHistorique}`;
 }
 
 /* ── Helpers ────────────────────────────────────────────────────────────────── */

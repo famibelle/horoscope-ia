@@ -194,7 +194,7 @@ async function generateWithMistral(
   const faune = getSignFaune(signId, todayGuadeloupe());
   const flore = getSignFlore(signId, todayGuadeloupe());
   const lieu = getSignLieu(signId, todayGuadeloupe());
-  const historicalResonance = getHistoricalResonance(todayGuadeloupe());
+  const historicalResonance = getHistoricalResonance(todayGuadeloupe(), signId);
 
   // Trouver les entrées correspondantes dans les bases de données
   const fauneNom = sign.faune?.nom_creole || sign.nomKreyol || '';
@@ -240,19 +240,9 @@ async function generateWithMistral(
     ))
   );
   
-  // CORRECTION: Filtre HISTOIRE plus flexible
-  // Les périodes dans histoireData sont des plages comme "1635–1650" ou "2000–2026"
-  const [year, month, day] = todayGuadeloupe().split('-');
-  const moisNom = new Date(todayGuadeloupe()).toLocaleString('fr-FR', { month: 'long' });
-  const histoireByDate = histoireData.filter(h => 
-    h.periode.includes(year) ||
-    h.periode.includes(moisNom) ||
-    h.periode.includes(month)
-  );
-
   // Logs détaillés pour chaque source culturelle
   logVerbose('===== DÉTAILS CULTURELS DEPUIS LES BASES DE DONNÉES =====');
-  
+
   logVerbose('📚 FAUNE-DATA (source brute)', fauneEntry || 'Aucune entrée trouvée');
   logVerbose('📚 FLORE-DATA (source brute)', floreEntry ? {
     nomCreole: floreEntry.nomCreole,
@@ -260,22 +250,21 @@ async function generateWithMistral(
     usage: floreEntry.usage,
     dimensionCulturelle: floreEntry.dimensionCulturelle
   } : 'Aucune entrée trouvée');
-  
+
   logVerbose('📚 LIEUX-DATA (source brute)', lieuEntry ? {
     nom: lieuEntry.nom,
     localisation: lieuEntry.localisation,
     dimensionCulturelle: lieuEntry.dimensionCulturelle
   } : 'Aucune entrée trouvée');
-  
+
   logVerbose('📚 KREYOL-DATA (filtré par élément/spirituel)', {
     count: kreyolByElement.length,
     elements: kreyolByElement.map(k => ({ nomCreole: k.nomCreole, type: k.typeResistance })),
     totalKreyol: kreyolData.length
   });
-  
-  logVerbose('📚 HISTOIRE-DATA (filtré par date)', {
-    count: histoireByDate.length,
-    dates: histoireByDate.map(h => h.periode),
+
+  logVerbose('📚 HISTOIRE-DATA (sélection hash sign+date)', {
+    selected: historicalResonance?.substring(0, 120) || 'Aucune',
     totalHistoire: histoireData.length
   });
   

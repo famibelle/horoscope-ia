@@ -185,7 +185,7 @@ async function generateHoroscopeWithMistral(
 
   // Récupérer les données
   const weather = await fetchWeather(date);
-  const historicalResonance = getHistoricalResonance(date);
+  const historicalResonance = getHistoricalResonance(date, signId);
   
   // Récupérer l'horoscope brut
   let rawText: string;
