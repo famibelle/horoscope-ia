@@ -234,10 +234,7 @@ export default function DictionnaireVaudouPage() {
                 <option value="">Toutes</option>
                 {allFamilies.map(famille => (
                   <option key={famille} value={famille}>
-                    {FAMILLES[famille]?.color && (
-                      <span className={`inline-block w-2 h-2 rounded-full mr-2 ${FAMILLES[famille].bgColor.replace('border-', '')}`} />
-                    )}
-                    {famille}
+                    {famille === 'Rada' ? '🟢' : famille === 'Petro' ? '🔴' : famille === 'Congo' ? '🟡' : ''} {famille}
                   </option>
                 ))}
               </select>
@@ -493,7 +490,7 @@ export default function DictionnaireVaudouPage() {
                     <span className={`text-xs px-3 py-1 rounded-full ${getCategoryConfig(selectedEntry.type).bgColor} ${getCategoryConfig(selectedEntry.type).color}`}>
                       {getCategoryConfig(selectedEntry.type).emoji} {getCategoryConfig(selectedEntry.type).name}
                     </span>
-                    {'famille' in selectedEntry && selectedEntry.famille && (
+                    {'famille' in selectedEntry && selectedEntry.famille && FAMILLES[selectedEntry.famille] && (
                       <span className={`text-xs px-3 py-1 rounded-full ${FAMILLES[selectedEntry.famille].bgColor} ${FAMILLES[selectedEntry.famille].color}`}>
                         {selectedEntry.famille}
                       </span>
@@ -548,9 +545,9 @@ export default function DictionnaireVaudouPage() {
                     <div className="pt-2">
                       <p className="text-white/60 text-xs uppercase tracking-wider mb-2">Tags</p>
                       <div className="flex flex-wrap gap-2">
-                        {selectedEntry.tags.slice(0, 5).map(tag => (
+                        {selectedEntry.tags.slice(0, 5).map((tag, i) => (
                           <span
-                            key={tag}
+                            key={`${tag}-${i}`}
                             className="px-2.5 py-1 rounded-full text-xs text-white/80"
                             style={{
                               background: 'rgba(245,245,220,0.08)',
