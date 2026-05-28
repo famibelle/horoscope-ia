@@ -23,6 +23,17 @@ interface HoroscopeData {
 
 type PlayerState = 'idle' | 'generating' | 'ready' | 'playing' | 'paused';
 
+const CALLING_MESSAGES = [
+  "Le téléphone sonne chez Maryse…",
+  "Elle va bientôt décrocher…",
+  "Patiente… patiente…",
+  "Elle arrive…",
+  "Ça sonne encore…",
+  "Elle est en train de préparer ton oracle…",
+  "Patiente encore un peu…",
+  "Elle décroche… elle parle…",
+];
+
 const LOADING_MESSAGES = [
   "Je consulte l’igwann qui scrute le ciel de Karukera…",
   "J’écoute la Soufrière murmurer ses secrets…",
@@ -94,6 +105,8 @@ export default function AudioPlayer({
   const [loadingMsg, setLoadingMsg] = useState(() =>
     LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)]
   );
+  const [callingMsg, setCallingMsg] = useState(CALLING_MESSAGES[0]);
+  const callingIndexRef = useRef(0);
   const [showLoading, setShowLoading] = useState(false);
   const audioRef   = useRef<HTMLAudioElement | null>(null);
   const blobUrlRef = useRef<string | null>(null);
@@ -107,9 +120,24 @@ export default function AudioPlayer({
     if (!showLoading) return;
 
     const interval = setInterval(() => {
-      const newIndex = Math.floor(Math.random() * LOADING_MESSAGES.length);
-      setLoadingMsg(LOADING_MESSAGES[newIndex]);
+      setLoadingMsg(LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)]);
     }, 1000);
+
+    return () => clearInterval(interval);
+  }, [showLoading]);
+
+  // Cycle through calling messages sequentially
+  useEffect(() => {
+    if (!showLoading) {
+      callingIndexRef.current = 0;
+      setCallingMsg(CALLING_MESSAGES[0]);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      callingIndexRef.current = (callingIndexRef.current + 1) % CALLING_MESSAGES.length;
+      setCallingMsg(CALLING_MESSAGES[callingIndexRef.current]);
+    }, 2200);
 
     return () => clearInterval(interval);
   }, [showLoading]);
@@ -332,9 +360,30 @@ export default function AudioPlayer({
           </motion.button>
 
           <div className="text-center sm:text-left flex-1 w-full">
-            <p className="text-white/80 font-semibold text-base sm:text-lg">
-              {signName ? `Horoscope ${signName}` : 'Horoscope audio'}
-            </p>
+            <AnimatePresence mode="wait">
+              {showLoading ? (
+                <motion.p
+                  key={callingMsg}
+                  className="text-violet-200 font-semibold text-base sm:text-lg italic"
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {callingMsg}
+                </motion.p>
+              ) : (
+                <motion.p
+                  key="title"
+                  className="text-white/80 font-semibold text-base sm:text-lg"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  {signName ? `Horoscope ${signName}` : 'Horoscope audio'}
+                </motion.p>
+              )}
+            </AnimatePresence>
             <AnimatePresence mode="wait">
               {showLoading ? (
                 <motion.p
