@@ -91,5 +91,6 @@ jobs:
           git add public/data/ambiance/*.json
           if ! git diff --staged --quiet; then
             git commit -m "chore: mise à jour ambiances $(date +%Y-%m-%d)"
+            git pull --rebase origin vaudou
             git push origin vaudou
           fi

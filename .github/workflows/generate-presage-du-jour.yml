@@ -91,5 +91,6 @@ jobs:
           git add public/data/presage-du-jour/*.json
           if ! git diff --staged --quiet; then
             git commit -m "chore: mise à jour présage du jour $(date +%Y-%m-%d)"
+            git pull --rebase origin vaudou
             git push origin vaudou
           fi

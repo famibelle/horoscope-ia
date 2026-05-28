@@ -97,5 +97,6 @@ jobs:
           git add public/data/horoscopes/*.json
           if ! git diff --staged --quiet; then
             git commit -m "chore: mise à jour horoscopes $(date +%Y-%m-%d)"
+            git pull --rebase origin vaudou
             git push origin vaudou
           fi
