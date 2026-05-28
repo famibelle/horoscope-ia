@@ -46,7 +46,7 @@ export default function EnergyBanner() {
       .then((d) => { if (d && !d.error) setWeather(d); })
       .catch(() => {});
 
-    fetch('/api/signe-du-jour')
+    fetch('/api/presage-du-jour')
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => { if (d && !d.error) setSigne(d); })
       .catch(() => {

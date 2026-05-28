@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { MARYSE_SYSTEM, buildSigneDuJourUserPrompt } from '@/lib/private/maryse-prompt';
 import { detectEdition, todayGuadeloupe, getGuadeloupeHour } from '@/lib/edition';
 import type { Edition } from '@/lib/private/maryse-prompt';
-import signeData from '@/lib/private/signe-du-jour-data.json';
+import signeData from '@/lib/private/presage-du-jour-data.json';
 import { loadSigneDuJourData } from '@/lib/private/horoscope-file-cache';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
@@ -17,24 +17,24 @@ async function getFromLocalFile(date: string, req: NextRequest): Promise<any | n
   try {
     // Construire l'URL avec l'origine du domaine
     const baseUrl = process.env.VERCEL_URL || process.env.NETLIFY_URL || req.nextUrl.origin;
-    const url = new URL(`/data/signe-du-jour/${date}.json`, baseUrl);
+    const url = new URL(`/data/presage-du-jour/${date}.json`, baseUrl);
     
-    console.log(`[SIGNE-DU-JOUR FETCH] Attempting: ${url.toString()}`); // LOG DIAGNOSTIC
+    console.log(`[PRESAGE-DU-JOUR FETCH] Attempting: ${url.toString()}`); // LOG DIAGNOSTIC
     
     const response = await fetch(url.toString(), { next: { revalidate: 28800 } });
     
-    console.log(`[SIGNE-DU-JOUR FETCH] Response: ${response.status} ${response.statusText}`); // LOG DIAGNOSTIC
+    console.log(`[PRESAGE-DU-JOUR FETCH] Response: ${response.status} ${response.statusText}`); // LOG DIAGNOSTIC
     
     if (!response.ok) {
-      console.warn(`[SIGNE-DU-JOUR FETCH] Failed: ${response.status}`); // LOG DIAGNOSTIC
+      console.warn(`[PRESAGE-DU-JOUR FETCH] Failed: ${response.status}`); // LOG DIAGNOSTIC
       return null;
     }
     
     const data = await response.json();
-    console.log(`[SIGNE-DU-JOUR FETCH] Loaded data with ${Object.keys(data).length} keys`); // LOG DIAGNOSTIC
+    console.log(`[PRESAGE-DU-JOUR FETCH] Loaded data with ${Object.keys(data).length} keys`); // LOG DIAGNOSTIC
     return data;
   } catch (err) {
-    console.error(`[SIGNE-DU-JOUR FETCH] Error:`, err instanceof Error ? err.message : err); // LOG DIAGNOSTIC
+    console.error(`[PRESAGE-DU-JOUR FETCH] Error:`, err instanceof Error ? err.message : err); // LOG DIAGNOSTIC
     return null;
   }
 }
@@ -161,12 +161,12 @@ export async function GET(req: NextRequest) {
   const typedData = signeData as SigneData;
 
   // LOG DIAGNOSTIC
-  console.log(`[SIGNE-DU-JOUR API] Request: date=${today}, edition=${edition}`);
+  console.log(`[PRESAGE-DU-JOUR API] Request: date=${today}, edition=${edition}`);
 
   // 0. Check local file via filesystem cache
   const cachedData = await loadSigneDuJourData(today, req);
   if (cachedData) {
-    console.log(`[SIGNE-DU-JOUR CACHE HIT] ${today}`);
+    console.log(`[PRESAGE-DU-JOUR CACHE HIT] ${today}`);
     return NextResponse.json(cachedData, {
       headers: { 'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=3600' },
     });
@@ -175,14 +175,14 @@ export async function GET(req: NextRequest) {
   // 1. Fallback: Check local file via HTTP fetch
   const localData = await getFromLocalFile(today, req);
   if (localData) {
-    console.log(`[SIGNE-DU-JOUR FILE HIT] ${today}`);
+    console.log(`[PRESAGE-DU-JOUR FILE HIT] ${today}`);
     return NextResponse.json(localData, {
       headers: { 'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=3600' },
     });
   }
 
   // LOG DIAGNOSTIC: Si on arrive ici, le fichier n'existe pas
-  console.warn(`[SIGNE-DU-JOUR] File not found for ${today}, falling back to dynamic generation`);
+  console.warn(`[PRESAGE-DU-JOUR] File not found for ${today}, falling back to dynamic generation`);
 
   // 2. Fallback: generate dynamically (if file doesn't exist yet)
   const weather = await fetchWeatherSummary();

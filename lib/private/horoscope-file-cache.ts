@@ -295,7 +295,7 @@ export async function loadSigneDuJourData(date: string, req?: any): Promise<any 
       || req.nextUrl?.origin
       || 'https://horoscope-karukera.netlify.app';
     
-    const url = new URL(`/data/signe-du-jour/${date}.json`, baseUrl);
+    const url = new URL(`/data/presage-du-jour/${date}.json`, baseUrl);
     console.log(`[SIGNE-DU-JOUR] Fetch HTTP: ${url.toString()}`);
     
     for (let attempt = 0; attempt < 3; attempt++) {
@@ -326,7 +326,7 @@ export async function loadSigneDuJourData(date: string, req?: any): Promise<any 
   // Étape 2: Filesystem (dev seulement)
   if (process.env.NODE_ENV === 'development') {
     try {
-      const filePath = path.join(process.cwd(), 'public', 'data', 'signe-du-jour', `${date}.json`);
+      const filePath = path.join(process.cwd(), 'public', 'data', 'presage-du-jour', `${date}.json`);
       const fileExists = await fs.access(filePath).then(() => true).catch(() => false);
       
       if (fileExists) {
