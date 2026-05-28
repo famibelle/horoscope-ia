@@ -132,6 +132,7 @@ async function generateTeaser(
     structured.argent, structured.amitie, structured.prediction,
   ].filter(Boolean).join(' ');
 
+  console.log(`\n🤖 [MISTRAL] Appel LLM — generateTeaser (mistral-small-latest) pour ${signName}`);
   const res = await fetch(MISTRAL_URL, {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
@@ -148,8 +149,9 @@ async function generateTeaser(
       ],
     }),
   });
-  if (!res.ok) return '';
+  if (!res.ok) { console.error(`🤖 [MISTRAL] ❌ Erreur teaser: ${res.status}`); return ''; }
   const data = await res.json();
+  console.log(`🤖 [MISTRAL] ✅ Teaser généré pour ${signName}`);
   return data.choices?.[0]?.message?.content?.trim() ?? '';
 }
 
@@ -255,6 +257,7 @@ async function rewriteWithMistral(
   const sign = signs.find((s) => s.id === signId);
   if (!sign) return null;
 
+  console.log(`\n🤖 [MISTRAL] Appel LLM — rewriteWithMistral (mistral-large-latest) signe=${signId} edition=${edition} date=${date ?? 'N/A'}`);
   const res = await fetch(MISTRAL_URL, {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
@@ -271,10 +274,14 @@ async function rewriteWithMistral(
       ],
     }),
   });
-  if (!res.ok) return null;
+  if (!res.ok) { console.error(`🤖 [MISTRAL] ❌ Erreur rewrite: ${res.status}`); return null; }
   const data = await res.json();
   const content: string = data.choices?.[0]?.message?.content ?? '';
-  try { return JSON.parse(content); } catch { return null; }
+  try {
+    const parsed = JSON.parse(content);
+    console.log(`🤖 [MISTRAL] ✅ Horoscope réécrit pour ${signId}`);
+    return parsed;
+  } catch { return null; }
 }
 
 /**

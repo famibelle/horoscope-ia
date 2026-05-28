@@ -202,6 +202,7 @@ Réponds avec un objet JSON valide et ces clés exactes :
 Pour "compatibilite" choisis exactement 2 valeurs parmi : ${otherSigns.join(', ')}.
 Sans markdown dans les valeurs JSON.`;
 
+  console.log(`\n🤖 [MISTRAL] Appel LLM — ambiance (mistral-small-latest) signe=${signId} date=${userDate} edition=${edition}`);
   const res = await fetch(MISTRAL_URL, {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
@@ -217,14 +218,15 @@ Sans markdown dans les valeurs JSON.`;
     }),
   });
 
-  if (!res.ok) return NextResponse.json({ error: 'Mistral error' }, { status: 500 });
+  if (!res.ok) { console.error(`🤖 [MISTRAL] ❌ Erreur ambiance: ${res.status}`); return NextResponse.json({ error: 'Mistral error' }, { status: 500 }); }
 
   const mistralData = await res.json();
   const content = mistralData.choices?.[0]?.message?.content ?? '{}';
 
   try {
     const data = { ...JSON.parse(content), scores };
-    
+    console.log(`🤖 [MISTRAL] ✅ Ambiance générée pour ${signId}`);
+
     // Store in Netlify Blobs cache
     if (blobStore) {
       try {
