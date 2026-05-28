@@ -1,0 +1,1356 @@
+{
+  "2026-05-28|belier|nuit": {
+    "ambiance": "Le vent de l'uraakan souffle sur Pointe-à-Pitre ce soir, Mars brûle comme l'ardeur d'Ogoun rouge et vert. La pluie lave les vieilles peurs, la mer murmure aux esprits des ancêtres sous le croissant gibbeux.",
+    "chiffrePorteBonheur": 47,
+    "compatibilite": [
+      "lion",
+      "taureau"
+    ],
+    "loa": "Ogoun",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "vert",
+      "rouge"
+    ],
+    "lune": {
+      "bienetre": "Prépare une tisane de zeb a pik le soir, sens son corps se refermer comme un secret. Bois lentement pour calmer l'esprit avant le coucher.",
+      "beaute": "Frotte ton visage avec une feuille de balizié (balisier) écrasée, son rouge éclatant réveille l'éclat comme à l'aube sur les mornes.",
+      "esprit": "Assieds-toi à un carrefour ce soir, laisse le vent porter tes prières aux invisibles. La gibbeuse te guidera vers une réponse dans tes rêves.",
+      "maison": "Raconte un kont à tes proches ce soir, rappelle-toi que les mots gardent la mémoire vivante. La maison écoute et se souvient.",
+      "jardinage": "Plante ou récolte la dachine sous la pluie modérée, ses feuilles vertes brillent comme l'espoir après l'orage. Cuisine-la en brede chouk pour nourrir ton âme."
+    },
+    "scores": {
+      "amour": 69,
+      "travail": 88,
+      "bienetre": 53,
+      "vieSociale": 48,
+      "finances": 87
+    }
+  },
+  "2026-05-28|belier|matin": {
+    "ambiance": "Le jour crache en rouge et vert sous les ailes de l’Urakan Ogoun te souffle sa force âpre comme la brise de Pointe des Châteaux. Mars gronde dans l’estomac du ciel mais la pluie lave sans éteindre le feu qui couve en toi. Prends garde à la Malomé (Malnommée) aux angles de ta case elle veille et protège même quand le vent semble trahir.",
+    "chiffrePorteBonheur": 47,
+    "compatibilite": [
+      "lion",
+      "taureau"
+    ],
+    "loa": "Ogoun",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "rouge",
+      "vert"
+    ],
+    "lune": {
+      "bienetre": "Zeb a pik se referme au toucher aujourd’hui bois ses feuilles en tisane pour calmer les nerfs et retrouver la paix des enfants qui savent écouter l’invisible. Son jus frais sur les tempes chasse les maux de tête dans la chaleur moite de Pointe-à-Pitre.",
+      "beaute": "Balizié (Balisier) déploie son rouge sang sous le ciel gris utilise son inflorescence écrasée en masque pour éclaircir le teint et apaiser l’épiderme après la pluie. Sa beauté crue rappelle que la force pousse même dans l’humidité des mornes.",
+      "esprit": "Au Carrefour ce soir écoute les murmures des ancêtres sous la lune gibbeuse. Les esprits se rassemblent à la croisée des chemins attends-toi à des messages clairs sous les étoiles voilées de nuages. Bois un peu de café noir pour rester éveillé aux signes.",
+      "maison": "Raconte un Kont aux enfants avant de dormir cette nuit la résistance s’entretient par la parole. Les vieux mots de Bouki et Malis gardent vivante la mémoire des anciens sous les plafonds de tôle. Laisse la lampe à pétrole éclairer les visages pour que les histoires ne s’éteignent pas.",
+      "jardinage": "Plante ou récolte la Dachine à l’aube alors que la terre est encore humide de l’averse. Ses feuilles en brede chouk nourrissent comme un remède et son tubercule fondant réchauffe le corps après l’effort. La lune gibbeuse adore les racines qui pompent l’énergie de la terre."
+    },
+    "scores": {
+      "amour": 69,
+      "travail": 88,
+      "bienetre": 53,
+      "vieSociale": 48,
+      "finances": 87
+    }
+  },
+  "2026-05-28|belier|midi": {
+    "ambiance": "Ogoun souffle sur Pointe des Châteaux avec son souffle vert et rouge. Comme l’urakan danse entre les nuages lourds ce midi, il te rappelle que la force doit être juste, pas brutale. 88% de ton énergie est concentrée sur le travail, mais le bien-être ne suit pas toujours, attention au feu qui brûle trop fort.",
+    "chiffrePorteBonheur": 47,
+    "compatibilite": [
+      "lion",
+      "taureau"
+    ],
+    "loa": "Ogoun",
+    "familleVaudou": "Rada",
+    "couleursSacrées": {
+      "0": "vert",
+      "1": "rouge"
+    },
+    "lune": {
+      "bienetre": "Prends une tisane de zeb a pik ce soir, plante qui se referme comme tes doutes elle te calmera avant le sommeil comme elle protège les petits enfants. Laisse-la infuser au clair de lune pour apaiser les nerfs à vif sous ce ciel chargé.",
+      "beaute": "Balizié (balisier) déploie ses pétales rouges comme ton courage, frotte une feuille fraîche sur tes joues pour raviver l’éclat du midi. Son jus rouge est aussi bon pour les peaux rougies par le soleil ou les soucis.",
+      "esprit": "Assieds-toi à un carrefour ce soir, écoute les murmures du vent et écris ce que tu entends comme un conte oublié. Sous la lune croissante, les esprits parlent plus fort, surtout quand Ogoun veille.",
+      "maison": "Raconte un kont à tes proches ce soir, un récit où les ancêtres l’emportent sur les oppresseurs. Les mots chuchotés sous le toit gardent la maison des mauvaises énergies, surtout quand la pluie frappe fort.",
+      "jardinage": "Seme des dachine en lune gibbeuse, leur feuillage large protègera la terre des averses soudaines. Dès que les feuilles percent, coupe-en pour en faire un court-bouillon de poisson, ainsi la récolte nourrira aussi ton cœur."
+    },
+    "couleursSacrees": [],
+    "scores": {
+      "amour": 69,
+      "travail": 88,
+      "bienetre": 53,
+      "vieSociale": 48,
+      "finances": 87
+    }
+  },
+  "2026-05-28|belier|soir": {
+    "ambiance": "Aujourd’hui l’Ogoun souffle sur vous comme un urakan sur Pointe des Châteaux. Le feu de Mars brûle dans vos mains vertes et rouges, prêtes à agir mais l’Océan Atlantique murmure de patience. L’énergie du jour est une lame prête à trancher mais à ne pas frapper dans le vide.",
+    "chiffrePorteBonheur": 17,
+    "compatibilite": [
+      "taureau",
+      "lion"
+    ],
+    "loa": "Ogoun",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "vert",
+      "rouge"
+    ],
+    "lune": {
+      "bienetre": "Zeb a pik se referme au toucher comme votre colère doit s’apaiser. Une tisane chaude de ses feuilles calme les nerfs et rappelle qu’on peut être fort sans être sourd aux autres.",
+      "beaute": "Balizié (Balisier) déploie ses pétales rouges comme un bouclier de vie. Son eau infusée renforce les cheveux et la peau, rappelant que la beauté créole est une résistance.",
+      "esprit": "Carrefour est aujourd’hui un lieu sacré où Ogoun écoute vos prières. Asseyez-vous au seuil de votre porte et écoutez le vent, il porte des réponses.",
+      "maison": "Kont s’entasse dans les murs de la case comme la mémoire des ancêtres. Racontez-vous ce soir l’histoire de votre lignée pour nourrir votre force.",
+      "jardinage": "Dachine pousse mieux sous la lune gibbeuse, ses feuilles tendres attendent votre main. Plantez-la contre le vent pour qu’elle résiste comme vous."
+    },
+    "scores": {
+      "amour": 69,
+      "travail": 88,
+      "bienetre": 53,
+      "vieSociale": 48,
+      "finances": 87
+    }
+  },
+  "2026-05-28|taureau|nuit": {
+    "ambiance": "Le ciel charrie des nuées vertes et jaunes d’Azaka la respiration lourde des champs après l’averse le krapò dlo chante sa mélopée tremblée depuis les sources de l’Îlet Macou. Ce soir Vénus danse avec la terre un pas lent où la prospérité mûrit comme la dartrier sous la pluie bienfaisante.",
+    "chiffrePorteBonheur": 17,
+    "compatibilite": [
+      "gemeaux",
+      "belier"
+    ],
+    "loa": "Azaka",
+    "familleVaudou": "Congo",
+    "couleursSacrees": [
+      "vert",
+      "jaune"
+    ],
+    "lune": {
+      "bienetre": "Bois sitwonèl et laisse infuser 10 minutes sous la lampe à pétrole cette nuit de Croissant gibbeuse. Le remède soulagera tes maux de tête et apaisera ton estomac après les plats lourds de midi.",
+      "beaute": "Frotte tes avant-bras avec une feuille de kokotye écrasée pour calmer les rougeurs dues à la pluie et au vent. Son suc jaune lave les cicatrices des dartres comme un baume ancestral.",
+      "esprit": "Porte un chapeau paille tressé ce soir il abrite tes pensées comme il a abrité les rêves des marrons sous le joug. Ses fibres gardent la mémoire des résistances silencieuses.",
+      "maison": "Dernière partie de jwé ka avec les ti moun avant le sommeil cette Croissant gibbeuse. Les dés de bois cliquetant scellent l’unité du foyer mieux que n’importe quel sort.",
+      "jardinage": "Sème des noyaux de nèflié (néflier du Japon) près du mangot dès que la terre cesse de trembler sous la pluie. Ces graines promises à l’ombre porteront des fruits sucrés quand l’arbre aura bu toute la force de la Croissant gibbeuse."
+    },
+    "scores": {
+      "amour": 58,
+      "travail": 82,
+      "bienetre": 60,
+      "vieSociale": 55,
+      "finances": 81
+    }
+  },
+  "2026-05-28|taureau|matin": {
+    "ambiance": "Azaka danse avec son vert et son jaune autour des dlo sacrées où le krapò dlo coasse sous la bruine. La terre chaude de ce croissant gibbeux porte en elle la mémoire des récoltes promises mais aussi la menace sourde de la chytridiomycose qui ronge les zones humides. L’énergie du Taureau ce matin est comme l’igwann pési qui fouille la terre : tenace, méthodique, mais prête à bondir si le sol se Agis toujours avec intégrité et respect des lois ses pattes.",
+    "chiffrePorteBonheur": 19,
+    "compatibilite": [
+      "gemeaux",
+      "belier"
+    ],
+    "loa": "Azaka",
+    "familleVaudou": "Congo",
+    "couleursSacrees": [
+      "vert",
+      "jaune"
+    ],
+    "lune": {
+      "bienetre": "Boire l’infusion sètwonèl tiède avant midi, c’est comme appeler l’énergie d’Azaka dans ton corps. La météo humide de Pointe-à-Pitre alourdit les têtes, un remède chaud pour purifier le sang et chasser les migren.",
+      "beaute": "Frotter tes pieds avec des pétales de kokotye écrasés dans de l’huile de coco le matin, pour adoucir la peau et chasser les dart. Cette fleur jaune sauvage pousse près des chemins comme un refus de la sécheresse, comme toi de te laisser abîmer.",
+      "esprit": "Porter un chapeau paille tressé en secret ce matin, c’est rappeler que la liberté se porte aussi sur la tête. Sous la lune gibbeuse, couvre ta nuque pour éviter que les esprits de l’îlet Macou ne te surprennent avec leurs histoires de noyés.",
+      "maison": "Disposer un jwé ka sur la table basse ce soir, c’est renouer avec l’ancestralité sans parler. Les pions en bois noir racontent des vies oubliées, et les parties gagnées sont des victoires contre l’oubli.",
+      "jardinage": "Planter un nèflié (néflier) en pleine lune gibbeuse, c’est semer la douceur dans ton jardin. Sous la bruine tiède, son tronc résistant résistera à l’humidité, comme toi aux vents contraires. Récoltera des fruits en grappes quand le soleil reviendra."
+    },
+    "scores": {
+      "amour": 58,
+      "travail": 82,
+      "bienetre": 60,
+      "vieSociale": 55,
+      "finances": 81
+    }
+  },
+  "2026-05-28|taureau|midi": {
+    "ambiance": "Aujourd'hui vénus danse avec azaka dans la terre verte du dartrier ce matin l'énergie est lourde de pluie et de mémoire les krapò dlo chantent au bord des sources sacrées comme si le ciel voulait laver les maux d'hier.",
+    "chiffrePorteBonheur": 23,
+    "compatibilite": [
+      "gemeaux",
+      "belier"
+    ],
+    "loa": "Azaka",
+    "familleVaudou": "Congo",
+    "couleursSacrees": [
+      "vert",
+      "jaune"
+    ],
+    "lune": {
+      "bienetre": "Si fanm nan Prépare toi une boisson chaude réconfortante (eau, thé classique) et médite sur ses bienfaits de sitwonèl avec une feuille de dlo de source pour chasser les maux de tête la lune croissante est propice à la purification des corps fatigués.",
+      "beaute": "Bwa kokotye pilé en poudre devient un onguent doré pour apaiser les dartres sous la lune jaune cette fleur sauvage parle de résistance par la douceur.",
+      "esprit": "Porte un chapeau paille en secret aujourd'hui la mangrove murmure aux esprits des noyés ces fibres tressées gardent la mémoire de ceux qui ont refusé l'oppression sans un mot.",
+      "maison": "Sors ton jwé ka ce soir et joue à voix basse avec les ti moun ce jeu de rondes invisibles unit les familles depuis l'esclavage en silence.",
+      "jardinage": "Plante un nèflié (néflier du Japon) sous la lune gibbeuse il portera des fruits jaunes en grappes comme les offrandes à azaka regarde-le grandir jour après jour."
+    },
+    "scores": {
+      "amour": 58,
+      "travail": 82,
+      "bienetre": 60,
+      "vieSociale": 55,
+      "finances": 81
+    }
+  },
+  "2026-05-28|taureau|soir": {
+    "ambiance": "Azaka dans son champ de canne verte et jaune surveille la pluie fine qui tombe sur Pointe-à-Pitre comme une bénédiction des ancêtres. La terre humide exhale l’odeur du dartrier et murmure les noms des pêcheurs perdus en mangrove à Îlet Macou. Vénus brille fort ce soir pour les Taureau, mais gare à l’excès de stabilité qui pourrait étouffer la souplesse des krapò dlo.",
+    "chiffrePorteBonheur": 17,
+    "compatibilite": [
+      "gemeaux",
+      "belier"
+    ],
+    "loa": "Azaka",
+    "familleVaudou": "Congo",
+    "couleursSacrees": [
+      "vert",
+      "jaune"
+    ],
+    "lune": {
+      "bienetre": "Bwi an tan sitwonèl ce soir, kwi sou dife en infusion. Deux branches fraîches suffisent pour chasser les maux de tête et calmer l’âme après la journée sous la pluie.",
+      "beaute": "Frotte ton visage avec les pétales de kokotye écrasés dans de l’huile de coco avant de dormir. La couleur jaune du kokotye éclaircit le teint et apaise les irritations de la peau après les embruns.",
+      "esprit": "Porte ce soir un chapeau paille tressé à la main, gwenn douvan comme un bouclier contre les pensées lourdes. Sous la Croissant gibbeuse, il capte les murmures des esprits de la mer qui veillent à Îlet Macou.",
+      "maison": "Dispose sur ta table à manger un jeu de ka en bois rouge et vert. Jouez à deux ou quatre, mais surtout gardez les règles secrètes comme on gardait les chants sous l’esclavage.",
+      "jardinage": "Plante un nèflié (néflier) près de ta case ce week-end, sous la lumière croissante de la lune. Il donnera des fruits sucrés en grappes dès l’année prochaine si tu le protèges des fourmis avec de la cendre."
+    },
+    "scores": {
+      "amour": 58,
+      "travail": 82,
+      "bienetre": 60,
+      "vieSociale": 55,
+      "finances": 81
+    }
+  },
+  "2026-05-28|gemeaux|nuit": {
+    "ambiance": "Le jour est sous l’influence de Legba, le gardien des portes, qui souffle ses vents rouges et noirs entre Pointe-à-Pitre et la Soufrière. Comme le Pic de Gwadloup qui veille sur la forêt, Mercure murmure des messages à ceux qui savent écouter. La pluie modérée lave les mémoires et réveille les sens, tandis que Legba trace des chemins invisibles pour les Gémeaux.",
+    "chiffrePorteBonheur": 7,
+    "compatibilite": [
+      "belier",
+      "taureau"
+    ],
+    "loa": "Legba",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "rouge",
+      "noir"
+    ],
+    "lune": {
+      "bienetre": "Prenez korosòl ce soir, faisan. Elle calme les douleurs comme elle apaise les esprits. Buvez-la avant de dormir pour un sommeil profond, zòt.",
+      "beaute": "Zanno parfume vos nuits et attire les esprits bienveillants. Passez-en une infusion sur votre peau avant de vous coucher, sa fraîcheur est magique.",
+      "esprit": "Écoutez le tambou ka ce soir, même faiblement. Son rythme porte la mémoire des ancêtres, interdit mais vivant. Comme la lune gibbeuse, il grandit dans l’ombre.",
+      "maison": "Dansez un peu de bèlé (danse traditionnelle) chez vous, même seul. Les pas interdits gardent la résistance en vie. Laissez la musique guider vos hanches, comme au temps des veillées.",
+      "jardinage": "Plantez des banann pòm aujourd’hui, elles aiment la pluie. Leurs feuilles larges protègent les petits potagers des vents. Cueillez-les quand elles sont dorées, manman."
+    },
+    "scores": {
+      "amour": 51,
+      "travail": 72,
+      "bienetre": 70,
+      "vieSociale": 66,
+      "finances": 71
+    }
+  },
+  "2026-05-28|gemeaux|matin": {
+    "ambiance": "Ce matin l’énergie danse comme Legba rouge devant le Pic de Gwadloup ses ailes frôlant les nuages pluvieux. Le vent léger porte les murmures des esprits de Pointe Allègre vers tes oreilles. La lune croissante gibbeuse t’offre une journée de melimélo où chaque choix peut être un chemin vers la lumière ou l’ombre.",
+    "chiffrePorteBonheur": 47,
+    "compatibilite": [
+      "taureau",
+      "belier"
+    ],
+    "loa": "Legba",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "rouge",
+      "noir"
+    ],
+    "lune": {
+      "bienetre": "Bwen korosòl séchées dans l’eau chaude ce soir. Y ka soigner les os fatigués par la fatigue, y ka apaiser l’esprit comme une berceuse malgache.",
+      "beaute": "Yonn zanno écrasée sur les tempes avant de dormir. Son parfum y ka attirer les loa la nuit, y ka calmer les peaux irritées par le sel et le vent.",
+      "esprit": "Écoute le son du tambou ka ce soir même s’il résonne à distance. Ses battements y ka réveiller Legba en toi, y ka te rappeler que la mémoire ne meurt jamais.",
+      "maison": "Balaye ta terrasse ce matin avec des feuilles de brizé (plante trois tasses). Y ka chasser les mauvaises énergies, y ka préparer l’espace pour les échanges du jour.",
+      "jardinage": "Plante un banann pòm à la pleine lune ce soir. Y ka donner des fruits parfumés en trois lunes, y ka résister au vent comme toi aujourd’hui."
+    },
+    "scores": {
+      "amour": 51,
+      "travail": 72,
+      "bienetre": 70,
+      "vieSociale": 66,
+      "finances": 71
+    }
+  },
+  "2026-05-28|gemeaux|midi": {
+    "ambiance": "Aujourd’hui Legba souffle sur le Pic de Gwadloup avec son souffle de choix. Les nuages dansent comme des esprits qui chuchotent dans le vent. La pluie tombe en rythme mais ne noie pas les questions qui montent en toi.",
+    "chiffrePorteBonheur": 23,
+    "compatibilite": [
+      "taureau",
+      "belier"
+    ],
+    "loa": "Legba",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "rouge",
+      "noir"
+    ],
+    "lune": {
+      "bienetre": "Ce soir Laisse-toi guider par les énergies bienveillantes, sans ingestion de substance non identifiée korosòl avant de dormir. Elle calme les nerfs et les os comme une main de manman sur ton front.",
+      "beaute": "Frotte tes poignets avec une feuille de zanno. Son parfum envoûte la nuit et attire les esprits bienveillants.",
+      "esprit": "Écoute le tambou ka même de loin. Son écho porte les mots de tes ancêtres interdits par le Code Noir.",
+      "maison": "Ce soir, danse seul un bèlé (danse traditionnelle) devant ton miroir. Que ton corps parle quand ta voix refuse.",
+      "jardinage": "Plante des banann pòm près de la source. Elles poussent vite sous la pluie gibbeuse et sucrent tes jours à venir."
+    },
+    "scores": {
+      "amour": 51,
+      "travail": 72,
+      "bienetre": 70,
+      "vieSociale": 66,
+      "finances": 71
+    }
+  },
+  "2026-05-28|gemeaux|soir": {
+    "ambiance": "Aujourd'hui Legba veille à Pointe-à-Pitre sous un ciel lourd et doux. Le vent murmure à Pointe Allègre où l'on dépose des cannes blettes pour ouvrir les portes. Mercure danse avec la lune gibbeuse, énergie de choix et de secrets à côté du Pic de Gwadloup dont l'ombre s'étire longuement. Travail et finances tiennent le haut du pavé comme un bèlé (danse interdite) qui soudain éclate en pleine rue.",
+    "chiffrePorteBonheur": 47,
+    "compatibilite": [
+      "taureau",
+      "belier"
+    ],
+    "loa": "Legba",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "rouge",
+      "noir"
+    ],
+    "lune": {
+      "bienetre": "Boire korosòl avant de dormir, cha angwè (très chaud). Ça soulage les os qui grincent comme un vieux roukou agité par le vent.",
+      "beaute": "Frotter tes poignets avec des pétales zanno à la tombée du soir. Son parfum capte les rêves comme un tambou ka appelle les esprits.",
+      "esprit": "Écouter le tambou ka ce soir en pensant aux ancêtres. Chaque coup résonne dans tes os comme un écho de la Croissant gibbeuse qui monte.",
+      "maison": "Balayer la véranda au crépuscule en marquant un cercle rouge à la chaux. Un geste simple qui chasse les mauvais esprits et attire la prospérité comme un bèlé (danse) attire les voisins.",
+      "jardinage": "Planter des banann pòm aujourd'hui sous la pluie fine. Elles pousseront douces comme des promesses et nourriront les enfants à l'automne."
+    },
+    "scores": {
+      "amour": 51,
+      "travail": 72,
+      "bienetre": 70,
+      "vieSociale": 66,
+      "finances": 71
+    }
+  },
+  "2026-05-28|cancer|nuit": {
+    "ambiance": "La lune gibbeuse danse avec Mami Dlo sous la pluie tiède des embouchures, l’eau salée et douce murmurant des secrets à l’oreille des tortues luth qui montent respirer à la surface. Ce soir, le vert des feuilles de brizée se mêle au bleu des flots de la Soufrière, porteurs de rêves lourds mais apaisés.",
+    "chiffrePorteBonheur": 7,
+    "compatibilite": [
+      "taureau",
+      "belier"
+    ],
+    "loa": "Mami Dlo",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "bleu",
+      "vert"
+    ],
+    "lune": {
+      "bienetre": "Boire korosòl ce soir avant de dormir, comme on boit un remède contre le mal de vivre. La tisane calme les nerfs et soulage les douleurs qui grattent l’âme après une journée de pluie grise.",
+      "beaute": "Passe un peu d’eau de flè d'awanj sur tes tempes et tes poignets avant de te coucher. Son parfum sucré lave les visages fatigués et attire les bonnes vibrations comme un vévé (dessin sacré) attire les lwa.",
+      "esprit": "Va te poser près d’une source ce soir, même une petite, et écoute l’eau chanter. Écrire un mot ou un nom sur une feuille et la jeter à l’eau en priant Mami Dlo, la reine des flots secrets.",
+      "maison": "Fais chanter un chanté mas à voix basse dans ta cuisine, même seul. Les mots codés résonnent dans les murs et chassent les énergies lourdes comme un balai invisible.",
+      "jardinage": "Plante des graines de ti-bòm dans un pot près de ta fenêtre ce soir. Ses fleurs blanches et roses repoussent les mauvais sorts et éclairent l’ombre comme la lune gibbeuse."
+    },
+    "scores": {
+      "amour": 48,
+      "travail": 61,
+      "bienetre": 82,
+      "vieSociale": 77,
+      "finances": 59
+    }
+  },
+  "2026-05-28|cancer|matin": {
+    "ambiance": "La mer est agitée ce matin comme les émotions du Cancer sous Mami Dlo les vagues apportent sa protection bleue et verte à ceux qui osent écouter leur intime murmure. La pluie modérée lave les feuilles de brizée et les tortues luth glissent vers les embouchures sacrées pour puiser la force des ancêtres.",
+    "chiffrePorteBonheur": 19,
+    "compatibilite": [
+      "taureau",
+      "belier"
+    ],
+    "loa": "Mami Dlo",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "bleu",
+      "vert"
+    ],
+    "lune": {
+      "bienetre": "Bwè yon ti kwafé kòyosòl pou anlèvi lèspas pou ti douvan ou. Lè zòt apwen mal nan kò oswa nan tèt ou se sa pou bwè sa anvan ou ale dòmi.",
+      "beaute": "Lalin anvi wè ou klè se flè dawaji ki pou bay ou ayè ki sentè. Vle zong long epi lwen sa vle di ou mete gout dlo flè sa sou cheve ou.",
+      "esprit": "Gade sou lavi ou tankou sou yon sous ou santi wè tout bagay klè anba dlo. La lune est gibbeuse ce matin rappelle-toi que chaque goutte compte pour la purification de ton âme.",
+      "maison": "Chanté mas ka maske verite anba son ou. Si ou genyen kè jwi ou anpil nan mizik anba la lune ce soir.",
+      "jardinage": "Ti bòm ou ka plante pou ou genyen lavi kòwè bel nan jaden ou. Anba la lune gibbeuse se bon moman pou ou plante li sou kòtè la rivyè."
+    },
+    "scores": {
+      "amour": 48,
+      "travail": 61,
+      "bienetre": 82,
+      "vieSociale": 77,
+      "finances": 59
+    }
+  },
+  "2026-05-28|cancer|midi": {
+    "ambiance": "Mami Dlo fait bruisser ses eaux bleues vertes sur les embouchures de rivières aujourd’hui. La Lune en Croissant gibbeuse murmure aux oreilles des Cancer comme une kalbas de tisane chaude. La pluie modérée lave les mémoires lourdes des ancêtres, porte les prières vers le ciel.",
+    "chiffrePorteBonheur": 29,
+    "compatibilite": [
+      "taureau",
+      "belier"
+    ],
+    "loa": "Mami Dlo",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "bleu",
+      "vert"
+    ],
+    "lune": {
+      "bienetre": "Korosòl ce midi te protège des mauvais rêves, des douleurs de corps. Bois une décoction le soir sous l’oreiller pour un sommeil doux comme la peau d’une tortue luth.",
+      "beaute": "Flè d'awanj ce soir parfume ta peau et tes cheveux. Son eau de Cologne naturelle apaise les peaux irritées par le sel marin de la brise.",
+      "esprit": "Source sacrée ce midi attire tes pensées vers la purification. L’eau mélangée de mer emporte les peurs comme une marée. Pense à Mami Dlo en plongeant tes mains dans une bassine.",
+      "maison": "Chanté mas résonne dans ta maison pour chasser les énergies lourdes. Les mélodies masquées portent les messages de résistance que même les murs entendent.",
+      "jardinage": "Ti-bòm ce jour fleurit sous la pluie. Plante-la près de ton seuil pour attirer la chance et protéger ton foyer des mauvais sorts."
+    },
+    "scores": {
+      "amour": 48,
+      "travail": 61,
+      "bienetre": 82,
+      "vieSociale": 77,
+      "finances": 59
+    }
+  },
+  "2026-05-28|cancer|soir": {
+    "ambiance": "La lune croise Mami Dlo ce soir sous une pluie douce et salée qui rappelle les embouchures sacrées où le sel et l’eau s’unissent. Le vent porte l’odeur du brizé (plante 3 tasses) et le silence des tortues luth qui avancent discrètes vers le large. Ton cœur bat au rythme d’un korosòl qui murmure des soins anciens dans ton sang.",
+    "chiffrePorteBonheur": 23,
+    "compatibilite": [
+      "taureau",
+      "belier"
+    ],
+    "loa": "Mami Dlo",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "bleu",
+      "vert"
+    ],
+    "lune": {
+      "bienetre": "Bwè un ti tcha brizé (tisane brizé) avant dodo pour apaiser les douleurs et le mal de tête. Le korosòl sert aussi à calmer les nerfs comme un baume invisible.",
+      "beaute": "Pase flè d'awanj sur ton visage le matin. Son parfum tire les soucis comme une brise marine tire les mauvaises pensées.",
+      "esprit": "Visite une source sacrée avant le coucher du soleil. Trempe tes pieds dans l’eau salée pour chasser les mauvaises énergies comme on lave les pieds des morts avant l’enterrement.",
+      "maison": "Fais résonner un chanté mas dans ta cuisine. Ces chants protègent la maison et éloignent les esprits malveillants.",
+      "jardinage": "Plante des ti-bòm près de ta porte. Elles poussent vite sous la lune gibbeuse et éloignent les mauvais sorts par leur beauté."
+    },
+    "scores": {
+      "amour": 48,
+      "travail": 61,
+      "bienetre": 82,
+      "vieSociale": 77,
+      "finances": 59
+    }
+  },
+  "2026-05-28|lion|nuit": {
+    "ambiance": "Le jour baigne dans la douceur rosée d’Ezili Freda l’eau salée de la Grande Vigie où ton âme de Lion doit enfin se poser au lieu de rugir. Entre deux averses d’été guadeloupéen l’énergie se fait caressante comme les écailles du serpan moun glissant sur la roche volcanique. Évite les excès de feu intérieure ce soir doucement.",
+    "chiffrePorteBonheur": 29,
+    "compatibilite": [
+      "belier",
+      "verseau"
+    ],
+    "loa": "Ezili Freda",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "rose",
+      "blanc",
+      "bleu"
+    ],
+    "lune": {
+      "bienetre": "Zèb a vè (herbe à vers) nettoie l’intérieur en infusion ce soir tu sentiras bouger une énergie neuve et légère comme la brise après la pluie. À prendre avant le crépuscule pour chasser tout poids inutile de ton corps.",
+      "beaute": "Pié manyòk écrasée en cataplasme sur ton visage élimine les traces de fatigue et luit ta peau d’un éclat doux comme la lune sur l’eau. Offre ces pétales à Ezili Freda pour bénir ta beauté naturelle.",
+      "esprit": "La Source sacrée murmure sous tes pas à la croissant gibbeuse où la lune gonfle comme un sein nourricier. Bois son eau claire en silence et laisse-la emporter les doutes qui te rongent depuis l’aube.",
+      "maison": "Une flûte en bambou dans ton salon ce soir attire les lwa et repousse les énergies lourdes quand tu joues des airs créoles entre chien et loup. Ce son ancien est ton bouclier contre les tensions du foyer.",
+      "jardinage": "Sème les kenèt près de ton case ce soir sous la gibbeuse car leur parfum acidulé purifie l’air et éloigne les mauvais esprits. Ces grappes vertes annoncent l’abondance jusqu’à la prochaine lune."
+    },
+    "scores": {
+      "amour": 51,
+      "travail": 51,
+      "bienetre": 91,
+      "vieSociale": 86,
+      "finances": 50
+    }
+  },
+  "2026-05-28|lion|matin": {
+    "ambiance": "Aujourd’hui l’énergie est légère comme la brise sur les falaises de la Grande Vigie où Ezili Freda danse avec ses robes roses et bleues sous la pluie créole. Le Serpan moun se love dans ton *ki* (force vitale) te rappelant que la puissance se porte en silence. Les scores du jour parlent clair comme le tamariné qui acidule le ciel avec sa douceur.",
+    "chiffrePorteBonheur": 29,
+    "compatibilite": [
+      "belier",
+      "verseau"
+    ],
+    "loa": "Ezili Freda",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "rose",
+      "blanc",
+      "bleu"
+    ],
+    "lune": {
+      "bienetre": "Bois un peu de *zèb a vè* (herbe à vers) en décoction pour purger ton ventre et réveiller ta force intérieure comme le fait la lune gibbeuse. Cette plante amère mais noble nettoie l’âme comme l’eau de pluie lave la terre.",
+      "beaute": "Frotte ta peau avec une infusion de *pié manyòk* (fleur de manioc) le matin pour un teint clair et frais comme les aubes créoles. Cette fleur sacrée des Arawaks garde la peau douce comme la lune caresse la mer.",
+      "esprit": "Va te recueillir près d’une source comme ceux qui jadis y venaient murmurer des prières à *Bouddha coq* (esprit de l’eau). La Croissant gibbeuse amplifie les messages de l’invisible quand on écoute avec le cœur.",
+      "maison": "Accroche une flûte en bambou près de ta porte pour chasser les mauvaises énergies et attirer la joie musicale des ancêtres. Ce petit objet noir et or parle sans mots comme les chants de résistance cachés sous le silence.",
+      "jardinage": "Plante des *kenèt* (quenettes) en ce mois où la terre est généreuse et l’ombre douce. Leurs fruits jaunes et sucrés viendront nourrir ta famille comme la lune nourrit les marées."
+    },
+    "scores": {
+      "amour": 51,
+      "travail": 51,
+      "bienetre": 91,
+      "vieSociale": 86,
+      "finances": 50
+    }
+  },
+  "2026-05-28|lion|midi": {
+    "ambiance": "Le jour porte la douceur d’Ezili Freda, son rose et son blanc flottant dans l’air humide comme un parfum de tamariné sous la pluie. Le Serpan moun s’étire au soleil entre deux averses, rappelant que la force vitale ne craint pas les tempêtes. Le Croissant gibbeuse murmure aux falaises de la Grande Vigie, invitant à méditer l’infini de l’Atlantique sans craindre les vagues.",
+    "chiffrePorteBonheur": 17,
+    "compatibilite": [
+      "belier",
+      "verseau"
+    ],
+    "loa": "Ezili Freda",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "rose",
+      "blanc",
+      "bleu"
+    ],
+    "lune": {
+      "bienetre": "Bwè anpil dlo aujourd’hui, comme Zeb a vers qui purifie l’intérieur en silence. Un verre d’infusion le matin chasse les maux insidieux, comme l’herbe chasse les vers.",
+      "beaute": "Pié manyòk parfume tes cheveux ce soir, son pollen doux apaisant les peaux irritées par le sel. Pose une feuille écrasée sur ton front pour un teint frais comme l’aube après l’orage.",
+      "esprit": "Fais couler l’eau de la Source sacrée sur tes mains, comme on lave les souillures de l’âme pendant la Croissant gibbeuse. L’océan répondra à tes prières chuchotées au vent.",
+      "maison": "Joue une mélodie dans la maison avec une flûte en bambou, son chant chasse les mauvaises énergies. Les notes résonnent comme les chants des ancêtres sous les case-à-nègres.",
+      "jardinage": "Plante des kenèt près de ton case, leurs grappes vertes mûriront avant les prochaines grandes pluies. Offre-les aux esprits pour qu’ils bénissent ta récolte de l’année."
+    },
+    "scores": {
+      "amour": 51,
+      "travail": 51,
+      "bienetre": 91,
+      "vieSociale": 86,
+      "finances": 50
+    }
+  },
+  "2026-05-28|lion|soir": {
+    "ambiance": "Le soleil couchant sur Pointe-à-Pitre colore les flots de bleu Ezili Freda ce soir, le vent murmure des prières en créole tandis que le Serpan moun glisse entre les herbes comme un gardien de ta ki. La pluie lave les espoirs trop lourds, laisse place à une énergie de feu doux, où la passion s’épanouit sans brûler.",
+    "chiffrePorteBonheur": 23,
+    "compatibilite": [
+      "verseau",
+      "belier"
+    ],
+    "loa": "Ezili Freda",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "rose",
+      "blanc",
+      "bleu"
+    ],
+    "lune": {
+      "bienetre": "Bois un thé de zèb a vè (herbe à vers) ce soir, ka pwoche ton ventre comme un bouclier guérisseur après les pluies de la journée.",
+      "beaute": "Frotte tes mains avec les pétales douces de pié manyòk pour une peau lisse comme la crème de tamariné sous la lune gibbeuse.",
+      "esprit": "Assieds-toi près d’une source claire, laisse l’eau te rappeler que la spiritualité est comme la Croissant gibbeuse, elle grandit chaque nuit pour te porter plus haut.",
+      "maison": "Joue une mélodie sur ta flûte en bambou ce soir, ka fè w konsantré (ça te recentre) et chasse les énergies lourdes accumulées dans les coins de ta case.",
+      "jardinage": "Plante des kenèt près de ton abri, sous la Croissant gibbeuse, leurs fruits mûriront comme des étoiles tombées dans tes mains."
+    },
+    "scores": {
+      "amour": 51,
+      "travail": 51,
+      "bienetre": 91,
+      "vieSociale": 86,
+      "finances": 50
+    }
+  },
+  "2026-05-28|vierge|nuit": {
+    "ambiance": "L’eau de Simbi court sous nos pieds ce soir bleuté vert. Le Kabribo chante sa mélodie comme un mantra de patience. La pluie lave nos doutes, emporte ce qui nous encombre sans clamer sa force. La Croissant gibbeuse nous offre une énergie terreuse et profonde, propice aux rites discrets.",
+    "chiffrePorteBonheur": 23,
+    "compatibilite": [
+      "cancer",
+      "poissons"
+    ],
+    "loa": "Simbi",
+    "familleVaudou": "Petro",
+    "couleursSacrees": [
+      "bleu",
+      "vert"
+    ],
+    "lune": {
+      "bienetre": "Si fièvre ou corps lourd te mange, fais bouillir du Chadon béni avec du gingembre et du citron vert. Bois-le tiède au coucher, ton sang écoutera mieux la voix de ton ventre et tes os.",
+      "beaute": "Pour un teint qui resplendit comme le soleil sur la mer, frotte ta peau avec une feuille de Pié manyòk écrasée. Son jus doux calme les irritations et donne un éclat de jeunesse sans produits d’ailleurs.",
+      "esprit": "Sous la Croissant gibbeuse, va méditer près d’un Grot Dlo même petit. L’eau murmure les noms des marrons, écoute sans répondre. Ton esprit s’allégera comme une poule libérée de sa cage.",
+      "maison": "Chante à voix basse un Chanté mas en balayant ta maison de l’entrée vers la sortie. Les mots danseront dans les coins, chasseront les énergies lourdes comme la pluie chasse la poussière.",
+      "jardinage": "Plante un Bèlizèl / Balisié (balisier) devant ta case aujourd’hui. Ses feuilles larges protègent le sol, ses fleurs rouges marquent l’espace. En Croissant gibbeuse, elle grandira vite et tiendra le vent à distance."
+    },
+    "scores": {
+      "amour": 60,
+      "travail": 46,
+      "bienetre": 95,
+      "vieSociale": 90,
+      "finances": 44
+    }
+  },
+  "2026-05-28|vierge|matin": {
+    "ambiance": "Le jour s’ouvre sous le chant du kabribo comme une bénédiction de Simbi, loa Petro aux couleurs de l’océan bleu et de la forêt verte. L’énergie terre-mer de la Vierge pulse fort aujourd’hui, purifiée par la pluie qui lave les mémoires enfouies sous les buttes d’iyam. Les vents légers murmurent des secrets anciens que seul le cœur peut entendre.",
+    "chiffrePorteBonheur": 19,
+    "compatibilite": [
+      "cancer",
+      "poissons"
+    ],
+    "loa": "Simbi",
+    "familleVaudou": "Petro",
+    "couleursSacrees": [
+      "bleu",
+      "vert"
+    ],
+    "lune": {
+      "bienetre": "Chadon béni pousse partout dans le jardin. Fais infuser ses feuilles pour chasser la fièvre ou les mauvaises humeurs, comme le faisaient nos aïeules en makout. Mêle-le au thé de cerase pour une potion purificatrice.",
+      "beaute": "Pié manyòk éclot en abondance. Écrases-en les pétales dans du beurre de coco pour un masque éclaircissant et régénérant. Son parfum doux rappelle les matins de makak après l’averse.",
+      "esprit": "Rends-toi à la Grot Dlo si Possible. Sous la lune gibbeuse, l’eau y est vivante et emporte les doutes comme l’urakan emporte les feuilles mortes. Écoute le silence, il murmure des vérités que Simbi garde.",
+      "maison": "Chanté mas résonne dans ta maison. Chante à mi-voix les airs de gwoka pour chasser les énergies lourdes. Les mots codés protègent ton foyer des intrusions.",
+      "jardinage": "Bèlizèl fleurit en cette saison. Plante-le en bordure de ton jardin, son bec rouge délimite les zones comme un malomé (bouclier) invisible. Ses feuilles larges ombragent les carottes et le chou caraïbe."
+    },
+    "scores": {
+      "amour": 60,
+      "travail": 46,
+      "bienetre": 95,
+      "vieSociale": 90,
+      "finances": 44
+    }
+  },
+  "2026-05-28|vierge|midi": {
+    "ambiance": "Le jour danse entre pluie tiède et vent léger comme un chant de Kabribo au crépuscule. L’énergie Simbi glisse en bleu vert sur toi, purifiant et éclairant chaque pensée sans jugement. Les nuages bas à Pointe-à-Pitre ne sont que voiles légers, le ciel n’est jamais loin.",
+    "chiffrePorteBonheur": 11,
+    "compatibilite": [
+      "cancer",
+      "poissons"
+    ],
+    "loa": "Simbi",
+    "familleVaudou": "Petro",
+    "couleursSacrees": [
+      "bleu",
+      "vert"
+    ],
+    "lune": {
+      "bienetre": "Mange chadon béni en acra ce soir pour chasser la fièvre de la journée. La plante est dans chaque soufrière, prends-en comme un remède des anciens.",
+      "beaute": "Lave ton visage avec l’eau infusée de pié manyòk pour éclaircir le teint comme une rosée matinale. La plante pousse près des cases et embaume l’air.",
+      "esprit": "Va près d’un gout d’eau ce soir et écoute le murmure des ancêtres sous la Croissant gibbeuse. L’eau porte leurs voix plus fort que le vent.",
+      "maison": "Chante un kanté mas en travaillant aujourd’hui pour que tes mots soient entendus au-delà des murs. La musique est une arme et une prière.",
+      "jardinage": "Plante bèlizèl en butte ce matin pour délimiter ton jardin comme un chemin vers le visible et l’invisible. La fleur rouge guidera tes pas chaque soir."
+    },
+    "scores": {
+      "amour": 60,
+      "travail": 46,
+      "bienetre": 95,
+      "vieSociale": 90,
+      "finances": 44
+    }
+  },
+  "2026-05-28|vierge|soir": {
+    "ambiance": "Aujourd'hui eau et terre dansent sous Simbi, le loa bleu-vert qui lave les blessures des jours passés. Comme le kabribo chante sous la pluie, écoute la voix des ancêtres qui murmure entre les feuilles. La Croissant gibbeuse attire la lumière dans l'ombre du Parc National, où chaque goutte porte la mémoire du malomé (bouclier invisible).",
+    "chiffrePorteBonheur": 47,
+    "compatibilite": [
+      "cancer",
+      "poissons"
+    ],
+    "loa": "Simbi",
+    "familleVaudou": "Petro",
+    "couleursSacrees": [
+      "bleu",
+      "vert"
+    ],
+    "lune": {
+      "bienetre": "Boire une décoction de chadon béni chaude avant de dormir chasse la fatigue. Cette plante omniprésente en Guadeloupe calme le ventre et réchauffe le corps comme un lambi en hiver.",
+      "beaute": "Frotter une feuille de pié manyòk sur le visage éclaircit l'épiderme et donne un éclat de lune. Ses pétales rouges écrasés font une poudre fine pour les masques de beauté des femmes créoles.",
+      "esprit": "La Croissant gibbeuse attire les esprits vers les Grot Dlo où les anciens marrons priaient. Assieds-toi près de l'eau murmure pour recevoir leurs conseils sans bruit.",
+      "maison": "Chanté mas protège ta maison ce soir quand le vent porte des messages anciens. Allume une lampe bleue pour guider les esprits amis vers ton foyer.",
+      "jardinage": "Plante un balisié (balisier) rouge en bordure du jardin ce soir sous la Croissant gibbeuse. Ses feuilles larges protègent les autres plantes comme le lambi protège les siens."
+    },
+    "scores": {
+      "amour": 60,
+      "travail": 46,
+      "bienetre": 95,
+      "vieSociale": 90,
+      "finances": 44
+    }
+  },
+  "2026-05-28|balance|nuit": {
+    "ambiance": "Balance ce soir, balance entre la pluie tiède qui lave Pointe-à-Pitre et le vent salé de la Pointe des Châteaux. Adja veille avec son balance blanche et jaune, te rappelant que l’équilibre n’est pas une paix molle mais une justice vivante. Écoute le chouèt kabrit dans les grottes, il murmure des vérités que le jour cache.",
+    "chiffrePorteBonheur": 73,
+    "compatibilite": [
+      "gemeaux",
+      "belier"
+    ],
+    "loa": "Adja",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "blanc",
+      "jaune"
+    ],
+    "lune": {
+      "bienetre": "Bouyi korosòl ce soir pour calmer les nerfs avant le sommeil. Laisse infuser les feuilles dix minutes sous la lampe à pétrole, comme ta grand-mère le faisait quand la nuit pesait trop lourd.",
+      "beaute": "Pwé flè d'awanj sur tes poignets avant de dormir. Son parfum ancre l’âme et éloigne les mauvais rêves, comme on le faisait jadis avant les prières du soir.",
+      "esprit": "Joue du tambou ka même seul dans ta chambre. Le son traverse les murs et réveille les ancêtres endormis. La Croissant gibbeuse porte sa mémoire, écoute bien.",
+      "maison": "Tresse un chapeau paille avec des brins de brizée séchée. Pose-le sur ton buffet, symbole de résistance et de douceur.",
+      "jardinage": "Plante pòm kajou dès l’aube si le temps le permet. Son ombre protège et son fruit nourrit, parfait pour la Croissant gibbeuse qui grandit."
+    },
+    "scores": {
+      "amour": 71,
+      "travail": 46,
+      "bienetre": 93,
+      "vieSociale": 88,
+      "finances": 45
+    }
+  },
+  "2026-05-28|balance|matin": {
+    "ambiance": "Ce matin Adja balance vos pas avec la sagesse du chouèt kabrit qui niche dans les grottes. Sous la pluie modérée et le vent tiède la terre boit vos soucis comme la brizée boit la chanson du matin. Vénus vous murmure à l’oreille de marcher pieds nus sur les roches de la Pointe des Châteaux pour retrouver l’harmonie perdue.",
+    "chiffrePorteBonheur": 19,
+    "compatibilite": [
+      "gemeaux",
+      "belier"
+    ],
+    "loa": "Adja",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "blanc",
+      "jaune"
+    ],
+    "lune": {
+      "bienetre": "Bouyon korosòl ce soir avant dormir. Contre les douleurs qui rongent comme le maloya fait saigner les os.",
+      "beaute": "Ekli flè d'awanj sur tes poignets en quittant la douche. Ton corps sentira la prière créole et la douceur des nuits sans lune.",
+      "esprit": "Écoute le son du tambou ka dans le vent de la Croissant gibbeuse. Ses battements portent les noms des ancêtres que les maîtres voulaient taire.",
+      "maison": "Accroche un chapeau paille près de ta porte. Il te rappellera que la résistance se porte aussi sur la tête comme une couronne de lumière.",
+      "jardinage": "Plante le pòm kajou ce matin sous la pluie tiède. Ses fruits rouges attireront les oiseaux et ses feuilles seront ton remède contre la fatigue."
+    },
+    "scores": {
+      "amour": 71,
+      "travail": 46,
+      "bienetre": 93,
+      "vieSociale": 88,
+      "finances": 45
+    }
+  },
+  "2026-05-28|balance|midi": {
+    "ambiance": "La Croissant gibbeuse enveloppe la Balance d'une lumière laiteuse comme le plumage d'Adja. Les vents légers de Pointe-à-Pitre murmurent à travers la brizée qui diffuse ses arômes citronnés dans l'air humide. Vénus balance ton cœur entre raison et passion comme la mer entre deux marées sous la Pointe des Châteaux.",
+    "chiffrePorteBonheur": 29,
+    "compatibilite": [
+      "gemeaux",
+      "belier"
+    ],
+    "loa": "Adja",
+    "familleVaudou": "Rada",
+    "couleursSacrées": {
+      "0": "blanc",
+      "1": "jaune"
+    },
+    "lune": {
+      "bienetre": "Bwè korosòl se soir anvan dodo. Pa genyen difikilte pou domi, genyen mal dan bonyè ou ka jwi ti klè a korosòl.",
+      "beaute": "Pase dlo flè d'awanj sou visaj ou. Ou ka senti bon kòman jaden anmè pwòp ou an maten.",
+      "esprit": "Ékoute son tambou ka pa lwen. Sa son dirèk nan san ou sa fanmi ou te pèdi anba Chimen Senk.",
+      "maison": "Pann chapo paille an vant do. Pwotéje tèt ou an memwa tout moun ki te travay anba solèy pou yo pa genyen kont.Toi non plis.",
+      "jardinage": "Kole pòm kajou an boutik ou. Son branch malad ka done anba pye anba lune sa yo ka grandi byen."
+    },
+    "couleursSacrees": [],
+    "scores": {
+      "amour": 71,
+      "travail": 46,
+      "bienetre": 93,
+      "vieSociale": 88,
+      "finances": 45
+    }
+  },
+  "2026-05-28|balance|soir": {
+    "ambiance": "Aujourd’hui l’énergie balance s’étire comme la brise sur la Pointe des Châteaux l’air sent la brizée et la mer fouette les rochers volcaniques. Adja l’a pos sur la balance blanche et jaune regarde ton âme osciller entre raison et désir ce soir écoute la chouèt kabrit chuchoter dans l’ombre des grottes on dirrait qu’elle te murmure equilibre ou déséquilibre.",
+    "chiffrePorteBonheur": 7,
+    "compatibilite": [
+      "gemaux",
+      "belier"
+    ],
+    "loa": "Adja",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "jaune",
+      "blanc"
+    ],
+    "lune": {
+      "bienetre": "Bwè korosòl ce soir avant dodo son goût amer et sa douceur apaisent l’âme et les articulations. Une tasse à boire en écoutant le chant lointain des crapauds.",
+      "beaute": "Passe un peu d’eau fle d’awanj sur ton visage ce soir ça rafraîchit comme une prière créole. Son parfum colle à la peau comme l’histoire colle aux os.",
+      "esprit": "Écoute le tambou ka battre au loin ce soir même s’il est interdit garde l’oreille tendue il porte les voix que l’on a voulu taire. La lune gibbeuse écoute aussi.",
+      "maison": "Pose un chapeau paille sur ta tête ce soir il protège mieux qu’un toit il rappelle que la liberté se tresse en cachette avec des mains usées. Garde-le près de ta porte.",
+      "jardinage": "Regarde pòm kajou aujourd’hui son fruit rouge mûrit sous la pluie donne-lui un peu de terre fraîche et d’amour paresseux. Le sol de la Croissant gibbeuse boit tout et rend double."
+    },
+    "scores": {
+      "amour": 71,
+      "travail": 46,
+      "bienetre": 93,
+      "vieSociale": 88,
+      "finances": 45
+    }
+  },
+  "2026-05-28|scorpion|nuit": {
+    "ambiance": "La nuit guadeloupéenne chante sous les doigts du Baron Samedi ce soir. Le ☠️ noir de son chapeau se mêle à l’odeur du zanno qui enveloppe la Rivière Salée d’un voile violet. Les grenn-bwa lancent leur cri vers la Croissant gibbeuse comme une prière aux ancêtres.",
+    "chiffrePorteBonheur": 29,
+    "compatibilite": [
+      "capricorne",
+      "belier"
+    ],
+    "loa": "Baron Samedi",
+    "familleVaudou": "Petro",
+    "couleursSacrees": [
+      "noir",
+      "violet",
+      "blanc"
+    ],
+    "lune": {
+      "bienetre": "Plante malomé (malnommée) ce soir. Fais bouillir ses feuilles avec ail et bois la décoction pour chasser les mauvais esprits. À boire après le coucher du soleil comme un bain de protection.",
+      "beaute": "Balizié (balisier) ouvre ses inflorescences rouges. Frotte tes cheveux avec ses pétales pour des boucles brillantes et une odeur de terre humide. La lune gibbeuse aime les soirs de balizié.",
+      "esprit": "Carrefour murmure des secrets à minuit. Assieds-toi entre deux chemins et écoute la Croissant gibbeuse te parler. Son croissant est une lame qui coupe les mensonges.",
+      "maison": "Chanté mas résonne dans l’air. Suspends un masque en feuilles de corossol près de ta porte pour éloigner les intrus. La musique protège mieux que les serrures.",
+      "jardinage": "Pwayo se plante à la pleine lune. Enterre des rejets verts près de ta case pour une récolte abondante. La Croissant gibbeuse lui donne une force invisible."
+    },
+    "scores": {
+      "amour": 82,
+      "travail": 52,
+      "bienetre": 86,
+      "vieSociale": 81,
+      "finances": 51
+    }
+  },
+  "2026-05-28|scorpion|matin": {
+    "ambiance": "Aujourd’hui l’énergie du Scorpion danse avec le Baron Samedi comme un nèg malini sous la pluie tiède. Le Croissant gibbeuse colle aux peaux comme la sueur à la chemise en riz de coco tandis que le chouin des mornes chante l’appel des ancêtres. Les 82% d’amour flottent dans l’air comme l’odeur du zanno à minuit.",
+    "chiffrePorteBonheur": 29,
+    "compatibilite": [
+      "capricorne",
+      "belier"
+    ],
+    "loa": "Baron Samedi",
+    "familleVaudou": "Petro",
+    "couleursSacrees": [
+      "noir",
+      "violet",
+      "blanc"
+    ],
+    "lune": {
+      "bienetre": "Frotte-toi les mains avec une feuille de malomé (malnommée) écrasée et sente l’odeur d’ail qui chasse les mauvais esprits. Bois un grog au citron vert et au miel pour tenir le malè (malheur) à distance jusqu’au soir.",
+      "beaute": "Lave ton visage avec une infusion de balizié (balisier) le matin, ses pétales rouges apaisent la peau et chassent les maux de tête. Porte une branche fraîche derrière l’oreille comme le faisaient les anciennes pour attirer la chance.",
+      "esprit": "Assieds-toi au carrefour sous la pluie fine et écoute le vent parler aux esprits. Note ce qu’ils murmurent dans un cahier jaune, les secrets viennent comme le croissant gibbeuse grandit.",
+      "maison": "Chante un chanté mas devant ta porte ouverte ce soir, les esprits entendent les messages codés. Les paroles doivent être comme un secret partagé entre toi et l’invisible, personne d’autre ne doit comprendre.",
+      "jardinage": "Plante un jeune pwayo en pot aujourd’hui, ses feuilles vertes protégeront ta case. Quand la lune sera pleine, coupe une feuille pour accompagner ton poisson grillé ou ton poulet boucané."
+    },
+    "scores": {
+      "amour": 82,
+      "travail": 52,
+      "bienetre": 86,
+      "vieSociale": 81,
+      "finances": 51
+    }
+  },
+  "2026-05-28|scorpion|midi": {
+    "ambiance": "Aujourd’hui l’énergie du Scorpion est lourde comme le ☠️ de Baron Samedi errant dans la nuit guadeloupéenne parfumée de zanno. La pluie créole nettoie les mémoires et réveille les grenn-bwa dont le chant nocturne se mêle au murmure des ancêtres. Les 81% en vie sociale confirment l’appel des carrefours où les esprits se retrouvent sous la lune gibbeuse.",
+    "chiffrePorteBonheur": 23,
+    "compatibilite": [
+      "capricorne",
+      "belier"
+    ],
+    "loa": "Baron Samedi",
+    "familleVaudou": "Petro",
+    "couleursSacrees": [
+      "noir",
+      "violet",
+      "blanc"
+    ],
+    "lune": {
+      "bienetre": "Prépare toi une boisson chaude réconfortante (eau, thé classique) et médite sur ses bienfaits de malomé (malnommée) avec trois feuilles et une gousse d’ail écrasée, bois-la à jeun pour chasser les mauvais sorts. La malomé (malnommée) protège comme un bouclier invisible quand son parfum d’ail monte dans ta case.",
+      "beaute": "Les pétales de balizié (balisier) écrasés sur tes joues après la douche laissent une teinte rougeoyante comme un lever de soleil sur la Soufrière. Le balizié (balisier) nourrit la peau et rappelle la résistance des fleurs caraïbes.",
+      "esprit": "Médite sur un carrefour devant ta porte à la tombée du jour, l’endroit où les esprits se croisent. La croissant gibbeuse guide les messages entre les mondes via les carrefours de ton âme.",
+      "maison": "Chante un chanté mas sous la pluie en gardant la porte ouverte, laisse les paroles révolutionnaires entrer et sortir. Le chanté mas est une arme douce contre les silences imposés par la société.",
+      "jardinage": "Plante des pwayo aujourd’hui car la lune gibbeuse favorise les racines profondes. Les pwayo nourriront les ti-moun demain et après-demain."
+    },
+    "scores": {
+      "amour": 82,
+      "travail": 52,
+      "bienetre": 86,
+      "vieSociale": 81,
+      "finances": 51
+    }
+  },
+  "2026-05-28|scorpion|soir": {
+    "ambiance": "Baron Samedi danse sur la Rivière Salée ce soir, sous la pluie créole qui lave les blessures anciennes. Le zanno parfume l’air, porteur de messages des loa pour les Scorpion assoiffés de vérité. L’énergie est lourde comme un malnommé (ail) en protection mais légère comme le vent qui murmure aux hylodes.",
+    "chiffrePorteBonheur": 29,
+    "compatibilite": [
+      "capricorne",
+      "belier"
+    ],
+    "loa": "Baron Samedi",
+    "familleVaudou": "Petro",
+    "couleursSacrees": [
+      "noir",
+      "violet",
+      "blanc"
+    ],
+    "lune": {
+      "bienetre": "Brûle trois grains de malnommé (ail) dans ta case pour purifier ton espace, aujourd’hui la lune croissante demande une protection d’urgence. Respire la vapeur qui monte pour chasser les mauvaises énergies de ta journée.",
+      "beaute": "Frotte ton visage avec une feuille fraîche de balizié (balisier) au réveil, ses pétales rouges donnent un éclat de feu intérieur. Garde-en une sous ton oreiller pour des rêves où tu danses avec les esprits de la rivière.",
+      "esprit": "Assieds-toi à un carrefour ce soir, place trois cailloux blancs en triangle et demande à la lune de t’éclairer. Les réponses viendront si tu écoutes le chant lointain des hylodes.",
+      "maison": "Chante un chanté mas en cuisinant ton repas, les paroles codées apaisent les tensions de la maison. Laisse la mélodie s’échapper par la fenêtre pour qu’elle emporte ce qui te pèse.",
+      "jardinage": "Plante des pwayo près de ton seuil aujourd’hui, la lune croissante les rendra vigoureux. Leurs larges feuilles protégeront ton foyer des mauvais sorts et nourriront ta famille demain."
+    },
+    "scores": {
+      "amour": 82,
+      "travail": 52,
+      "bienetre": 86,
+      "vieSociale": 81,
+      "finances": 51
+    }
+  },
+  "2026-05-28|sagittaire|nuit": {
+    "ambiance": "Ce soir, Gran Bwa souffle sur la Pointe où le kolibri fal vèt danse entre ombre et lumière verte. L’énergie est puissante comme la forêt, libre comme le vent qui frappe les rochers de la Pointe des Châteaux.",
+    "chiffrePorteBonheur": 59,
+    "compatibilite": [
+      "belier",
+      "gemeaux"
+    ],
+    "loa": "Gran Bwa",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "vert",
+      "marron"
+    ],
+    "lune": {
+      "bienetre": "Prenez une tisane de zeb a pik ce soir, cette plante qui pleure au toucher. Elle calme les nerfs comme un baume créole.",
+      "beaute": "Frottez vos tempes avec du jus de kokotye, cette fleur jaune qui apaise les maux de tête.",
+      "esprit": "Portez un chapeau paille tressé ce soir, léger comme l’air mais lourd de mémoire. Il protège des esprits qui rôdent sous la lune gibbeuse.",
+      "maison": "Secouez des maracas près de votre porte pour chasser les mauvaises énergies. Leur son porte loin, comme les chants interdits d’autrefois.",
+      "jardinage": "Plantez des graines de kalbasi ce soir sous la lune croissante. Ses fruits seront utiles pour vos rituels ou votre cuisine."
+    },
+    "scores": {
+      "amour": 89,
+      "travail": 62,
+      "bienetre": 76,
+      "vieSociale": 70,
+      "finances": 61
+    }
+  },
+  "2026-05-28|sagittaire|matin": {
+    "ambiance": "Aujourd’hui Gran Bwa souffle sur Pointe-à-Pitre avec son vent vert et marron Le kolibri fal vèt danse entre deux gouttes de chadékié (pomélo) tombées du ciel chaud Autour de toi tout bruisse de liberté comme les vagues contre la Pointe des Châteaux",
+    "chiffrePorteBonheur": 47,
+    "compatibilite": [
+      "belier",
+      "gemeaux"
+    ],
+    "loa": "Gran Bwa",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "vert",
+      "marron"
+    ],
+    "lune": {
+      "bienetre": "Zeb a pik se referme aujourd’hui sous tes doigts fais-en une tisane avec des zestes de chadékié (pomélo) pour apaiser ton esprit elle donne la même sérénité qu’un temps pluvieux de dimanche après-midi",
+      "beaute": "Kokotye se pare de jaune sur le bord des routes son infusion réduit les rougeurs de ta peau utilise-la en lotion après ta douche",
+      "esprit": "Porte ton chapeau paille tressé sous le ciel gris il te protège des pensées lourdes comme le vent de la Pointe des Châteaux",
+      "maison": "Secoue tes maracas en calebasse et graines ce soir elles chassent les énergies stagnantes comme l’eau de pluie dans les caniveaux",
+      "jardinage": "Sème des graines de kalbasi sous la lune gibbeuse leurs fruits seront de parfaits réceptacles à prières ou à chants rassembleurs."
+    },
+    "scores": {
+      "amour": 89,
+      "travail": 62,
+      "bienetre": 76,
+      "vieSociale": 70,
+      "finances": 61
+    }
+  },
+  "2026-05-28|sagittaire|midi": {
+    "ambiance": "Le jour s’étire comme l’ombre du kolibri fal vèt quand le soleil frôle la Pointe des Châteaux la mer gronde sous Gran Bwa qui souffle ses feuilles vertes sur l’horizon les Scores montrent que l’amour flambe comme un feu de camp sous la pluie créole 89% c’est une énergie qui ne ment pas.",
+    "chiffrePorteBonheur": 7,
+    "compatibilite": [
+      "gemeaux",
+      "belier"
+    ],
+    "loa": "Gran Bwa",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "vert",
+      "marron"
+    ],
+    "lune": {
+      "bienetre": "Prépare une tisane de zèb a pik le soir pour calmer les esprits trop agités cette plante se ferme au toucher comme les douleurs qu’elle apaise. Bois-la lentement en écoutant le vent contre les feuilles du chadékié (chadéquier).",
+      "beaute": "Écrase des pétales de kokotye dans de l’huile de coco pour apaiser les peaux irritées par le sel et le soleil. Laisse poser comme un baume de résistance en pensant à la mer.",
+      "esprit": "Tresse un petit chapeau paille en secret aujourd’hui c’est un acte de liberté contre les ombres du passé. Porte-le sous la lune croissante pour te rappeler que tu n’es pas ce que l’on t’a dit d’être.",
+      "maison": "Sers-toi des maracas pour marquer le rythme de tes pas dans la maison aujourd’hui ces graines secouées chassent les pensées lourdes. Fais-les chanter en pensant à la forêt de Gran Bwa.",
+      "jardinage": "Sème des graines de kalbasi dans un coin humide du jardin sous la gibbeuse ces fruits vides deviendront des récipients ou des objets sacrés dans le silence."
+    },
+    "scores": {
+      "amour": 89,
+      "travail": 62,
+      "bienetre": 76,
+      "vieSociale": 70,
+      "finances": 61
+    }
+  },
+  "2026-05-28|sagittaire|soir": {
+    "ambiance": "Aujourd’hui Jupiter brille sous le ciel vert de Gran Bwa l’arbre immense du Rada. Le vent porte l’odeur de chadékié (pomélo) et le kolibri fal vèt danse entre deux gouttes. Ce Croissant gibbeux te murmure d’avancer sans crainte vers l’inconnu la mer te guidera.",
+    "chiffrePorteBonheur": 17,
+    "compatibilite": [
+      "gemeaux",
+      "belier"
+    ],
+    "loa": "Gran Bwa",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "vert",
+      "marron"
+    ],
+    "lune": {
+      "bienetre": "Prends une tisane de zèb a pik ce soir. Cette plante se replie mais ouvre son cœur à qui sait la caresser. Bois-la pour apaiser les esprits et calmer les fièvres du jour.",
+      "beaute": "Frotte tes tempes avec de la poudre de kokotye pour éclaircir l’esprit. Cette fleur jaune chasse les inflammations et illumine le teint comme un matin de vent.",
+      "esprit": "Enfile un chapeau paille ce soir. Ce simple tressage rappelle que la liberté se porte en secret. Sous la lune gibbeuse écoute les chuchotements de l’Atlantique.",
+      "maison": "Balance des maracas dans ta maison aujourd’hui. Leurs graines parlent quand les mots manquent. Laisse leur rythme bercer tes doutes et ouvrir les portes closes.",
+      "jardinage": "Sème des kalbasi en lune croissante. Leurs fruits creusés serviront plus tard comme récipients ou instruments. La terre de Pointe-à-Pitre sait attendre."
+    },
+    "scores": {
+      "amour": 89,
+      "travail": 62,
+      "bienetre": 76,
+      "vieSociale": 70,
+      "finances": 61
+    }
+  },
+  "2026-05-28|capricorne|nuit": {
+    "ambiance": "Le ciel de Pointe-à-Pitre murmure comme le Kabribo sous la pluie douce du soir. Kafou t’invite à marcher dans la grotte Zimbis pour y déposer tes rêves rouges et noirs. La Croissant gibbeuse te rappelle que même les nuits les plus noires portent des graines de lumière.",
+    "chiffrePorteBonheur": 23,
+    "compatibilite": [
+      "scorpion",
+      "belier"
+    ],
+    "loa": "Kafou",
+    "familleVaudou": "Petro",
+    "couleursSacrees": [
+      "rouge",
+      "noir"
+    ],
+    "lune": {
+      "bienetre": "Frotte ton corps avec les feuilles de Dartrier sous l’eau de pluie tiède. Ce remède créole nettoie les dartres et purifie l’âme comme la source Zimbis purifie les mémoires.",
+      "beaute": "Lavande wouj écrasée en poudre fine fait briller ta peau sous le soleil mouillé. Une pincée dans ton bain de tamaren répare les peaux fatiguées par la saison.",
+      "esprit": "Le son des maracas te guide vers les voix de ceux qui ont résisté. Écoute-les et danse comme si Kafou soufflait dans tes oreilles avec son vent d’ambition.",
+      "maison": "Suspends des maracas au-dessus de ta porte pour chasser les énergies lourdes. Leurs graines sèches gardent le foyer léger comme une brise de Carême.",
+      "jardinage": "Plante le madè (madère) ce soir sous la lune gibbeuse et arrose-le avec de l’eau de coco. Ce tubercule absorbera les saveurs de la terre et nourrira ton foyer comme il nourrit les sauces créoles."
+    },
+    "scores": {
+      "amour": 92,
+      "travail": 73,
+      "bienetre": 64,
+      "vieSociale": 59,
+      "finances": 73
+    }
+  },
+  "2026-05-28|capricorne|matin": {
+    "ambiance": "Le Kabribo chante sous la pluie sur lemanyè (chemin) des esprits à la Grotte Zimbis. Kafou souffle rouge et noir ce matin, propice aux Capricorne pour traverser les ombres sans peur. L’énergie terre de Saturne résonne comme le Tamaren, gousse qui nettoie le transit intérieur et l’âme.",
+    "chiffrePorteBonheur": 47,
+    "compatibilite": [
+      "scorpion",
+      "belier"
+    ],
+    "loa": "Kafou",
+    "familleVaudou": "Petro",
+    "couleursSacrees": [
+      "rouge",
+      "noir"
+    ],
+    "lune": {
+      "bienetre": "Dartrier lave la peau comme l’eau de la Soufrière, retire les dartres avec ses feuilles écrasées. Marche pieds nus sur la terre humide pour capter sa force purificatrice.",
+      "beaute": "Frotte Lavand wouj sur tes tempes ce soir, parfum de résistance et beauté. Ses pétales rouges ravivent l’éclat après la pluie des ancêtres.",
+      "esprit": "Confie tes soucis à ton maracas comme aux anciens, secoue-le vers l’est pour chasser les miasmes. La Croissant gibbeuse amplifie son appel aux zémis.",
+      "maison": "Accroche un maracas d’argile près de ta porte, son bruit garde les mauvais esprits à distance. La Grotte Zimbis enseigne que les murs ont des oreilles, écoute-les.",
+      "jardinage": "Plante Madè (madère) sous la pluie, son tubercule absorbe les saveurs comme nos mémoires. Arrose-le avec la voix des ancêtres pour qu’il grandisse puissant et nourricier."
+    },
+    "scores": {
+      "amour": 92,
+      "travail": 73,
+      "bienetre": 64,
+      "vieSociale": 59,
+      "finances": 73
+    }
+  },
+  "2026-05-28|capricorne|midi": {
+    "ambiance": "Aujourd’hui Kafou souffle sur les carrefours du Capricorne, rouge et noir comme les pétroglyphes de Zimbis. Le kabribo chante sous la pluie modérée, berce ton ambition de notes anciennes mais ton énergie reste terre à terre comme le tamaren mûrissant sous la gibbeuse. Les scores explosent en amour et travail, preuve que tes racines peuvent porter des fruits sans trahir tes rêves.",
+    "chiffrePorteBonheur": 47,
+    "compatibilite": [
+      "scorpion",
+      "belier"
+    ],
+    "loa": "Kafou",
+    "familleVaudou": "Petro",
+    "couleursSacrees": [
+      "rouge",
+      "noir"
+    ],
+    "lune": {
+      "bienetre": "Passe la feuille de dartrier sur ta peau ce soir. Comme un ti lavè (petit lavage) créole, elle chasse les dartres qui grattent ton âme après la canicule. Marre de te sentir asséché, écoute le kabribo te rappeler que les peaux guadeloupéennes savent cicatriser sous la lune.",
+      "beaute": "Frotte une tige de lavand wouj sur tes poignets avant de dormir. Son parfum de jardin créole, aussi tenace que l’amour de tes aïeules, purifie ton aura. Rouge comme Kafou, elle te rappelle que la beauté est une force, pas une douceur.",
+      "esprit": "Écoute une maracas ce soir dans le silence de la gibbeuse. Son rythme parle aux esprits comme aux vivants, porte la voix de ceux qu’on a voulu faire taire. Comme l’eau qui coule à Zimbis, elle brise les silences qui étouffent ton âme.",
+      "maison": "Accroche une maracas au-dessus de ta porte d’entrée. Son bruit sec éloigne les mauvaises énergies comme le vent chasse les nuages après l’averse. Rouge et noir, elle marque ton territoire sans avoir besoin de crier ton nom.",
+      "jardinage": "Plante un pied de madè (madère) près de ton manguier. Comme l’igname, il absorbe les saveurs de la terre, donne cette force discrète aux tubercules des ancêtres. Sous la gibbeuse, il prend racine sans se presser, toi non plus."
+    },
+    "scores": {
+      "amour": 92,
+      "travail": 73,
+      "bienetre": 64,
+      "vieSociale": 59,
+      "finances": 73
+    }
+  },
+  "2026-05-28|capricorne|soir": {
+    "ambiance": "La pluie lave Pointe-à-Pitre ce soir, mais ne craint pas Saturne qui te murmure laisse-toi guider par Kafou, debout au carrefour de tes choix rouges et noirs comme un chemin de poudre. Le Kabribo chante dans les branches, porteur de messages anciens à ceux qui savent écouter le vent après l’ondée.",
+    "chiffrePorteBonheur": 53,
+    "compatibilite": [
+      "scorpion",
+      "belier"
+    ],
+    "loa": "Kafou",
+    "familleVaudou": "Petro",
+    "couleursSacrees": [
+      "rouge",
+      "noir"
+    ],
+    "lune": {
+      "bienetre": "Passe la feuille de Dartrier sur ta peau ce soir, son jus amer chasse les dartres comme les mauvaises ondes. Sens la fraîcheur du soir apaiser tes peines sous la lune qui monte, douce et lente.",
+      "beaute": "Frotte-toi les mains avec la Lavand wouj, son parfum sucré délasse tes doigts fatigués de travailler. Laisse ses pétales rouges glisser sur ton front, symbole de force et de sérénité.",
+      "esprit": "Secoue les Maracas lentement ce soir, leur bruit clair rappelle que la résistance se danse même quand on te dit de te taire. Écoute le son traverser l’air humide, il porte tes prières vers les zémis de la mer.",
+      "maison": "Pose tes Maracas près de la porte, leur son purifie l’espace quand tu rentres du travail harassant. Un seul mouvement suffit, comme un salut discret aux esprits qui veillent sur ton foyer.",
+      "jardinage": "Plante la Madè (madère) ce soir, sous la Croissant gibbeuse son tubercule absorbe les saveurs comme un réservoir de force. Arrose-la d’eau bénite ou de larmes de joie, elle te nourrira bientôt mieux que l’igname."
+    },
+    "scores": {
+      "amour": 92,
+      "travail": 73,
+      "bienetre": 64,
+      "vieSociale": 59,
+      "finances": 73
+    }
+  },
+  "2026-05-28|verseau|nuit": {
+    "ambiance": "L’énergie d’aujourd’hui est verte et or comme les cheveux de la Sirène saute dans l’eau des îlets Pigeon. Le vent porte le chant plaintif du yòlò (siffleur de montagne) qui vous murmure de danser avec l’invisible. Uranus secoue vos certitudes mais La Sirène veille et vous invite à plonger dans l’inconnu sans craindre l’ombre.",
+    "chiffrePorteBonheur": 23,
+    "compatibilite": [
+      "lion",
+      "poissons"
+    ],
+    "loa": "La Sirène",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "vert",
+      "or"
+    ],
+    "lune": {
+      "bienetre": "Boire ti dlo sitwonèl ce matin vous chassera les fièvres et les mauvais esprits. La tisane ti boujé (chaude) apaisera votre esprit comme la brise marine.",
+      "beaute": "Frottez vos cheveux avec un jus de ti-bòm pour des boucles brillantes et parfumées. Ses pétales macérés dans l’eau de coco adoucissent la peau.",
+      "esprit": "Posez vos mains sur un pot en terre cuite ce soir et écoutez ses murmures. Sous la lune croissante gibbeuse il garde les secrets de l’autonomie créole.",
+      "maison": "Secouez vos maracas ce soir et laissez la musique chasser les mauvaises ondes. Fabriquées en calebasse et graines elles portent la force des cérémonies interdites.",
+      "jardinage": "Plantez un sitwonié (citronnier) près de votre case pour ses zestes tonifiants. Sous cette lune il donnera fruits et fleurs parfumées pour vos sirops et ti-punchs."
+    },
+    "scores": {
+      "amour": 89,
+      "travail": 83,
+      "bienetre": 55,
+      "vieSociale": 50,
+      "finances": 82
+    }
+  },
+  "2026-05-28|verseau|matin": {
+    "ambiance": "La Sirène danse sur les vagues vert doré de la Réserve Cousteau ce matin, son chantFILEt répond à l’Igwann péyi caché dans les feuillages du Korossolié. Le vent faible porte l’odeur des feuilles de Sitwonèl qui dansent sur les tables créoles, tandis que le Croissant gibbeuse murmure des secrets aux esprits des mornes à travers le yòlò (siffleur montagne).",
+    "chiffrePorteBonheur": 83,
+    "compatibilite": [
+      "lion",
+      "poissons"
+    ],
+    "loa": "La Sirène",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "vert",
+      "or"
+    ],
+    "lune": {
+      "bienetre": "Bwè yon ti tisan Sitwonèl lévé an pilé an plas ka lwen kò a, an ti chè lévé anvan mòdé solèy. Li chaché mwèl dan mòso zansèt ou, anba zèy ou chaché kò a.",
+      "beaute": "Froté zong épi jounou an ak Ti-bòm pou ka zong ou sanble sé boz san anmè. Lè ou lévé flè sa a anvan solèy, li ka gardé wouj ou klè an konstans.",
+      "esprit": "Kaché yon mòso potè en tè (poterie) anba lè ou ka médité, li ka absorbé anbwa anmè a ki ka monté an ba wè ou. Li ka rapèl ou ke tout bagay anmè ka ka viré klè si ou ka vlé wè.",
+      "maison": "Fè sonnen maracas anvan ou ka travay, li ka éfrazé tout negatif ki ka ka rèd an lakaz ou. Lè ou ka jwé ak sa a, ou ka rapèl ou ke lavi ka se yon dansé inerrompu.",
+      "jardinage": "Plante yon pye Orangié (oranger) an plas solèy pou ka li ka grandé an oranzé klè. Lè ou kwi zèst yo, zé dlo a ka lav tout soufwans ki ka ka rèd an kè ou."
+    },
+    "scores": {
+      "amour": 89,
+      "travail": 83,
+      "bienetre": 55,
+      "vieSociale": 50,
+      "finances": 82
+    }
+  },
+  "2026-05-28|verseau|midi": {
+    "ambiance": "Aujourd’hui l’énergie de La Sirène danse avec les nuages de Pointe-à-Pitre sous le chant du yòlò (siffleur des mornes) porteur de messages des esprits. Les corossoliés étirent leurs ombres promises à une méditation sous la pluie fine, verte et or comme ses couleurs sacrées. Le mistral léger porte les parfums du sitwonèl à travers les mornes et la ville.",
+    "chiffrePorteBonheur": 53,
+    "compatibilite": [
+      "lion",
+      "poissons"
+    ],
+    "loa": "La Sirène",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "vert",
+      "or"
+    ],
+    "lune": {
+      "bienetre": "Boire sitwonèl en tisane calme l’esprit et éloigne les moustiques comme un remède de nos grands-mères. Pas besoin d’aller loin pour trouver la sérénité sous la pluie modérée.",
+      "beaute": "Frotte ton visage avec des pétales de ti-bòm pour une peau douce et parfumée comme les marchés du dimanche matin. La nature te donne ce qu’il faut avec simplicité.",
+      "esprit": "Garde un petit pot en terre près de toi comme écrin à tes pensées, surtout sous cette lune croissante gibbeuse qui murmure aux ancêtres. Il contient tes secrets mieux qu’un cahier fermé.",
+      "maison": "Secoue une maracas en calebasse près de ton autel ou de ta fenêtre pour chasser les pensées lourdes. Le son porte la résistance des anciens et nos mélodies interdites.",
+      "jardinage": "Plante un orangié (oranger) ou un sitwonié (citronnier) près de ton pas de porte pour profiter de ses feuilles sous la lune croissante gibbeuse. Ses fleurs en infusion apaiseront tes nuits agitées."
+    },
+    "scores": {
+      "amour": 89,
+      "travail": 83,
+      "bienetre": 55,
+      "vieSociale": 50,
+      "finances": 82
+    }
+  },
+  "2026-05-28|verseau|soir": {
+    "ambiance": "Le jour danse avec La Sirène verte et dorée sous une pluie fine qui caresse les feuilles de korossolié (corossolier). Les yòlò (siffleurs des mornes) murmurent des messages des mornes à ceux qui savent écouter. Uranus souffle fort dans les branches comme un vent de liberté inattendue.",
+    "chiffrePorteBonheur": 47,
+    "compatibilite": [
+      "lion",
+      "poissons"
+    ],
+    "loa": "La Sirène",
+    "familleVaudou": "Rada",
+    "couleursSacrees": [
+      "vert",
+      "or"
+    ],
+    "lune": {
+      "bienetre": "Bwè yon ti gode sitwonèl ou ka chaud li dou, li ka chayé (chasser) fé anmè (fatigue) an fé mwen wè (voir) clair. Li ka dézodé (désodoriser) anmè (corps) anba latè (terre) tonm.",
+      "beaute": "Pren yon ti branch ti-bòm ki ka fè (qui fait) janti sou wè (visage). Pote l' anpi anpi yon dlo pou l' lavé (laver) wè (peau) an dézòd.",
+      "esprit": "Pote yon pot an té (poterie en terre) anba lé lalin pou ka chayé (chasser) négativité. Li ka sanblé (sembler) pou ka anmè (esprit) wè (voir) li an tan ka ka pwospè (avancer).",
+      "maison": "Fè youn maraka an kalebass ki ka chayé (chasser) anmè (ennui) an kay. Fè l' soné (sonner) an minui pou ka Lapli ka ka wè (voir) anba pye bwa.",
+      "jardinage": "Plante yon pyé orangié (oranger) an jaden anba Chwalè gibous. Récolté zès li pou ka bon mi ou ka pwason grilé (grillé)."
+    },
+    "scores": {
+      "amour": 89,
+      "travail": 83,
+      "bienetre": 55,
+      "vieSociale": 50,
+      "finances": 82
+    }
+  },
+  "2026-05-28|poissons|nuit": {
+    "ambiance": "La rivière Salée gronde sous la lune gibbeuse et l’énergie de Marinette enflamme les flots du bleu sacré. Les feuilles de bwa d'ind frémissent comme des mains en prière, mêlant protection et mémoire des ancêtres. Le vent porte l’odeur du sel et des bouillons chauds, rappelant que l’eau douce et l’eau amère font une même vie.",
+    "chiffrePorteBonheur": 13,
+    "compatibilite": [
+      "verseau",
+      "vierge"
+    ],
+    "loa": "Marinette",
+    "familleVaudou": "Petro",
+    "couleursSacrees": [
+      "bleu",
+      "blanc"
+    ],
+    "lune": {
+      "bienetre": "Si wom mal à l’estomac, fais bouillir zèb zangwél dans un ti dlo, ajoute un zep de gous d’ail, siropo et ti anmwe. Boire ti dlo a ka chanjé (ce petit verre va changer) tout ça en trois gorgées.",
+      "beaute": "Lavand wouj emplit tes pores de son parfum doux comme un chant mas. Trempe ses fleurs dans de l’eau de coco fermentée, laisse infuser dans un zanm na et badigeonne-toi le visage avant le coucher pour toi trouver la paix comme un soir de carême.",
+      "esprit": "Zémis veille sous la croissant gibbeuse, rappelant que les esprits taïno et africain dansent un même pas. Pose-la près de ta fenêtre avec un cierge bleu et murmure ton intention à l’oreille du vent.",
+      "maison": "Chanté mas murmure aux murs des messages anciens à écouter en silence. Imagine une bougie allumée devant toi, symbole de lumière et de guidance spirituelle blanche et laisse la mélodie des ancêtres résonner dans chaque recoin, même sous le lit. Si ti pwoblèm survient, ce chant te protègera.",
+      "jardinage": "Kowosol grimpe haut sur les haies de la croissant gibbeuse, prête à donner ses fruits légers. Plante-la près d’un gwotè (barrière) de bois et récolte ses feuilles pour un gratin qui saura nourrir ton âme et ton corps."
+    },
+    "scores": {
+      "amour": 80,
+      "travail": 88,
+      "bienetre": 51,
+      "vieSociale": 46,
+      "finances": 88
+    }
+  },
+  "2026-05-28|poissons|matin": {
+    "ambiance": "Marinette danse dans l'onde salée, son bleu blanc flottant avec la pluie fine sur Rivière Salée, tandis que le ciel déverse ses larmes pour purifier les vieilles dettes. Le vent porte l'odeur du Bwa d'Ind et le souffle des esprits qui chuchotent aux oreilles des vivants, comme le fait la Tòti luth quand elle émerge des flots à l'aube.",
+    "chiffrePorteBonheur": 23,
+    "compatibilite": [
+      "verseau",
+      "vierge"
+    ],
+    "loa": "Marinette",
+    "familleVaudou": "Petro",
+    "couleursSacrees": [
+      "bleu",
+      "blanc"
+    ],
+    "lune": {
+      "bienetre": "Prends Basilik péyi en infusion après le repas, son parfum apaisera ton ventre et chassera les mauvaises humeurs. Tu peux aussi l'écraser dans un pilon avec un peu de citron vert pour les nausées du matin.",
+      "beaute": "Lavand wouj parfume tes cheveux et ton linge quand tu la froisses entre tes doigts. Une pincée dans ton bain rougeoiera ta peau et chassera les ombres de la nuit.",
+      "esprit": "Pose une Zémis près de ton autel sous la lune croissante, elle guidera tes rêves et te rappellera que les esprits ne sont jamais loin. Garde-la tournée vers l'est à l'aube pour capter les énergies nouvelles.",
+      "maison": "Chanté mas murmure dans les murs quand tu nettoies ta maison aujourd'hui, écoute sa mélodie secrète et danse avec elle. Ces chants anciens portent les mots de ceux qui n'ont jamais pu parler.",
+      "jardinage": "Plante des graines de Kowosol en lune croissante, la liane poussera vite et portera ses fruits légers avant les pluies d'automne. Tu peux aussi en couper des morceaux pour en faire des gratin crémeux, c'est le moment."
+    },
+    "scores": {
+      "amour": 80,
+      "travail": 88,
+      "bienetre": 51,
+      "vieSociale": 46,
+      "finances": 88
+    }
+  },
+  "2026-05-28|poissons|midi": {
+    "ambiance": "L’énergie de la Marinet danse avec l’urakan sur la Rivière Salée ce midi. Le bleu de la houle porte des messages venus de loin comme une tòti luth qui trace son chemin sur les vagues. La pluie modérée lave les peines mais garde en elle la mémoire des ancêtres.",
+    "chiffrePorteBonheur": 11,
+    "compatibilite": [
+      "verseau",
+      "vierge"
+    ],
+    "loa": "Marinette",
+    "familleVaudou": "Petro",
+    "couleursSacrees": [
+      "bleu",
+      "blanc"
+    ],
+    "lune": {
+      "bienetre": "Bois un bon bouillon de Basilik péyi ce soir. Ses feuilles apaisent le ventre après un repas de dlo kanari.",
+      "beaute": "Frotte tes mains avec les pétales de Lavand wouj ce soir. Son parfum calma les esprits et embellit la peau comme un bain de la Rivière Salée.",
+      "esprit": "Place une Zémis sur ton autel ce soir. Ce zémis veille sur tes rêves sous la Croissant gibbeuse et te rappelle que toutes les cultures s’unissent dans le silence.",
+      "maison": "Écoute le Chanté mas qui murmure dans les murs ce soir. Ces chants protègent ta maison comme un rempart invisible contre les mauvais sorts.",
+      "jardinage": "Plante une liane de Kowosol aujourd’hui. Elle grimpera haut sur ton treillis et te donnera des fruits légers pourdes gratin ce week-end."
+    },
+    "scores": {
+      "amour": 80,
+      "travail": 88,
+      "bienetre": 51,
+      "vieSociale": 46,
+      "finances": 88
+    }
+  },
+  "2026-05-28|poissons|soir": {
+    "ambiance": "Aujourd’hui la Rivière Salée vous murmure comme Marinette son flux bleu blanc, porteuse de secrets et de révélations. Le vent léger glisse sur vous comme la carapace de la tòti luth, symbole de patience et de force cachée. Les feuilles de bwa d’Ind frémissent dans l’air, prêtes à distiller leurs remèdes entre ciel et terre.",
+    "chiffrePorteBonheur": 17,
+    "compatibilite": [
+      "verseau",
+      "vierge"
+    ],
+    "loa": "Marinette",
+    "familleVaudou": "Petro",
+    "couleursSacrees": [
+      "bleu",
+      "blanc"
+    ],
+    "lune": {
+      "bienetre": "Si douleurs ou ventre serré vous prennent, faites bouillir basilik péyi dans de l’eau, buvez tiède, ça dénoue comme un maréyaj pur. Un bain de pieds avec ces feuilles apaisera aussi l’esprit, comme une caresse de mer après l’orage.",
+      "beaute": "Frottez une fleur de lavand wouj écrasée sur vos tempes pour chasser migren et fatigue des yeux, son parfum est une brise de montagne. Trempez-en quelques pétales dans de l’huile de coco pour un massage du cuir chevelu, cheveux longs et brillants comme ceux des sirènes de la Rivière Salée.",
+      "esprit": "Regardez la Croissant gibbeuse ce soir et placez une zémis face à la fenêtre ouverte, ses yeux vous rappelleront que les frontières entre mondes sont minces. Parlez à vos ancêtres, ils répondront mieux que le vent ne souffle sur la canne à sucre.",
+      "maison": "Posez un chanté mas sur votre enceinte, laissez-le résonner à travers la maison, même à voix basse. Ces notes porteront vos prières plus loin que les murs, comme un message codé envoyé à l’univers. Les ombres écouteront, les esprits souriront.",
+      "jardinage": "Plantez ou récoltez des kowosol aujourd’hui, leur liane pousse vite sous la lune gibbeuse. Coupez les fruits jeunes, faites-les sauter à l’ail et au piment comme un griyo léger, nourrissant comme un repas d’Igwann qui se cache pour survivre."
+    },
+    "scores": {
+      "amour": 80,
+      "travail": 88,
+      "bienetre": 51,
+      "vieSociale": 46,
+      "finances": 88
+    }
+  }
+}

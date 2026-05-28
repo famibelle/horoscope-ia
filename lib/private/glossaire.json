@@ -3,23 +3,29 @@
     "definition": "Solidarité, entraide, lien social dans la culture antillaise",
     "category": "vaudou",
     "firstSeen": "2024-01-01",
-    "count": 0,
-    "sources": [],
+    "count": 39,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ],
     "vaudou": true
   },
   "matoutou": {
     "definition": "Fricassée de crabes, plat traditionnel guadeloupéen",
     "category": "gastronomie",
     "firstSeen": "2024-01-01",
-    "count": 0,
-    "sources": []
+    "count": 1,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
   },
   "Urakan": {
     "definition": "Frégate, oiseau symbole de liberté dans la culture antillaise",
     "category": "faune",
     "firstSeen": "2024-01-01",
-    "count": 0,
-    "sources": []
+    "count": 2,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
   },
   "bwa d'Ind": {
     "definition": "Feuilles sacrées utilisées dans les rituels vaudou",
@@ -47,8 +53,11 @@
     "definition": "Loa (esprit) du travail, de la force et de la justice dans le vaudou",
     "category": "vaudou",
     "firstSeen": "2024-01-01",
-    "count": 0,
-    "sources": [],
+    "count": 3,
+    "sources": [
+      "ambiance/2026-05-28.json",
+      "horoscopes/2026-05-28.json"
+    ],
     "vaudou": true
   },
   "Baron Samedi": {
@@ -63,24 +72,31 @@
     "definition": "Loa (esprit) des carrefours, messager entre les humains et les esprits dans le vaudou",
     "category": "vaudou",
     "firstSeen": "2024-01-01",
-    "count": 0,
-    "sources": [],
+    "count": 6,
+    "sources": [
+      "ambiance/2026-05-28.json",
+      "horoscopes/2026-05-28.json"
+    ],
     "vaudou": true
   },
   "Gede": {
     "definition": "Famille de loas (esprits) associés à la mort et à l'au-delà dans le vaudou",
     "category": "vaudou",
     "firstSeen": "2024-01-01",
-    "count": 0,
-    "sources": [],
+    "count": 1,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ],
     "vaudou": true
   },
   "Simbi": {
     "definition": "Esprit des eaux, loa de la pluie et de la fertilité dans le vaudou",
     "category": "vaudou",
     "firstSeen": "2024-01-01",
-    "count": 0,
-    "sources": [],
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ],
     "vaudou": true
   },
   "Mami Dlo": {
@@ -95,8 +111,10 @@
     "definition": "Esprit ou sorcière dans le folklore antillais, capable de se transformer",
     "category": "vaudou",
     "firstSeen": "2024-01-01",
-    "count": 0,
-    "sources": [],
+    "count": 3,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ],
     "vaudou": true
   },
   "vèvè": {
@@ -111,8 +129,10 @@
     "definition": "Poudre magique, porte-bonheur ou protection dans les traditions vaudou",
     "category": "vaudou",
     "firstSeen": "2024-01-01",
-    "count": 0,
-    "sources": [],
+    "count": 3,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ],
     "vaudou": true
   },
   "fromager": {
@@ -140,8 +160,10 @@
     "definition": "Crevette d'eau douce, symbole de vie et de résilience dans les rivières sacrées",
     "category": "faune",
     "firstSeen": "2024-01-01",
-    "count": 0,
-    "sources": []
+    "count": 1,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
   },
   "manyòk": {
     "definition": "Igname, tubercules cultivé traditionnellement en Guadeloupe",
@@ -154,8 +176,10 @@
     "definition": "Légume-feuille traditionnel, ingrédient de base de la cuisine guadeloupéenne",
     "category": "gastronomie",
     "firstSeen": "2024-01-01",
-    "count": 0,
-    "sources": []
+    "count": 4,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
   },
   "kwikwi": {
     "definition": "Ver de terre, symbole de travail discret et efficace dans les traditions",
@@ -184,5 +208,2065 @@
     "firstSeen": "2024-01-01",
     "count": 0,
     "sources": []
+  },
+  "b": {
+    "definition": "argent",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 82,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "bouji": {
+    "definition": "bougie",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 18,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "Ind": {
+    "definition": "feuilles de bois d’inde",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 8,
+    "sources": [
+      "horoscopes/2026-05-28.json",
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "omega": {
+    "definition": "plante africaine",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 4,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "nwa": {
+    "definition": "poudre noire",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 14,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "iyam": {
+    "definition": "igname",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 12,
+    "sources": [
+      "horoscopes/2026-05-28.json",
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Dlo": {
+    "definition": "esprit des eaux",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 15,
+    "sources": [
+      "horoscopes/2026-05-28.json",
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "k": {
+    "definition": "igname",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 18,
+    "sources": [
+      "horoscopes/2026-05-28.json",
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "eau": {
+    "definition": "kòb",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "horoscopes/2026-05-28.json",
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "sucriers": {
+    "definition": "oiseaux jaunes",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "urakan": {
+    "definition": "frégate",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 7,
+    "sources": [
+      "horoscopes/2026-05-28.json",
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "manyok": {
+    "definition": "fourmis manioc",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 5,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "zerbenn": {
+    "definition": "herbe sacrée",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 6,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "dlo": {
+    "definition": "pois d’eau",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 16,
+    "sources": [
+      "horoscopes/2026-05-28.json",
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "porte-monnaie": {
+    "definition": "kòb",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "l": {
+    "definition": "oiseau messager",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 49,
+    "sources": [
+      "horoscopes/2026-05-28.json",
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "siwo": {
+    "definition": "herbe sucrée",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 7,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "maron": {
+    "definition": "herbe marronne",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 3,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "mwon": {
+    "definition": "esprits",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 3,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "kachiman": {
+    "definition": "bois cachiman",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 9,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "Kafou": {
+    "definition": "Carrefour",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 8,
+    "sources": [
+      "horoscopes/2026-05-28.json",
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "yi": {
+    "definition": "iguane vert",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 10,
+    "sources": [
+      "horoscopes/2026-05-28.json",
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "kabrit": {
+    "definition": "effraie des Antilles",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 8,
+    "sources": [
+      "horoscopes/2026-05-28.json",
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "cerasee": {
+    "definition": "herbe sacrée",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 8,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "bouc": {
+    "definition": "zèbenn",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "l'ouragan": {
+    "definition": "hurakan",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "pik": {
+    "definition": "Sensitive",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 14,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "toucher": {
+    "definition": "rimèd razié",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Carrefour": {
+    "definition": "Carrefour",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 5,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Kont": {
+    "definition": "conte",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 3,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Dachine": {
+    "definition": "Taro",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 3,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "kont": {
+    "definition": "conte",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 5,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "kontr": {
+    "definition": "conte",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "dachine": {
+    "definition": "taro",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 5,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "pika": {
+    "definition": "pique",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "calma": {
+    "definition": "calme",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "carrefour": {
+    "definition": "carrefour",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 6,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "brede": {
+    "definition": "légumes",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Sipote": {
+    "definition": "bois",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "anfilasyon": {
+    "definition": "infusion",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "apann": {
+    "definition": "cela va calmer",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "so": {
+    "definition": "la migraine",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 3,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Kokotye": {
+    "definition": "coquelicot",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 5,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "y": {
+    "definition": "fleur qui pousse au soleil",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 4,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "manman": {
+    "definition": "pour faire disparaître",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 4,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "lant": {
+    "definition": "l’inflammation",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "jipon": {
+    "definition": "chapeau de paille",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "t": {
+    "definition": "protège la tête",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 23,
+    "sources": [
+      "ambiance/2026-05-28.json",
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "kache": {
+    "definition": "qui cachaient",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "ka": {
+    "definition": "jeu de ka",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 70,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "kart": {
+    "definition": "cartes",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "tab": {
+    "definition": "sur la table",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "kay": {
+    "definition": "dans la maison",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "bay": {
+    "definition": "donne",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "grap": {
+    "definition": "fruits en grappe",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "sis": {
+    "definition": "en juin",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "f": {
+    "definition": "pour faire du neuf",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Azaka": {
+    "definition": "Congo",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "es": {
+    "definition": "krapò dlo",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "dartrier": {
+    "definition": "sene",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 8,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "mwe": {
+    "definition": "nous",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "kouman": {
+    "definition": "comme",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "dan": {
+    "definition": "dans",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "dartres": {
+    "definition": "peaux irritées",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 4,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "tet": {
+    "definition": "maux de tête",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "ou": {
+    "definition": "ton crâne",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 3,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "kokotye": {
+    "definition": "coquelicot des Antilles",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 10,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "apwi": {
+    "definition": "appliquer",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "paille": {
+    "definition": "chapeau de paille",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 8,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "yo": {
+    "definition": "tes ancêtres",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 3,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "phyr": {
+    "definition": "vent léger",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "granmoun": {
+    "definition": "elle change tout ton corps en fleur de grand-mère",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "viv": {
+    "definition": "je sais cela, la paix revient",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "bagay": {
+    "definition": "il fait une petite chose",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "li": {
+    "definition": "il donne des fruits en grappes",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "bon": {
+    "definition": "il pousse devant la misère, c'est une bonne chose",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Gwadloup": {
+    "definition": "Pic de Guadeloupe",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 5,
+    "sources": [
+      "ambiance/2026-05-28.json",
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "konsa": {
+    "definition": "comme cela",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Zanno": {
+    "definition": "jasmin de nuit",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 3,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "maudit": {
+    "definition": "feuilles de malanga",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "e": {
+    "definition": "plante trois tasses",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 11,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "m": {
+    "definition": "banane pomme",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 23,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "zanno": {
+    "definition": "jasmin de nuit",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 13,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "luth": {
+    "definition": "Tortue luth",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 7,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "pou": {
+    "definition": "pour",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 5,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "d'awanj": {
+    "definition": "Fleur d'oranger",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 9,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "mas": {
+    "definition": "Chant masqué",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 28,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "n": {
+    "definition": "Fleur de porcelaine",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "s": {
+    "definition": "douleurs articulaires",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "awanj": {
+    "definition": "fleur d’oranger",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 5,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "moun": {
+    "definition": "boa guadeloupéen",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 8,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "vitale": {
+    "definition": "ki",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "makou": {
+    "definition": "repas d’amitié",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "zandoli": {
+    "definition": "lézard",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "net": {
+    "definition": "quenette",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "vers": {
+    "definition": "herbe à vers",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "mi-xonbonn": {
+    "definition": "mélancolie",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "bwen": {
+    "definition": "bois",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "mi-di": {
+    "definition": "donne",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "kabribo": {
+    "definition": "grillon des bois",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 8,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "ni": {
+    "definition": "chardon béni",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 9,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Kabribo": {
+    "definition": "grillon des bois",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 6,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "zanj": {
+    "definition": "rivière aux esprits",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "quimbois": {
+    "definition": "rituel",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Adja": {
+    "definition": "⚖️",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "mbiya": {
+    "definition": "pluie",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "kajou": {
+    "definition": "pommier cajou",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 8,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "d'Adja": {
+    "definition": "⚖️",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "grenn-bwa": {
+    "definition": "crapaud des bois",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 3,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Pwayo": {
+    "definition": "banane plantain",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 3,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "pwayo": {
+    "definition": "poyo",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 6,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "ti-moun": {
+    "definition": "enfants",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 3,
+    "sources": [
+      "ambiance/2026-05-28.json",
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "gren-bwa": {
+    "definition": "hylode",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Bwa": {
+    "definition": "loa de la forêt et de la liberté",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 4,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Maracas": {
+    "definition": "maracas",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 5,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Kalbasi": {
+    "definition": "calebassier",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "pye": {
+    "definition": "chapeau de paille",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Mawak": {
+    "definition": "maracas",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "kalbasi": {
+    "definition": "calebassier",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 6,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "tamaren": {
+    "definition": "tamarin",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 5,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "wouj": {
+    "definition": "lavande rouge",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 16,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Anmwe": {
+    "definition": "nous",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "maracas": {
+    "definition": "maracas",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 15,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Zimbis": {
+    "definition": "grotte aux Esprits",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "cohobas": {
+    "definition": "repas",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Dartrier": {
+    "definition": "Ti-baume",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 4,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "cabris-bois": {
+    "definition": "grillons des bois",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "leaves": {
+    "definition": "feuilles",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "corossoliers": {
+    "definition": "corossol trees",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "moustik": {
+    "definition": "moustiques",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "kalman": {
+    "definition": "avec quelques feuilles dans de l’eau chaude",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "fimen": {
+    "definition": "il chasse le mauvais sort",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "lapli": {
+    "definition": "bois une petite tasse avant de sortir sous la pluie",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "manman-w": {
+    "definition": "reflet de ta mère",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "kouraj": {
+    "definition": "plante de force",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "anviwon": {
+    "definition": "qui remplit l’espace",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "t-w": {
+    "definition": "elle rappelle ta force à toi",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "chanjman": {
+    "definition": "chasse le changement",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "domi-w": {
+    "definition": "dans ta nuit",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "z": {
+    "definition": "et en dessert",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "gwoka": {
+    "definition": "batterie traditionnelle",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "saoul": {
+    "definition": "pour calmer le corps",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "terre": {
+    "definition": "poterie",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Crabe": {
+    "definition": "esprit de la terre",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "mis": {
+    "definition": "statuette sacrée",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 9,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Kowosol": {
+    "definition": "christophine",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 7,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Marinette": {
+    "definition": "loa Petro",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 4,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "bouillon": {
+    "definition": "bouillon",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "b-la": {
+    "definition": "herbe-là",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "r-la": {
+    "definition": "fleur-là",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "l'uraakan": {
+    "definition": "frégate",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "chouk": {
+    "definition": "brede de chou",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "si": {
+    "definition": "agouti",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "migren": {
+    "definition": "migraines",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "dart": {
+    "definition": "dartres",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "nan": {
+    "definition": "femme",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "dife": {
+    "definition": "cuire sur le feu",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "douvan": {
+    "definition": "devant le front",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "faisan": {
+    "definition": "faites-en une tisane",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "rouge": {
+    "definition": "E",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "lo": {
+    "definition": "mélange",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "blettes": {
+    "definition": "offrandes",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "roukou": {
+    "definition": "roulis",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "dawaji": {
+    "definition": "fleur d'oranger",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "sous": {
+    "definition": "source sacrée",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "kalbas": {
+    "definition": "calebasse",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "lwa": {
+    "definition": "esprits",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Freda": {
+    "definition": "💖",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 5,
+    "sources": [
+      "ambiance/2026-05-28.json",
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "ki": {
+    "definition": "force vitale",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "pwoche": {
+    "definition": "ça protège",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "cerase": {
+    "definition": "cerise",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "makak": {
+    "definition": "nuage",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "loa": {
+    "definition": "esprit",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "lambi": {
+    "definition": "conque",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 3,
+    "sources": [
+      "ambiance/2026-05-28.json",
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "maloya": {
+    "definition": "chant endeuillé",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Senk": {
+    "definition": "Code Noir",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "g": {
+    "definition": "nègre",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "malini": {
+    "definition": "rusé",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "chouin": {
+    "definition": "grenouille",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "hylodes": {
+    "definition": "grenouilles de bois",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Tamaren": {
+    "definition": "tamarin",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "ne": {
+    "definition": "🧜",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "chantFILEt": {
+    "definition": "sifflement",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "anbwa": {
+    "definition": "ombrage",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "mwen": {
+    "definition": "me faire",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "tonm": {
+    "definition": "chaud",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "janti": {
+    "definition": "douceur",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "anpi": {
+    "definition": "mettre",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "d": {
+    "definition": "propreté",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "lalin": {
+    "definition": "sous la lune",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "tan": {
+    "definition": "temps",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "maraka": {
+    "definition": "maracas",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "minui": {
+    "definition": "minuit",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Lapli": {
+    "definition": "la pluie",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "bwa": {
+    "definition": "sous les arbres",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "gibous": {
+    "definition": "croissant gibbeux",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "mi": {
+    "definition": "odeur",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "pwason": {
+    "definition": "poisson",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "wom": {
+    "definition": "Tu as",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "zep": {
+    "definition": "morceau",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "siropo": {
+    "definition": "sirop de canne",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "anmwe": {
+    "definition": "un peu de miel",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "na": {
+    "definition": "verre à rhum",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "toi": {
+    "definition": "toi",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "d'Ind": {
+    "definition": "feuilles de bois d'inde",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "ambiance/2026-05-28.json",
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "Marinet": {
+    "definition": "loa Petro",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "kanari": {
+    "definition": "eau de jarre",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "ti": {
+    "definition": "tortue",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "yaj": {
+    "definition": "remède",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "kowosol": {
+    "definition": "christophines",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Igwann": {
+    "definition": "iguane",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "ambiance/2026-05-28.json"
+    ]
+  },
+  "Jaunes": {
+    "definition": "eaux sacrées",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "blan": {
+    "definition": "arbre de mobilité",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "balisier": {
+    "definition": "plante sacrée",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "gate": {
+    "definition": "urakan",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 2,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "Samedi": {
+    "definition": "loa de la transformation",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "ce": {
+    "definition": "kòb",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "d'alowes": {
+    "definition": "aloès",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "alowes": {
+    "definition": "aloès",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 4,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "lavann": {
+    "definition": "herbe à lavande",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 4,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "sou": {
+    "definition": "kòb",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "Diab'": {
+    "definition": "lieu de protection",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "kouyon'": {
+    "definition": "l’amour n’a pas de lâche",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "senn": {
+    "definition": "herbe à cent têtes",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "gourde": {
+    "definition": "pièce",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "verte": {
+    "definition": "kòb",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
+  },
+  "sucrier": {
+    "definition": "oiseau jaune",
+    "category": "à_classer",
+    "firstSeen": "2026-05-28",
+    "count": 1,
+    "sources": [
+      "horoscopes/2026-05-28.json"
+    ]
   }
 }

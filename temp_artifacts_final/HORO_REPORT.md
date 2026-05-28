@@ -1,0 +1,2 @@
+# Rapport Horoscopes
+Status: success

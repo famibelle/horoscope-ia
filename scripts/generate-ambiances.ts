@@ -298,25 +298,6 @@ Sans markdown dans les valeurs JSON.`;
     return null;
   }
 
-    // 🛡️ APPLICATION DES GARDE-FOUS DE SÉCURITÉ
-    // ==========================================
-    logVerbose('🛡️  Application des garde-fous de sécurité...');
-    const { filtered: safeParsed, warnings, stats } = applySafetyFiltersToObject(
-      parsed,
-      { logWarnings: true, includeStats: true }
-    );
-    
-    if (warnings.length > 0) {
-      logVerbose(`✅ ${warnings.length} garde-fous appliqués pour ${signId} (${edition})`, {
-        highPriority: stats.highPriority,
-        mediumPriority: stats.mediumPriority,
-        lowPriority: stats.lowPriority,
-        totalReplacements: stats.totalReplacements,
-      });
-    } else {
-      logVerbose(`✅ Aucun garde-fou nécessaire pour ${signId} (${edition})`);
-    }
-=======
   const data = await res.json();
   const content = data.choices?.[0]?.message?.content ?? '{}';
 
@@ -373,45 +354,31 @@ Sans markdown dans les valeurs JSON.`;
       });
     } else {
       logVerbose(`✅ Aucun garde-fou nécessaire pour ${signId} (${edition})`);
-    }==========================================
-    // 🛡️ APPLICATION DES GARDE-FOUS DE SÉCURITÉ
-    // ==========================================
-    logVerbose('🛡️  Application des garde-fous de sécurité...');
-    const { filtered: safeParsed, warnings, stats } = applySafetyFiltersToObject(
-      parsed,
-      { logWarnings: true, includeStats: true }
-    );
-    
-    if (warnings.length > 0) {
-      logVerbose(`✅ ${warnings.length} garde-fous appliqués pour ${signId} (${edition})`, {
-        highPriority: stats.highPriority,
-        mediumPriority: stats.mediumPriority,
-        lowPriority: stats.lowPriority,
-        totalReplacements: stats.totalReplacements,
-      });
-    } else {
-      logVerbose(`✅ Aucun garde-fou nécessaire pour ${signId} (${edition})`);
     }
-    
-    return { ...safeParsed, scores };
-  } catch (e) {
-    console.log(`❌ JSON invalide pour ${signId} ${edition}`);
-    logError('Échec parsing JSON', e instanceof Error ? e.message : e);
-    logError('Contenu:', content);
-    return null;
-  }
-}
+        // S'assurer que compatibilite et couleursSacrees sont des tableaux (Mistral renvoie parfois des objets)
+        const ensureArray = (val: any) => {
+          if (Array.isArray(val)) return val;
+          if (val && typeof val === 'object') return Object.values(val);
+          return [];
+        };
 
-export async function generateAllAmbiances() {
+        const finalResult = {
+          ...safeParsed,
+          compatibilite: ensureArray(safeParsed.compatibilite),
+          couleursSacrees: ensureArray(safeParsed.couleursSacrees),
+          scores
+        };
+
+        return finalResult;
+        } catch (e) {
+        console.log(`❌ JSON invalide pour ${signId} ${edition}`);
+        logError('Échec parsing JSON', e instanceof Error ? e.message : e);
+        return null;
+        }  }
+
+async function generateAllAmbiances() {
   const today = options.date || todayGuadeloupe();
   const filePath = `data/ambiance/${today}.json`;
-
-  logVerbose(`Début de la génération des ambiances`, {
-    date: today,
-    forceMode: options.force,
-    outputPath: filePath
-  });
-
   // Vérifier si les ambiances du jour existent déjà (sauf si --force)
   if (!options.force) {
     try {
