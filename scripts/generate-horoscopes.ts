@@ -20,9 +20,19 @@ const options = {
   verbose: args.includes('-v') || args.includes('--verbose'),
   force: args.includes('-f') || args.includes('--force'),
   date: args.find(arg => arg.startsWith('--date='))?.split('=')[1],
+  signs: args.find(arg => arg.startsWith('--signs='))?.split('=')[1]?.split(','),
 };
 
-// Helper pour les logs verboses
+// Filtrer les signes si spécifiés
+import { signs as allSigns } from '@/lib/signs-data';
+const signs = options.signs 
+  ? allSigns.filter(s => options.signs!.includes(s.id)) 
+  : allSigns;
+
+if (signs.length === 0 && options.signs) {
+  console.error(`❌ Aucun signe valide trouvé pour: ${options.signs.join(', ')}`);
+  process.exit(1);
+}
 function logVerbose(message: string, data?: any) {
   if (options.verbose) {
     const timestamp = new Date().toISOString().split('T')[1].split('.')[0];
@@ -50,7 +60,6 @@ if (options.force) {
   console.log('⚡ Mode force activé - régénération forcée');
 }
 
-import { signs } from '@/lib/signs-data';
 import { MARYSE_SYSTEM, buildHoroscopeUserPrompt, type Edition } from '@/lib/private/maryse-prompt';
 import {
   getMedicinalPlant,
@@ -326,14 +335,14 @@ async function generateWithMistral(
     signe: signId,
     loa: vaudouContext.loa,
     famille: vaudouContext.famille,
-    couleurs: vaudouContext.couleurs,
-    plante: vaudouContext.plante,
-    animal: vaudouContext.animal,
-    objet: vaudouContext.objet,
-    lieu: vaudouContext.lieu,
-    rituel: vaudouContext.rituel,
-    emoji: vaudouContext.emoji,
-    energie: vaudouContext.energie
+    couleurs: vaudouContext.elements.couleurs,
+    plante: vaudouContext.elements.plante,
+    animal: vaudouContext.elements.animal,
+    objet: vaudouContext.elements.objet,
+    lieu: vaudouContext.elements.lieu,
+    rituel: vaudouContext.elements.rituel,
+    emoji: vaudouContext.elements.emoji,
+    energie: vaudouContext.elements.energie
   });
   
   // Logs pour les loas pertinents
@@ -670,9 +679,17 @@ export async function generateAllHoroscopes() {
         console.log(`   ✓ Teaser généré: "${teaser.substring(0, 60)}..."`);
         logVerbose(`Teaser: "${teaser}"`);
 
+        // Parser le JSON pour extraire les champs pour le frontend
+        let parsed = {};
+        try {
+          parsed = JSON.parse(cleanedContent);
+        } catch (e) {
+          logVerboseError(`Erreur parsing JSON final pour ${sign.id}`, e);
+        }
+
         // Sauvegarder
         const response = {
-          horoscope: cleanedContent, // Le texte brut intégral de Mistral (JSON parfait)
+          ...parsed,
           teaser: teaser || undefined,
           signFr: sign.name,
           weather,
@@ -709,7 +726,7 @@ export async function generateAllHoroscopes() {
     if (generated + skipped < total) {
       throw new Error(`❌ VALIDATION ÉCHOUÉE: Seulement ${generated + skipped}/${total} horoscopes générés`);
     }
-     catch (error) {
+  } catch (error) {
 
     logVerbose('Netlify Blobs non disponible, bascule en mode local', {
       error: error instanceof Error ? error.message : String(error)
@@ -784,15 +801,22 @@ export async function generateAllHoroscopes() {
         console.log(`   ✓ Teaser: OK`);
         logVerbose(`Teaser généré en mode local: "${teaser}"`);
 
+        // Parser le JSON pour extraire les champs pour le frontend
+        let parsed = {};
+        try {
+          parsed = JSON.parse(cleanedContent);
+        } catch (e) {
+          logVerboseError(`Erreur parsing JSON final local pour ${sign.id}`, e);
+        }
+
         const response = {
-          horoscope: cleanedContent, // Le texte brut intégral de Mistral (JSON parfait)
+          ...parsed,
           teaser: teaser || undefined,
           signFr: sign.name,
           weather,
           edition,
           source: 'mistral-raw',
         };
-
         results[blobKey] = response;
         await saveToLocalFile(today, results);
         logVerbose(`Sauvegarde locale: ${blobKey}`);
