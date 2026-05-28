@@ -238,7 +238,7 @@ export const EDITION_TO_VAUDOU_CONTEXT: Record<string, {
   matin: {
     loa: 'Legba',
     energie: 'Ouverture des chemins spirituels et des portes entre les mondes',
-    conseil: 'Allumez une bougie blanche et tracez un vèvè de Legba pour ouvrir votre journée sous protection.',
+    conseil: 'Imagine une bougie allumée devant toi, symbole de lumière et de guidance spirituelle — laisse Legba ouvrir les chemins de ta journée.',
     emoji: '🌅',
     couleur: 'blanc',
     plante: 'Piment bouc',
@@ -247,7 +247,7 @@ export const EDITION_TO_VAUDOU_CONTEXT: Record<string, {
   midi: {
     loa: 'Ogoun',
     energie: 'Force, travail et justice pour accomplir vos tâches',
-    conseil: 'Portez un objet en métal (clé, couteau) ou utilisez une Mache symbolique pour canaliser votre énergie.',
+    conseil: 'Symbolise la coupure des énergies négatives avec un geste de la main, comme une lame invisible guidée par Ogoun.',
     emoji: '☀️',
     couleur: 'vert',
     plante: 'Fey zepin',
@@ -256,7 +256,7 @@ export const EDITION_TO_VAUDOU_CONTEXT: Record<string, {
   soir: {
     loa: 'Baron Samedi',
     energie: 'Transformation, réflexion et connexion avec les ancêtres',
-    conseil: 'Méditez avec une bougie noire et du Pwen nwa (poudre noire) pour honorer les esprits.',
+    conseil: 'Contemple une flamme sacrée dans ton esprit, symbole de transformation et de purification — Baron Samedi veille sur tes passages.',
     emoji: '🌇',
     couleur: 'noir',
     plante: 'Zerbenn maron',
@@ -265,7 +265,7 @@ export const EDITION_TO_VAUDOU_CONTEXT: Record<string, {
   nuit: {
     loa: 'Gede',
     energie: 'Communication avec les esprits et les rêves',
-    conseil: 'Placez une offrande (rhum, fleur) sur votre autel et allumez une Bouji (bougie) pour dialoguer avec les ancêtres.',
+    conseil: 'Invoque l\'énergie du rhum dans tes rituels (sans ingestion), symbole de joies partagées et de convivialité avec les esprits de Gede.',
     emoji: '🌙',
     couleur: 'violet',
     plante: 'Pwa dlo',
@@ -316,7 +316,7 @@ export function getVaudouTipForSign(signId: string, edition: string) {
   if (!signContext || !editionContext) {
     return {
       message: 'Les esprits de Karukera vous protègent aujourd\'hui.',
-      conseil: 'Allumez une bougie blanche pour honorer Legba.',
+      conseil: 'Imagine une bougie allumée devant toi, symbole de lumière et de guidance spirituelle — laisse Legba ouvrir tes chemins.',
       emoji: '🕯️',
       loa: 'Legba',
       couleurs: ['blanc']
