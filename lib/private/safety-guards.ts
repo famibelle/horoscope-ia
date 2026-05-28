@@ -63,6 +63,10 @@ export const SAFETY_RULES: SafetyRule[] = [
       /fais?\s+brûler\s+(une?|la|des?)\s*bougie/gi,
       /enflamme[s]?\s+(une?|la)\s*bougie/gi,
       /embrasse\s+la\s*flamme/gi,
+      /brûle[s]?[-\s]?(le|la|les|toi|vous)\s+avec/gi,
+      /brûle[s]?\s+(le|la|les|un|une|des)\s+\w+\s+avec/gi,
+      /brûle[s]?\s+avec\s+(une?|la|des?|\w+\s+)?feuille/gi,
+      /fais?\s+brûler\s+\w+\s+avec\s+(une?|la|des?|\w+\s+)?feuille/gi,
     ],
     replacement: 'Imagine une bougie allumée devant toi, symbole de lumière et de guidance spirituelle',
     examples: {

@@ -14,6 +14,7 @@ import { detectEditionWithNight, todayGuadeloupe, getGuadeloupeHour } from '@/li
 import type { Edition } from '@/lib/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
 import { loadHoroscopeData, saveSingleHoroscope } from '@/lib/private/horoscope-file-cache';
+import { applySafetyFiltersToObject } from '@/lib/private/safety-filter';
 
 const HOROSCOPE_API = 'https://freehoroscopeapi.com/api/v1/get-horoscope/daily';
 const MISTRAL_URL   = 'https://api.mistral.ai/v1/chat/completions';
@@ -280,7 +281,11 @@ async function rewriteWithMistral(
   try {
     const parsed = JSON.parse(content);
     console.log(`🤖 [MISTRAL] ✅ Horoscope réécrit pour ${signId}`);
-    return parsed;
+    const { filtered, warnings } = applySafetyFiltersToObject(parsed, { logWarnings: false });
+    if (warnings.length > 0) {
+      console.warn(`🛡️ [SAFETY] ${warnings.length} remplacement(s) appliqué(s) sur horoscope ${signId}`);
+    }
+    return filtered;
   } catch { return null; }
 }
 

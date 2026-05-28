@@ -14,6 +14,7 @@ import { computeScores } from '@/lib/scores';
 import type { WeatherData } from '@/app/api/weather/route';
 import type { Edition } from '@/lib/private/maryse-prompt';
 import { loadAmbianceData } from '@/lib/private/horoscope-file-cache';
+import { applySafetyFiltersToObject } from '@/lib/private/safety-filter';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
@@ -224,7 +225,11 @@ Sans markdown dans les valeurs JSON.`;
   const content = mistralData.choices?.[0]?.message?.content ?? '{}';
 
   try {
-    const data = { ...JSON.parse(content), scores };
+    const raw = { ...JSON.parse(content), scores };
+    const { filtered: data, warnings } = applySafetyFiltersToObject(raw, { logWarnings: false });
+    if (warnings.length > 0) {
+      console.warn(`🛡️ [SAFETY] ${warnings.length} remplacement(s) appliqué(s) sur ambiance ${signId}`);
+    }
     console.log(`🤖 [MISTRAL] ✅ Ambiance générée pour ${signId}`);
 
     // Store in Netlify Blobs cache
