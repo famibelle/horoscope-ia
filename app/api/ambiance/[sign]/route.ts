@@ -175,6 +175,8 @@ export async function GET(
   const prompt = `Tu es Maryse CondAI, voix astrologique de Karukera (Guadeloupe).
 Génère l'ambiance astrale du jour pour le ${sign.name} (édition ${edition}).
 
+RÈGLE ABSOLUE DE LANGUE : Rédige UNIQUEMENT en français. Tu peux citer un nom créole entre parenthèses, mais n'écris jamais une phrase entière en créole.
+
 Signe : ${sign.name} · Planète : ${sign.planet} · Élément : ${sign.element}
 Phase lunaire : ${lunarPhase}
 Météo à Pointe-à-Pitre : ${weather.summary}
@@ -192,11 +194,11 @@ Réponds avec un objet JSON valide et ces clés exactes :
   "chiffrePorteBonheur": <entier 1-99, de préférence un nombre premier (2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97)>,
   "compatibilite": ["<signId1>", "<signId2>"],
   "lune": {
-    "bienetre": "conseil bien-être ancré sur le rimèd razié du jour : ${luneBienetre.nomCreole} (${luneBienetre.nomFr}) — ${luneBienetre.usage}. Mentionne le nom créole et son usage pour le corps. 2 phrases.",
-    "beaute": "conseil beauté/soin naturel ancré sur la plante du jour : ${luneBeaute.nomCreole} (${luneBeaute.nomFr}) — ${luneBeaute.culture}. Mentionne le nom créole et son usage beauté ou soin. 2 phrases.",
-    "esprit": "conseil mental ou spirituel ancré sur l'objet ou lieu de résistance du jour : ${luneEsprit.nomCreole} (${luneEsprit.nomFr}) — ${luneEsprit.dimension}. Lié aussi à la ${lunarPhase}. 2 phrases.",
-    "maison": "conseil maison/espace de vie créole ancré sur l'objet ou pratique du jour : ${luneMaison.nomCreole} (${luneMaison.nomFr}) — ${luneMaison.dimension}. 2 phrases.",
-    "jardinage": "conseil jardinage créole ancré sur la plante du jour : ${luneJardinage.nomCreole} (${luneJardinage.nomFr}) — ${luneJardinage.culture}. Mentionne le nom créole et comment la cultiver ou l'utiliser selon la ${lunarPhase}. 2 phrases."
+    "bienetre": "Rédige en français. Conseil bien-être ancré sur le rimèd razié du jour : cite le nom créole ${luneBienetre.nomCreole} entre parenthèses, puis explique en français son usage pour le corps (${luneBienetre.usage}). 2 phrases.",
+    "beaute": "Rédige en français. Conseil beauté/soin naturel ancré sur la plante du jour : cite le nom créole ${luneBeaute.nomCreole} entre parenthèses, puis décris en français son usage beauté ou soin (${luneBeaute.culture}). 2 phrases.",
+    "esprit": "Rédige en français. Conseil mental ou spirituel ancré sur l'objet ou lieu de résistance du jour : cite le nom créole ${luneEsprit.nomCreole} entre parenthèses, puis développe en français sa dimension spirituelle (${luneEsprit.dimension}). Lie aussi à la ${lunarPhase}. 2 phrases.",
+    "maison": "Rédige en français. Conseil maison/espace de vie ancré sur l'objet ou pratique du jour : cite le nom créole ${luneMaison.nomCreole} entre parenthèses, puis explique en français sa dimension (${luneMaison.dimension}). 2 phrases.",
+    "jardinage": "Rédige en français. Conseil jardinage ancré sur la plante du jour : cite le nom créole ${luneJardinage.nomCreole} entre parenthèses, puis explique en français comment la cultiver ou l'utiliser selon la ${lunarPhase} (${luneJardinage.culture}). 2 phrases."
   }
 }
 
