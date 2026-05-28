@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Calendar, ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import { getAllRitualDates, type RitualDateInfo } from '@/lib/private/vaudou-calendar-utils';
 
 // Noms des mois en français
@@ -295,9 +296,9 @@ export default function CalendrierVaudouPage() {
                           <span className="text-white/70 ml-2">({ritualDate.nomCreole})</span>
                         )}
                       </h4>
-                      <p className="text-white/80 text-sm mt-1 line-clamp-2">
-                        {ritualDate.theme}
-                      </p>
+                      <div className="text-white/80 text-sm mt-1 line-clamp-2">
+                        <ReactMarkdown>{ritualDate.theme}</ReactMarkdown>
+                      </div>
                       <p className="text-white/60 text-xs mt-2">
                         Loa : {ritualDate.loa}
                       </p>
@@ -398,9 +399,9 @@ export default function CalendrierVaudouPage() {
               </div>
               <div className="pt-4 border-t border-white/10">
                 <p className="text-white/60 mb-1">Thème</p>
-                <p className="text-white text-base leading-relaxed">
-                  {selectedDate.dimensionCulturelle}
-                </p>
+                <div className="text-white text-base leading-relaxed">
+                  <ReactMarkdown>{selectedDate.dimensionCulturelle}</ReactMarkdown>
+                </div>
               </div>
             </motion.div>
 
