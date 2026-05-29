@@ -21,7 +21,7 @@ export async function upsertRest(
   const key = process.env.SUPABASE_SERVICE_KEY!;
   const body = Array.isArray(rows) ? rows : [rows];
 
-  const res = await fetch(`${supabaseUrl}/rest/v1/${table}`, {
+  const res = await fetch(`${supabaseUrl}/rest/v1/${table}?on_conflict=${onConflict}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
