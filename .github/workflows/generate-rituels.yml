@@ -1,8 +1,6 @@
 name: Générer les données rituelles vaudou
 
 on:
-  schedule:
-    - cron: '0 4 * * *'   # Tous les jours à 4h UTC = minuit heure Guadeloupe (UTC-4)
   workflow_dispatch:
     inputs:
       mode:
