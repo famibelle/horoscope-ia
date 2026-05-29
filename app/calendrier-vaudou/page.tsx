@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Calendar, ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
+import { Markdown as ReactMarkdown, markdownComponents } from '@/lib/markdown-components';
 import { getAllRitualDates, type RitualDateInfo } from '@/lib/private/vaudou-calendar-utils';
 
 // Noms des mois en français
