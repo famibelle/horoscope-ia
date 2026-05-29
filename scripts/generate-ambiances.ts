@@ -131,7 +131,7 @@ async function fetchWeather(): Promise<string> {
 }
 
 async function saveToSupabase(data: Record<string, any>): Promise<void> {
-  const { upsertRest } = await import('@/lib/supabase');
+  const { upsertRest } = await import('@/lib/supabase-rest');
   const rows = Object.entries(data).map(([key, v]) => {
     const [date, sign_id, edition] = key.split('|');
     return {

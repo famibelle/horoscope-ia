@@ -206,7 +206,7 @@ async function generatePhrase(
 }
 
 async function saveToSupabase(data: any): Promise<void> {
-  const { upsertRest } = await import('@/lib/supabase');
+  const { upsertRest } = await import('@/lib/supabase-rest');
   const row = {
     date: data.date,
     type: data.type,
