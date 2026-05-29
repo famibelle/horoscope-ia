@@ -28,27 +28,7 @@ export default function Footer() {
             🌿 Votre voyage ancestral dans la sagesse de Karukera
           </div>
           
-          {/* Liens Vaudou */}
-          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mt-4">
-            <Link
-              href="/calendrier-vaudou"
-              className="text-ancestral-gold/80 text-sm hover:text-ancestral-gold transition-colors duration-200 flex items-center gap-2"
-            >
-              📅 Calendrier Vaudou
-            </Link>
-            <Link
-              href="/quiz-vaudou"
-              className="text-ancestral-gold/80 text-sm hover:text-ancestral-gold transition-colors duration-200 flex items-center gap-2"
-            >
-              ❓ Quiz Vaudou
-            </Link>
-            <Link
-              href="/dictionnaire-vaudou"
-              className="text-ancestral-gold/80 text-sm hover:text-ancestral-gold transition-colors duration-200 flex items-center gap-2"
-            >
-              📖 Dictionnaire Vaudou
-            </Link>
-          </div>
+          {/* Liens Vaudou - désactivés temporairement */}
         </div>
 
         {/* Legal links - centered and inline */}
