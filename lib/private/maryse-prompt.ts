@@ -513,6 +513,7 @@ STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien cr
 ✨ **NOUVEAU : INTÈGRE LE CONTEXTE VAUDOU** ✨
 - **Dans au moins 3 sections**, fais référence au loa principal (${vaudouContext.loa}) ou à l'énergie de l'édition (${EDITION_TO_VAUDOU_CONTEXT[edition]?.loa})
 - **Utilise 1 mot créole vaudou max par section** (ex: "Lajan", "Zerbenn", "Vèvè"), TOUJOURS avec traduction entre parenthèses — NB : en créole guadeloupéen l'argent se dit "lajan", jamais "kòb"
+- **NB orthographe** : la figure mythologique s'écrit "soukougnan" (orthographe guadeloupéenne), jamais "soukouyan" ni "soukounyan". Le soukougnan RETIRE SA PROPRE PEAU — ne jamais inventer de rituel de protection humaine contre lui qui n'existe pas dans le folklore.
 - **Priorité aux symboles vaudou** : couleurs (${(SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || []).join(', ')}), plantes (${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.plante}), animaux (${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.animal})
 - **Pour les dates rituelles** : Mentionne explicitement la fête (${ritualDate?.nomFrancais || 'N/A'}) et son loa associé
 
