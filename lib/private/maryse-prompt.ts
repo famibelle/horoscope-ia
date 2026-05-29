@@ -324,12 +324,7 @@ export function buildHoroscopeUserPrompt(
     h.periode.includes(moisNom) ||
     h.periode.includes(month)
   );
-  const histoireEntry = histoireByMonth[0] || histoireData.find(h => 
-    h.faitHistorique.toLowerCase().includes(sign.element.toLowerCase()) ||
-    h.faitHistorique.toLowerCase().includes(sign.spirituel.toLowerCase()) ||
-    h.faitHistorique.toLowerCase().includes(sign.animal?.toLowerCase() || '') ||
-    h.faitHistorique.toLowerCase().includes(sign.plante?.toLowerCase() || '')
-  );
+  const histoireEntry = histoireByMonth[0] || null;
   const histoireFait = histoireEntry?.faitHistorique || '';
   const histoirePeriode = histoireEntry?.periode || '';
   
@@ -405,12 +400,11 @@ export function buildHoroscopeUserPrompt(
     ))
   ).slice(0, 5);
 
-  // HISTOIRE-DATA : 2-3 entrées pertinentes
-  const histoireEnrichies = histoireData.filter(h => 
+  // HISTOIRE-DATA : 2-3 entrées pertinentes (filtre par date uniquement)
+  const histoireEnrichies = histoireData.filter(h =>
     h.periode.includes(year) ||
     h.periode.includes(moisNom) ||
-    h.periode.includes(month) ||
-    h.faitHistorique.toLowerCase().includes(sign.element.toLowerCase())
+    h.periode.includes(month)
   ).slice(0, 3);
 
   // Détecter les correspondances météo/édition pour adapter le contexte
