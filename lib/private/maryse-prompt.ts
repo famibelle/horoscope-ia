@@ -375,37 +375,32 @@ export function buildHoroscopeUserPrompt(
   ).slice(0, 3);
 
   // Filtrer les données enrichies pour ne garder que les pertinentes
-  // FAUNE-DATA : 5-8 entrées liées au signe
+  // FAUNE-DATA : entrées liées au signe par animal/nomKreyol uniquement
   const fauneEnrichies = fauneData.filter(f =>
-    matchesWord(f.nomCreole, sign.element) ||
     f.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '') ||
-    f.nomCreole.toLowerCase().includes(sign.nomKreyol?.toLowerCase() || '') ||
-    f.tags?.some(tag => matchesWord(tag, sign.element))
+    f.nomCreole.toLowerCase().includes(sign.nomKreyol?.toLowerCase() || '')
   ).slice(0, 8);
 
-  // FLORE-DATA : 5-8 entrées liées au signe
+  // FLORE-DATA : entrées liées au signe par plante uniquement
   const floreEnrichies = floreData.filter(f =>
-    matchesWord(f.nomCreole, sign.element) ||
     f.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '') ||
-    f.tags?.some(tag => matchesWord(tag, sign.element))
+    f.nomFrancais.toLowerCase().includes(sign.plante?.toLowerCase() || '')
   ).slice(0, 8);
 
-  // LIEUX-DATA : 3-5 entrées liées au signe
+  // LIEUX-DATA : entrées liées au signe par lieu uniquement
   const lieuxEnrichis = lieuxData.filter(l =>
-    matchesWord(l.dimensionCulturelle, sign.element) ||
     l.nom.toLowerCase().includes(sign.lieu?.toLowerCase() || '') ||
-    l.tags?.some(tag => matchesWord(tag, sign.element))
+    sign.lieu?.toLowerCase().includes(l.nom.toLowerCase())
   ).slice(0, 5);
 
-  // KREYOL-DATA : 3-5 entrées filtrées
+  // KREYOL-DATA : entrées liées au signe par animal/plante/nomKreyol uniquement
   const kreyolEnrichis = kreyolData.filter(k =>
     k.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '') ||
     k.nomCreole.toLowerCase().includes(sign.nomKreyol?.toLowerCase() || '') ||
     k.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '') ||
-    matchesWord(k.famille, sign.element) ||
     (k.tags && k.tags.some(tag =>
-      matchesWord(tag, sign.element) ||
       tag.includes(sign.animal?.toLowerCase() || '') ||
+      tag.includes(sign.nomKreyol?.toLowerCase() || '') ||
       tag.includes(sign.plante?.toLowerCase() || '')
     ))
   ).slice(0, 5);
