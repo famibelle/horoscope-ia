@@ -7,6 +7,7 @@ import { Check, X, Sparkles, BookOpen, Leaf, Heart, Shield, Star, ArrowRight, Ca
 import { loasData, animauxData, plantesData, objetsData } from '@/lib/private/vaudou-data';
 import { SIGN_TO_LOA, SIGN_TO_VAUDOU_CONTEXT } from '@/lib/private/vaudou-mappings';
 import { signs } from '@/lib/signs-data';
+import { Markdown, markdownComponents } from '@/lib/markdown-components';
 
 interface QuizQuestion {
   id: number;
@@ -532,9 +533,16 @@ export default function QuizVaudouPage() {
                   <p className="text-ancestral-gold text-xs uppercase tracking-wider mb-2">
                     Explication
                   </p>
-                  <p className="text-white/90 text-sm leading-relaxed">
+                  <Markdown
+                    components={{
+                      ...markdownComponents,
+                      p: ({ children }) => (
+                        <p className="text-white/90 text-sm leading-relaxed">{children}</p>
+                      ),
+                    }}
+                  >
                     {currentQuestion.explanation}
-                  </p>
+                  </Markdown>
                 </motion.div>
               )}
 
@@ -556,7 +564,7 @@ export default function QuizVaudouPage() {
                       }}
                     >
                       <BookOpen size={16} className="inline-block mr-2" />
-                      Voir l\'explication
+                      {"Voir l'explication"}
                     </button>
                   ) : (
                     <button
