@@ -285,16 +285,6 @@
       "ambiance/2026-05-28.json"
     ]
   },
-  "eau": {
-    "definition": "kòb",
-    "category": "à_classer",
-    "firstSeen": "2026-05-28",
-    "count": 2,
-    "sources": [
-      "horoscopes/2026-05-28.json",
-      "ambiance/2026-05-28.json"
-    ]
-  },
   "sucriers": {
     "definition": "oiseaux jaunes",
     "category": "à_classer",
@@ -340,15 +330,6 @@
     "sources": [
       "horoscopes/2026-05-28.json",
       "ambiance/2026-05-28.json"
-    ]
-  },
-  "porte-monnaie": {
-    "definition": "kòb",
-    "category": "à_classer",
-    "firstSeen": "2026-05-28",
-    "count": 1,
-    "sources": [
-      "horoscopes/2026-05-28.json"
     ]
   },
   "l": {
@@ -2170,15 +2151,6 @@
       "horoscopes/2026-05-28.json"
     ]
   },
-  "ce": {
-    "definition": "kòb",
-    "category": "à_classer",
-    "firstSeen": "2026-05-28",
-    "count": 1,
-    "sources": [
-      "horoscopes/2026-05-28.json"
-    ]
-  },
   "d'alowes": {
     "definition": "aloès",
     "category": "à_classer",
@@ -2202,15 +2174,6 @@
     "category": "à_classer",
     "firstSeen": "2026-05-28",
     "count": 4,
-    "sources": [
-      "horoscopes/2026-05-28.json"
-    ]
-  },
-  "sou": {
-    "definition": "kòb",
-    "category": "à_classer",
-    "firstSeen": "2026-05-28",
-    "count": 1,
     "sources": [
       "horoscopes/2026-05-28.json"
     ]
@@ -2251,15 +2214,6 @@
       "horoscopes/2026-05-28.json"
     ]
   },
-  "verte": {
-    "definition": "kòb",
-    "category": "à_classer",
-    "firstSeen": "2026-05-28",
-    "count": 1,
-    "sources": [
-      "horoscopes/2026-05-28.json"
-    ]
-  },
   "sucrier": {
     "definition": "oiseau jaune",
     "category": "à_classer",
@@ -2268,5 +2222,13 @@
     "sources": [
       "horoscopes/2026-05-28.json"
     ]
+  },
+  "lajan": {
+    "definition": "argent, monnaie (terme correct en créole guadeloupéen)",
+    "category": "à_classer",
+    "firstSeen": "2026-05-29",
+    "count": 0,
+    "sources": [],
+    "vaudou": false
   }
 }
