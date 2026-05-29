@@ -206,7 +206,7 @@ async function generatePhrase(
 }
 
 async function saveToSupabase(data: any): Promise<void> {
-  const { supabaseAdmin } = await import('@/lib/supabase');
+  const { upsertRest } = await import('@/lib/supabase');
   const row = {
     date: data.date,
     type: data.type,
@@ -217,11 +217,8 @@ async function saveToSupabase(data: any): Promise<void> {
       ? (() => { try { return JSON.parse(data.interpretation); } catch { return { texte: data.interpretation }; } })()
       : data.interpretation,
   };
-  const { error } = await supabaseAdmin
-    .from('presages')
-    .upsert(row, { onConflict: 'date' });
-  if (error) console.error('❌ [SUPABASE] Erreur upsert présage:', error.message);
-  else console.log(`✅ [SUPABASE] Présage du ${data.date} upsert`);
+  await upsertRest('presages', row, 'date');
+  console.log(`✅ [SUPABASE] Présage du ${data.date} upsert`);
 }
 
 async function saveToFile(today: string, data: any): Promise<string> {

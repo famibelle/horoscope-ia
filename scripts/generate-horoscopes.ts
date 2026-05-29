@@ -541,7 +541,7 @@ async function fetchWeather(): Promise<string> {
 }
 
 async function saveToSupabase(data: Record<string, any>): Promise<void> {
-  const { supabaseAdmin } = await import('@/lib/supabase');
+  const { upsertRest } = await import('@/lib/supabase');
   const rows = Object.entries(data).map(([key, v]) => {
     const [date, sign_id, edition] = key.split('|');
     return {
@@ -552,11 +552,8 @@ async function saveToSupabase(data: Record<string, any>): Promise<void> {
       sign_fr: v.signFr, weather: v.weather, source: v.source,
     };
   });
-  const { error } = await supabaseAdmin
-    .from('horoscopes')
-    .upsert(rows, { onConflict: 'date,sign_id,edition' });
-  if (error) console.error('❌ [SUPABASE] Erreur upsert horoscopes:', error.message);
-  else console.log(`✅ [SUPABASE] ${rows.length} horoscope(s) upsertés`);
+  await upsertRest('horoscopes', rows, 'date,sign_id,edition');
+  console.log(`✅ [SUPABASE] ${rows.length} horoscope(s) upsertés`);
 }
 
 async function saveToLocalFile(today: string, data: Record<string, any>): Promise<string> {
