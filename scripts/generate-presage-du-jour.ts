@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 config();
 
 import { todayGuadeloupe } from '@/lib/edition';
-import { MARYSE_SYSTEM } from '@/lib/private/maryse-prompt';
+const PRESAGE_SYSTEM = `Tu es Maryse, conteuse guadeloupéenne. Tu réponds UNIQUEMENT par une seule phrase courte en français, sans titre, sans introduction, sans JSON. La phrase commence obligatoirement par "Si tu croises".`;
 import signeData from '@/lib/private/presage-du-jour-data.json';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
@@ -180,14 +180,10 @@ async function generatePhrase(
     body: JSON.stringify({
       model: 'mistral-small-latest',
       temperature: 0.8,
-      max_tokens: 150,
-      response_format: { type: 'json_object' },
+      max_tokens: 120,
       messages: [
-        { role: 'system', content: MARYSE_SYSTEM },
-        {
-          role: 'user',
-          content: prompt,
-        },
+        { role: 'system', content: PRESAGE_SYSTEM },
+        { role: 'user', content: prompt },
       ],
     }),
   });
@@ -213,9 +209,7 @@ async function saveToSupabase(data: any): Promise<void> {
     nom_creole: data.nomCreole,
     nom_commun: data.nomCommun,
     presage_naturel: data.presageNaturel,
-    interpretation: typeof data.interpretation === 'string'
-      ? (() => { try { return JSON.parse(data.interpretation); } catch { return { texte: data.interpretation }; } })()
-      : data.interpretation,
+    interpretation: data.interpretation ?? null,
   };
   await upsertRest('presages', row, 'date');
   console.log(`✅ [SUPABASE] Présage du ${data.date} upsert`);
@@ -290,18 +284,12 @@ export async function generatePresageDuJour() {
     nomCreole: entry.nom_creole,
     nomCommun: entry.nom_commun,
     presageNaturel: "",
-    interpretation: ""
+    interpretation: null as string | null
   };
   
   if (content) {
-    try {
-        const parsed = JSON.parse(content);
-        result.presageNaturel = entry.nom_creole;
-        result.interpretation = parsed.interpretation || content;
-    } catch {
-        result.presageNaturel = entry.nom_creole;
-        result.interpretation = content;
-    }
+    result.presageNaturel = content;
+    result.interpretation = null;
   }
 
   await saveToFile(today, result);
