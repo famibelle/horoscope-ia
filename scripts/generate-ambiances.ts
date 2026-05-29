@@ -28,7 +28,9 @@ import {
   extractGlossaryTerms,
   updateGlossary,
   removeRedundantParentheses,
-  loadGlossary
+  loadGlossary,
+  initGlossaryCache,
+  flushGlossaryToSupabase,
 } from '@/lib/private/glossaire';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
@@ -406,6 +408,7 @@ Sans markdown dans les valeurs JSON.`;
         }  }
 
 async function generateAllAmbiances() {
+  await initGlossaryCache();
   const today = options.date || todayGuadeloupe();
   const filePath = `data/ambiance/${today}.json`;
   // Vérifier si les ambiances du jour existent déjà (sauf si --force)
@@ -474,6 +477,7 @@ async function generateAllAmbiances() {
     total,
     successRate: `${((generated / total) * 100).toFixed(1)}%`
   });
+  await flushGlossaryToSupabase();
 }
 
 // Exécuter

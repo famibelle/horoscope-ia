@@ -12,7 +12,7 @@ import { histoireData } from '@/lib/private/histoire-data';
 import { applySafetyFiltersToObject } from '@/lib/private/safety-filter';
 
 // Importer le système de glossaire
-import { extractGlossaryTerms, updateGlossary, removeRedundantParentheses, loadGlossary } from '@/lib/private/glossaire';
+import { extractGlossaryTerms, updateGlossary, removeRedundantParentheses, loadGlossary, initGlossaryCache, flushGlossaryToSupabase } from '@/lib/private/glossaire';
 
 // Parser les arguments en ligne de commande
 const args = process.argv.slice(2);
@@ -579,6 +579,7 @@ async function saveToLocalFile(today: string, data: Record<string, any>): Promis
 }
 
 export async function generateAllHoroscopes() {
+  await initGlossaryCache();
   const today = options.date || todayGuadeloupe();
   const filePath = `data/horoscopes/${today}.json`;
   
@@ -849,6 +850,7 @@ export async function generateAllHoroscopes() {
       throw new Error(`❌ VALIDATION ÉCHOUÉE: Seulement ${Object.keys(results).length}/${total} horoscopes générés`);
     }
   }
+  await flushGlossaryToSupabase();
 }
 
 // Exécuter
