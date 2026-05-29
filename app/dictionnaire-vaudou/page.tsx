@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import ReactMarkdown from 'react-markdown';
+import { Markdown as ReactMarkdown, markdownComponents } from '@/lib/markdown-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, X, BookOpen, Sparkles, Leaf, Crown, Church, Music, Calendar } from 'lucide-react';
 import { vaudouData, VaudouEntry, isLoaEntry, isAnimalEntry, isPlanteEntry, isObjetEntry, isLieuEntry, isRituelEntry, isChantEntry, isDateRituelleEntry } from '@/lib/private/vaudou-data';
@@ -521,7 +521,7 @@ export default function DictionnaireVaudouPage() {
                       Dimension culturelle
                     </p>
                     <div className="text-white/90 text-sm leading-relaxed">
-                      <ReactMarkdown>{selectedEntry.dimensionCulturelle}</ReactMarkdown>
+                      <ReactMarkdown components={markdownComponents}>{selectedEntry.dimensionCulturelle}</ReactMarkdown>
                     </div>
                   </div>
 
@@ -537,7 +537,7 @@ export default function DictionnaireVaudouPage() {
                       Symbolique
                     </p>
                     <div className="text-white/90 text-sm leading-relaxed">
-                      <ReactMarkdown>{selectedEntry.sacreSymbolique}</ReactMarkdown>
+                      <ReactMarkdown components={markdownComponents}>{selectedEntry.sacreSymbolique}</ReactMarkdown>
                     </div>
                   </div>
 

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { signs } from '@/lib/signs-data';
 import { detectLocalEditionWithNight } from '@/lib/edition';
 import { todayISO } from '@/lib/horoscope-data';
+import { stripMarkdown } from '@/lib/markdown-components';
 
 interface SignPreview {
   signId: string;
@@ -17,8 +18,9 @@ interface SignPreview {
 const PREVIEW_LENGTH = 180;
 
 function truncate(text: string) {
-  if (text.length <= PREVIEW_LENGTH) return text;
-  return text.slice(0, PREVIEW_LENGTH).trimEnd() + '…';
+  const clean = stripMarkdown(text);
+  if (clean.length <= PREVIEW_LENGTH) return clean;
+  return clean.slice(0, PREVIEW_LENGTH).trimEnd() + '…';
 }
 
 

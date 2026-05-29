@@ -321,7 +321,7 @@ export default function CalendrierVaudouPage() {
                         )}
                       </h4>
                       <div className="text-white/80 text-sm mt-1 line-clamp-2">
-                        <ReactMarkdown>{ritualDate.theme}</ReactMarkdown>
+                        <ReactMarkdown components={markdownComponents}>{ritualDate.theme}</ReactMarkdown>
                       </div>
                       <p className="text-white/60 text-xs mt-2">
                         Loa : {ritualDate.loa}
@@ -469,7 +469,7 @@ export default function CalendrierVaudouPage() {
               <div className="pt-4 border-t border-white/10">
                 <p className="text-white/60 mb-1">Thème</p>
                 <div className="text-white text-base leading-relaxed">
-                  <ReactMarkdown>{selectedDate.dimensionCulturelle}</ReactMarkdown>
+                  <ReactMarkdown components={markdownComponents}>{selectedDate.dimensionCulturelle}</ReactMarkdown>
                 </div>
               </div>
             </motion.div>

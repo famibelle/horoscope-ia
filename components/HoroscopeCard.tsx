@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Briefcase, Coins, Users, Sparkles, Eye, Leaf, Cloud, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
+import { Markdown as ReactMarkdown, markdownComponents } from '@/lib/markdown-components';
 import { signs } from '@/lib/signs-data';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
 import { formatDate } from '@/lib/horoscope-data';
@@ -245,13 +246,18 @@ function FilledCard({
                   {label}
                 </span>
               </div>
-              <p
-                className={`text-sm leading-relaxed pl-5 ${
-                  isPrediction ? 'italic text-white' : 'text-white'
-                }`}
+              <ReactMarkdown
+                components={{
+                  ...markdownComponents,
+                  p: ({ children }) => (
+                    <p className={`text-sm leading-relaxed pl-5 ${isPrediction ? 'italic text-white' : 'text-white'}`}>
+                      {children}
+                    </p>
+                  ),
+                }}
               >
                 {isPrediction ? `"${text}"` : text}
-              </p>
+              </ReactMarkdown>
             </motion.div>
           );
         })}

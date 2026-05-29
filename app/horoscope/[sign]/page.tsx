@@ -12,6 +12,7 @@ import { detectLocalEditionWithNight, getLocalDynamicEditionLabels } from '@/lib
 import AudioPlayer from '@/components/AudioPlayer';
 import type { Edition } from '@/lib/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
+import { Markdown as ReactMarkdown, markdownComponents } from '@/lib/markdown-components';
 
 /* ── Types ─────────────────────────────────────────────────────────────────── */
 
@@ -258,9 +259,18 @@ export default function HoroscopeSignPage() {
                             <Icon size={13} className={`${colorClass} flex-shrink-0`} />
                             <span className={`text-xs font-semibold uppercase tracking-widest ${colorClass}`}>{label}</span>
                           </div>
-                          <p className={`text-sm leading-relaxed pl-5 ${isPrediction ? 'italic text-ancestral-cream/60' : 'text-ancestral-cream/70'}`}>
+                          <ReactMarkdown
+                            components={{
+                              ...markdownComponents,
+                              p: ({ children }) => (
+                                <p className={`text-sm leading-relaxed pl-5 ${isPrediction ? 'italic text-ancestral-cream/60' : 'text-ancestral-cream/70'}`}>
+                                  {children}
+                                </p>
+                              ),
+                            }}
+                          >
                             {isPrediction ? `"${text}"` : text}
-                          </p>
+                          </ReactMarkdown>
                         </div>
                       );
                     })}
@@ -516,9 +526,16 @@ export default function HoroscopeSignPage() {
                     border: '1px solid rgba(210,105,30,0.18)',
                   }}
                 >
-                  <p className="text-ancestral-cream/65 text-sm sm:text-base leading-relaxed italic">
+                  <ReactMarkdown
+                    components={{
+                      ...markdownComponents,
+                      p: ({ children }) => (
+                        <p className="text-ancestral-cream/65 text-sm sm:text-base leading-relaxed italic">{children}</p>
+                      ),
+                    }}
+                  >
                     {ambiance.ambiance}
-                  </p>
+                  </ReactMarkdown>
                 </div>
 
                 {/* Score bars */}
@@ -612,7 +629,16 @@ export default function HoroscopeSignPage() {
                           <p className="text-ancestral-cream/50 text-xs font-semibold uppercase tracking-wider mb-2">
                             {luneEmoji} {label}
                           </p>
-                          <p className="text-ancestral-cream/45 text-xs leading-relaxed">{text}</p>
+                          <ReactMarkdown
+                            components={{
+                              ...markdownComponents,
+                              p: ({ children }) => (
+                                <p className="text-ancestral-cream/45 text-xs leading-relaxed">{children}</p>
+                              ),
+                            }}
+                          >
+                            {text}
+                          </ReactMarkdown>
                         </motion.div>
                       );
                     })}
