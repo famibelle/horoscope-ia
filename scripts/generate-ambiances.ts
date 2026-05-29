@@ -2,9 +2,6 @@ import { config } from 'dotenv';
 config(); // Charger les variables d'environnement depuis .env
 
 import { signs as allSigns } from '@/lib/signs-data';
-const signs = options.signs
-  ? allSigns.filter(s => options.signs!.includes(s.id))
-  : allSigns;
 import { todayGuadeloupe } from '@/lib/edition';
 import { MARYSE_SYSTEM } from '@/lib/private/maryse-prompt';
 import { applySafetyFiltersToObject } from '@/lib/private/safety-filter';
@@ -44,6 +41,10 @@ const options = {
   date: args.find(arg => arg.startsWith('--date='))?.split('=')[1],
   signs: args.find(arg => arg.startsWith('--signs='))?.split('=')[1]?.split(','),
 };
+
+const signs = options.signs
+  ? allSigns.filter(s => options.signs!.includes(s.id))
+  : allSigns;
 
 function logVerbose(message: string, data?: any) {
   if (options.verbose) {
