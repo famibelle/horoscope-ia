@@ -163,7 +163,32 @@ export async function GET(req: NextRequest) {
   // LOG DIAGNOSTIC
   console.log(`[PRESAGE-DU-JOUR API] Request: date=${today}, edition=${edition}`);
 
-  // 0. Check local file via filesystem cache
+  // 0. Supabase (source principale)
+  try {
+    const { supabase } = await import('@/lib/supabase');
+    const { data: row } = await supabase
+      .from('presages')
+      .select('*')
+      .eq('date', today)
+      .single();
+    if (row) {
+      console.log(`[PRESAGE-DU-JOUR SUPABASE HIT] ${today}`);
+      return NextResponse.json({
+        date: row.date,
+        type: row.type,
+        nomCreole: row.nom_creole,
+        nomCommun: row.nom_commun,
+        presageNaturel: row.presage_naturel,
+        interpretation: row.interpretation,
+      }, {
+        headers: { 'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=3600' },
+      });
+    }
+  } catch (err) {
+    console.error(`[PRESAGE-DU-JOUR SUPABASE ERROR]`, err instanceof Error ? err.message : err);
+  }
+
+  // 1. Check local file via filesystem cache
   const cachedData = await loadSigneDuJourData(today, req);
   if (cachedData) {
     console.log(`[PRESAGE-DU-JOUR CACHE HIT] ${today}`);

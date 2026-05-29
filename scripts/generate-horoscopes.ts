@@ -540,6 +540,25 @@ async function fetchWeather(): Promise<string> {
   }
 }
 
+async function saveToSupabase(data: Record<string, any>): Promise<void> {
+  const { supabaseAdmin } = await import('@/lib/supabase');
+  const rows = Object.entries(data).map(([key, v]) => {
+    const [date, sign_id, edition] = key.split('|');
+    return {
+      date, sign_id, edition,
+      ouverture: v.ouverture, amour: v.amour, travail: v.travail,
+      argent: v.argent, amitie: v.amitie, prediction: v.prediction,
+      conseil: v.conseil, teaser: v.teaser,
+      sign_fr: v.signFr, weather: v.weather, source: v.source,
+    };
+  });
+  const { error } = await supabaseAdmin
+    .from('horoscopes')
+    .upsert(rows, { onConflict: 'date,sign_id,edition' });
+  if (error) console.error('❌ [SUPABASE] Erreur upsert horoscopes:', error.message);
+  else console.log(`✅ [SUPABASE] ${rows.length} horoscope(s) upsertés`);
+}
+
 async function saveToLocalFile(today: string, data: Record<string, any>): Promise<string> {
   const fs = await import('fs/promises');
   const path = await import('path');
@@ -690,8 +709,9 @@ export async function generateAllHoroscopes() {
         await store.set(blobKey, JSON.stringify(response));
         logVerbose(`Sauvegarde dans Netlify Blobs: ${blobKey}`);
 
-        // Sauvegarder au fil de l'eau dans le fichier local
+        // Sauvegarder au fil de l'eau dans le fichier local + Supabase
         await saveToLocalFile(today, results);
+        await saveToSupabase({ [blobKey]: response });
 
         console.log(`✅ [${++generated}/${total}] ${sign.id} (${edition}) - SAUVEGARDÉ\n`);
         console.log(`   🌟 Teaser: "${teaser}"\n`);
@@ -808,7 +828,8 @@ export async function generateAllHoroscopes() {
         };
         results[blobKey] = response;
         await saveToLocalFile(today, results);
-        logVerbose(`Sauvegarde locale: ${blobKey}`);
+        await saveToSupabase({ [blobKey]: response });
+        logVerbose(`Sauvegarde locale + Supabase: ${blobKey}`);
 
         console.log(`✅ [${++generated}/${total}] ${sign.id} (${edition}) - SAUVEGARDÉ`);
         console.log(`   🌟 Teaser: "${teaser}"\n`);

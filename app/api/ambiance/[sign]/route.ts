@@ -104,7 +104,43 @@ export async function GET(
   // LOG DIAGNOSTIC
   console.log(`[AMBIANCE API] Request: sign=${signId}, date=${userDate}, edition=${edition}`);
 
-  // 0. Check local file via filesystem cache
+  // 0. Supabase (source principale)
+  try {
+    const { supabase } = await import('@/lib/supabase');
+    const { data: row } = await supabase
+      .from('ambiances')
+      .select('*')
+      .eq('date', userDate)
+      .eq('sign_id', signId)
+      .eq('edition', edition)
+      .single();
+    if (row) {
+      console.log(`[AMBIANCE SUPABASE HIT] ${cacheKey}`);
+      const payload = {
+        ambiance: row.ambiance,
+        chiffrePorteBonheur: row.chiffre_porte_bonheur,
+        compatibilite: row.compatibilite,
+        loa: row.loa,
+        familleVaudou: row.famille_vaudou,
+        couleursSacrees: row.couleurs_sacrees,
+        lune: {
+          bienetre: row.lune_bienetre,
+          beaute: row.lune_beaute,
+          esprit: row.lune_esprit,
+          maison: row.lune_maison,
+          jardinage: row.lune_jardinage,
+        },
+        scores: row.scores,
+      };
+      return NextResponse.json(payload, {
+        headers: { 'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' },
+      });
+    }
+  } catch (err) {
+    console.error(`[AMBIANCE SUPABASE ERROR]`, err instanceof Error ? err.message : err);
+  }
+
+  // 1. Check local file via filesystem cache
   const cachedData = await loadAmbianceData(userDate, signId, edition, req);
   if (cachedData) {
     console.log(`[AMBIANCE CACHE HIT] ${cacheKey}`);

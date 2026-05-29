@@ -460,17 +460,49 @@ export async function GET(
   console.log(`[API HOROSCOPE] Background generation: ${ENABLE_BACKGROUND_GENERATION}`);
 
   // ============================================================
-  // ÉTAPE 1: Essayer de charger depuis le cache (fetch HTTP)
+  // ÉTAPE 1: Supabase (source principale)
   // ============================================================
-  console.log(`\n[API HOROSCOPE] ÉTAPE 1/4: Chargement depuis le cache...`);
-  
+  console.log(`\n[API HOROSCOPE] ÉTAPE 1/4: Supabase...`);
+
+  try {
+    const { supabase } = await import('@/lib/supabase');
+    const { data: row } = await supabase
+      .from('horoscopes')
+      .select('*')
+      .eq('date', date)
+      .eq('sign_id', signId)
+      .eq('edition', edition)
+      .single();
+    if (row) {
+      console.log(`[API HOROSCOPE] ✅ SUPABASE HIT: ${blobKey}`);
+      const payload = {
+        ouverture: row.ouverture, amour: row.amour, travail: row.travail,
+        argent: row.argent, amitie: row.amitie, prediction: row.prediction,
+        conseil: row.conseil, teaser: row.teaser,
+        signFr: row.sign_fr, weather: row.weather, edition: row.edition, source: row.source,
+      };
+      return NextResponse.json(payload, {
+        headers: { 'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' },
+      });
+    }
+  } catch (err) {
+    console.error(`[API HOROSCOPE] ❌ SUPABASE ERROR:`, err instanceof Error ? err.message : err);
+  }
+
+  console.log(`[API HOROSCOPE] ❌ SUPABASE MISS: ${blobKey}`);
+
+  // ============================================================
+  // ÉTAPE 2: Essayer de charger depuis le cache (fetch HTTP)
+  // ============================================================
+  console.log(`\n[API HOROSCOPE] ÉTAPE 2/4: Chargement depuis le cache...`);
+
   try {
     const localData = await loadHoroscopeData(date, signId, edition, req);
     if (localData) {
       console.log(`[API HOROSCOPE] ✅ CACHE HIT: ${blobKey}`);
       return NextResponse.json(localData, {
-        headers: { 
-          'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' 
+        headers: {
+          'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200'
         },
       });
     }

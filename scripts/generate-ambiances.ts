@@ -125,6 +125,33 @@ async function fetchWeather(): Promise<string> {
   }
 }
 
+async function saveToSupabase(data: Record<string, any>): Promise<void> {
+  const { supabaseAdmin } = await import('@/lib/supabase');
+  const rows = Object.entries(data).map(([key, v]) => {
+    const [date, sign_id, edition] = key.split('|');
+    return {
+      date, sign_id, edition,
+      ambiance: v.ambiance,
+      chiffre_porte_bonheur: v.chiffrePorteBonheur,
+      compatibilite: v.compatibilite,
+      loa: v.loa,
+      famille_vaudou: v.familleVaudou,
+      couleurs_sacrees: v.couleursSacrees,
+      lune_bienetre: v.lune?.bienetre,
+      lune_beaute: v.lune?.beaute,
+      lune_esprit: v.lune?.esprit,
+      lune_maison: v.lune?.maison,
+      lune_jardinage: v.lune?.jardinage,
+      scores: v.scores,
+    };
+  });
+  const { error } = await supabaseAdmin
+    .from('ambiances')
+    .upsert(rows, { onConflict: 'date,sign_id,edition' });
+  if (error) console.error('❌ [SUPABASE] Erreur upsert ambiances:', error.message);
+  else console.log(`✅ [SUPABASE] ${rows.length} ambiance(s) upsertée(s)`);
+}
+
 async function saveToLocalFile(today: string, data: Record<string, any>): Promise<string> {
   const fs = await import('fs/promises');
   const path = await import('path');
@@ -430,6 +457,7 @@ async function generateAllAmbiances() {
       // Sauvegarder au fil de l'eau
       if (Object.keys(results).length > 0) {
         await saveToLocalFile(today, results);
+        if (ambiance) await saveToSupabase({ [blobKey]: ambiance });
       }
     }
   }

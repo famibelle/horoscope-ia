@@ -51,6 +51,8 @@ jobs:
         id: generate
         env:
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
         run: |
           DATE_ARG=""
           if [ -n "${{ github.event.inputs.date }}" ]; then
@@ -83,14 +85,6 @@ jobs:
           name: pdj-execution-report
           path: artifacts/
 
-      - name: 💾 Commit & Push
+      - name: ✅ Vérification Supabase
         if: success()
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/data/presage-du-jour/*.json
-          if ! git diff --staged --quiet; then
-            git commit -m "chore: mise à jour présage du jour $(date +%Y-%m-%d)"
-            git pull --rebase origin vaudou
-            git push origin vaudou
-          fi
+        run: echo "✅ Présage du jour écrit dans Supabase — pas de commit git nécessaire."
