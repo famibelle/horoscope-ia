@@ -263,6 +263,11 @@ Tu rédiges UNIQUEMENT le signe du jour — une plante, un arbre ou un animal de
 /* ── Prompts utilisateur - Voir horoscope_instructions.md ━ */
 /* Structure : 1 phrase (ouverture/prediction/conseil) ou 2-4 phrases (amour/travail/argent/amitie/sante) */
 
+// Word-boundary match — évite les faux positifs comme "feuille" pour "feu"
+function matchesWord(text: string, word: string): boolean {
+  return new RegExp(`\\b${word}\\b`, 'i').test(text);
+}
+
 export function buildHoroscopeUserPrompt(
   sign: Sign,
   rawText: string,
@@ -329,13 +334,13 @@ export function buildHoroscopeUserPrompt(
   const histoirePeriode = histoireEntry?.periode || '';
   
   // Récupérer un symbole créole pertinent (par nom, élément ou animal/plante)
-  const kreyolEntry = kreyolData.find(k => 
+  const kreyolEntry = kreyolData.find(k =>
     k.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '') ||
     k.nomCreole.toLowerCase().includes(sign.nomKreyol?.toLowerCase() || '') ||
     k.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '') ||
-    k.famille.toLowerCase().includes(sign.element.toLowerCase()) ||
-    (k.tags && k.tags.some(tag => 
-      tag.includes(sign.element.toLowerCase()) ||
+    matchesWord(k.famille, sign.element) ||
+    (k.tags && k.tags.some(tag =>
+      matchesWord(tag, sign.element) ||
       tag.includes(sign.animal?.toLowerCase() || '') ||
       tag.includes(sign.plante?.toLowerCase() || '')
     ))
@@ -371,35 +376,35 @@ export function buildHoroscopeUserPrompt(
 
   // Filtrer les données enrichies pour ne garder que les pertinentes
   // FAUNE-DATA : 5-8 entrées liées au signe
-  const fauneEnrichies = fauneData.filter(f => 
-    f.nomCreole.toLowerCase().includes(sign.element.toLowerCase()) ||
+  const fauneEnrichies = fauneData.filter(f =>
+    matchesWord(f.nomCreole, sign.element) ||
     f.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '') ||
     f.nomCreole.toLowerCase().includes(sign.nomKreyol?.toLowerCase() || '') ||
-    f.tags?.some(tag => tag.includes(sign.element.toLowerCase()))
+    f.tags?.some(tag => matchesWord(tag, sign.element))
   ).slice(0, 8);
 
   // FLORE-DATA : 5-8 entrées liées au signe
-  const floreEnrichies = floreData.filter(f => 
-    f.nomCreole.toLowerCase().includes(sign.element.toLowerCase()) ||
+  const floreEnrichies = floreData.filter(f =>
+    matchesWord(f.nomCreole, sign.element) ||
     f.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '') ||
-    f.tags?.some(tag => tag.includes(sign.element.toLowerCase()))
+    f.tags?.some(tag => matchesWord(tag, sign.element))
   ).slice(0, 8);
 
   // LIEUX-DATA : 3-5 entrées liées au signe
-  const lieuxEnrichis = lieuxData.filter(l => 
-    l.dimensionCulturelle.toLowerCase().includes(sign.element.toLowerCase()) ||
+  const lieuxEnrichis = lieuxData.filter(l =>
+    matchesWord(l.dimensionCulturelle, sign.element) ||
     l.nom.toLowerCase().includes(sign.lieu?.toLowerCase() || '') ||
-    l.tags?.some(tag => tag.includes(sign.element.toLowerCase()))
+    l.tags?.some(tag => matchesWord(tag, sign.element))
   ).slice(0, 5);
 
   // KREYOL-DATA : 3-5 entrées filtrées
-  const kreyolEnrichis = kreyolData.filter(k => 
+  const kreyolEnrichis = kreyolData.filter(k =>
     k.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '') ||
     k.nomCreole.toLowerCase().includes(sign.nomKreyol?.toLowerCase() || '') ||
     k.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '') ||
-    k.famille.toLowerCase().includes(sign.element.toLowerCase()) ||
-    (k.tags && k.tags.some(tag => 
-      tag.includes(sign.element.toLowerCase()) ||
+    matchesWord(k.famille, sign.element) ||
+    (k.tags && k.tags.some(tag =>
+      matchesWord(tag, sign.element) ||
       tag.includes(sign.animal?.toLowerCase() || '') ||
       tag.includes(sign.plante?.toLowerCase() || '')
     ))
