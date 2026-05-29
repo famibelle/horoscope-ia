@@ -14,6 +14,9 @@ on:
         default: 'normal'
         type: choice
         options: [normal, verbose, force]
+      signs:
+        description: 'Signes à générer (ex: belier,lion,vierge) — vide = tous'
+        required: false
 
 permissions:
   contents: write
@@ -72,7 +75,11 @@ jobs:
             MODE_ARG="--verbose"
           fi
 
-          npx tsx scripts/generate-horoscopes.ts $DATE_ARG $MODE_ARG
+          SIGNS_ARG=""
+          if [ -n "${{ github.event.inputs.signs }}" ]; then
+            SIGNS_ARG="--signs=${{ github.event.inputs.signs }}"
+          fi
+          npx tsx scripts/generate-horoscopes.ts $DATE_ARG $MODE_ARG $SIGNS_ARG
 
       - name: 📊 Artefacts & Logs
         if: always()
