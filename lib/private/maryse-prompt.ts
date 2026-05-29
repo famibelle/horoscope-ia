@@ -254,6 +254,11 @@ Contraintes strictes de longueur (très important) :
 
 Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Utilise uniquement des virgules, des points, des tirets simples (-) ou des espaces.
 
+⚠️ SÉCURITÉ ABSOLUE — LE "conseil" DOIT ÊTRE SYMBOLIQUE ET SANS DANGER :
+- INTERDIT : toute suggestion de laisser une flamme allumée sans surveillance (bougie, feu, encens), de s'endormir avec une bougie, de brûler quoi que ce soit dans un espace fermé.
+- INTERDIT : conseiller d'ingérer une plante, une tisane ou un remède sans préciser qu'il faut consulter un professionnel de santé.
+- OBLIGATOIRE : le conseil reste poétique, métaphorique ou symbolique. "Allume une bougie" devient "Laisse la lumière entrer", "Pose une intention" plutôt qu'une action physique littérale.
+
 Sans markdown, sans commentaire, juste le JSON brut.`;
 
 export const MARYSE_SIGNE_SYSTEM = `${MARYSE_AME}
@@ -465,7 +470,6 @@ ${histoireEnrichies.map(h => `  - ${h.periode}: ${h.faitHistorique}`).join('\n')
 
 💫 Loa de l'édition "${edition}" : **${EDITION_TO_VAUDOU_CONTEXT[edition]?.loa || 'Legba'}**
    Énergie : ${EDITION_TO_VAUDOU_CONTEXT[edition]?.energie || 'Ouverture'}
-   Conseil : ${EDITION_TO_VAUDOU_CONTEXT[edition]?.conseil || 'Allumez une bougie blanche'}
 
 ${isRitual ? `⭐ DATE RITUELLE SPÉCIALE : **${ritualDate?.nomFrancais || ritualDate?.nomCreole || 'Cérémonie sacrée'}**
    Loa associé : ${ritualDate?.famille || 'Multiple'}
@@ -502,7 +506,7 @@ STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien cr
 4. "argent" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les finances. **Choisis parmi FLORE-DATA, HISTOIRE-DATA ou CONTEXTE VAUDOU.**
 5. "amitie" (Lyannaj) : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur le lien social. **Choisis parmi LIEUX-DATA, KREYOL-DATA ou CONTEXTE VAUDOU.**
 6. "prediction" : UNE phrase - tendance pour les jours à venir. **Utilise une métaphore naturelle ou vaudou.**
-7. "conseil" : UNE phrase - un conseil pratique basé sur une plante, un symbole OU un rituel vaudou.
+7. "conseil" : UNE phrase - un conseil symbolique ou poétique basé sur une plante, un symbole OU un rituel vaudou. JAMAIS une action physique dangereuse (bougie sans surveillance, ingestion de plante, feu en espace fermé).
 
 ✨ **NOUVEAU : INTÈGRE LE CONTEXTE VAUDOU** ✨
 - **Dans au moins 3 sections**, fais référence au loa principal (${vaudouContext.loa}) ou à l'énergie de l'édition (${EDITION_TO_VAUDOU_CONTEXT[edition]?.loa})
