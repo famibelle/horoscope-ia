@@ -101,9 +101,10 @@ function limitVeve(text: string): string {
 // par une métaphore neutre mais ancrée dans le quotidien créole.
 // La prohibition prompt seule ne suffit pas — le modèle ignore la règle.
 function removeSeve(jsonStr: string): string {
+  // Capture la phrase entière jusqu'au premier point pour éviter les artefacts de concat.
   return jsonStr.replace(
-    /lajan\s+(circule|coule)[^"]{0,30}comme la sève[^",]{0,40}/gi,
-    'Lajan se déplace avec discernement aujourd\'hui'
+    /lajan\s+(circule|coule)[^"]*?comme la sève[^".]*\./gi,
+    "Lajan se déplace avec discernement aujourd'hui."
   );
 }
 
