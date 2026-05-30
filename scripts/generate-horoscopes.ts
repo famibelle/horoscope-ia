@@ -60,7 +60,7 @@ if (options.force) {
   console.log('⚡ Mode force activé - régénération forcée');
 }
 
-import { MARYSE_SYSTEM, buildHoroscopeUserPrompt, type Edition } from '@/lib/private/maryse-prompt';
+import { MARYSE_SYSTEM, buildHoroscopeUserPrompt, buildHoroscopeMetadata, type Edition, type HoroscopeMetadata } from '@/lib/private/maryse-prompt';
 import {
   getMedicinalPlant,
   getResistancePratique,
@@ -553,6 +553,31 @@ async function saveToSupabase(data: Record<string, any>): Promise<void> {
       argent: v.argent, amitie: v.amitie, prediction: v.prediction,
       conseil: v.conseil, teaser: v.teaser,
       sign_fr: v.signFr, weather: v.weather, source: v.source,
+      raw_text: v.raw_text ?? null,
+      // Métadonnées de construction
+      element: v.element ?? null,
+      animal: v.animal ?? null,
+      plante: v.plante ?? null,
+      arbre: v.arbre ?? null,
+      lieu: v.lieu ?? null,
+      planet: v.planet ?? null,
+      loa: v.loa ?? null,
+      famille_vaudou: v.famille_vaudou ?? null,
+      energie_vaudou: v.energie_vaudou ?? null,
+      couleurs_sacrees: v.couleurs_sacrees ?? null,
+      edition_energie: v.edition_energie ?? null,
+      heure_locale: v.heure_locale ?? null,
+      is_ritual_date: v.is_ritual_date ?? false,
+      date_rituelle: v.date_rituelle ?? null,
+      faune_enrichies: v.faune_enrichies ?? null,
+      flore_enrichies: v.flore_enrichies ?? null,
+      lieux_enrichis: v.lieux_enrichis ?? null,
+      kreyol_enrichis: v.kreyol_enrichis ?? null,
+      histoire_enrichies: v.histoire_enrichies ?? null,
+      loas_pertinents: v.loas_pertinents ?? null,
+      animaux_sacres: v.animaux_sacres ?? null,
+      plantes_sacrees: v.plantes_sacrees ?? null,
+      contexte_dynamique: v.contexte_dynamique ?? null,
     };
   });
   await upsertRest('horoscopes', rows, 'date,sign_id,edition');
@@ -697,6 +722,7 @@ export async function generateAllHoroscopes() {
         }
 
         // Sauvegarder
+        const metadata = buildHoroscopeMetadata(sign, edition, weather, today);
         const response = {
           ...parsed,
           teaser: teaser || undefined,
@@ -704,6 +730,8 @@ export async function generateAllHoroscopes() {
           weather,
           edition,
           source: 'mistral-raw',
+          raw_text: rawText,
+          ...metadata,
         };
 
         results[blobKey] = response;
@@ -819,6 +847,7 @@ export async function generateAllHoroscopes() {
           logVerboseError(`Erreur parsing JSON final local pour ${sign.id}`, e);
         }
 
+        const metadata = buildHoroscopeMetadata(sign, edition, weather, today);
         const response = {
           ...parsed,
           teaser: teaser || undefined,
@@ -826,6 +855,8 @@ export async function generateAllHoroscopes() {
           weather,
           edition,
           source: 'mistral-raw',
+          raw_text: rawText,
+          ...metadata,
         };
         results[blobKey] = response;
         await saveToLocalFile(today, results);

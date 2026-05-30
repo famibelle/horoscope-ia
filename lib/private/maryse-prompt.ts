@@ -530,6 +530,137 @@ Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadr
 Intègre subtilement les références culturelles fournies ET le contexte vaudou.`;
 }
 
+export interface HoroscopeMetadata {
+  element: string;
+  animal: string;
+  plante: string;
+  arbre: string;
+  lieu: string;
+  planet: string;
+  loa: string;
+  famille_vaudou: string;
+  energie_vaudou: string;
+  couleurs_sacrees: string[];
+  edition_energie: string;
+  heure_locale: string;
+  is_ritual_date: boolean;
+  date_rituelle: string | null;
+  faune_enrichies: string[];
+  flore_enrichies: string[];
+  lieux_enrichis: string[];
+  kreyol_enrichis: string[];
+  histoire_enrichies: string[];
+  loas_pertinents: string[];
+  animaux_sacres: string[];
+  plantes_sacrees: string[];
+  contexte_dynamique: string | null;
+}
+
+/**
+ * Retourne les métadonnées de construction d'un horoscope pour un signe donné.
+ * Miroir de buildHoroscopeUserPrompt — même calcul, sortie structurée au lieu de string.
+ * Destiné à être persisté dans la table horoscopes pour traçabilité et analyse.
+ */
+export function buildHoroscopeMetadata(
+  sign: Sign,
+  edition: Edition = 'matin',
+  weather: string = '',
+  date?: string,
+): HoroscopeMetadata {
+  const dateToUse = date || todayGuadeloupe();
+  const [year, month] = dateToUse.split('-');
+  const moisNom = new Date(dateToUse).toLocaleString('fr-FR', { month: 'long' });
+
+  const vaudouContext = getVaudouContextForSign(sign.id);
+  const ritualDate = getRitualDateContext(dateToUse);
+  const isRitual = isRitualDate(dateToUse);
+  const loaName = SIGN_TO_LOA[sign.id];
+
+  const fauneEnrichies = fauneData.filter(f =>
+    f.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '') ||
+    f.nomCreole.toLowerCase().includes(sign.nomKreyol?.toLowerCase() || '')
+  ).slice(0, 8);
+
+  const floreEnrichies = floreData.filter(f =>
+    f.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '') ||
+    f.nomFrancais.toLowerCase().includes(sign.plante?.toLowerCase() || '')
+  ).slice(0, 8);
+
+  const lieuxEnrichis = lieuxData.filter(l =>
+    l.nom.toLowerCase().includes(sign.lieu?.toLowerCase() || '') ||
+    sign.lieu?.toLowerCase().includes(l.nom.toLowerCase())
+  ).slice(0, 5);
+
+  const kreyolEnrichis = kreyolData.filter(k =>
+    k.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '') ||
+    k.nomCreole.toLowerCase().includes(sign.nomKreyol?.toLowerCase() || '') ||
+    k.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '') ||
+    (k.tags && k.tags.some(tag =>
+      tag.includes(sign.animal?.toLowerCase() || '') ||
+      tag.includes(sign.nomKreyol?.toLowerCase() || '') ||
+      tag.includes(sign.plante?.toLowerCase() || '')
+    ))
+  ).slice(0, 5);
+
+  const histoireEnrichies = histoireData.filter(h =>
+    h.periode.includes(year) ||
+    h.periode.includes(moisNom) ||
+    h.periode.includes(month)
+  ).slice(0, 3);
+
+  const relevantLoas = loasData.filter(l =>
+    l.nomCreole.toLowerCase().includes(loaName?.toLowerCase() || '') ||
+    l.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase()
+  ).slice(0, 3);
+
+  const relevantAnimals = animauxData.filter(a =>
+    a.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase() ||
+    a.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '')
+  ).slice(0, 3);
+
+  const relevantPlantes = plantesData.filter(p =>
+    p.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase() ||
+    p.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '')
+  ).slice(0, 3);
+
+  const signConditions = [...(sign.faune?.conditions || []), ...(sign.flore?.conditions || [])];
+  const signEditions = [...(sign.faune?.editions || []), ...(sign.flore?.editions || [])];
+  const weatherLower = weather.toLowerCase();
+  const hasMatchingCondition = signConditions.some(c => weatherLower.includes(c.toLowerCase()));
+  const hasMatchingEdition = signEditions.includes(edition);
+
+  let contexte_dynamique: string | null = null;
+  if (hasMatchingCondition && hasMatchingEdition) contexte_dynamique = 'IDEAL';
+  else if (hasMatchingCondition) contexte_dynamique = 'FAVORABLE';
+  else if (hasMatchingEdition) contexte_dynamique = 'ADAPTÉ';
+
+  return {
+    element: sign.element || '',
+    animal: sign.animal || '',
+    plante: sign.plante || '',
+    arbre: sign.arbre || '',
+    lieu: sign.lieu || '',
+    planet: sign.planet || '',
+    loa: vaudouContext.loa || '',
+    famille_vaudou: vaudouContext.famille || '',
+    energie_vaudou: SIGN_TO_VAUDOU_CONTEXT[sign.id]?.energie || '',
+    couleurs_sacrees: SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || [],
+    edition_energie: EDITION_TO_VAUDOU_CONTEXT[edition]?.energie || '',
+    heure_locale: getGuadeloupeTime(),
+    is_ritual_date: isRitual,
+    date_rituelle: ritualDate?.nomFrancais || ritualDate?.nomCreole || null,
+    faune_enrichies: fauneEnrichies.map(f => f.nomCreole),
+    flore_enrichies: floreEnrichies.map(f => f.nomCreole),
+    lieux_enrichis: lieuxEnrichis.map(l => l.nom),
+    kreyol_enrichis: kreyolEnrichis.map(k => k.nomCreole),
+    histoire_enrichies: histoireEnrichies.map(h => h.periode),
+    loas_pertinents: relevantLoas.map(l => l.nomCreole),
+    animaux_sacres: relevantAnimals.map(a => a.nomCreole),
+    plantes_sacrees: relevantPlantes.map(p => p.nomCreole),
+    contexte_dynamique,
+  };
+}
+
 export function buildSigneDuJourUserPrompt(
   type: 'flore' | 'faune',
   nomCommun: string,
