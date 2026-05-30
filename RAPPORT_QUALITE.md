@@ -1,101 +1,145 @@
 # Rapport Qualité — Horoscopes Karukera
-**Date des tests** : 2026-05-30 | **Édition** : matin  
-**Signes** : Gémeaux, Lion, Capricorne  
-**Code** : branche `vaudou` — commits locaux non poussés
+**Date** : 2026-05-30 | **Édition** : matin | **12 signes** | **Commit** : `7d281b2`  
+**Workflow** : `🪐 Génération Horoscopes (Sécurisée)` — ✅ success
 
 ---
 
-## Résultats — correction structurelle
+## Tableau de bord — Checks critiques
 
-| Vérification | Gémeaux | Lion | Capricorne |
-|---|:---:|:---:|:---:|
-| Tiret cadratin `—` | ✅ | ✅ | ✅ |
-| Bougie / flamme | ✅ | ✅ | ✅ |
-| Loa unique | ✅ Legba | ✅ Ezili | ✅ Kafou |
-| `vèvè` ≤ 1 occurrence | ✅ | ✅ | ✅ |
-| `ka` ≤ 2 occurrences | ✅ 1 | ✅ 2 | ✅ 0 |
-| Sève absente d'argent | ✅ | ✅ | ✅ |
-| faune depuis la base | ✅ Fwou-fwou | ✅ Pélikan | ✅ Chouèt/Fòmi/Kabrit |
-| flore depuis la base | ✅ Lavand wouj | ✅ Balisié | ✅ Chadon béni |
-| **Données base citées dans argent** | ✅ | ✅ | ✅ |
-| **Données base citées dans amour** | ✅ | ✅ | ✅ |
+| Signe | Statut | Problème |
+|---|:---:|---|
+| Balance | ✅ | — |
+| **Bélier** | ❌ | Ezili dans le texte (loa = Ogoun) |
+| **Cancer** | ❌ | vèvè × 2 (limitVeve() contourné) |
+| Capricorne | ✅ | — |
+| Gémeaux | ✅ | — |
+| Lion | ✅ | — |
+| Poissons | ✅ | — |
+| Sagittaire | ✅ | — |
+| Scorpion | ✅ | — |
+| **Taureau** | ❌ | ka × 4 + artefact "le ka ka" dans teaser |
+| Verseau | ✅ | — |
+| Vierge | ✅ | — |
+
+**9/12 signes propres** sur tous les checks critiques.
 
 ---
 
-## Impact de la correction structurelle
+## Progrès validés
 
-### Avant → Après dans argent
+### Section argent — transformation majeure
 
-| Signe | Avant (sève) | Après (sign-specific) |
-|---|---|---|
-| Capricorne | *"Lajan circule comme la sève du chadon béni"* | *"Le kabrit nwè sait qu'il faut parfois se sacrifier pour nourrir le troupeau"* |
-| Gémeaux | *"Lajan circule comme la sève dans le gommier"* | *"Fwou-fwou ne stocke pas son nectar, il le récolte au jour le jour"* |
-| Lion | *"Lajan circule comme la sève dans le flamboyant"* | *"Observe le gran pélikan plonger pour attraper son poisson, précis et déterminé"* |
+Chaque signe utilise maintenant son animal ou un comportement sign-specific :
 
-Les trois métaphores sont maintenant différentes et propres à chaque signe.
+| Signe | Métaphore argent |
+|---|---|
+| Balance | *"Manman dlo glisse entre les courants sans hâte — la richesse n'est pas dans la vitesse"* |
+| Bélier | *"fourmis autour d'un morceau de cassave — discret mais constant"* |
+| Cancer | *"Comme le crabe qui enterre ses trésors dans le sable"* |
+| Capricorne | *"lait d'un kabrit nwè — rare, précieux, à ne pas gaspiller"* |
+| Gémeaux | *"Observe le fwou-fwou : il ne stocke pas, il prend ce dont il a besoin"* |
+| Lion | *"Le gran pélikan plonge et remonte avec un poisson dans son bec"* |
+| Poissons | *"comment la tortue karet enterre ses œufs dans le sable"* |
+| Sagittaire | *"crevettes dans les rivières — invisible mais présent"* |
+| Scorpion | *"Le hèrkil ne transporte que ce dont il a besoin, jamais plus"* |
 
-### Avant → Après dans amour (Gémeaux)
+**Avant** : 3 signes utilisaient "lajan circule comme la sève de [plante]". **Après** : 0.
 
-- Avant : *"Ton cœur bat au rythme du ka, léger comme un fwou-fwou"* (ka générique)
-- Après : *"Fwou-fwou danse dans l'Alpinia humide, ses ailes légères comme un cœur qui hésite entre deux fleurs"* (faune + flore du signe)
+---
+
+### Structures répétitives — réduction massive
+
+| Formule | Avant | Après |
+|---|:---:|:---:|
+| "comme les racines de [arbre]" | 8/12 | **1/12** |
+| "la pluie trace un vèvè" | 12/12 | **1/12** |
+| ka dans les teasers | 9/12 | **4/12** |
+| "laisse-toi porter" | 5/12 | **1/12** |
+
+---
+
+### Données de la base utilisées dans le texte
+
+| | Faune | Flore |
+|---|:---:|:---:|
+| Signes utilisant les données | **9/12** | **10/12** |
+
+Les 3 signes sans faune en base (Scorpion, Taureau) ou sans flore (Vierge) improvident — attendu, la base est incomplète pour ces signes.
+
+---
+
+### Teasers — diversification effective
+
+| Signe | Teaser (extrait) |
+|---|---|
+| Balance | *"l'ibiskis rouge chuchote à ton oreille comme une confidence de femme libre"* |
+| Cancer | *"la pluie trace un vèvè de Mami Dlo sur tes paupières"* |
+| Gémeaux | *"ton âme est un kawoubouyé où deux chemins s'appellent"* |
+| Lion | *"Ezili Freda effleure tes épaules de ses ailes poudrées d'or"* |
+| Poissons | *"la feuille de korosòl sous la brise"* |
+| Vierge | *"les Chutes du Carbet chantent à ton oreille"* |
 
 ---
 
 ## Problèmes résiduels
 
-### 1. Génériques "vent" et "danse" persistent — 2/3 signes
+### 🔴 Nouveau cliché — zandoli 8/12
 
-Le modèle utilise encore "vent" et "danse" malgré les interdictions. Deux cas :
-- `vent` dans travail : *"le vent porte tes idées loin"* (Lion) — image générique
-- `danse` dans amour : *"Fwou-fwou danse dans l'Alpinia"* (Gémeaux) — ici le mot est justifié (le colibri danse de fleur en fleur)
+Le zandoli (animal du Bélier) s'est imposé comme nouvelle image générique de liberté/résilience :
 
-**Nuance importante** : "danse" dans le contexte du fwou-fwou est une métaphore propre au signe, pas une image générique. Mon checker est trop strict sur ce mot.
+> Balance, Bélier, Cancer, Gémeaux, Scorpion, Taureau, Verseau, Vierge
 
-### 2. "la pluie trace un vèvè" — persiste pour Lion
+C'est le même mécanisme que `fromager` et `colibri` avant correction : le modèle utilise le zandoli car c'est l'animal créole le plus connu dans la littérature antillaise. **Cause directe** : les textes `spirituel` des signes mentionnent tous le proverbe ou l'image du zandoli comme métaphore universelle de résilience.
 
-Malgré l'interdiction explicite, Lion ouverture utilise encore : *"la pluie trace un vèvè d'Ezili Freda sur les feuilles de balisié"*. La phrase est enrichie (elle utilise balisié et Ezili) mais conserve le pattern interdit.
+### 🔴 Vent 11/12 — résiste à toutes les interdictions
 
-### 3. "comme les branches" remplace "comme les racines"
+Le mot "vent" apparaît dans 11 signes sur 12, principalement dans les sections `travail` et `prediction`. Le post-processing (comme pour `tambour → ka` et `sève`) est la seule solution fiable.
 
-Capricorne amitie : *"Les amis sont comme les branches du gommié blan, solides mais flexibles"*. Le modèle a substitué "branches" à "racines" — même structure, autre mot. La règle a changé le vocabulaire mais pas la logique.
+### 🔴 ka 11/12 — omniprésent
 
-### 4. Teasers — nette amélioration
+Malgré la suppression de la règle "ka" dans le prompt teaser et la limite à 2 occurrences, `ka` reste dans 11/12 signes. Taureau l'utilise 4 fois. Le mot est maintenant ancré dans le modèle comme symbole vaudou universel.
 
-- Capricorne : *"la pluie trace sur ta peau les signes sacrés de Kafou"* — Kafou ✅
-- Gémeaux : *"la pluie trace un kawoubouyé sous tes pas"* — symbole créole ✅
-- Lion : *"le gran pélikan te murmure à l'oreille"* — animal du signe ✅
-- **ka absent des 3 teasers** ✅ (était 7/12 signes avant)
+### 🔴 vèvè 8/12 — limitVeve() insuffisant
+
+`limitVeve()` limite à 1 occurrence par horoscope, mais `vèvè` reste présent dans 8 signes. Le pattern "la pluie trace un vèvè" persiste pour Cancer (1/12 au lieu de 12/12 — c'est un progrès) mais l'association pluie → vèvè reste ancrée.
+
+### 🟡 Artefacts ponctuels
+
+- **Taureau teaser** : *"le ka ka te murmure"* — duplication du mot par post-processing (`tambour → ka` sur un texte qui contenait déjà "ka")
+- **Lion argent** : *"lajàn"* — accent erroné sur le `a` (`à` au lieu de `a`)
+- **Cancer** : vèvè × 2 malgré `limitVeve()` — peut-être une orthographe alternative dans le texte brut
+
+### 🟡 Loa Bélier — Ezili persiste
+
+Bélier (loa = Ogoun) cite Ezili. La règle prompt est ignorée pour ce signe depuis plusieurs itérations. Ezili est culturellement associée à l'amour — le modèle l'utilise systématiquement dans la section `amour` du Bélier.
 
 ---
 
-## Observations générales
+## Analyse — ce qui résiste et pourquoi
 
-### Ce qui fonctionne maintenant
-- **argent** : métaphores sign-specific dans 3/3 cas — le changement le plus visible
-- **faune/flore en base utilisés** : chaque signe cite ses animaux/plantes assignés
-- **ka** : réduit à 0-2 par signe (était 9/12 teasers avec "ka")
-- **loas** : distribution correcte, un seul par signe
+Le modèle a un **répertoire de symboles créoles** limité qu'il utilise comme raccourcis culturels :
 
-### Ce qui résiste
-- Quelques images génériques (vent, vague, mer) persistent dans travail et prediction
-- Le pattern "la pluie → symbole sacré" dans ouverture est très ancré
-- "comme les [parties d'arbre]" dans amitie change de mot mais garde la structure
+| Symbole | Usage actuel | Rôle dans l'entraînement |
+|---|---|---|
+| `zandoli` | 8/12 | Animal créole = résilience universelle |
+| `vent` | 11/12 | Image naturelle = liberté/mouvement |
+| `ka` | 11/12 | Symbole vaudou = rythme/énergie |
+| `vèvè` | 8/12 | Symbole vaudou = sacré/protection |
+| `Ezili` | dans amour | Loa = amour universel |
 
-### Analyse du mécanisme
-Le modèle a **un répertoire limité de structures narratives** qu'il applique par section :
-- ouverture → "la pluie [verbe] [symbole vaudou]"  
-- amitie → "les liens sont comme les [parties d'arbre]"
-- travail → "Aujourd'hui, [verbe] comme [animal/force naturelle]"
+Ces cinq éléments forment le **squelette narratif caribéen** du modèle. Chaque correction déplace le problème vers un autre élément de ce répertoire sans réduire la répétition globale.
 
-Ces structures persistent même quand les mots changent. La vraie diversité nécessiterait de contraindre aussi les **structures syntaxiques**, pas seulement le vocabulaire.
+**Conclusion architecturale** : le post-processing par regex est le seul mécanisme fiable pour éliminer les clichés. Le prompt engineering seul ne suffit pas pour ces termes profondément ancrés.
 
 ---
 
 ## Recommandations
 
-| Priorité | Action | Type |
+| Priorité | Action | Mécanisme |
 |---|---|---|
-| Moyenne | Interdire le pattern "la pluie [verbe] [symbole]" dans ouverture — imposer une image sans pluie | Prompt |
-| Moyenne | Imposer une structure différente pour amitie (pas "comme les [parties d'arbre]") | Prompt |
-| Basse | Affiner le checker : "danse" acceptable quand associé à un animal spécifique | Analyse |
-| Basse | Tester sur 12 signes complets après push | Tests |
+| Haute | `zandoli` → post-processing : interdire sauf pour Bélier | regex sur structured |
+| Haute | `vent` → post-processing : remplacer par une alternative sign-specific | regex ciblée |
+| Moyenne | `ka` → limiter à 1 occurrence par horoscope (comme vèvè) | étendre limitVeve() |
+| Moyenne | Taureau teaser "le ka ka" → détecter les doublons mot | post-processing |
+| Basse | `lajàn` → normaliser accent | regex `.replace(/lajàn/g, 'lajan')` |
+| Basse | Bélier/Ezili → post-processing ciblé sur section amour | regex sur parsed.amour |
