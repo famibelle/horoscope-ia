@@ -72,7 +72,7 @@ export const signs: Sign[] = [
     arbre: 'Flanbwayan',
     lieu: 'Pointe des Châteaux',
     spirituel:
-      "Animal totem des Arawaks. « Zandoli sav si ki pyébwa i ka monté » — il sait sur quel arbre grimper. Fougue, ambition, résistance. Le flamboyant flamboie rouge au moment de son retour au printemps.",
+      "Gwo Zandoli, l’ancêtre qui veille sous les feuilles, t’a choisi comme enfant du feu et de l’attente. Ton souffle est celui des Kalinagos quand ils soufflaient dans les conques pour appeler les esprits de la terre. Flanbwayan, ton arbre-sang, porte les cicatrices des chaînes brisées—ses fleurs sont des braises de la mémoire. Marche droit, mais souviens-toi : même l’iguane se fait pierre avant de bondir.",
     faune: {
       nom_creole: 'igwann vè',
       nom_commun: 'Iguane vert / Iguana iguana',
@@ -116,7 +116,7 @@ export const signs: Sign[] = [
     arbre: 'Awokasié (Avocatier)',
     lieu: 'Fête des Grands-Fonds (Sainte-Anne)',
     spirituel:
-      "Persévérance et travail. La course de bœufs de Sainte-Anne est son rituel annuel. La vanille — patience de la pollinisation manuelle — est sa plante de résistance économique.",
+      "Bèf a Bos porte la terre des ancêtres dans ses sabots, lourd de la sueur des champs et des chants kalinagos. Vanilier, liane rebelle, enseigne l’art de fleurir sans maître—chaque gousse est un secret volé aux colons. Sous l’Awokasié, les mains des aïeux murmurent la pollinisation comme un quimbois de survie. Ta force est dans le silence des Grands-Fonds, où la résistance se cultive grain par grain.",
     faune: {
       nom_creole: 'kabribo',
       nom_commun: 'Cabrit-bois / Capra aegagrus hircus',
@@ -160,7 +160,7 @@ export const signs: Sign[] = [
     arbre: 'Gommié blan (Gommier)',
     lieu: 'Jardin botanique de Deshaies',
     spirituel:
-      "Dualité et rapidité. Le colibri est le seul oiseau qui vole en arrière — capacité à voir les deux côtés. Pollinisateur de tout le jardin créole. Son nom vient directement des Arawaks.",
+      "Foufou, z'oiseau des Arawaks, danse entre deux souffles sans jamais choisir — seul oiseau à tenir l'invisible entre ses ailes. Gommié blan garde la mémoire des Kalinagos dans sa sève, bois sacré des pirogues qui traversaient l'invisible. Lavande rouge borde les cases comme une prière qui attire les esprits bienveillants et chasse les mauvais sorts du quimbois.",
     faune: {
       nom_creole: 'fwou-fwou',
       nom_commun: 'Colibri huppé / Orthorhyncus cristatus',
@@ -206,7 +206,7 @@ export const signs: Sign[] = [
     arbre: 'Palétuwyé (Palétuvier)',
     lieu: 'Grand Cul-de-Sac Marin / Mangrove',
     spirituel:
-      "Animal kalinago par excellence — nom intact depuis les origines. Vit dans les eaux saumâtres entre terre et mer, comme le Cancer entre deux mondes. La mangrove est son territoire sacré.",
+      "Touloulou, crabe rouge des Kalinagos, marche entre les racines du palétuvyé comme l’âme glisse entre les mondes. Sa carapace porte la mémoire des femmes masquées, celles qui dansent la résistance sous la lune. Le balisier rouge veille, fleur-sentinelle du jardin créole, tandis que la dachine nourrit les corps et les esprits—racine de survie, tubercule des ancêtres. Dans la mangrove, les eaux murmurent les noms oubliés.",
     faune: {
       nom_creole: 'touloulou',
       nom_commun: 'Crabe touloulou / Gecarcinus lateralis',
@@ -250,7 +250,7 @@ export const signs: Sign[] = [
     arbre: 'Flanbwayan',
     lieu: 'Pointe de la Grande Vigie',
     spirituel:
-      "Majesté et rayonnement. Le pélican plane au-dessus de tous. Totem des pêcheurs côtiers. Le flamboyant flamboie à son apogée en juillet-août — mois de son règne.",
+      "Gran Pélikan t'ouvre les ailes au-dessus des vagues sacrées, là où les Arawaks lisaient le souffle des ancêtres dans l'écume. Balizié, fleur-épée, trace la frontière entre les mondes : son rouge est sang des Kalinagos résistants, sa tige une lance plantée dans la terre volée. Sous le Flanbwayan, les quimboiseurs murmurent tes secrets de feu — tu portes la braise des révoltes sans fin, celle qui couve sous les rochers de la Grande Vigie.",
     faune: {
       nom_creole: 'pélikan',
       nom_commun: 'Pélican brun / Pelecanus occidentalis',
@@ -293,7 +293,7 @@ export const signs: Sign[] = [
     arbre: 'Manguié (Manguier)',
     lieu: 'Chutes du Carbet',
     spirituel:
-      "Précision, discernement, sens du devoir. La mangouste observe avant d'agir. Le manguier donne ses fruits avec une rigueur saisonnière parfaite. Les Chutes du Carbet — eau pure et ordonnée — sont son sanctuaire.",
+      "Sous le regard des Arawaks, la Vierge guadeloupéenne affine son âme comme manguié sous le pilon. Son esprit, précis tel la mangouste traçant son chemin, cherche l'équilibre entre les racines et les chutes du Carbet, murmures des Kalinagos. Les quimbois lui rappellent : la pureté naît dans l'action, jamais dans l'attente. Mango blan mûrit en silence, tout comme elle.",
     faune: {
       nom_creole: 'koures',
       nom_commun: 'Couresse / Alsophis antillensis',
@@ -336,7 +336,7 @@ export const signs: Sign[] = [
     arbre: 'Zanmann (Amandier plage)',
     lieu: 'Rivière Salée',
     spirituel:
-      "Harmonie et passage. Le lamantin est l'être-frontière par excellence entre eau et terre — origine des légendes de sirènes. La Rivière Salée sépare et unit les deux îles de la Guadeloupe comme la Balance équilibre tout.",
+      "Manman dlo glisse entre les mondes comme l’âme entre deux souffles. Son chant appelle les ancêtres kalinagos à danser sur les berges de la Rivière Salée, là où l’eau douce et salée se mêlent sans se combattre. Grangouzie, tes pétales rouges boivent le soleil pour nourrir les veines des vivants — équilibre des humeurs, équilibre des cœurs. Zanmann étend ses branches comme une balance de justice, ses amandes gardiennes des secrets échangés sous son ombre.",
     faune: {
       nom_creole: 'manman dlo',
       nom_commun: 'Lamantin des Caraïbes / Trichechus manatus',
@@ -379,7 +379,7 @@ export const signs: Sign[] = [
     arbre: 'Kalbasi (Calebassier)',
     lieu: 'La Soufrière',
     spirituel:
-      "Puissance cachée, transformation. Le scarabée Hercule est le plus grand insecte des Antilles — force immense sous une carapace. L'aloès guérit les brûlures comme la Soufrière brûle et régénère.",
+      "Hèrkil, scarabée des mornes, porte le poids des secrets sous sa carapace noire. Alowès, sang vert des ancêtres, panse les plaies que l’esclavage a gravées dans la chair. Kalbasi murmure aux esprits des Kalinagos quand le vent froisse ses feuilles — sa calebasse recueille les larmes des résistants. La Soufrière fume ta colère sacrée, enfant des cendres et des renaissances.",
     faune: {
       nom_creole: 'myg',
       nom_commun: 'Mygale de la Soufrière',
@@ -424,7 +424,7 @@ export const signs: Sign[] = [
     arbre: 'Gommié (Gommier)',
     lieu: 'Forêt de Basse-Terre / mornes',
     spirituel:
-      "Liberté et mouvement. L'ouassou remonte les rivières sacrées contre le courant — toujours vers l'amont, vers la source. La forêt des mornes est son espace infini. Le maracuja — fleur de la passion qui grimpe sans jamais s'arrêter.",
+      "Wasou, la crevette des eaux vives, porte l’âme des Kalinagos qui remontaient les rivières pour échapper aux chaînes. Son corps transparent cache la force des ancêtres — ceux qui ont choisi la montagne plutôt que l’esclavage. Marakoudja, ton fruit brûle et apaise : comme le quimbois qui guérit ou maudit, selon la main qui le cueille. Gommié, ton bois résonne encore des tambours interdits, ceux qui appelaient à la révolte sous les mornes.",
     faune: {
       nom_creole: 'wasou',
       nom_commun: 'Ouassou / Macrobrachium carcinus',
@@ -467,7 +467,7 @@ export const signs: Sign[] = [
     arbre: 'Gros Tim (Thym créole)',
     lieu: 'Matouba / Fort Delgrès',
     spirituel:
-      "Résistance et rigueur. Le cabri escalade les mornes que personne d'autre n'ose. Animal du sacrifice rituel du quimbois — lien direct avec les forces profondes. Matouba, lieu de l'immolation de Delgrès, est son lieu totem.",
+      "Kabrit des mornes porte l’âme des mornes rebelles. Ses sabots tracent les chemins de résistance où les ancêtres kalinagos ont fui l’esclavage. Piman végétarien, doux comme la ruse des anciens, protège les cases contre les mauvais sorts. Gros tim, thym des guerriers, parfume les offrandes à Delgrès—son feu veille encore dans les grottes de Matouba.",
     faune: {
       nom_creole: 'kabribo',
       nom_commun: 'Cabrit-bois / Capra aegagrus hircus',
@@ -511,7 +511,7 @@ export const signs: Sign[] = [
     arbre: 'Kokoye (Cocotier)',
     lieu: 'Pointe Allègre / Sources de Dolé',
     spirituel:
-      "Vision, originalité, communication. Le lambi est l'instrument de communication des esclaves marrons — son souffle traversait les mornes pour transmettre les messages de révolte. Sa coquille spiralée est un symbole de l'infini.",
+      "Ton souffle porte l’écho des lambi kalinagos, ces cornes qui réveillaient les esprits de la mer avant la bataille. La sitwonèl brûle en toi comme un feu sans fumée, purifiant les pensées lourdes des chaînes oubliées. Sous le kokoye, tes racines boivent aux sources de Dolé, là où l’eau murmure les noms des ancêtres rebelles. Tu es le vent qui dérange les cases trop sages—celui que les vieux quimboiseurs écoutent en silence.",
     faune: {
       nom_creole: 'chatou',
       nom_commun: 'Poulpe / Octopus vulgaris',
@@ -554,7 +554,7 @@ export const signs: Sign[] = [
     arbre: 'Palétuwyé (Palétuvier)',
     lieu: 'Plages du nord Grande-Terre (ponte des tortues)',
     spirituel:
-      "Intuition et profondeur. La tortue karet vient de l'océan profond pondre sous les étoiles — acte de foi et de mémoire ancestrale. La fleur de corossol s'ouvre la nuit. Être des deux mondes — mer et terre, rêve et réalité.",
+      "Tòti karé glisse entre les mondes, sa carapace chargée des prières kalinagos gravées dans l’écaille. Sous les palétuwyé, le korosòl murmure : ses feuilles apaisent les esprits agités, son fruit nourrit les rêves des ancêtres. Tu portes l’eau et la terre, comme la plage où la tortue dépose ses œufs — acte sacré de résistance, lien invisible entre les vivants et ceux qui veillent depuis Gwadloup. Écoute le silence entre les vagues : c’est là que parlent les anciens.",
     faune: {
       nom_creole: 'tòti karé',
       nom_commun: 'Tortue imbriquée / Eretmochelys imbricata',
