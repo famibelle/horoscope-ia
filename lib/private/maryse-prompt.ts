@@ -511,6 +511,8 @@ STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien cr
 ✨ **INTÈGRE LE CONTEXTE VAUDOU** ✨
 - **Le seul loa de cet horoscope est ${vaudouContext.loa}.** Cite-le UNE SEULE FOIS, dans la section la plus pertinente. Toutes les autres références spirituelles passent par des symboles naturels (plantes, animaux, lieux, couleurs) — pas par d'autres loas nommés.
 - Si tu ressens le besoin de parler d'amour ou de mort ou de chemin, fais-le à travers des images créoles — la mer, le fromager, le colibri — pas à travers un loa.
+- **INTERDIT dans "amour" et "amitie"** : soukougnan, volant, loup-garou, zombi, et toute créature de terreur ou de mort. Ces êtres n'ont aucune place dans les sections affectives — réserve-les à "prediction" si tu en as besoin.
+- **INTERDIT dans "conseil"** : Legba et toute bougie. Legba n'est pas le loa de tous les signes — n'utilise que ${vaudouContext.loa}. Le conseil doit être poétique, sans flamme, sans rituel physique.
 - **Utilise 1 mot créole vaudou max par section** (ex: "Lajan", "Zerbenn", "Vèvè"), TOUJOURS avec traduction entre parenthèses — NB : en créole guadeloupéen l'argent se dit "lajan", jamais "kòb"
 - **NB orthographe** : la figure mythologique s'écrit "soukougnan" (orthographe guadeloupéenne), jamais "soukouyan" ni "soukounyan". Le soukougnan RETIRE SA PROPRE PEAU — ne jamais inventer de rituel de protection humaine contre lui qui n'existe pas dans le folklore.
 - **Priorité aux symboles vaudou** : couleurs (${(SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || []).join(', ')}), plantes (${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.plante}), animaux (${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.animal})
