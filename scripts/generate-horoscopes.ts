@@ -97,6 +97,16 @@ function limitVeve(text: string): string {
   });
 }
 
+// Remplace "lajan circule/coule comme la sève de/du/dans [plante]"
+// par une métaphore neutre mais ancrée dans le quotidien créole.
+// La prohibition prompt seule ne suffit pas — le modèle ignore la règle.
+function removeSeve(jsonStr: string): string {
+  return jsonStr.replace(
+    /lajan\s+(circule|coule)[^"]{0,30}comme la sève[^",]{0,40}/gi,
+    'Lajan se déplace avec discernement aujourd\'hui'
+  );
+}
+
 function restoreApostrophes(text: string): string {
   return text
     .replace(/\baujourd hui\b/gi, "aujourd'hui")
@@ -732,7 +742,7 @@ export async function generateAllHoroscopes() {
         }
         // Nettoyage post-génération
         const cleanedContent = removeRedundantParentheses(
-          limitVeve(restoreApostrophes(structured
+          limitVeve(restoreApostrophes(removeSeve(structured)
             .replace(/\btambours?\b/gi, 'ka')
             .replace(/—/g, ',')
             .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan')))
@@ -866,7 +876,7 @@ export async function generateAllHoroscopes() {
         }
         // Nettoyage post-génération
         const cleanedContent = removeRedundantParentheses(
-          limitVeve(restoreApostrophes(structured
+          limitVeve(restoreApostrophes(removeSeve(structured)
             .replace(/\btambours?\b/gi, 'ka')
             .replace(/—/g, ',')
             .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan')))
