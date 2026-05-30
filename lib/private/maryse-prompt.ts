@@ -274,6 +274,14 @@ function matchesWord(text: string, word: string): boolean {
   return new RegExp(`\\b${word}\\b`, 'i').test(text);
 }
 
+// Découpe les noms composés ("Colibri huppé / Foufou", "Marakoudja (Fruit de la passion)")
+// en tokens individuels, en splitant sur / et les parenthèses.
+function splitTokens(...parts: (string | undefined)[]): string[] {
+  return parts
+    .flatMap(s => (s || '').split(/[/()\[\]]/g).map(t => t.trim().toLowerCase()))
+    .filter(t => t.length >= 3);
+}
+
 export function buildHoroscopeUserPrompt(
   sign: Sign,
   rawText: string,
@@ -375,18 +383,24 @@ export function buildHoroscopeUserPrompt(
     p.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '')
   ).slice(0, 3);
 
-  // Filtrer les données enrichies pour ne garder que les pertinentes
-  // FAUNE-DATA : entrées liées au signe par animal/nomKreyol uniquement
-  const fauneEnrichies = fauneData.filter(f =>
-    f.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '') ||
-    f.nomCreole.toLowerCase().includes(sign.nomKreyol?.toLowerCase() || '')
-  ).slice(0, 8);
+  // Tokens découpés pour gérer les noms composés ("Colibri huppé / Foufou")
+  const animalTokens = splitTokens(sign.animal, sign.nomKreyol);
+  const planteTokens = splitTokens(sign.plante);
 
-  // FLORE-DATA : entrées liées au signe par plante uniquement
-  const floreEnrichies = floreData.filter(f =>
-    f.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '') ||
-    f.nomFrancais.toLowerCase().includes(sign.plante?.toLowerCase() || '')
-  ).slice(0, 8);
+  // Filtrer les données enrichies pour ne garder que les pertinentes
+  // FAUNE-DATA : nomCreole ET nomFrancais pour couvrir les variantes d'orthographe
+  const fauneEnrichies = fauneData.filter(f => {
+    const nom = f.nomCreole.toLowerCase();
+    const fr = (f.nomFrancais || '').toLowerCase();
+    return animalTokens.some(t => nom.includes(t) || fr.includes(t));
+  }).slice(0, 8);
+
+  // FLORE-DATA : nomCreole ET nomFrancais
+  const floreEnrichies = floreData.filter(f => {
+    const nom = f.nomCreole.toLowerCase();
+    const fr = f.nomFrancais.toLowerCase();
+    return planteTokens.some(t => nom.includes(t) || fr.includes(t));
+  }).slice(0, 8);
 
   // LIEUX-DATA : entrées liées au signe par lieu uniquement
   const lieuxEnrichis = lieuxData.filter(l =>
@@ -395,16 +409,17 @@ export function buildHoroscopeUserPrompt(
   ).slice(0, 5);
 
   // KREYOL-DATA : entrées liées au signe par animal/plante/nomKreyol uniquement
-  const kreyolEnrichis = kreyolData.filter(k =>
-    k.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '') ||
-    k.nomCreole.toLowerCase().includes(sign.nomKreyol?.toLowerCase() || '') ||
-    k.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '') ||
-    (k.tags && k.tags.some(tag =>
-      tag.includes(sign.animal?.toLowerCase() || '') ||
-      tag.includes(sign.nomKreyol?.toLowerCase() || '') ||
-      tag.includes(sign.plante?.toLowerCase() || '')
-    ))
-  ).slice(0, 5);
+  const kreyolEnrichis = kreyolData.filter(k => {
+    const nom = k.nomCreole.toLowerCase();
+    return (
+      animalTokens.some(t => nom.includes(t)) ||
+      planteTokens.some(t => nom.includes(t)) ||
+      (k.tags && k.tags.some(tag =>
+        animalTokens.some(t => tag.includes(t)) ||
+        planteTokens.some(t => tag.includes(t))
+      ))
+    );
+  }).slice(0, 5);
 
   // HISTOIRE-DATA : 2-3 entrées pertinentes (filtre par date uniquement)
   const histoireEnrichies = histoireData.filter(h =>
@@ -578,31 +593,37 @@ export function buildHoroscopeMetadata(
   const isRitual = isRitualDate(dateToUse);
   const loaName = SIGN_TO_LOA[sign.id];
 
-  const fauneEnrichies = fauneData.filter(f =>
-    f.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '') ||
-    f.nomCreole.toLowerCase().includes(sign.nomKreyol?.toLowerCase() || '')
-  ).slice(0, 8);
+  const animalTokens = splitTokens(sign.animal, sign.nomKreyol);
+  const planteTokens = splitTokens(sign.plante);
 
-  const floreEnrichies = floreData.filter(f =>
-    f.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '') ||
-    f.nomFrancais.toLowerCase().includes(sign.plante?.toLowerCase() || '')
-  ).slice(0, 8);
+  const fauneEnrichies = fauneData.filter(f => {
+    const nom = f.nomCreole.toLowerCase();
+    const fr = (f.nomFrancais || '').toLowerCase();
+    return animalTokens.some(t => nom.includes(t) || fr.includes(t));
+  }).slice(0, 8);
+
+  const floreEnrichies = floreData.filter(f => {
+    const nom = f.nomCreole.toLowerCase();
+    const fr = f.nomFrancais.toLowerCase();
+    return planteTokens.some(t => nom.includes(t) || fr.includes(t));
+  }).slice(0, 8);
 
   const lieuxEnrichis = lieuxData.filter(l =>
     l.nom.toLowerCase().includes(sign.lieu?.toLowerCase() || '') ||
     sign.lieu?.toLowerCase().includes(l.nom.toLowerCase())
   ).slice(0, 5);
 
-  const kreyolEnrichis = kreyolData.filter(k =>
-    k.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '') ||
-    k.nomCreole.toLowerCase().includes(sign.nomKreyol?.toLowerCase() || '') ||
-    k.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '') ||
-    (k.tags && k.tags.some(tag =>
-      tag.includes(sign.animal?.toLowerCase() || '') ||
-      tag.includes(sign.nomKreyol?.toLowerCase() || '') ||
-      tag.includes(sign.plante?.toLowerCase() || '')
-    ))
-  ).slice(0, 5);
+  const kreyolEnrichis = kreyolData.filter(k => {
+    const nom = k.nomCreole.toLowerCase();
+    return (
+      animalTokens.some(t => nom.includes(t)) ||
+      planteTokens.some(t => nom.includes(t)) ||
+      (k.tags && k.tags.some(tag =>
+        animalTokens.some(t => tag.includes(t)) ||
+        planteTokens.some(t => tag.includes(t))
+      ))
+    );
+  }).slice(0, 5);
 
   const histoireEnrichies = histoireData.filter(h =>
     h.periode.includes(year) ||
@@ -617,12 +638,12 @@ export function buildHoroscopeMetadata(
 
   const relevantAnimals = animauxData.filter(a =>
     a.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase() ||
-    a.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '')
+    animalTokens.some(t => a.nomCreole.toLowerCase().includes(t))
   ).slice(0, 3);
 
   const relevantPlantes = plantesData.filter(p =>
     p.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase() ||
-    p.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '')
+    planteTokens.some(t => p.nomCreole.toLowerCase().includes(t))
   ).slice(0, 3);
 
   const signConditions = [...(sign.faune?.conditions || []), ...(sign.flore?.conditions || [])];
