@@ -468,8 +468,11 @@ async function generateTeaser(
   // 📚 EXTRACTION DES TERMES POUR LE GLOSSAIRE (TEASER)
   // ==========================================
   if (teaser) {
-    // Garde-fou : "tambour(s)" → "ka" (le terme créole correct en Guadeloupe)
-    teaser = teaser.replace(/\btambours?\b/gi, 'ka');
+    // Nettoyage post-génération du teaser
+    teaser = teaser
+      .replace(/\btambours?\b/gi, 'ka')
+      .replace(/—/g, ',')
+      .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan');
 
     const teaserTerms = extractGlossaryTerms(teaser);
     if (teaserTerms.length > 0) {
@@ -703,9 +706,12 @@ export async function generateAllHoroscopes() {
           const sourceFile = `horoscopes/${todayGuadeloupe()}.json`;
           updateGlossary(terms, dateToday, sourceFile);
         }
-        // Nettoyage des parenthèses redondantes + "tambour" → "ka"
+        // Nettoyage post-génération
         const cleanedContent = removeRedundantParentheses(
-          structured.replace(/\btambours?\b/gi, 'ka')
+          structured
+            .replace(/\btambours?\b/gi, 'ka')
+            .replace(/—/g, ',')
+            .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan')
         );
 
         // Générer le teaser
@@ -834,9 +840,12 @@ export async function generateAllHoroscopes() {
           const sourceFile = `horoscopes/${today}.json`;
           updateGlossary(terms, dateToday, sourceFile);
         }
-        // Nettoyage des parenthèses redondantes + "tambour" → "ka"
+        // Nettoyage post-génération
         const cleanedContent = removeRedundantParentheses(
-          structured.replace(/\btambours?\b/gi, 'ka')
+          structured
+            .replace(/\btambours?\b/gi, 'ka')
+            .replace(/—/g, ',')
+            .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan')
         );
 
         const teaser = await generateTeaser(sign.name, cleanedContent);

@@ -282,6 +282,11 @@ function splitTokens(...parts: (string | undefined)[]): string[] {
     .filter(t => t.length >= 3);
 }
 
+// Exclut les périodes longues type "2000-2026" qui remontent par faux positif sur l'année.
+function isLongPeriod(periode: string): boolean {
+  return /\b\d{4}\s*[-–—]\s*\d{4}\b/.test(periode);
+}
+
 export function buildHoroscopeUserPrompt(
   sign: Sign,
   rawText: string,
@@ -333,10 +338,12 @@ export function buildHoroscopeUserPrompt(
   // Récupérer un événement historique pertinent (par mois, année ou élément)
   const [year, month, day] = dateToUse.split('-');
   const moisNom = new Date(dateToUse).toLocaleString('fr-FR', { month: 'long' });
-  const histoireByMonth = histoireData.filter(h => 
-    h.periode.includes(year) ||
-    h.periode.includes(moisNom) ||
-    h.periode.includes(month)
+  const histoireByMonth = histoireData.filter(h =>
+    !isLongPeriod(h.periode) && (
+      h.periode.includes(year) ||
+      h.periode.includes(moisNom) ||
+      h.periode.includes(month)
+    )
   );
   const histoireEntry = histoireByMonth[0] || null;
   const histoireFait = histoireEntry?.faitHistorique || '';
@@ -423,9 +430,11 @@ export function buildHoroscopeUserPrompt(
 
   // HISTOIRE-DATA : 2-3 entrées pertinentes (filtre par date uniquement)
   const histoireEnrichies = histoireData.filter(h =>
-    h.periode.includes(year) ||
-    h.periode.includes(moisNom) ||
-    h.periode.includes(month)
+    !isLongPeriod(h.periode) && (
+      h.periode.includes(year) ||
+      h.periode.includes(moisNom) ||
+      h.periode.includes(month)
+    )
   ).slice(0, 3);
 
   // Détecter les correspondances météo/édition pour adapter le contexte
@@ -515,12 +524,12 @@ ${relevantPlantes.map(p => `  - ${p.nomCreole} (${p.nomFrancais}): ${p.dimension
 ÉDITION : ${cfg.instruction}
 
 STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien créole guadeloupéen :
-1. "ouverture" : UNE phrase - image caribéenne qui pose le ton du jour. **Utilise un symbole vaudou si possible.**
+1. "ouverture" : UNE phrase - image caribéenne qui pose le ton du jour. **Utilise un symbole vaudou ou HISTOIRE-DATA si pertinent.**
 2. "amour" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les relations et le cœur. **Choisis parmi FAUNE-DATA, FLORE-DATA, KREYOL-DATA ou CONTEXTE VAUDOU.**
 3. "travail" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur l'action, l'effort. **Choisis parmi FAUNE-DATA, LIEUX-DATA ou CONTEXTE VAUDOU.**
-4. "argent" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les finances. **Choisis parmi FLORE-DATA, HISTOIRE-DATA ou CONTEXTE VAUDOU.**
+4. "argent" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les finances. **Choisis parmi FLORE-DATA ou CONTEXTE VAUDOU uniquement. INTERDIT : HISTOIRE-DATA dans cette section.**
 5. "amitie" (Lyannaj) : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur le lien social. **Choisis parmi LIEUX-DATA, KREYOL-DATA ou CONTEXTE VAUDOU.**
-6. "prediction" : UNE phrase - tendance pour les jours à venir. **Utilise une métaphore naturelle ou vaudou.**
+6. "prediction" : UNE phrase - tendance pour les jours à venir. **Utilise une métaphore naturelle, vaudou ou HISTOIRE-DATA.**
 7. "conseil" : UNE phrase - un conseil symbolique ou poétique basé sur une plante, un symbole OU un rituel vaudou. JAMAIS une action physique dangereuse (bougie sans surveillance, ingestion de plante, feu en espace fermé).
 
 ✨ **INTÈGRE LE CONTEXTE VAUDOU** ✨
@@ -543,6 +552,8 @@ Note : Le champ "sante" (optionnel) peut être ajouté séparément avec EXACTEM
 - Ne répète PAS un mot créole vaudou dans plusieurs sections
 
 Contraintes absolues : ton oral direct, parle à l'auditeur (tu/vous), vise 20–30 mots par phrase.
+- Ne cite jamais un mois autre que le mois en cours (${moisNom}). Décris plantes et animaux dans leur état aujourd'hui, pas dans un état futur ou passé.
+- "lajan" porte déjà l'article créole — ne jamais écrire "le lajan", "la lajan" ou "l'lajan". Écris simplement "lajan".
 Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Les apostrophes ('), virgules, points, points d'exclamation et tirets simples (-) sont autorisés et nécessaires.
 Intègre subtilement les références culturelles fournies ET le contexte vaudou.`;
 }
@@ -626,9 +637,11 @@ export function buildHoroscopeMetadata(
   }).slice(0, 5);
 
   const histoireEnrichies = histoireData.filter(h =>
-    h.periode.includes(year) ||
-    h.periode.includes(moisNom) ||
-    h.periode.includes(month)
+    !isLongPeriod(h.periode) && (
+      h.periode.includes(year) ||
+      h.periode.includes(moisNom) ||
+      h.periode.includes(month)
+    )
   ).slice(0, 3);
 
   const relevantLoas = loasData.filter(l =>
