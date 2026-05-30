@@ -101,13 +101,35 @@ export function saveGlossary(glossary: Record<string, GlossaryEntry>): void {
   _dirty = true;
 }
 
+// Mots trop courts ou particules françaises/créoles qui ne sont pas des termes culturels
+const GLOSSARY_STOP_WORDS = new Set([
+  'k', 'b', 's', 'p', 'l', 'w', 'm', 'n',
+  'an', 'de', 'du', 'la', 'le', 'pi', 'sa', 'si',
+  'ou', 'et', 'en', 'ou', 'ni', 'ba', 'di',
+  'ind', 'fli', 'san', 'dan',
+]);
+
 /** Extrait les termes entre parenthèses d'un texte. */
 export function extractGlossaryTerms(text: string): Array<{ term: string; definition: string }> {
   const pattern = /(\w[\w'\-]*)\s*\(([^)]+)\)/g;
-  return Array.from(text.matchAll(pattern)).map(m => ({
+  const allMatches = Array.from(text.matchAll(pattern)).map(m => ({
     term: m[1].trim(),
     definition: m[2].trim(),
   }));
+
+  // Correction 1 : rejeter les clés trop courtes ou mots outils
+  const filtered = allMatches.filter(({ term }) =>
+    term.length >= 3 && !GLOSSARY_STOP_WORDS.has(term.toLowerCase())
+  );
+
+  // Correction 2 : dédupliquer par terme dans le même run (garder la première occurrence)
+  const seen = new Set<string>();
+  return filtered.filter(({ term }) => {
+    const key = term.toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 /** Met à jour le cache avec de nouveaux termes. */
