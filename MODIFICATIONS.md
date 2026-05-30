@@ -24,6 +24,20 @@
 
 ---
 
+## Correction structurelle — obligations d'usage des données (maryse-prompt.ts + generate-horoscopes.ts)
+
+| Modification | Effet attendu |
+|---|---|
+| "Choisis parmi" → "OBLIGATOIRE : le nom créole doit apparaître dans le texte" par section | Force l'usage des données injectées au lieu des métaphores génériques |
+| Interdictions par section : mer/vague/vent/racines/danse/chemin/sève | Élimine les images de remplacement universelles |
+| "la pluie trace un vèvè" interdit dans ouverture | Casse le pattern 12/12 signes |
+| "comme les racines de [arbre]" interdit dans amitie | Casse le pattern 8/12 signes |
+| ka max 2 occurrences par horoscope | Limite la sur-représentation (était 9/12 teasers) |
+| Suppression règle "ka" dans prompt teaser | La règle créait 9/12 teasers avec "ka" — post-processing suffit |
+| Teaser : "ancre-toi dans les symboles propres à ce signe" | Diversifie les teasers |
+
+---
+
 ## Prompt système — ajouts récents (maryse-prompt.ts)
 
 | Règle ajoutée | Problème corrigé |

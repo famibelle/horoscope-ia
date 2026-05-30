@@ -1,66 +1,93 @@
 # Rapport Qualité — Horoscopes Karukera
 **Date des tests** : 2026-05-30 | **Édition** : matin  
-**Signes** : Gémeaux, Lion, Capricorne | **Itérations** : 4 (3 sur 2026-05-29 + 1 finale sur 2026-05-30)  
+**Signes** : Gémeaux, Lion, Capricorne  
 **Code** : branche `vaudou` — commits locaux non poussés
 
 ---
 
-## Résultats finaux
+## Résultats — correction structurelle
 
 | Vérification | Gémeaux | Lion | Capricorne |
 |---|:---:|:---:|:---:|
 | Tiret cadratin `—` | ✅ | ✅ | ✅ |
-| `tambour` → `ka` | ✅ | ✅ | ✅ |
-| `le lajan` (article redondant) | ✅ | ✅ | ✅ |
-| Apostrophes restaurées | ✅ | ✅ | ✅ |
 | Bougie / flamme | ✅ | ✅ | ✅ |
+| Loa unique | ✅ Legba | ✅ Ezili | ✅ Kafou |
 | `vèvè` ≤ 1 occurrence | ✅ | ✅ | ✅ |
-| Histoire absente d'argent | ✅ | ✅ | ✅ |
-| Mois futur absent | ✅ | ✅ | ✅ |
-| Loa unique (pas d'autre loa) | ✅ | ✅ | ✅ |
+| `ka` ≤ 2 occurrences | ✅ 1 | ✅ 2 | ✅ 0 |
 | Sève absente d'argent | ✅ | ✅ | ✅ |
-| Artefact concat absent | ✅ | ✅ | ✅ |
-| faune depuis la base | ✅ Fwou-fwou | ✅ Pélikan | ✅ Chouèt kabrit |
-| flore depuis la base | ✅ Lavand wouj | ✅ Bèlizèl | ✅ Chadon béni |
-| Données base dans le texte | ✅ | ✅ | ✅ |
+| faune depuis la base | ✅ Fwou-fwou | ✅ Pélikan | ✅ Chouèt/Fòmi/Kabrit |
+| flore depuis la base | ✅ Lavand wouj | ✅ Balisié | ✅ Chadon béni |
+| **Données base citées dans argent** | ✅ | ✅ | ✅ |
+| **Données base citées dans amour** | ✅ | ✅ | ✅ |
 
 ---
 
-## Corrections appliquées dans cette session
+## Impact de la correction structurelle
 
-### Fuite de loa — Ezili dans Gémeaux, Damballa dans Gémeaux
-**Itération 1 → 2** : Ezili (loa du Lion) apparaissait dans la section amour de Gémeaux. Damballa (sans `h`) contournait le filtre. Correction : règle prompt listant tous les loas interdits nommément, incluant Damballa/Damballah.
+### Avant → Après dans argent
 
-### Métaphore "sève" dans argent — 3/3 signes
-**Itération 1 → 3** : `"Lajan circule comme la sève du [plante]"` utilisé pour les 3 signes avec des plantes différentes mais une structure identique. La prohibition prompt a été ignorée deux itérations consécutives. Solution finale : `removeSeve()` post-processing (regex capture jusqu'au point de fin de phrase).
+| Signe | Avant (sève) | Après (sign-specific) |
+|---|---|---|
+| Capricorne | *"Lajan circule comme la sève du chadon béni"* | *"Le kabrit nwè sait qu'il faut parfois se sacrifier pour nourrir le troupeau"* |
+| Gémeaux | *"Lajan circule comme la sève dans le gommier"* | *"Fwou-fwou ne stocke pas son nectar, il le récolte au jour le jour"* |
+| Lion | *"Lajan circule comme la sève dans le flamboyant"* | *"Observe le gran pélikan plonger pour attraper son poisson, précis et déterminé"* |
 
-**Résultat itération finale** :
-- Capricorne argent : *"Lajan se déplace avec discernement aujourd'hui. Aujourd'hui, observe où l'argent s'infiltre dans ta vie, comme l'eau qui cherche les fissures"* ✅
-- Gémeaux argent : *"Lajan circule aujourd'hui comme les graines de gommié blan emportées par le vent"* ✅ (modèle a trouvé sa propre métaphore)
-- Lion argent : *"Lajan circule aujourd'hui comme les vagues sur les rochers de la côte"* ✅ (idem)
+Les trois métaphores sont maintenant différentes et propres à chaque signe.
+
+### Avant → Après dans amour (Gémeaux)
+
+- Avant : *"Ton cœur bat au rythme du ka, léger comme un fwou-fwou"* (ka générique)
+- Après : *"Fwou-fwou danse dans l'Alpinia humide, ses ailes légères comme un cœur qui hésite entre deux fleurs"* (faune + flore du signe)
 
 ---
 
-## Qualité générale observée
+## Problèmes résiduels
 
-### Points forts
-- **Ancrage dans la base de données** : les enrichissements faune/flore sont correctement utilisés dans le texte. Capricorne conseil utilise "chadon béni" (flore_enrichies), travail utilise "chouèt kabrit" et "fòmi kabrit" (faune_enrichies).
-- **Loas assignés** : chaque signe cite son loa une seule fois, dans le bon contexte. Lion/Ezili dans amour ✅, Gémeaux/Legba dans ouverture ✅, Capricorne/Kafou dans conseil ✅.
-- **Gémeaux amour** : *"Ton cœur bat comme les ailes du fwou-fwou, rapide et léger"* — métaphore issue directement de faune_enrichies.
+### 1. Génériques "vent" et "danse" persistent — 2/3 signes
 
-### Observations résiduelles mineures
+Le modèle utilise encore "vent" et "danse" malgré les interdictions. Deux cas :
+- `vent` dans travail : *"le vent porte tes idées loin"* (Lion) — image générique
+- `danse` dans amour : *"Fwou-fwou danse dans l'Alpinia"* (Gémeaux) — ici le mot est justifié (le colibri danse de fleur en fleur)
 
-**1. "Lajan se déplace avec discernement aujourd'hui" est générique**
-La phrase de substitution post-processing est neutre mais sans ancrage culturel. Elle remplace une mauvaise métaphore par une phrase acceptable mais sans caractère. À terme, une substitution sign-specific (basée sur l'animal) serait plus riche.
+**Nuance importante** : "danse" dans le contexte du fwou-fwou est une métaphore propre au signe, pas une image générique. Mon checker est trop strict sur ce mot.
 
-**2. Structure travail homogène**
-Les 3 signes utilisent une construction similaire dans travail :
-> *"Aujourd'hui, [verbe/animal/lieu comme comparant], [leçon]"*
+### 2. "la pluie trace un vèvè" — persiste pour Lion
 
-Non bloquant — les comparants sont différents et propres à chaque signe.
+Malgré l'interdiction explicite, Lion ouverture utilise encore : *"la pluie trace un vèvè d'Ezili Freda sur les feuilles de balisié"*. La phrase est enrichie (elle utilise balisié et Ezili) mais conserve le pattern interdit.
 
-**3. Taureau et Scorpion sans faune en base**
-Le bœuf créole (Taureau) et le scarabée Hercule (Scorpion) sont absents de `faune-data`. Ces deux signes improviseront leurs symboles animaux depuis l'entraînement du modèle. Non corrigeable sans enrichir la base de données.
+### 3. "comme les branches" remplace "comme les racines"
+
+Capricorne amitie : *"Les amis sont comme les branches du gommié blan, solides mais flexibles"*. Le modèle a substitué "branches" à "racines" — même structure, autre mot. La règle a changé le vocabulaire mais pas la logique.
+
+### 4. Teasers — nette amélioration
+
+- Capricorne : *"la pluie trace sur ta peau les signes sacrés de Kafou"* — Kafou ✅
+- Gémeaux : *"la pluie trace un kawoubouyé sous tes pas"* — symbole créole ✅
+- Lion : *"le gran pélikan te murmure à l'oreille"* — animal du signe ✅
+- **ka absent des 3 teasers** ✅ (était 7/12 signes avant)
+
+---
+
+## Observations générales
+
+### Ce qui fonctionne maintenant
+- **argent** : métaphores sign-specific dans 3/3 cas — le changement le plus visible
+- **faune/flore en base utilisés** : chaque signe cite ses animaux/plantes assignés
+- **ka** : réduit à 0-2 par signe (était 9/12 teasers avec "ka")
+- **loas** : distribution correcte, un seul par signe
+
+### Ce qui résiste
+- Quelques images génériques (vent, vague, mer) persistent dans travail et prediction
+- Le pattern "la pluie → symbole sacré" dans ouverture est très ancré
+- "comme les [parties d'arbre]" dans amitie change de mot mais garde la structure
+
+### Analyse du mécanisme
+Le modèle a **un répertoire limité de structures narratives** qu'il applique par section :
+- ouverture → "la pluie [verbe] [symbole vaudou]"  
+- amitie → "les liens sont comme les [parties d'arbre]"
+- travail → "Aujourd'hui, [verbe] comme [animal/force naturelle]"
+
+Ces structures persistent même quand les mots changent. La vraie diversité nécessiterait de contraindre aussi les **structures syntaxiques**, pas seulement le vocabulaire.
 
 ---
 
@@ -68,7 +95,7 @@ Le bœuf créole (Taureau) et le scarabée Hercule (Scorpion) sont absents de `f
 
 | Priorité | Action | Type |
 |---|---|---|
-| Moyenne | Remplacer "Lajan se déplace avec discernement" par une métaphore sign-specific basée sur l'animal | Post-processing enrichi |
-| Moyenne | Enrichir `faune-data` : bœuf créole (Taureau), scarabée Hercule (Scorpion) | Données |
-| Basse | Varier la structure travail — éviter l'homogénéité des comparants | Prompt |
-| Basse | Tester sur 12 signes complets pour vérifier que les corrections tiennent à l'échelle | Tests |
+| Moyenne | Interdire le pattern "la pluie [verbe] [symbole]" dans ouverture — imposer une image sans pluie | Prompt |
+| Moyenne | Imposer une structure différente pour amitie (pas "comme les [parties d'arbre]") | Prompt |
+| Basse | Affiner le checker : "danse" acceptable quand associé à un animal spécifique | Analyse |
+| Basse | Tester sur 12 signes complets après push | Tests |
