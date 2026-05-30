@@ -2,7 +2,7 @@ name: ✨ Génération Présage du Jour (Sécurisée)
 
 on:
   schedule:
-    - cron: '15 4 * * *'
+    - cron: '0 3 * * *'
   workflow_dispatch:
     inputs:
       date:

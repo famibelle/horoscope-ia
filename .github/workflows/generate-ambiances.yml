@@ -2,7 +2,7 @@ name: ✨ Génération Ambiances (Sécurisée)
 
 on:
   schedule:
-    - cron: '30 4 * * *'
+    - cron: '15 3 * * *'
   workflow_dispatch:
     inputs:
       date:
