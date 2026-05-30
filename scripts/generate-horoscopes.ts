@@ -89,6 +89,14 @@ const SIGN_EN: Record<string, string> = {
   poissons: 'pisces',
 };
 
+function limitVeve(text: string): string {
+  let count = 0;
+  return text.replace(/vèvè/gi, (match) => {
+    count++;
+    return count <= 1 ? match : 'signe sacré';
+  });
+}
+
 function restoreApostrophes(text: string): string {
   return text
     .replace(/\baujourd hui\b/gi, "aujourd'hui")
@@ -724,10 +732,10 @@ export async function generateAllHoroscopes() {
         }
         // Nettoyage post-génération
         const cleanedContent = removeRedundantParentheses(
-          restoreApostrophes(structured
+          limitVeve(restoreApostrophes(structured
             .replace(/\btambours?\b/gi, 'ka')
             .replace(/—/g, ',')
-            .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan'))
+            .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan')))
         );
 
         // Générer le teaser
@@ -858,10 +866,10 @@ export async function generateAllHoroscopes() {
         }
         // Nettoyage post-génération
         const cleanedContent = removeRedundantParentheses(
-          restoreApostrophes(structured
+          limitVeve(restoreApostrophes(structured
             .replace(/\btambours?\b/gi, 'ka')
             .replace(/—/g, ',')
-            .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan'))
+            .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan')))
         );
 
         const teaser = await generateTeaser(sign.name, cleanedContent);
