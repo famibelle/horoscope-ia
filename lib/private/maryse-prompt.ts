@@ -532,13 +532,13 @@ ${relevantPlantes.map(p => `  - ${p.nomCreole} (${p.nomFrancais}): ${p.dimension
 ÉDITION : ${cfg.instruction}
 
 STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien créole guadeloupéen :
-1. "ouverture" : UNE phrase - image caribéenne qui pose le ton du jour. **Utilise un symbole vaudou ou HISTOIRE-DATA si pertinent.**
-2. "amour" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les relations et le cœur. **Choisis parmi FAUNE-DATA, FLORE-DATA, KREYOL-DATA ou CONTEXTE VAUDOU.**
-3. "travail" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur l'action, l'effort. **Choisis parmi FAUNE-DATA, LIEUX-DATA ou CONTEXTE VAUDOU.**
-4. "argent" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les finances. **Choisis parmi FLORE-DATA ou CONTEXTE VAUDOU uniquement. INTERDIT : HISTOIRE-DATA. INTERDIT : "lajan circule/coule comme la sève" (métaphore usée, même avec des plantes différentes).** Utilise plutôt une image ancrée dans le comportement de l'animal du signe, une pratique économique créole (le marché, la pêche, la récolte, le troc), ou un symbole vaudou de la famille du signe.
-5. "amitie" (Lyannaj) : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur le lien social. **Choisis parmi LIEUX-DATA, KREYOL-DATA ou CONTEXTE VAUDOU.**
-6. "prediction" : UNE phrase - tendance pour les jours à venir. **Utilise une métaphore naturelle, vaudou ou HISTOIRE-DATA.**
-7. "conseil" : UNE phrase - un conseil symbolique ou poétique basé sur une plante, un symbole OU un rituel vaudou. JAMAIS une action physique dangereuse (bougie sans surveillance, ingestion de plante, feu en espace fermé).
+1. "ouverture" : UNE phrase - image caribéenne qui pose le ton du jour. Utilise un symbole vaudou ou HISTOIRE-DATA. INTERDIT : "la pluie trace un vèvè" (formule usée — 12 signes l'utilisent).
+2. "amour" : 2 à 4 phrases. **OBLIGATOIRE : le nom créole d'un élément de FAUNE-DATA ou FLORE-DATA doit apparaître dans le texte.** INTERDIT comme images de remplacement : "mer", "vague", "vent", "racines", "danse".
+3. "travail" : 2 à 4 phrases. **OBLIGATOIRE : le nom créole d'un élément de FAUNE-DATA ou LIEUX-DATA doit apparaître dans le texte.** INTERDIT : "chemin", "vent", "racines" comme métaphores génériques.
+4. "argent" : 2 à 4 phrases. **OBLIGATOIRE : une image tirée du comportement de l'animal du signe ou d'une pratique économique créole (marché, pêche, récolte, troc).** INTERDIT : HISTOIRE-DATA, "sève", "racines", "mer", "vent".
+5. "amitie" : 2 à 4 phrases. **OBLIGATOIRE : le nom créole d'un élément de LIEUX-DATA ou KREYOL-DATA doit apparaître dans le texte.** INTERDIT : "comme les racines de [arbre]" (formule identique pour 8 signes sur 12).
+6. "prediction" : UNE phrase - tendance pour les jours à venir. Métaphore naturelle propre au signe, vaudou ou HISTOIRE-DATA.
+7. "conseil" : UNE phrase - un geste symbolique ancré dans FLORE-DATA ou CONTEXTE VAUDOU. JAMAIS une bougie, une flamme, un feu.
 
 ✨ **INTÈGRE LE CONTEXTE VAUDOU** ✨
 - **Le seul loa de cet horoscope est ${vaudouContext.loa}.** Cite-le UNE SEULE FOIS, dans la section la plus pertinente. Toutes les autres références spirituelles passent par des symboles naturels (plantes, animaux, lieux, couleurs) — pas par d'autres loas nommés.
@@ -555,11 +555,13 @@ STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien cr
 Note : Le champ "sante" (optionnel) peut être ajouté séparément avec EXACTEMENT 2 OU 4 phrases.
 
 🎯 **RÈGLES DE VARIÉTÉ ABSOLUES** :
-- Chaque section doit utiliser des symboles DIFFÉRENTS des autres sections
-- Ne répète PAS ${sign.animal} ou ${sign.nomKreyol} plus d'UNE FOIS
+- Chaque section doit citer un élément DIFFÉRENT des autres sections — pas le même animal, plante ou lieu deux fois
+- Ne répète PAS ${sign.animal} ou ${sign.nomKreyol} plus d'UNE FOIS dans tout l'horoscope
 - Ne répète PAS ${sign.plante} ou ${sign.arbre} plus d'UNE FOIS
 - Ne répète PAS ${sign.lieu} plus d'UNE FOIS
 - Ne répète PAS un mot créole vaudou dans plusieurs sections
+- **"ka" : maximum 2 occurrences dans tout l'horoscope** — pas une image générique de rythme ou d'énergie, uniquement quand le contexte musical est justifié
+- **INTERDIT comme images de remplacement génériques** (utilisées par tous les signes) : "comme les racines", "laisse-toi porter", "les jours à venir réservent", "mer", "vent", "chemin", "danse", "vague" — remplace par des images tirées des données injectées
 
 Contraintes absolues : ton oral direct, parle à l'auditeur (tu/vous), vise 20–30 mots par phrase.
 - Ne cite jamais un mois autre que le mois en cours (${moisNom}). Décris plantes et animaux dans leur état aujourd'hui, pas dans un état futur ou passé.
