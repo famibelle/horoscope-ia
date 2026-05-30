@@ -504,10 +504,13 @@ async function generateTeaser(
   // ==========================================
   if (teaser) {
     // Nettoyage post-génération du teaser
+    // Si le corps contient déjà vèvè, on le supprime du teaser pour éviter le doublon
+    const bodyHasVeve = /vèvè/i.test(rawContent);
     teaser = restoreApostrophes(teaser
       .replace(/\btambours?\b/gi, 'ka')
       .replace(/—/g, ',')
-      .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan'));
+      .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan')
+      .replace(bodyHasVeve ? /vèvè/gi : /(?!)/g, 'signe sacré'));
 
     const teaserTerms = extractGlossaryTerms(teaser);
     if (teaserTerms.length > 0) {

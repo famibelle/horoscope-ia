@@ -360,11 +360,11 @@ export function buildHoroscopeUserPrompt(
   // Récupérer des éléments vaudou aléatoires mais pertinents
   const loaName = SIGN_TO_LOA[sign.id];
   
-  // Filtrer les données vaudou par pertinence avec le signe
-  const relevantLoas = loasData.filter(l => 
-    l.nomCreole.toLowerCase().includes(loaName.toLowerCase()) ||
-    l.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase()
-  ).slice(0, 3);
+  // Uniquement le loa assigné au signe — pas les autres loas de la même famille
+  // (injecter Legba+Ezili+Damballa puis les interdire créait une tension → repli sur vèvè)
+  const relevantLoas = loasData.filter(l =>
+    l.nomCreole.toLowerCase().includes(loaName.toLowerCase())
+  ).slice(0, 1);
   
   const relevantAnimals = animauxData.filter(a => 
     a.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase() ||
@@ -510,7 +510,7 @@ ${relevantPlantes.map(p => `  - ${p.nomCreole} (${p.nomFrancais}): ${p.dimension
 ÉDITION : ${cfg.instruction}
 
 STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien créole guadeloupéen :
-1. "ouverture" : UNE phrase - image caribéenne qui pose le ton du jour. Utilise un symbole vaudou ou HISTOIRE-DATA. INTERDIT : "la pluie trace un vèvè" (formule usée — 12 signes l'utilisent).
+1. "ouverture" : UNE phrase - image caribéenne qui pose le ton du jour. Ancre dans l'animal, la plante ou le lieu du signe, ou dans une couleur sacrée du loa — pas une formule générique. INTERDIT : toute phrase avec "vèvè" dans cette section.
 2. "amour" : 2 à 4 phrases. **OBLIGATOIRE : le nom créole d'un élément de FAUNE-DATA ou FLORE-DATA doit apparaître dans le texte.** INTERDIT comme images de remplacement : "mer", "vague", "vent", "racines", "danse".
 3. "travail" : 2 à 4 phrases. **OBLIGATOIRE : le nom créole d'un élément de FAUNE-DATA ou LIEUX-DATA doit apparaître dans le texte.** INTERDIT : "chemin", "vent", "racines" comme métaphores génériques.
 4. "argent" : 2 à 4 phrases. **OBLIGATOIRE : une image tirée du comportement de l'animal du signe ou d'une pratique économique créole (marché, pêche, récolte, troc).** INTERDIT : HISTOIRE-DATA, "sève", "racines", "mer", "vent".
@@ -525,7 +525,7 @@ STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien cr
 - **INTERDIT dans "amour" et "amitie"** : soukougnan, volant, loup-garou, zombi, et toute créature de terreur ou de mort. Ces êtres n'ont aucune place dans les sections affectives — réserve-les à "prediction" si tu en as besoin.
 - **INTERDIT dans "conseil"** : Legba et toute bougie. Legba n'est pas le loa de tous les signes — n'utilise que ${vaudouContext.loa}. Le conseil doit être poétique, sans flamme, sans rituel physique.
 - **Utilise 1 mot créole vaudou max par section**, tiré du contexte vaudou du signe — NB : en créole guadeloupéen l'argent se dit "lajan", jamais "kòb"
-- **"Vèvè" : 1 occurrence MAXIMUM dans tout l'horoscope.** Ne l'utilise pas dans ouverture ET conseil. S'il est dans l'ouverture, pas de vèvè ailleurs. S'il est dans le conseil, pas de vèvè ailleurs.
+- Les dessins sacrés vaudou ne sont pas une image générique — n'évoque cette pratique que si elle est directement liée au loa du signe et au contexte de la section.
 - **NB orthographe** : la figure mythologique s'écrit "soukougnan" (orthographe guadeloupéenne), jamais "soukouyan" ni "soukounyan". Le soukougnan RETIRE SA PROPRE PEAU — ne jamais inventer de rituel de protection humaine contre lui qui n'existe pas dans le folklore.
 - **Priorité aux symboles vaudou** : couleurs (${(SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || []).join(', ')}), plantes (${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.plante}), animaux (${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.animal})
 - **Pour les dates rituelles** : Mentionne explicitement la fête (${ritualDate?.nomFrancais || 'N/A'}) et son loa associé
@@ -635,9 +635,8 @@ export function buildHoroscopeMetadata(
   ).slice(0, 3);
 
   const relevantLoas = loasData.filter(l =>
-    l.nomCreole.toLowerCase().includes(loaName?.toLowerCase() || '') ||
-    l.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase()
-  ).slice(0, 3);
+    l.nomCreole.toLowerCase().includes(loaName?.toLowerCase() || '')
+  ).slice(0, 1);
 
   const relevantAnimals = animauxData.filter(a =>
     a.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase() ||
