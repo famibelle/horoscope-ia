@@ -89,6 +89,22 @@ const SIGN_EN: Record<string, string> = {
   poissons: 'pisces',
 };
 
+function restoreApostrophes(text: string): string {
+  return text
+    .replace(/\baujourd hui\b/gi, "aujourd'hui")
+    .replace(/\bpresqu île\b/gi, "presqu'île")
+    // l' avant voyelle ou h (l arbre → l'arbre, l eau → l'eau)
+    .replace(/\bl ([aeiouhàâéèêëîïôùûüœæ])/gi, (_, v) => `l'${v}`)
+    // d' avant majuscule — noms propres (d Ogoun → d'Ogoun)
+    .replace(/\bd ([A-ZÁÀÂÉÈÊËÎÏÔÙÛÜ])/g, (_, v) => `d'${v}`)
+    // j' avant voyelle (j ai → j'ai)
+    .replace(/\bj ([aeiouyàâéèêëîïôùûü])/gi, (_, v) => `j'${v}`)
+    // c'est, s'il, n'est
+    .replace(/\bc (est\b|était)/gi, (_, v) => `c'${v}`)
+    .replace(/\bs (il\b|ils\b|elle\b|elles\b|en\b|y\b)/gi, (_, v) => `s'${v}`)
+    .replace(/\bn (est\b|a\b|ai\b|ont\b)/gi, (_, v) => `n'${v}`);
+}
+
 async function fetchRawHoroscope(signEn: string): Promise<string> {
   logVerbose(`Appel FreeHoroscopeAPI pour ${signEn}...`);
   const startTime = Date.now();
@@ -469,10 +485,10 @@ async function generateTeaser(
   // ==========================================
   if (teaser) {
     // Nettoyage post-génération du teaser
-    teaser = teaser
+    teaser = restoreApostrophes(teaser
       .replace(/\btambours?\b/gi, 'ka')
       .replace(/—/g, ',')
-      .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan');
+      .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan'));
 
     const teaserTerms = extractGlossaryTerms(teaser);
     if (teaserTerms.length > 0) {
@@ -708,10 +724,10 @@ export async function generateAllHoroscopes() {
         }
         // Nettoyage post-génération
         const cleanedContent = removeRedundantParentheses(
-          structured
+          restoreApostrophes(structured
             .replace(/\btambours?\b/gi, 'ka')
             .replace(/—/g, ',')
-            .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan')
+            .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan'))
         );
 
         // Générer le teaser
@@ -842,10 +858,10 @@ export async function generateAllHoroscopes() {
         }
         // Nettoyage post-génération
         const cleanedContent = removeRedundantParentheses(
-          structured
+          restoreApostrophes(structured
             .replace(/\btambours?\b/gi, 'ka')
             .replace(/—/g, ',')
-            .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan')
+            .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan'))
         );
 
         const teaser = await generateTeaser(sign.name, cleanedContent);

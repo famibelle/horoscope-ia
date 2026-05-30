@@ -253,7 +253,7 @@ Contraintes strictes de longueur (très important) :
 - Chaque section ("ouverture", "amour", "travail", "argent", "amitie", "prediction", "conseil") doit contenir entre 2 et 4 phrases maximum.
 - Ne dépasse jamais ces limites, sinon le format JSON sera corrompu.
 
-Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Les apostrophes ('), virgules, points, points d'exclamation et tirets simples (-) sont autorisés et nécessaires.
+Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Les apostrophes ('), virgules, points, points d'exclamation et tirets simples (-) sont autorisés et nécessaires. OBLIGATOIRE : toujours écrire les élisions avec leur apostrophe — l'arbre (pas "l arbre"), d'Ogoun (pas "d Ogoun"), aujourd'hui (pas "aujourd hui"), j'ai, c'est, s'il.
 
 ⚠️ SÉCURITÉ ABSOLUE — DANS TOUTES LES SECTIONS GÉNÉRÉES :
 - INTERDIT : allumer une bougie, une flamme, un feu ou un encens — dans n'importe quel champ (conseil, esprit, bienetre, beaute, maison, jardinage, ambiance). Sans aucune exception.
@@ -554,7 +554,7 @@ Note : Le champ "sante" (optionnel) peut être ajouté séparément avec EXACTEM
 Contraintes absolues : ton oral direct, parle à l'auditeur (tu/vous), vise 20–30 mots par phrase.
 - Ne cite jamais un mois autre que le mois en cours (${moisNom}). Décris plantes et animaux dans leur état aujourd'hui, pas dans un état futur ou passé.
 - "lajan" porte déjà l'article créole — ne jamais écrire "le lajan", "la lajan" ou "l'lajan". Écris simplement "lajan".
-Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Les apostrophes ('), virgules, points, points d'exclamation et tirets simples (-) sont autorisés et nécessaires.
+Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Les apostrophes ('), virgules, points, points d'exclamation et tirets simples (-) sont autorisés et nécessaires. OBLIGATOIRE : toujours écrire les élisions avec leur apostrophe — l'arbre (pas "l arbre"), d'Ogoun (pas "d Ogoun"), aujourd'hui (pas "aujourd hui"), j'ai, c'est, s'il.
 Intègre subtilement les références culturelles fournies ET le contexte vaudou.`;
 }
 
