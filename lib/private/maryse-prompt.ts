@@ -253,7 +253,7 @@ Contraintes strictes de longueur (très important) :
 - Chaque section ("ouverture", "amour", "travail", "argent", "amitie", "prediction", "conseil") doit contenir entre 2 et 4 phrases maximum.
 - Ne dépasse jamais ces limites, sinon le format JSON sera corrompu.
 
-Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Utilise uniquement des virgules, des points, des tirets simples (-) ou des espaces.
+Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Les apostrophes ('), virgules, points, points d'exclamation et tirets simples (-) sont autorisés et nécessaires.
 
 ⚠️ SÉCURITÉ ABSOLUE — LE "conseil" DOIT ÊTRE SYMBOLIQUE ET SANS DANGER :
 - INTERDIT : toute suggestion de laisser une flamme allumée sans surveillance (bougie, feu, encens), de s'endormir avec une bougie, de brûler quoi que ce soit dans un espace fermé.
@@ -526,7 +526,7 @@ Note : Le champ "sante" (optionnel) peut être ajouté séparément avec EXACTEM
 - Ne répète PAS un mot créole vaudou dans plusieurs sections
 
 Contraintes absolues : ton oral direct, parle à l'auditeur (tu/vous), vise 20–30 mots par phrase.
-Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Utilise uniquement des virgules, des points, des tirets simples (-) ou des espaces.
+Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Les apostrophes ('), virgules, points, points d'exclamation et tirets simples (-) sont autorisés et nécessaires.
 Intègre subtilement les références culturelles fournies ET le contexte vaudou.`;
 }
 
