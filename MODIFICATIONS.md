@@ -4,7 +4,15 @@
 
 ---
 
-## Post-processing (generate-horoscopes.ts)
+## Post-processing — ajouts récents (generate-horoscopes.ts)
+
+| Fonction | Effet |
+|---|---|
+| `removeSeve()` | Remplace "lajan circule/coule comme la sève [plante]." par "Lajan se déplace avec discernement aujourd'hui." — prohibition prompt ignorée par le modèle |
+
+---
+
+## Post-processing — historique (generate-horoscopes.ts)
 
 | Fonction | Effet |
 |---|---|
@@ -16,7 +24,16 @@
 
 ---
 
-## Prompt système (maryse-prompt.ts)
+## Prompt système — ajouts récents (maryse-prompt.ts)
+
+| Règle ajoutée | Problème corrigé |
+|---|---|
+| INTERDIT tout loa autre que `vaudouContext.loa` dans toutes les sections | Ezili dans Gémeaux amour (fuite thématique amour → Ezili) |
+| INTERDIT dans argent : métaphore "lajan circule/coule comme la sève" | Structure identique pour les 3 signes testés |
+
+---
+
+## Prompt système — historique (maryse-prompt.ts)
 
 | Règle ajoutée | Problème corrigé |
 |---|---|
