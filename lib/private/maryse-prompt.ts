@@ -535,14 +535,14 @@ STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien cr
 1. "ouverture" : UNE phrase - image caribéenne qui pose le ton du jour. **Utilise un symbole vaudou ou HISTOIRE-DATA si pertinent.**
 2. "amour" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les relations et le cœur. **Choisis parmi FAUNE-DATA, FLORE-DATA, KREYOL-DATA ou CONTEXTE VAUDOU.**
 3. "travail" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur l'action, l'effort. **Choisis parmi FAUNE-DATA, LIEUX-DATA ou CONTEXTE VAUDOU.**
-4. "argent" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les finances. **Choisis parmi FLORE-DATA ou CONTEXTE VAUDOU uniquement. INTERDIT : HISTOIRE-DATA dans cette section. INTERDIT : la métaphore "lajan circule/coule comme la sève" — trouve une image propre à ce signe.**
+4. "argent" : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur les finances. **Choisis parmi FLORE-DATA ou CONTEXTE VAUDOU uniquement. INTERDIT : HISTOIRE-DATA. INTERDIT : "lajan circule/coule comme la sève" (métaphore usée, même avec des plantes différentes).** Utilise plutôt une image ancrée dans le comportement de l'animal du signe, une pratique économique créole (le marché, la pêche, la récolte, le troc), ou un symbole vaudou de la famille du signe.
 5. "amitie" (Lyannaj) : EXACTEMENT 2 OU 4 phrases - ce que le signe dit sur le lien social. **Choisis parmi LIEUX-DATA, KREYOL-DATA ou CONTEXTE VAUDOU.**
 6. "prediction" : UNE phrase - tendance pour les jours à venir. **Utilise une métaphore naturelle, vaudou ou HISTOIRE-DATA.**
 7. "conseil" : UNE phrase - un conseil symbolique ou poétique basé sur une plante, un symbole OU un rituel vaudou. JAMAIS une action physique dangereuse (bougie sans surveillance, ingestion de plante, feu en espace fermé).
 
 ✨ **INTÈGRE LE CONTEXTE VAUDOU** ✨
 - **Le seul loa de cet horoscope est ${vaudouContext.loa}.** Cite-le UNE SEULE FOIS, dans la section la plus pertinente. Toutes les autres références spirituelles passent par des symboles naturels (plantes, animaux, lieux, couleurs) — pas par d'autres loas nommés.
-- **INTERDIT dans toutes les sections** : citer un loa autre que ${vaudouContext.loa}. En particulier, n'utilise pas Ezili dans "amour" si ce n'est pas le loa de ce signe — exprime la tendresse par les symboles naturels du signe.
+- **INTERDIT dans toutes les sections** : citer un loa autre que ${vaudouContext.loa} (ni Ezili, ni Legba, ni Damballa/Damballah, ni Baron, ni Ogoun, ni aucun autre). Si tu veux exprimer la tendresse, la mort, le chemin, utilise les symboles naturels du signe — jamais le nom d'un autre loa.
 - Si tu ressens le besoin de parler d'amour ou de mort ou de chemin, fais-le à travers les symboles naturels propres à CE signe (son animal, sa plante, son lieu) — pas à travers un loa, et pas à travers des images génériques partagées par tous les signes.
 - **INTERDIT dans "amour" et "amitie"** : soukougnan, volant, loup-garou, zombi, et toute créature de terreur ou de mort. Ces êtres n'ont aucune place dans les sections affectives — réserve-les à "prediction" si tu en as besoin.
 - **INTERDIT dans "conseil"** : Legba et toute bougie. Legba n'est pas le loa de tous les signes — n'utilise que ${vaudouContext.loa}. Le conseil doit être poétique, sans flamme, sans rituel physique.
