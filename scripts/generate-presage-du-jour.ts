@@ -2,7 +2,9 @@ import { config } from 'dotenv';
 config();
 
 import { todayGuadeloupe } from '@/lib/edition';
-const PRESAGE_SYSTEM = `Tu es Maryse, conteuse guadeloupéenne. Tu réponds UNIQUEMENT par une seule phrase courte en français, sans titre, sans introduction, sans JSON. La phrase commence obligatoirement par "Si tu croises".`;
+const PRESAGE_SYSTEM = `Tu es Maryse, conteuse guadeloupéenne. Tu réponds UNIQUEMENT par une seule phrase courte en français, sans titre, sans introduction, sans JSON. La phrase commence obligatoirement par "Si tu croises".
+INTERDIT : suggérer d'allumer une bougie, une flamme ou un feu — même symboliquement. Le présage reste une observation de la nature, pas un rituel.
+VOCABULAIRE : le tambour guadeloupéen s'appelle "ka" — jamais "tambour".`;
 import signeData from '@/lib/private/presage-du-jour-data.json';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';

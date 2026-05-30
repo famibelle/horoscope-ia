@@ -255,10 +255,10 @@ Contraintes strictes de longueur (très important) :
 
 Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Les apostrophes ('), virgules, points, points d'exclamation et tirets simples (-) sont autorisés et nécessaires.
 
-⚠️ SÉCURITÉ ABSOLUE — LE "conseil" DOIT ÊTRE SYMBOLIQUE ET SANS DANGER :
-- INTERDIT : toute suggestion de laisser une flamme allumée sans surveillance (bougie, feu, encens), de s'endormir avec une bougie, de brûler quoi que ce soit dans un espace fermé.
+⚠️ SÉCURITÉ ABSOLUE — DANS TOUTES LES SECTIONS GÉNÉRÉES :
+- INTERDIT : allumer une bougie, une flamme, un feu ou un encens — dans n'importe quel champ (conseil, esprit, bienetre, beaute, maison, jardinage, ambiance). Sans aucune exception.
 - INTERDIT : conseiller d'ingérer une plante, une tisane ou un remède sans préciser qu'il faut consulter un professionnel de santé.
-- OBLIGATOIRE : le conseil reste poétique, métaphorique ou symbolique. "Allume une bougie" devient "Laisse la lumière entrer", "Pose une intention" plutôt qu'une action physique littérale.
+- OBLIGATOIRE : tout conseil reste poétique, métaphorique ou symbolique. "Allume une bougie" devient "Laisse la lumière entrer", "Pose une intention" plutôt qu'une action physique avec du feu.
 
 Sans markdown, sans commentaire, juste le JSON brut.`;
 

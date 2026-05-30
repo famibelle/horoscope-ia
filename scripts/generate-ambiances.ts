@@ -269,7 +269,7 @@ Météo à Pointe-à-Pitre : ${weather}
 ${culturalContext}
 
 🔮 **CONTEXTE VAUDOU GUADELOUPÉEN** :
-📌 Signe ${sign.name} → Loa principal : **${loa || 'Legba'}** (${signVaudouContext?.famille || 'Rada'})
+📌 Signe ${sign.name} → Loa principal : **${loa}** (${signVaudouContext?.famille || 'Rada'})
    Énergie : ${signVaudouContext?.energie || 'Harmonie et équilibre'}
    Couleurs sacrées : ${(signVaudouContext?.couleurs || ['blanc']).join(', ')}
    Symbole : ${signVaudouContext?.emoji || '🔮'}
@@ -284,7 +284,7 @@ Réponds avec un objet JSON valide et ces clés exactes :
   "ambiance": "2-3 phrases sur l'énergie du jour, ancrées dans les références culturelles ci-dessus et cohérentes avec les scores. Intègre au moins 1 référence vaudou (loa, couleur, symbole).",
   "chiffrePorteBonheur": <entier 1-99, de préférence un nombre premier (2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97)>
   "compatibilite": ["<signId1>", "<signId2>"],
-  "loa": "${loa || 'Legba'}",
+  "loa": "${loa}",
   "familleVaudou": "${signVaudouContext?.famille || 'Rada'}",
   "couleursSacrees": ["${(signVaudouContext?.couleurs || ['blanc']).join('", "')}"],
   "lune": {
@@ -297,6 +297,7 @@ Réponds avec un objet JSON valide et ces clés exactes :
 }
 
 Pour "compatibilite" choisis exactement 2 valeurs parmi : ${finalCompatibleSigns.join(', ')} (basé sur la compatibilité vaudou via les loas).
+SÉCURITÉ — dans tous les champs lune (bienetre, beaute, esprit, maison, jardinage) : JAMAIS de bougie, flamme ou feu. JAMAIS Legba sauf si c'est le loa assigné au signe. Le tambour guadeloupéen s'appelle "ka", jamais "tambour".
 Utilise 1 mot créole max par phrase, TOUJOURS avec traduction entre parenthèses.
 Sans markdown dans les valeurs JSON.`;
 
