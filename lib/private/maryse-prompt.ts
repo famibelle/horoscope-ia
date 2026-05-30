@@ -274,12 +274,20 @@ function matchesWord(text: string, word: string): boolean {
   return new RegExp(`\\b${word}\\b`, 'i').test(text);
 }
 
+// Variantes orthographiques connues en créole guadeloupéen
+const CREOLE_VARIANTS: Record<string, string> = {
+  'balizié': 'balisié',
+  'balizier': 'balisier',
+  'balize': 'balise',
+};
+
 // Découpe les noms composés ("Colibri huppé / Foufou", "Marakoudja (Fruit de la passion)")
 // en tokens individuels, en splitant sur / et les parenthèses.
 function splitTokens(...parts: (string | undefined)[]): string[] {
   return parts
     .flatMap(s => (s || '').split(/[/()\[\]]/g).map(t => t.trim().toLowerCase()))
-    .filter(t => t.length >= 3);
+    .filter(t => t.length >= 3)
+    .map(t => CREOLE_VARIANTS[t] ?? t);
 }
 
 // Exclut les périodes longues type "2000-2026" qui remontent par faux positif sur l'année.
@@ -538,6 +546,7 @@ STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien cr
 - **INTERDIT dans "amour" et "amitie"** : soukougnan, volant, loup-garou, zombi, et toute créature de terreur ou de mort. Ces êtres n'ont aucune place dans les sections affectives — réserve-les à "prediction" si tu en as besoin.
 - **INTERDIT dans "conseil"** : Legba et toute bougie. Legba n'est pas le loa de tous les signes — n'utilise que ${vaudouContext.loa}. Le conseil doit être poétique, sans flamme, sans rituel physique.
 - **Utilise 1 mot créole vaudou max par section** (ex: "Lajan", "Zerbenn", "Vèvè"), TOUJOURS avec traduction entre parenthèses — NB : en créole guadeloupéen l'argent se dit "lajan", jamais "kòb"
+- **"Vèvè" : 1 occurrence MAXIMUM dans tout l'horoscope.** Ne l'utilise pas dans ouverture ET conseil. S'il est dans l'ouverture, pas de vèvè ailleurs. S'il est dans le conseil, pas de vèvè ailleurs.
 - **NB orthographe** : la figure mythologique s'écrit "soukougnan" (orthographe guadeloupéenne), jamais "soukouyan" ni "soukounyan". Le soukougnan RETIRE SA PROPRE PEAU — ne jamais inventer de rituel de protection humaine contre lui qui n'existe pas dans le folklore.
 - **Priorité aux symboles vaudou** : couleurs (${(SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || []).join(', ')}), plantes (${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.plante}), animaux (${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.animal})
 - **Pour les dates rituelles** : Mentionne explicitement la fête (${ritualDate?.nomFrancais || 'N/A'}) et son loa associé
