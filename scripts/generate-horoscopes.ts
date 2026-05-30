@@ -447,7 +447,7 @@ async function generateTeaser(
           {
             role: 'system',
             content:
-              `Tu es Maryse CondAI. Rédige une accroche de 2 phrases maximum à partir de l'horoscope du ${signName}, en voix directe et sensuelle, qui donne envie de lire la suite sans tout révéler. Pas de titre, pas de ponctuation finale superflue.`,
+              `Tu es Maryse CondAI. Rédige une accroche de 2 phrases maximum à partir de l'horoscope du ${signName}, en voix directe et sensuelle, qui donne envie de lire la suite sans tout révéler. Le tambour guadeloupéen s'appelle "ka" — jamais "tambour". Pas de titre, pas de ponctuation finale superflue.`,
           },
           { role: 'user', content: fullText },
         ],
@@ -468,6 +468,9 @@ async function generateTeaser(
   // 📚 EXTRACTION DES TERMES POUR LE GLOSSAIRE (TEASER)
   // ==========================================
   if (teaser) {
+    // Garde-fou : "tambour(s)" → "ka" (le terme créole correct en Guadeloupe)
+    teaser = teaser.replace(/\btambours?\b/gi, 'ka');
+
     const teaserTerms = extractGlossaryTerms(teaser);
     if (teaserTerms.length > 0) {
       const dateToday = new Date().toISOString().split('T')[0];
