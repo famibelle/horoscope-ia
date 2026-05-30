@@ -468,8 +468,7 @@ ${histoireEnrichies.map(h => `  - ${h.periode}: ${h.faitHistorique}`).join('\n')
    Couleurs sacrées : ${(SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || ['blanc']).join(', ')}
    Symbole : ${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.emoji || '🔮'}
 
-💫 Loa de l'édition "${edition}" : **${EDITION_TO_VAUDOU_CONTEXT[edition]?.loa || 'Legba'}**
-   Énergie : ${EDITION_TO_VAUDOU_CONTEXT[edition]?.energie || 'Ouverture'}
+💫 Ambiance de l'édition "${edition}" : ${EDITION_TO_VAUDOU_CONTEXT[edition]?.energie || 'Ouverture et chemin'}
 
 ${isRitual ? `⭐ DATE RITUELLE SPÉCIALE : **${ritualDate?.nomFrancais || ritualDate?.nomCreole || 'Cérémonie sacrée'}**
    Loa associé : ${ritualDate?.famille || 'Multiple'}
@@ -508,8 +507,9 @@ STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien cr
 6. "prediction" : UNE phrase - tendance pour les jours à venir. **Utilise une métaphore naturelle ou vaudou.**
 7. "conseil" : UNE phrase - un conseil symbolique ou poétique basé sur une plante, un symbole OU un rituel vaudou. JAMAIS une action physique dangereuse (bougie sans surveillance, ingestion de plante, feu en espace fermé).
 
-✨ **NOUVEAU : INTÈGRE LE CONTEXTE VAUDOU** ✨
-- **Dans au moins 3 sections**, fais référence au loa principal (${vaudouContext.loa}) ou à l'énergie de l'édition (${EDITION_TO_VAUDOU_CONTEXT[edition]?.loa})
+✨ **INTÈGRE LE CONTEXTE VAUDOU** ✨
+- **Le seul loa de cet horoscope est ${vaudouContext.loa}.** Cite-le UNE SEULE FOIS, dans la section la plus pertinente. Toutes les autres références spirituelles passent par des symboles naturels (plantes, animaux, lieux, couleurs) — pas par d'autres loas nommés.
+- Si tu ressens le besoin de parler d'amour ou de mort ou de chemin, fais-le à travers des images créoles — la mer, le fromager, le colibri — pas à travers un loa.
 - **Utilise 1 mot créole vaudou max par section** (ex: "Lajan", "Zerbenn", "Vèvè"), TOUJOURS avec traduction entre parenthèses — NB : en créole guadeloupéen l'argent se dit "lajan", jamais "kòb"
 - **NB orthographe** : la figure mythologique s'écrit "soukougnan" (orthographe guadeloupéenne), jamais "soukouyan" ni "soukounyan". Le soukougnan RETIRE SA PROPRE PEAU — ne jamais inventer de rituel de protection humaine contre lui qui n'existe pas dans le folklore.
 - **Priorité aux symboles vaudou** : couleurs (${(SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || []).join(', ')}), plantes (${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.plante}), animaux (${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.animal})
