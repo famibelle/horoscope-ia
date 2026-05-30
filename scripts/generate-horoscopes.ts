@@ -703,8 +703,10 @@ export async function generateAllHoroscopes() {
           const sourceFile = `horoscopes/${todayGuadeloupe()}.json`;
           updateGlossary(terms, dateToday, sourceFile);
         }
-        // Nettoyage des parenthèses redondantes
-        const cleanedContent = removeRedundantParentheses(structured);
+        // Nettoyage des parenthèses redondantes + "tambour" → "ka"
+        const cleanedContent = removeRedundantParentheses(
+          structured.replace(/\btambours?\b/gi, 'ka')
+        );
 
         // Générer le teaser
         console.log(`   🤖 Appel Mistral (small) pour teaser...`);
@@ -832,8 +834,10 @@ export async function generateAllHoroscopes() {
           const sourceFile = `horoscopes/${today}.json`;
           updateGlossary(terms, dateToday, sourceFile);
         }
-        // Nettoyage des parenthèses redondantes
-        const cleanedContent = removeRedundantParentheses(structured);
+        // Nettoyage des parenthèses redondantes + "tambour" → "ka"
+        const cleanedContent = removeRedundantParentheses(
+          structured.replace(/\btambours?\b/gi, 'ka')
+        );
 
         const teaser = await generateTeaser(sign.name, cleanedContent);
         console.log(`   ✓ Teaser: OK`);
