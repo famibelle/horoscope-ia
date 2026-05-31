@@ -1,377 +1,209 @@
 /**
- * Générateur de templates pour la newsletter d'horoscope
- * Templates simples et réutilisables pour différents formats
+ * Templates HTML email pour la newsletter Horoscope Karukera
+ * Design : thème ancestral sombre, palette du site
+ * Compatible email (inline styles, pas de flexbox/grid complexe)
  */
 
 import { Sign } from './signs-data';
 import { HoroscopeResponse } from './horoscope-data';
 
-// Interface pour les données de la newsletter
-interface NewsletterData {
+// ── Palette ──────────────────────────────────────────────────────────────────
+const C = {
+  bg:           '#0d0d1a',   // fond principal
+  card:         '#13111f',   // fond carte
+  cardAlt:      '#1a1428',   // fond carte alternée
+  border:       '#2a2040',   // bordure subtile
+  gold:         '#FFD700',   // ancestral-gold
+  terracotta:   '#CD5C5C',   // ancestral-terracotta
+  forest:       '#228B22',   // ancestral-forest
+  earth:        '#8B4513',   // ancestral-earth
+  cream:        '#F5F5DC',   // ancestral-cream
+  creamFaint:   '#c8c8a0',   // cream atténué
+  purple:       '#7c3aed',   // accent violet
+};
+
+// ── Types ─────────────────────────────────────────────────────────────────────
+export interface NewsletterData {
   date: string;
   sign: Sign;
   horoscope: HoroscopeResponse;
   culturalTip?: string;
-  specialAdvice?: string;
   ritual?: string;
 }
 
-// Template HTML de base pour un signe
-function getSignHtmlTemplate(data: NewsletterData): string {
-  return `
-<div style="
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border-radius: 12px;
-  padding: 24px;
-  margin: 16px 0;
-  border-left: 4px solid #7c3aed;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-">
-  <div style="display: flex; align-items: center; margin-bottom: 16px;">
-    <div style="
-      width: 48px;
-      height: 48px;
-      background: #7c3aed;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
-      margin-right: 12px;
-      flex-shrink: 0;
-    ">
-      ${data.sign.emoji || data.sign.name.slice(0, 2)}
-    </div>
-    <div>
-      <h3 style="
-        margin: 0;
-        color: #2d3748;
-        font-size: 18px;
-        font-weight: 600;
-      ">
-        ${data.sign.name} (${data.sign.nomKreyol})
-      </h3>
-      <p style="
-        margin: 4px 0 0 0;
-        color: #718096;
-        font-size: 14px;
-      ">
-        ${data.sign.element} | ${data.sign.faune?.nom_creole || '—'} | ${data.sign.flore?.nom_creole || '—'}
-      </p>
-    </div>
-  </div>
-
-  <div style="margin: 16px 0;">
-    <p style="
-      color: #4a5568;
-      line-height: 1.6;
-      margin: 0 0 12px 0;
-    ">
-      <strong style="color: #7c3aed;">Ce matin :</strong> ${data.horoscope.ouverture}
-    </p>
-    <p style="
-      color: #4a5568;
-      line-height: 1.6;
-      margin: 0 0 12px 0;
-    ">
-      <strong style="color: #7c3aed;">Cet après-midi :</strong> ${data.horoscope.amour}
-    </p>
-    <p style="
-      color: #4a5568;
-      line-height: 1.6;
-      margin: 0;
-    ">
-      <strong style="color: #7c3aed;">Ce soir :</strong> ${data.horoscope.travail}
-    </p>
-  </div>
-
-  ${data.culturalTip ? `
-  <div style="
-    background: rgba(124, 58, 237, 0.05);
-    border-left: 2px solid #7c3aed;
-    padding: 12px;
-    margin: 16px 0;
-    border-radius: 6px;
-  ">
-    <p style="
-      color: #7c3aed;
-      font-style: italic;
-      margin: 0 0 8px 0;
-      font-weight: 500;
-    ">
-      Conseil de résistance
-    </p>
-    <p style="
-      color: #4a5568;
-      margin: 0;
-      font-size: 14px;
-      line-height: 1.5;
-    ">
-      ${data.culturalTip}
-    </p>
-  </div>
-  ` : ''}
-
-  ${data.ritual ? `
-  <div style="
-    background: rgba(59, 130, 246, 0.05);
-    border-left: 2px solid #3b82f6;
-    padding: 12px;
-    margin: 16px 0;
-    border-radius: 6px;
-  ">
-    <p style="
-      color: #3b82f6;
-      font-style: italic;
-      margin: 0 0 8px 0;
-      font-weight: 500;
-    ">
-      Rituel du jour
-    </p>
-    <p style="
-      color: #4a5568;
-      margin: 0;
-      font-size: 14px;
-      line-height: 1.5;
-    ">
-      ${data.ritual}
-    </p>
-  </div>
-  ` : ''}
-
-  <div style="
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid #e2e8f0;
-    text-align: center;
-  ">
-    <a href="https://horoscope-guadeloupe.com/horoscope/${data.sign.id}?date=${data.date}" 
-       style="
-         display: inline-block;
-         background: #7c3aed;
-         color: white;
-         padding: 8px 16px;
-         border-radius: 6px;
-         text-decoration: none;
-         font-weight: 500;
-         font-size: 14px;
-         transition: background 0.2s;
-       "
-       onmouseover="this.style.background='#6b21a8'"
-       onmouseout="this.style.background='#7c3aed'"
-    >
-      Lire mon horoscope complet
-    </a>
-  </div>
-</div>
-  `;
+export interface PresageData {
+  type: string;
+  nom_creole: string;
+  nom_commun: string;
+  presage_naturel: string;
+  interpretation: Record<string, string> | string;
 }
 
-// Template texte simple pour un signe
-function getSignTextTemplate(data: NewsletterData): string {
-  return `
-${data.sign.name} (${data.sign.nomKreyol})
-${'='.repeat(data.sign.name.length + data.sign.nomKreyol.length + 3)}
+// ── Sections du signe (labels du site) ───────────────────────────────────────
+const SECTIONS = [
+  { key: 'ouverture',  label: 'Parole des ancêtres', color: C.gold,        emoji: '✦' },
+  { key: 'amour',      label: 'Amour',               color: C.terracotta,  emoji: '❤' },
+  { key: 'travail',    label: 'Travail',              color: C.forest,      emoji: '⚒' },
+  { key: 'argent',     label: 'Argent',               color: C.gold,        emoji: '✧' },
+  { key: 'amitie',     label: 'Lyannaj',              color: C.earth,       emoji: '⟡' },
+  { key: 'prediction', label: 'Présage ancestral',    color: C.gold,        emoji: '◈' },
+  { key: 'conseil',    label: 'Conseil de Maryse',    color: C.forest,      emoji: '✿' },
+] as const;
 
-Élément: ${data.sign.element}
-Faune: ${data.sign.faune?.nom_creole || '—'}
-Flore: ${data.sign.flore?.nom_creole || '—'}
-
-Ce matin: ${data.horoscope.ouverture}
-Cet après-midi: ${data.horoscope.amour}
-Ce soir: ${data.horoscope.travail}
-
-${data.culturalTip ? `
-CONSEIL DE RÉSISTANCE:
-${data.culturalTip}
-` : ''}
-
-${data.ritual ? `
-RITUEL DU JOUR:
-${data.ritual}
-` : ''}
-
-Lire mon horoscope complet:
-https://horoscope-guadeloupe.com/horoscope/${data.sign.id}?date=${data.date}
-
-${'—'.repeat(20)}
-  `;
-}
-
-// Template pour l'en-tête de la newsletter
-function getHeaderTemplate(date: string): string {
-  const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-  const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 
-                  'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-  
-  const d = new Date(date);
-  const dayName = days[d.getDay()];
-  const day = d.getDate();
-  const month = months[d.getMonth()];
-  const year = d.getFullYear();
+// ── Header ────────────────────────────────────────────────────────────────────
+export function getHeaderTemplate(date: string): string {
+  const d = new Date(date + 'T12:00:00');
+  const day = d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const dayCapitalized = day.charAt(0).toUpperCase() + day.slice(1);
 
   return `
-<div style="
-  text-align: center;
-  padding: 32px 24px;
-  background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
-  color: white;
-  border-radius: 12px 12px 0 0;
-">
-  <h1 style="
-    margin: 0;
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 8px;
-  ">
-    🌟 Horoscope Guadeloupéen
+<div style="background:${C.bg};padding:40px 32px 32px;text-align:center;border-bottom:1px solid ${C.border};">
+  <p style="margin:0 0 8px;font-family:Georgia,serif;font-size:13px;letter-spacing:4px;color:${C.gold};text-transform:uppercase;">
+    Horoscope Karukera
+  </p>
+  <h1 style="margin:0 0 12px;font-family:Georgia,serif;font-size:30px;font-weight:700;color:${C.cream};line-height:1.2;">
+    Les étoiles de Gwadloup<br>vous parlent
   </h1>
-  <p style="
-    margin: 0;
-    font-size: 18px;
-    opacity: 0.9;
-    margin-bottom: 4px;
-  ">
-    ${dayName} ${day} ${month} ${year}
+  <p style="margin:0;font-family:Arial,sans-serif;font-size:15px;color:${C.creamFaint};">
+    ${dayCapitalized}
   </p>
-  <p style="
-    margin: 0;
-    font-size: 14px;
-    opacity: 0.8;
-    font-style: italic;
-  ">
-    "Les esprits de Karukera vous parlent"
-  </p>
-</div>
-  `;
+</div>`.trim();
 }
 
-// Template pour le pied de page
-function getFooterTemplate(): string {
-  return `
-<div style="
-  text-align: center;
-  padding: 24px;
-  color: #718096;
-  font-size: 12px;
-  margin-top: 32px;
-">
-  <p style="margin: 0 0 8px 0;">
-    Cet email vous est envoyé depuis la Guadeloupe avec amour ❤️
-  </p>
-  <p style="margin: 0 0 8px 0;">
-    <a href="https://horoscope-guadeloupe.com" style="color: #7c3aed; text-decoration: none;">
-      Visitez notre site
-    </a> | 
-    <a href="{{unsubscribe_link}}" style="color: #7c3aed; text-decoration: none;">
-      Se désabonner
-    </a>
-  </p>
-  <p style="margin: 0;">
-    © ${new Date().getFullYear()} Horoscope Guadeloupéen. Tous droits réservés.
-  </p>
-</div>
-  `;
-}
+// ── Présage du jour ───────────────────────────────────────────────────────────
+export function getPresageTemplate(presage: PresageData): string {
+  const interpretation = typeof presage.interpretation === 'string'
+    ? presage.interpretation
+    : presage.interpretation?.texte ?? presage.interpretation?.general ?? '';
 
-// Template pour la section culturelle
-function getCulturalSectionTemplate(title: string, content: string, imageUrl?: string): string {
   return `
-<div style="
-  background: white;
-  border-radius: 12px;
-  padding: 24px;
-  margin: 24px 0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-">
-  <h2 style="
-    color: #2d3748;
-    font-size: 20px;
-    margin: 0 0 16px 0;
-    padding-bottom: 8px;
-    border-bottom: 2px solid #7c3aed;
-  ">
-    ${title}
+<div style="margin:0;padding:28px 32px;background:${C.cardAlt};border-top:2px solid ${C.gold};border-bottom:1px solid ${C.border};">
+  <p style="margin:0 0 6px;font-family:Georgia,serif;font-size:11px;letter-spacing:3px;color:${C.gold};text-transform:uppercase;">
+    Signe du jour
+  </p>
+  <h2 style="margin:0 0 4px;font-family:Georgia,serif;font-size:20px;color:${C.cream};">
+    ${presage.nom_creole}
+    <span style="font-size:14px;color:${C.creamFaint};font-style:italic;"> — ${presage.nom_commun}</span>
   </h2>
-  
-  ${imageUrl ? `
-  <img src="${imageUrl}" alt="${title}" style="
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin-bottom: 16px;
-  " />
-  ` : ''}
-  
-  <p style="
-    color: #4a5568;
-    line-height: 1.6;
-    margin: 0;
-  ">
-    ${content}
+  <p style="margin:12px 0 0;font-family:Georgia,serif;font-size:16px;color:${C.cream};line-height:1.6;font-style:italic;">
+    "${presage.presage_naturel}"
   </p>
-</div>
-  `;
+  ${interpretation ? `<p style="margin:10px 0 0;font-family:Arial,sans-serif;font-size:14px;color:${C.creamFaint};line-height:1.6;">${interpretation}</p>` : ''}
+</div>`.trim();
 }
 
-// Template pour les prévisions spéciales
-function getSpecialPredictionsTemplate(predictions: {
-  love: string;
-  work: string;
-  money: string;
-  health: string;
-}): string {
+// ── Carte d'un signe ─────────────────────────────────────────────────────────
+export function getSignHtmlTemplate(data: NewsletterData): string {
+  const { sign, horoscope } = data;
+
+  const teaser = horoscope.teaser
+    ? `<div style="margin:0 0 20px;padding:16px;background:rgba(255,215,0,0.06);border-left:3px solid ${C.gold};">
+         <p style="margin:0;font-family:Georgia,serif;font-size:15px;color:${C.cream};line-height:1.6;font-style:italic;">"${horoscope.teaser}"</p>
+       </div>`
+    : '';
+
+  const sections = SECTIONS.map(({ key, label, color, emoji }) => {
+    const text = (horoscope as any)[key];
+    if (!text) return '';
+    return `
+<div style="margin:0 0 16px;">
+  <p style="margin:0 0 4px;font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;color:${color};text-transform:uppercase;">
+    ${emoji} ${label}
+  </p>
+  <p style="margin:0;font-family:Arial,sans-serif;font-size:14px;color:${C.creamFaint};line-height:1.7;">
+    ${text}
+  </p>
+</div>`.trim();
+  }).join('\n');
+
+  const meta = [
+    sign.element && `${sign.element}`,
+    sign.faune?.nom_creole && sign.faune.nom_creole,
+    sign.flore?.nom_creole && sign.flore.nom_creole,
+  ].filter(Boolean).join(' · ');
+
   return `
-<div style="
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-  border-radius: 12px;
-  padding: 24px;
-  margin: 24px 0;
-">
-  <h2 style="
-    color: #1e40af;
-    font-size: 20px;
-    margin: 0 0 20px 0;
-    text-align: center;
-  ">
-    🔮 Prévisions Spéciales du Jour
-  </h2>
-  
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-    <div style="text-align: center; padding: 12px; background: white; border-radius: 8px;">
-      <p style="margin: 0 0 8px 0; color: #ef4444; font-weight: 600;">❤️ Amour</p>
-      <p style="margin: 0; color: #4a5568; font-size: 14px;">${predictions.love}</p>
-    </div>
-    
-    <div style="text-align: center; padding: 12px; background: white; border-radius: 8px;">
-      <p style="margin: 0 0 8px 0; color: #f59e0b; font-weight: 600;">💼 Travail</p>
-      <p style="margin: 0; color: #4a5568; font-size: 14px;">${predictions.work}</p>
-    </div>
-    
-    <div style="text-align: center; padding: 12px; background: white; border-radius: 8px;">
-      <p style="margin: 0 0 8px 0; color: #10b981; font-weight: 600;">💰 Argent</p>
-      <p style="margin: 0; color: #4a5568; font-size: 14px;">${predictions.money}</p>
-    </div>
-    
-    <div style="text-align: center; padding: 12px; background: white; border-radius: 8px;">
-      <p style="margin: 0 0 8px 0; color: #8b5cf6; font-weight: 600;">🏥 Santé</p>
-      <p style="margin: 0; color: #4a5568; font-size: 14px;">${predictions.health}</p>
-    </div>
+<div style="margin:0;padding:28px 32px;border-bottom:1px solid ${C.border};background:${C.card};">
+  <div style="margin:0 0 20px;">
+    <h3 style="margin:0 0 4px;font-family:Georgia,serif;font-size:22px;color:${C.cream};">
+      ${sign.name}
+      <span style="font-size:15px;color:${C.gold};font-style:italic;"> ${sign.nomKreyol ?? ''}</span>
+    </h3>
+    ${meta ? `<p style="margin:0;font-family:Arial,sans-serif;font-size:12px;color:${C.creamFaint};letter-spacing:1px;">${meta}</p>` : ''}
   </div>
-</div>
-  `;
+
+  ${teaser}
+  ${sections}
+
+  <div style="margin:20px 0 0;text-align:center;">
+    <a href="https://horoscope-guadeloupe.com/horoscope/${sign.id}"
+       style="display:inline-block;padding:10px 24px;background:transparent;color:${C.gold};border:1px solid ${C.gold};font-family:Arial,sans-serif;font-size:13px;text-decoration:none;letter-spacing:1px;">
+      Lire l'horoscope complet →
+    </a>
+  </div>
+</div>`.trim();
 }
 
-// Export des templates
+// ── Template texte brut ───────────────────────────────────────────────────────
+export function getSignTextTemplate(data: NewsletterData): string {
+  const { sign, horoscope } = data;
+  const lines = [`\n${sign.name} (${sign.nomKreyol ?? ''})\n${'─'.repeat(40)}`];
+  for (const { key, label } of SECTIONS) {
+    const text = (horoscope as any)[key];
+    if (text) lines.push(`${label} :\n${text}`);
+  }
+  lines.push(`\nhttps://horoscope-guadeloupe.com/horoscope/${sign.id}\n`);
+  return lines.join('\n\n');
+}
+
+// ── Footer ────────────────────────────────────────────────────────────────────
+export function getFooterTemplate(unsubscribeUrl = '{{unsubscribe_url}}'): string {
+  return `
+<div style="padding:28px 32px;background:${C.bg};text-align:center;border-top:1px solid ${C.border};">
+  <p style="margin:0 0 8px;font-family:Georgia,serif;font-size:13px;color:${C.creamFaint};font-style:italic;">
+    Transmis depuis Karukera avec amour
+  </p>
+  <p style="margin:0 0 16px;font-family:Arial,sans-serif;font-size:12px;color:${C.border};">
+    <a href="https://horoscope-guadeloupe.com" style="color:${C.gold};text-decoration:none;">horoscope-guadeloupe.com</a>
+    &nbsp;·&nbsp;
+    <a href="${unsubscribeUrl}" style="color:${C.creamFaint};text-decoration:none;">Se désabonner</a>
+  </p>
+  <p style="margin:0;font-family:Arial,sans-serif;font-size:11px;color:#333344;">
+    © ${new Date().getFullYear()} Horoscope Karukera
+  </p>
+</div>`.trim();
+}
+
+// ── Enveloppe HTML complète ───────────────────────────────────────────────────
+export function wrapHtml(subject: string, body: string): string {
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>${subject}</title>
+</head>
+<body style="margin:0;padding:0;background:${C.bg};">
+<div style="max-width:600px;margin:0 auto;background:${C.bg};">
+${body}
+</div>
+</body>
+</html>`;
+}
+
+// ── Export legacy (compatibilité avec le code existant) ───────────────────────
 const NewsletterTemplates = {
   getSignHtmlTemplate,
   getSignTextTemplate,
   getHeaderTemplate,
-  getFooterTemplate,
-  getCulturalSectionTemplate,
-  getSpecialPredictionsTemplate
+  getFooterTemplate: () => getFooterTemplate(),
+  getCulturalSectionTemplate: (title: string, content: string) => `
+<div style="margin:0;padding:28px 32px;background:${C.cardAlt};border-bottom:1px solid ${C.border};">
+  <h2 style="margin:0 0 12px;font-family:Georgia,serif;font-size:18px;color:${C.gold};">${title}</h2>
+  <p style="margin:0;font-family:Arial,sans-serif;font-size:14px;color:${C.creamFaint};line-height:1.7;">${content}</p>
+</div>`.trim(),
+  getSpecialPredictionsTemplate: () => '',
 };
 
-export type { NewsletterData };
 export default NewsletterTemplates;

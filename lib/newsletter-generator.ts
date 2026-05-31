@@ -6,13 +6,32 @@
 import { signs } from './signs-data';
 import { todayGuadeloupe } from './edition';
 import { getEditionFromDate } from './private/tts-prompt';
-import NewsletterTemplates, { NewsletterData } from './newsletter-templates';
+import NewsletterTemplates, { NewsletterData, PresageData, getHeaderTemplate, getPresageTemplate, getSignHtmlTemplate, getSignTextTemplate, getFooterTemplate, wrapHtml } from './newsletter-templates';
 import { HoroscopeResponse } from './horoscope-data';
 import { floreData } from './private/flore-data';
 import { fauneData } from './private/faune-data';
 import { lieuxData } from './private/lieux-data';
 import { kreyolData } from './private/kreyol-data';
 import { histoireData } from './private/histoire-data';
+
+// Charger le présage du jour depuis Supabase
+async function fetchPresageFromSupabase(date: string): Promise<PresageData | null> {
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !key) return null;
+
+  try {
+    const res = await fetch(
+      `${supabaseUrl}/rest/v1/presages?date=eq.${date}&select=*&limit=1`,
+      { headers: { apikey: key, Authorization: `Bearer ${key}` } },
+    );
+    if (!res.ok) return null;
+    const rows = await res.json();
+    return rows[0] ?? null;
+  } catch {
+    return null;
+  }
+}
 
 // Charger les horoscopes depuis Supabase via REST (sans SDK, compatible CI)
 async function fetchHoroscopesFromSupabase(date: string, edition: string): Promise<SignHoroscope[]> {
@@ -544,7 +563,53 @@ export async function generateDailyNewsletter(
 ): Promise<Newsletter> {
   // Charger les vrais horoscopes depuis Supabase (édition matin — newsletter lue au réveil)
   const horoscopes = await fetchHoroscopesFromSupabase(date, 'matin');
-  return generateNewsletter(date, horoscopes, subscriberName);
+  const presage    = await fetchPresageFromSupabase(date);
+
+  const subject = `✦ Horoscope Karukera — ${new Date(date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}`;
+
+  let htmlBody = getHeaderTemplate(date);
+  let text = `HOROSCOPE KARUKERA — ${date}\n${'═'.repeat(50)}\n`;
+
+  if (presage) {
+    htmlBody += getPresageTemplate(presage);
+    text += `\nSIGNE DU JOUR : ${presage.nom_creole} (${presage.nom_commun})\n`;
+    text += `"${presage.presage_naturel}"\n`;
+  }
+
+  // Signes — vrais ou simulés
+  const allSignsData: SignHoroscope[] = horoscopes.length > 0
+    ? horoscopes
+    : signs.map(sign => ({
+        sign,
+        horoscope: {
+          ouverture:  `Les esprits de Karukera accompagnent les natifs du ${sign.name} aujourd'hui.`,
+          amour:      'Le cœur sait où aller, laissez-le guider.',
+          travail:    'Votre persévérance porte ses fruits.',
+          argent:     'Gérez avec sagesse ce qui vous est confié.',
+          amitie:     'Le lyannaj est votre force ce jour.',
+          prediction: 'Un présage favorable se dessine à l\'horizon.',
+          conseil:    'Écoutez la voix des ancêtres en vous.',
+          signFr:     sign.name,
+          weather:    '',
+          edition:    'matin',
+          source:     'fallback',
+        } as HoroscopeResponse,
+      }));
+
+  for (const { sign, horoscope } of allSignsData) {
+    const data: NewsletterData = { date, sign, horoscope };
+    htmlBody += getSignHtmlTemplate(data);
+    text     += getSignTextTemplate(data);
+  }
+
+  htmlBody += getFooterTemplate();
+
+  return {
+    subject,
+    html: wrapHtml(subject, htmlBody),
+    text,
+    date,
+  };
 }
 
 // Générateur de newsletter pour un signe spécifique
