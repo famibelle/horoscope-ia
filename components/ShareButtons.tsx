@@ -76,7 +76,7 @@ export default function ShareButtons() {
   };
 
   return (
-    <section className="px-4 py-10 max-w-2xl mx-auto">
+    <section id="partager" className="px-4 py-10 max-w-2xl mx-auto">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
