@@ -60,7 +60,7 @@ if (options.force) {
   console.log('⚡ Mode force activé - régénération forcée');
 }
 
-import { MARYSE_SYSTEM, buildHoroscopeUserPrompt, buildHoroscopeMetadata, type Edition, type HoroscopeMetadata } from '@/lib/private/maryse-prompt';
+import { MARYSE_SYSTEM, buildHoroscopeUserPrompt, buildHoroscopeMetadata, type Edition, type HoroscopeMetadata, type CulturalContext } from '@/lib/private/maryse-prompt';
 import {
   getMedicinalPlant,
   getResistancePratique,
@@ -380,7 +380,17 @@ async function generateWithMistral(
   const loasPertinents = [SIGN_TO_LOA[signId], ...Object.values(SIGN_TO_LOA).filter(l => l !== SIGN_TO_LOA[signId])].slice(0, 3);
   logVerbose('📚 LOAS PERTINENTS (pour le prompt)', loasPertinents);
 
-  const userPrompt = buildHoroscopeUserPrompt(sign, rawText, weather, edition, undefined, undefined);
+  const culturalCtx: CulturalContext = {
+    medicinal,
+    pratique,
+    objet,
+    faune:    faune?.nomCreole ? faune : undefined,
+    flore:    flore?.nomCreole ? flore : undefined,
+    lieu:     lieu?.nomCreole  ? lieu  : undefined,
+    historicalResonance,
+  };
+
+  const userPrompt = buildHoroscopeUserPrompt(sign, rawText, weather, edition, undefined, undefined, culturalCtx);
   logVerbose(`Prompt utilisateur généré (${userPrompt.length} caractères)`);
   logVerbose(`Modèle: mistral-large-latest, Temp: 0.75, Max tokens: 900`);
 

@@ -247,6 +247,18 @@ Tu rédiges UNIQUEMENT le signe du jour — une plante, un arbre ou un animal de
 /* ── Prompts utilisateur - Voir horoscope_instructions.md ━ */
 /* Structure : 1 phrase (ouverture/prediction/conseil) ou 2-4 phrases (amour/travail/argent/amitie/sante) */
 
+// ── Contexte culturel quotidien (depuis cultural-context.ts) ─────────────────
+// Passé par generateWithMistral — évite de dupliquer les lookups
+export interface CulturalContext {
+  medicinal?: { nomCreole: string; nomFr: string; usage: string };
+  pratique?:  { nomCreole: string; nomFr: string; dimension: string };
+  objet?:     { nomCreole: string; nomFr: string; dimension: string };
+  faune?:     { nomCreole: string; nomFr: string; culture: string };
+  flore?:     { nomCreole: string; nomFr: string; culture: string };
+  lieu?:      { nomCreole: string; nomFr: string; culture: string };
+  historicalResonance?: string | null;
+}
+
 // Word-boundary match — évite les faux positifs comme "feuille" pour "feu"
 function matchesWord(text: string, word: string): boolean {
   return new RegExp(`\\b${word}\\b`, 'i').test(text);
@@ -280,6 +292,7 @@ export function buildHoroscopeUserPrompt(
   edition: Edition = 'matin',
   date?: string,
   hour?: string,
+  culturalCtx?: CulturalContext,
 ): string {
   const cfg = EDITION_CONFIGS[edition];
   const dateToUse = date || todayGuadeloupe();
@@ -445,12 +458,34 @@ export function buildHoroscopeUserPrompt(
     ? `\n${dynamicContext.join('\n')}\n`
     : '';
 
+  // ── Section données du jour (depuis cultural-context.ts) ──────────────────
+  const donneesJourLines: string[] = [];
+  if (culturalCtx) {
+    if (culturalCtx.faune?.nomCreole)
+      donneesJourLines.push(`  Animal du jour       : ${culturalCtx.faune.nomCreole} (${culturalCtx.faune.nomFr}) — ${culturalCtx.faune.culture.split('.')[0]}`);
+    if (culturalCtx.flore?.nomCreole)
+      donneesJourLines.push(`  Plante du jour       : ${culturalCtx.flore.nomCreole} (${culturalCtx.flore.nomFr}) — ${culturalCtx.flore.culture.split('.')[0]}`);
+    if (culturalCtx.lieu?.nomCreole)
+      donneesJourLines.push(`  Lieu du jour         : ${culturalCtx.lieu.nomCreole} (${culturalCtx.lieu.nomFr}) — ${culturalCtx.lieu.culture.split('.')[0]}`);
+    if (culturalCtx.medicinal?.nomCreole)
+      donneesJourLines.push(`  Plante médicinale    : ${culturalCtx.medicinal.nomCreole} (${culturalCtx.medicinal.nomFr}) — ${culturalCtx.medicinal.usage.split('.')[0]}`);
+    if (culturalCtx.pratique?.nomCreole)
+      donneesJourLines.push(`  Pratique résistance  : ${culturalCtx.pratique.nomCreole} (${culturalCtx.pratique.nomFr}) — ${culturalCtx.pratique.dimension.split('.')[0]}`);
+    if (culturalCtx.objet?.nomCreole)
+      donneesJourLines.push(`  Objet créole         : ${culturalCtx.objet.nomCreole} (${culturalCtx.objet.nomFr}) — ${culturalCtx.objet.dimension.split('.')[0]}`);
+    if (culturalCtx.historicalResonance)
+      donneesJourLines.push(`  Résonance historique : ${culturalCtx.historicalResonance.split('.')[0]}`);
+  }
+  const donneesJourBlock = donneesJourLines.length > 0
+    ? `\n🌿 DONNÉES CULTURELLES DU JOUR (sélection rotation quotidienne — PRIORITÉ HAUTE) :\n${donneesJourLines.join('\n')}\n`
+    : '';
+
   return `CONTEXTE TEMPOREL À KARUKERA :
 ${dynamicContextBlock}Date : ${dateToUse}
 Heure locale : ${hourToUse}
 Moment : ${cfg.moment}
 ${weatherBlock}
-
+${donneesJourBlock}
 🌍 HOROSCOPE BRUT (source anglaise - pour inspiration uniquement) :
 ${sign.name} : ${rawText}
 
