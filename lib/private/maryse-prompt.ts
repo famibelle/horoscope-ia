@@ -317,35 +317,57 @@ export function buildHoroscopeUserPrompt(
   const floreSavoir = sign.flore?.savoir.split('.')[0] || '';
   const lieuSymbolique = sign.lieuDetails?.symbolique || '';
   
-  // Récupérer l'usage de la plante depuis flore-data.ts
-  const floreNom = sign.flore?.nom_creole || sign.plante || '';
-  const floreEntry = floreData.find(f => 
-    f.nomCreole.toLowerCase().includes(floreNom.toLowerCase()) || 
-    f.nomFrancais.toLowerCase().includes(floreNom.toLowerCase()) ||
-    floreNom.toLowerCase().includes(f.nomCreole.toLowerCase()) ||
-    floreNom.toLowerCase().includes(f.nomFrancais.toLowerCase())
+  // Clé de rotation quotidienne — déterministe, reproductible en cas de retry
+  const rotKey = sign.id + dateToUse;
+
+  // ── fauneEntry : rotation dans la famille du totem ────────────────────────
+  // Pool = toutes les entrées de la même famille (reptiles, oiseaux…)
+  // Priorité : d'abord les entrées qui matchent exactement le nom du totem,
+  // puis le reste de la famille — évite qu'un signe "oiseaux" affiche
+  // le totem d'un autre signe "oiseaux".
+  const fauneNom    = sign.faune?.nom_creole || sign.nomKreyol || '';
+  const fauneFamille = sign.faune?.famille || '';
+  const fauneExact  = fauneData.filter(f => {
+    const nom = f.nomCreole.toLowerCase();
+    const fr  = (f.nomFrancais || '').toLowerCase();
+    const key = fauneNom.toLowerCase();
+    return nom.includes(key) || fr.includes(key) || key.includes(nom) || key.includes(fr);
+  });
+  const fauneByFamille = fauneData.filter(f =>
+    fauneFamille && f.categorie.toLowerCase().includes(fauneFamille.toLowerCase()) &&
+    !fauneExact.some(e => e.id === f.id)
   );
-  const floreUsage = floreEntry?.usage || '';
-  const floreDimension = floreEntry?.dimensionCulturelle || '';
-  
-  // Récupérer la dimension culturelle de la faune
-  const fauneNom = sign.faune?.nom_creole || sign.nomKreyol || '';
-  const fauneEntry = fauneData.find(f => 
-    f.nomCreole.toLowerCase().includes(fauneNom.toLowerCase()) || 
-    f.nomFrancais.toLowerCase().includes(fauneNom.toLowerCase()) ||
-    fauneNom.toLowerCase().includes(f.nomCreole.toLowerCase()) ||
-    fauneNom.toLowerCase().includes(f.nomFrancais.toLowerCase())
-  );
+  const faunePool2  = [...fauneExact, ...fauneByFamille]; // exact en tête
+  const fauneEntry  = rotateBySignDate(faunePool2, sign.id, rotKey, 1)[0] || null;
   const fauneDimension = fauneEntry?.dimensionCulturelle || '';
-  
-  // Récupérer la dimension culturelle du lieu
-  const lieuEntry = lieuxData.find(l => 
+
+  // ── floreEntry : rotation dans la famille de la plante ────────────────────
+  const floreNom    = sign.flore?.nom_creole || sign.plante || '';
+  const floreFamille = sign.flore?.famille || '';
+  const floreExact  = floreData.filter(f => {
+    const nom = f.nomCreole.toLowerCase();
+    const fr  = f.nomFrancais.toLowerCase();
+    const key = floreNom.toLowerCase();
+    return nom.includes(key) || fr.includes(key) || key.includes(nom) || key.includes(fr);
+  });
+  const floreByFamille = floreData.filter(f =>
+    floreFamille && f.categorie?.toLowerCase().includes(floreFamille.toLowerCase()) &&
+    !floreExact.some(e => e.nomCreole === f.nomCreole)
+  );
+  const florePool2  = [...floreExact, ...floreByFamille];
+  const floreEntry  = rotateBySignDate(florePool2, sign.id, rotKey, 1)[0] || null;
+  const floreUsage     = floreEntry?.usage || '';
+  const floreDimension = floreEntry?.dimensionCulturelle || '';
+
+  // ── lieuEntry : rotation parmi les lieux correspondant au signe ───────────
+  const lieuPool2   = lieuxData.filter(l =>
     l.nom.toLowerCase().includes(sign.lieu.toLowerCase()) ||
     sign.lieu.toLowerCase().includes(l.nom.toLowerCase())
   );
+  const lieuEntry   = rotateBySignDate(lieuPool2, sign.id, rotKey, 1)[0] || null;
   const lieuDimension = lieuEntry?.dimensionCulturelle || '';
-  
-  // Récupérer un événement historique pertinent (par mois, année ou élément)
+
+  // ── histoireEntry : rotation parmi les événements du mois ────────────────
   const [year, month, day] = dateToUse.split('-');
   const moisNom = new Date(dateToUse).toLocaleString('fr-FR', { month: 'long' });
   const histoireByMonth = histoireData.filter(h =>
@@ -355,23 +377,22 @@ export function buildHoroscopeUserPrompt(
       h.periode.includes(month)
     )
   );
-  const histoireEntry = histoireByMonth[0] || null;
-  const histoireFait = histoireEntry?.faitHistorique || '';
+  const histoireEntry  = rotateBySignDate(histoireByMonth, sign.id, rotKey, 1)[0] || null;
+  const histoireFait   = histoireEntry?.faitHistorique || '';
   const histoirePeriode = histoireEntry?.periode || '';
-  
-  // Récupérer un symbole créole pertinent (par nom, élément ou animal/plante)
-  const kreyolEntry = kreyolData.find(k =>
-    k.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '') ||
-    k.nomCreole.toLowerCase().includes(sign.nomKreyol?.toLowerCase() || '') ||
-    k.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '') ||
+
+  // ── kreyolEntry : rotation dans un pool élargi (élément + animal/plante) ──
+  const kreyolPool2 = kreyolData.filter(k =>
     matchesWord(k.famille, sign.element) ||
+    k.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '') ||
     (k.tags && k.tags.some(tag =>
       matchesWord(tag, sign.element) ||
       tag.includes(sign.animal?.toLowerCase() || '') ||
       tag.includes(sign.plante?.toLowerCase() || '')
     ))
   );
-  const kreyolSymbol = kreyolEntry?.nomCreole || '';
+  const kreyolEntry    = rotateBySignDate(kreyolPool2, sign.id, rotKey, 1)[0] || null;
+  const kreyolSymbol   = kreyolEntry?.nomCreole || '';
   const kreyolDimension = kreyolEntry?.dimensionCulturelle || '';
 
   // ============================================
