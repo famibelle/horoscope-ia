@@ -424,7 +424,11 @@ export function buildHoroscopeUserPrompt(
     const fr  = nomFrancais.toLowerCase();
     const words = animalTokens.flatMap(t =>
       [t, ...t.split(/[\s\-]+/).filter(w => w.length >= 3)]
-    ).flatMap(t => [t, t.replace(/\bcolibri\b/, 'kolibri')]);
+    ).flatMap(t => [
+      t,
+      t.replace(/\bcolibri\b/, 'kolibri'),   // fr → créole
+      t.replace(/\biguane?\b/, 'igwann'),    // fr → créole
+    ]);
     return words.some(t => nom.includes(t) || fr.includes(t)) ||
            planteTokens.some(t => nom.includes(t) || fr.includes(t));
   }
@@ -458,21 +462,12 @@ export function buildHoroscopeUserPrompt(
     sign.lieu?.toLowerCase().includes(l.nom.toLowerCase())
   ).slice(0, 5);
 
-  // KREYOL-DATA : diversification — exclut le totem, filtre par élément (fallback : non-totem)
-  const kreyolNonTotem = kreyolData.filter(k => {
-    const nom = k.nomCreole.toLowerCase();
-    return !animalTokens.some(t => nom.includes(t)) &&
-           !planteTokens.some(t => nom.includes(t)) &&
-           !(k.tags && k.tags.some(tag =>
-             animalTokens.some(t => tag.includes(t)) ||
-             planteTokens.some(t => tag.includes(t))
-           ));
-  });
-  const kreyolByElement = kreyolNonTotem.filter(k =>
-    matchesWord(k.famille, sign.element) ||
-    (k.tags && k.tags.some(tag => matchesWord(tag, sign.element)))
-  );
-  const kreyolEnrichis = (kreyolByElement.length > 0 ? kreyolByElement : kreyolNonTotem).slice(0, 5);
+  // KREYOL-DATA : diversification — exclut le totem via isTotem() (gère les variantes
+  // orthographiques fr/créole), puis rotation déterministe par signe+date+édition.
+  // kreyolByElement supprimé : k.famille contient "animaux-symboles de résistance"
+  // et non les éléments (Feu/Air…) → le filtre était toujours vide.
+  const kreyolNonTotem = kreyolData.filter(k => !isTotem(k.nomCreole));
+  const kreyolEnrichis = rotateBySignDate(kreyolNonTotem, sign.id, dateToUse + edition, 5);
 
   // HISTOIRE-DATA : 2-3 entrées pertinentes (filtre par date uniquement)
   const histoireEnrichies = histoireData.filter(h =>
