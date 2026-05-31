@@ -89,6 +89,11 @@ export async function GET(
   const sign = signs.find((s) => s.id === signId);
   if (!sign) return NextResponse.json({ error: 'Signe inconnu' }, { status: 404 });
 
+  const CACHE_HEADERS = {
+    'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200',
+    'netlify-vary': 'query=edition|userDate|date',
+  };
+
   const apiKey = process.env.MISTRAL_API_KEY;
   if (!apiKey) return NextResponse.json({ error: 'API key manquante' }, { status: 500 });
 
@@ -133,7 +138,7 @@ export async function GET(
         scores: row.scores,
       };
       return NextResponse.json(payload, {
-        headers: { 'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' },
+        headers: CACHE_HEADERS,
       });
     }
   } catch (err) {
@@ -145,7 +150,7 @@ export async function GET(
   if (cachedData) {
     console.log(`[AMBIANCE CACHE HIT] ${cacheKey}`);
     return NextResponse.json(cachedData, {
-      headers: { 'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' },
+      headers: CACHE_HEADERS,
     });
   }
 
@@ -154,7 +159,7 @@ export async function GET(
   if (localData) {
     console.log(`[AMBIANCE FILE HIT] ${cacheKey}`);
     return NextResponse.json(localData, {
-      headers: { 'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' },
+      headers: CACHE_HEADERS,
     });
   }
 
@@ -168,7 +173,7 @@ export async function GET(
       const cached = await blobStore.get(cacheKey, { type: 'json' });
       if (cached) {
         return NextResponse.json(cached, {
-          headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300' },
+          headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300', 'netlify-vary': 'query=edition|userDate|date' },
         });
       }
     } catch {
@@ -180,7 +185,7 @@ export async function GET(
   const hit = _inMemoryCache.get(cacheKey);
   if (hit && Date.now() - hit.ts < TTL) {
     return NextResponse.json(hit.data, {
-      headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300' },
+      headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300', 'netlify-vary': 'query=edition|userDate|date' },
     });
   }
 
@@ -283,7 +288,7 @@ Sans markdown dans les valeurs JSON.`;
     _inMemoryCache.set(cacheKey, { data, ts: Date.now() });
     
     return NextResponse.json(data, {
-      headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300' },
+      headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300', 'netlify-vary': 'query=edition|userDate|date' },
     });
   } catch {
     return NextResponse.json({ error: 'Parse error' }, { status: 500 });

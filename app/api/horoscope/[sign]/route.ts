@@ -395,6 +395,19 @@ function buildFallbackResponse(sign: any, weather: string, edition: Edition): Ho
   };
 }
 
+/* ── Cache headers ──────────────────────────────────────────────────────────── */
+
+const CACHE_HEADERS = {
+  'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200',
+  // Netlify CDN doit varier le cache par ces paramètres pour éviter de servir
+  // la même édition (nuit/matin/midi/soir) à tous les visiteurs
+  'netlify-vary': 'query=edition|date|userHour|userDate',
+};
+
+const NO_CACHE_HEADERS = {
+  'Cache-Control': 'no-store, max-age=30',
+};
+
 /* ── Route ─────────────────────────────────────────────────────────────────── */
 
 export async function GET(
@@ -481,9 +494,7 @@ export async function GET(
         conseil: row.conseil, teaser: row.teaser,
         signFr: row.sign_fr, weather: row.weather, edition: row.edition, source: row.source,
       };
-      return NextResponse.json(payload, {
-        headers: { 'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' },
-      });
+      return NextResponse.json(payload, { headers: CACHE_HEADERS });
     }
   } catch (err) {
     console.error(`[API HOROSCOPE] ❌ SUPABASE ERROR:`, err instanceof Error ? err.message : err);
@@ -500,11 +511,7 @@ export async function GET(
     const localData = await loadHoroscopeData(date, signId, edition, req);
     if (localData) {
       console.log(`[API HOROSCOPE] ✅ CACHE HIT: ${blobKey}`);
-      return NextResponse.json(localData, {
-        headers: {
-          'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200'
-        },
-      });
+      return NextResponse.json(localData, { headers: CACHE_HEADERS });
     }
   } catch (err) {
     console.error(`[API HOROSCOPE] ❌ CACHE ERROR:`, err instanceof Error ? err.message : err);
@@ -521,11 +528,7 @@ export async function GET(
     const cached = await getCached(blobKey);
     if (cached) {
       console.log(`[API HOROSCOPE] ✅ BLOBS HIT: ${blobKey}`);
-      return NextResponse.json(cached, {
-        headers: { 
-          'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' 
-        },
-      });
+      return NextResponse.json(cached, { headers: CACHE_HEADERS });
     }
   } catch (err) {
     console.error(`[API HOROSCOPE] ❌ BLOBS ERROR:`, err instanceof Error ? err.message : err);
@@ -561,11 +564,7 @@ export async function GET(
         console.log(`[API HOROSCOPE] ✅ GÉNÉRATION RÉUSSIE: ${blobKey}`);
         console.log(`[API HOROSCOPE] Source: on-demand`);
         
-        return NextResponse.json(response, {
-          headers: { 
-            'Cache-Control': 'public, s-maxage=28800, stale-while-revalidate=7200' 
-          },
-        });
+        return NextResponse.json(response, { headers: CACHE_HEADERS });
       } else {
         console.error(`[API HOROSCOPE] ❌ GÉNÉRATION ÉCHOUÉE: Mistral n'a pas retourné de données valides`);
       }
@@ -608,11 +607,7 @@ export async function GET(
     const generatingResponse = buildGeneratingResponse(sign, date, edition, weather);
     
     console.log(`[API HOROSCOPE] ⏳ RETOUR: Génération en cours`);
-    return NextResponse.json(generatingResponse, {
-      headers: { 
-        'Cache-Control': 'no-store, max-age=30' // Cache très court pour la régénération
-      },
-    });
+    return NextResponse.json(generatingResponse, { headers: NO_CACHE_HEADERS });
   }
 
   // 🔹 Fallback statique (dernier recours)
@@ -621,9 +616,5 @@ export async function GET(
   
   const fallbackResponse = buildFallbackResponse(sign, weather, edition);
   
-  return NextResponse.json(fallbackResponse, {
-    headers: { 
-      'Cache-Control': 'public, max-age=300, stale-while-revalidate=60' // Cache court pour le fallback
-    },
-  });
+  return NextResponse.json(fallbackResponse, { headers: CACHE_HEADERS });
 }
