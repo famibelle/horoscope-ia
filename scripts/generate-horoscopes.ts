@@ -97,6 +97,12 @@ function limitVeve(text: string): string {
   });
 }
 
+// Élimine le doublon "ka ka" produit quand tambour→ka s'applique
+// à un texte qui contenait déjà "ka" (ex: "rythme du tambour ka" → "rythme du ka ka")
+function fixKaKa(text: string): string {
+  return text.replace(/\bka\s+ka\b/gi, 'ka');
+}
+
 // Remplace "lajan circule/coule comme la sève de/du/dans [plante]"
 // par une métaphore neutre mais ancrée dans le quotidien créole.
 // La prohibition prompt seule ne suffit pas — le modèle ignore la règle.
@@ -506,11 +512,11 @@ async function generateTeaser(
     // Nettoyage post-génération du teaser
     // Si le corps contient déjà vèvè, on le supprime du teaser pour éviter le doublon
     const bodyHasVeve = /vèvè/i.test(rawContent);
-    teaser = restoreApostrophes(teaser
+    teaser = restoreApostrophes(fixKaKa(teaser
       .replace(/\btambours?\b/gi, 'ka')
       .replace(/—/g, ',')
       .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan')
-      .replace(bodyHasVeve ? /vèvè/gi : /(?!)/g, 'signe sacré'));
+      .replace(bodyHasVeve ? /vèvè/gi : /(?!)/g, 'signe sacré')));
 
     const teaserTerms = extractGlossaryTerms(teaser);
     if (teaserTerms.length > 0) {
@@ -746,8 +752,8 @@ export async function generateAllHoroscopes() {
         }
         // Nettoyage post-génération
         const cleanedContent = removeRedundantParentheses(
-          limitVeve(restoreApostrophes(removeSeve(structured)
-            .replace(/\btambours?\b/gi, 'ka')
+          limitVeve(restoreApostrophes(fixKaKa(removeSeve(structured)
+            .replace(/\btambours?\b/gi, 'ka'))
             .replace(/—/g, ',')
             .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan')))
         );
@@ -880,8 +886,8 @@ export async function generateAllHoroscopes() {
         }
         // Nettoyage post-génération
         const cleanedContent = removeRedundantParentheses(
-          limitVeve(restoreApostrophes(removeSeve(structured)
-            .replace(/\btambours?\b/gi, 'ka')
+          limitVeve(restoreApostrophes(fixKaKa(removeSeve(structured)
+            .replace(/\btambours?\b/gi, 'ka'))
             .replace(/—/g, ',')
             .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan')))
         );
