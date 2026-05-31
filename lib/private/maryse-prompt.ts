@@ -582,7 +582,7 @@ STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien cr
 1. "ouverture" : UNE phrase - image caribéenne qui pose le ton du jour. Ancre dans l'animal, la plante ou le lieu du signe, ou dans une couleur sacrée du loa — pas une formule générique. INTERDIT : toute phrase avec "vèvè" dans cette section.
 2. "amour" : 2 à 4 phrases. **OBLIGATOIRE : le nom créole d'un élément de FAUNE-DATA ou FLORE-DATA doit apparaître dans le texte.** INTERDIT comme images de remplacement : "mer", "vague", "vent", "racines", "danse".
 3. "travail" : 2 à 4 phrases. **OBLIGATOIRE : le nom créole d'un élément de FAUNE-DATA ou LIEUX-DATA doit apparaître dans le texte.** INTERDIT : "chemin", "vent", "racines" comme métaphores génériques.
-4. "argent" : 2 à 4 phrases. **OBLIGATOIRE : une image tirée du comportement de l'animal du signe ou d'une pratique économique créole (marché, pêche, récolte, troc).** INTERDIT : HISTOIRE-DATA, "sève", "racines", "mer", "vent".
+4. "argent" : 2 à 4 phrases. **OBLIGATOIRE : une image tirée du comportement d'un animal de FAUNE-DATA (diversification) ou d'une pratique économique créole (marché, pêche, récolte, troc) — pas le totem du signe.** INTERDIT : HISTOIRE-DATA, "sève", "racines", "mer", "vent".
 5. "amitie" : 2 à 4 phrases. **OBLIGATOIRE : le nom créole d'un élément de LIEUX-DATA ou KREYOL-DATA doit apparaître dans le texte.** INTERDIT : "comme les racines de [arbre]" (formule identique pour 8 signes sur 12).
 6. "prediction" : UNE phrase - tendance pour les jours à venir. Métaphore naturelle propre au signe, vaudou ou HISTOIRE-DATA.
 7. "conseil" : UNE phrase - un geste symbolique ancré dans FLORE-DATA ou CONTEXTE VAUDOU. JAMAIS une bougie, une flamme, un feu.
