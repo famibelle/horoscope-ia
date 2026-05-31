@@ -393,19 +393,34 @@ export function buildHoroscopeUserPrompt(
   const animalTokens = splitTokens(sign.animal, sign.nomKreyol);
   const planteTokens = splitTokens(sign.plante);
 
-  // Filtrer les données enrichies pour ne garder que les pertinentes
-  // FAUNE-DATA : nomCreole ET nomFrancais pour couvrir les variantes d'orthographe
-  const fauneEnrichies = fauneData.filter(f => {
-    const nom = f.nomCreole.toLowerCase();
-    const fr = (f.nomFrancais || '').toLowerCase();
-    return animalTokens.some(t => nom.includes(t) || fr.includes(t));
-  }).slice(0, 8);
+  // Helper : vrai si une entrée correspond au totem du signe.
+  // Décompose les tokens composés ("colibri huppé" → "colibri") et normalise
+  // les variantes français/créole (colibri → kolibri) pour ne pas manquer
+  // les entrées créoles quand le sign.animal est en français.
+  function isTotem(nomCreole: string, nomFrancais: string = ''): boolean {
+    const nom = nomCreole.toLowerCase();
+    const fr  = nomFrancais.toLowerCase();
+    const words = animalTokens.flatMap(t =>
+      [t, ...t.split(/[\s\-]+/).filter(w => w.length >= 3)]
+    ).flatMap(t => [t, t.replace(/\bcolibri\b/, 'kolibri')]);
+    return words.some(t => nom.includes(t) || fr.includes(t)) ||
+           planteTokens.some(t => nom.includes(t) || fr.includes(t));
+  }
 
-  // FLORE-DATA : nomCreole ET nomFrancais
+  // FAUNE-DATA : diversification — exclut le totem, préfère les entrées SACRÉ/Emblématique
+  const fauneEnrichies = fauneData.filter(f => {
+    if (isTotem(f.nomCreole, f.nomFrancais)) return false;
+    const sacre = (f.sacreSymbolique || '').toUpperCase();
+    return sacre.includes('SACRÉ') || sacre.includes('EMBLÉMATIQUE') || sacre.includes('EMBLEMATIQUE');
+  }).slice(0, 6);
+
+  // FLORE-DATA : exclut l'entrée exacte du totem (évite le doublon flanbwayan×2)
+  const floreTotemNom = (floreEntry?.nomCreole || '').toLowerCase();
   const floreEnrichies = floreData.filter(f => {
     const nom = f.nomCreole.toLowerCase();
-    const fr = f.nomFrancais.toLowerCase();
-    return planteTokens.some(t => nom.includes(t) || fr.includes(t));
+    const fr  = f.nomFrancais.toLowerCase();
+    return planteTokens.some(t => nom.includes(t) || fr.includes(t)) &&
+           nom !== floreTotemNom;
   }).slice(0, 8);
 
   // LIEUX-DATA : entrées liées au signe par lieu uniquement
@@ -414,18 +429,21 @@ export function buildHoroscopeUserPrompt(
     sign.lieu?.toLowerCase().includes(l.nom.toLowerCase())
   ).slice(0, 5);
 
-  // KREYOL-DATA : entrées liées au signe par animal/plante/nomKreyol uniquement
-  const kreyolEnrichis = kreyolData.filter(k => {
+  // KREYOL-DATA : diversification — exclut le totem, filtre par élément (fallback : non-totem)
+  const kreyolNonTotem = kreyolData.filter(k => {
     const nom = k.nomCreole.toLowerCase();
-    return (
-      animalTokens.some(t => nom.includes(t)) ||
-      planteTokens.some(t => nom.includes(t)) ||
-      (k.tags && k.tags.some(tag =>
-        animalTokens.some(t => tag.includes(t)) ||
-        planteTokens.some(t => tag.includes(t))
-      ))
-    );
-  }).slice(0, 5);
+    return !animalTokens.some(t => nom.includes(t)) &&
+           !planteTokens.some(t => nom.includes(t)) &&
+           !(k.tags && k.tags.some(tag =>
+             animalTokens.some(t => tag.includes(t)) ||
+             planteTokens.some(t => tag.includes(t))
+           ));
+  });
+  const kreyolByElement = kreyolNonTotem.filter(k =>
+    matchesWord(k.famille, sign.element) ||
+    (k.tags && k.tags.some(tag => matchesWord(tag, sign.element)))
+  );
+  const kreyolEnrichis = (kreyolByElement.length > 0 ? kreyolByElement : kreyolNonTotem).slice(0, 5);
 
   // HISTOIRE-DATA : 2-3 entrées pertinentes (filtre par date uniquement)
   const histoireEnrichies = histoireData.filter(h =>
@@ -493,20 +511,31 @@ ${sign.name} : ${rawText}
 
 ⭐ DONNÉES ENRICHIES CULTURELLES (PRIORITÉ ABSOLUE) ⭐
 
-📚 FAUNE-DATA (symboles animaux pertinents) :
-${fauneEnrichies.map(f => `  - ${f.nomCreole} (${f.nomFrancais}): ${f.dimensionCulturelle || ''}`).join('\n')}
+📚 FAUNE-DATA :
+  Totem du signe (citer AU PLUS 1 FOIS — déjà dans "Données du signe") :
+  - ${fauneEntry?.nomCreole || sign.animal} : ${fauneDimension}${fauneSavoir ? ` | Savoir : ${fauneSavoir}` : ''}
+  Diversification (animaux différents — à utiliser en priorité dans le texte) :
+${fauneEnrichies.length > 0 ? fauneEnrichies.map(f => `  - ${f.nomCreole} (${f.nomFrancais}): ${f.dimensionCulturelle || ''}`).join('\n') : '  (aucune entrée — utiliser les données vaudou)'}
 
-🌺 FLORE-DATA (plantes et arbres sacrés) :
-${floreEnrichies.map(f => `  - ${f.nomCreole} (${f.nomFrancais}): ${f.usage ? `USAGE=${f.usage}, ` : ''}DIMENSION=${f.dimensionCulturelle || ''}`).join('\n')}
+🌺 FLORE-DATA :
+  Plante du signe (citer AU PLUS 1 FOIS) :
+  - ${floreEntry?.nomCreole || sign.plante}${floreUsage ? ` : USAGE=${floreUsage}` : ''}${floreDimension ? ` | ${floreDimension}` : ''}${floreSavoir ? ` | Savoir : ${floreSavoir}` : ''}
+  Autres plantes :
+${floreEnrichies.length > 0 ? floreEnrichies.map(f => `  - ${f.nomCreole} (${f.nomFrancais}): ${f.usage ? `USAGE=${f.usage}, ` : ''}DIMENSION=${f.dimensionCulturelle || ''}`).join('\n') : '  (aucune entrée)'}
 
-🏞️  LIEUX-DATA (sites sacrés et symboliques) :
-${lieuxEnrichis.map(l => `  - ${l.nom} (${l.localisation}): ${l.dimensionCulturelle || ''}`).join('\n')}
+🏞️  LIEUX-DATA :
+  Lieu du signe (citer AU PLUS 1 FOIS) :
+  - ${lieuEntry?.nom || sign.lieu}${lieuDimension ? ` : ${lieuDimension}` : ''}${lieuSymbolique ? ` | Symbolique : ${lieuSymbolique}` : ''}
 
 🎭 KREYOL-DATA (symboles de résistance) :
-${kreyolEnrichis.map(k => `  - ${k.nomCreole}: ${k.dimensionCulturelle || k.typeResistance || ''}`).join('\n')}
+${[
+  kreyolSymbol ? `  - ${kreyolSymbol} (spécifique au signe) : ${kreyolDimension}` : '',
+  ...kreyolEnrichis.map(k => `  - ${k.nomCreole}: ${k.dimensionCulturelle || k.typeResistance || ''}`),
+].filter(Boolean).join('\n')}
 
-📜 HISTOIRE-DATA (événements historiques) :
-${histoireEnrichies.map(h => `  - ${h.periode}: ${h.faitHistorique}`).join('\n')}
+📜 HISTOIRE-DATA :
+${histoirePeriode ? `  - ${histoirePeriode} : ${histoireFait}` : ''}
+${histoireEnrichies.filter(h => h.periode !== histoirePeriode).map(h => `  - ${h.periode}: ${h.faitHistorique}`).join('\n')}
 
 🔮 **CONTEXTE VAUDOU GUADELOUPÉEN** (NOUVEAU - À INTÉGRER DANS TON HOROSCOPE) :
 📌 Signe ${sign.name} → Loa principal : **${vaudouContext.loa}** (${vaudouContext.famille})
@@ -528,19 +557,14 @@ ${relevantAnimals.map(a => `  - ${a.nomCreole} (${a.nomFrancais}): ${a.dimension
 🌿 PLANTES SACRÉES PERTINENTES :
 ${relevantPlantes.map(p => `  - ${p.nomCreole} (${p.nomFrancais}): ${p.dimensionCulturelle.split('.')[0]}`).join('\n')}
 
-⚠️ DONNÉES DU SIGNE (pour référence - À UTILISER AVEC MODÉRATION) :
-  - id: ${sign.id}
-  - name: ${sign.name}
-  - animal: ${sign.animal}
-  - nomKreyol: ${sign.nomKreyol}
-  - plante: ${sign.plante}
+⚠️ DONNÉES DU SIGNE (totem — À UTILISER AVEC MODÉRATION, 1 fois max chacun) :
+  - animal: ${sign.animal}${fauneDimension ? ` — ${fauneDimension}` : ''}${fauneSavoir ? ` | ${fauneSavoir}` : ''}
+  - plante: ${sign.plante}${floreUsage ? ` — ${floreUsage}` : ''}${floreSavoir ? ` | ${floreSavoir}` : ''}
   - arbre: ${sign.arbre}
-  - lieu: ${sign.lieu}
+  - lieu: ${sign.lieu}${lieuDimension ? ` — ${lieuDimension}` : ''}${lieuSymbolique ? ` | ${lieuSymbolique}` : ''}
   - element: ${sign.element}
-  - spirituel: ${sign.spirituel.substring(0, 150)}${sign.spirituel.length > 150 ? '...' : ''}
-  - dateRange: ${sign.dateRange}
   - planet: ${sign.planet}
-  - tagline: ${sign.tagline}
+  - spirituel: ${sign.spirituel.substring(0, 150)}${sign.spirituel.length > 150 ? '...' : ''}
 
 ÉDITION : ${cfg.instruction}
 
