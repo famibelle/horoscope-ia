@@ -8,15 +8,12 @@ import { histoireData } from '@/lib/private/histoire-data';
 import {
   SIGN_TO_LOA,
   SIGN_TO_VAUDOU_CONTEXT,
-  EDITION_TO_VAUDOU_CONTEXT,
   getVaudouContextForSign,
   getRitualDateContext,
   isRitualDate
 } from '@/lib/private/vaudou-mappings';
 import {
   loasData,
-  animauxData,
-  plantesData
 } from '@/lib/private/vaudou-data';
 
 /*
@@ -393,16 +390,6 @@ export function buildHoroscopeUserPrompt(
     l.nomCreole.toLowerCase().includes(loaName.toLowerCase())
   ).slice(0, 1);
   
-  const relevantAnimals = animauxData.filter(a => 
-    a.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase() ||
-    a.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '')
-  ).slice(0, 3);
-  
-  const relevantPlantes = plantesData.filter(p => 
-    p.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase() ||
-    p.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '')
-  ).slice(0, 3);
-
   // Tokens découpés pour gérer les noms composés ("Colibri huppé / Foufou")
   const animalTokens = splitTokens(sign.animal, sign.nomKreyol);
   const planteTokens = splitTokens(sign.plante);
@@ -558,25 +545,11 @@ ${[
 ${histoirePeriode ? `  - ${histoirePeriode} : ${histoireFait}` : ''}
 ${histoireEnrichies.filter(h => h.periode !== histoirePeriode).map(h => `  - ${h.periode}: ${h.faitHistorique}`).join('\n')}
 
-🔮 **CONTEXTE VAUDOU GUADELOUPÉEN** (NOUVEAU - À INTÉGRER DANS TON HOROSCOPE) :
-📌 Signe ${sign.name} → Loa principal : **${vaudouContext.loa}** (${vaudouContext.famille})
-   Énergie : ${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.energie || 'Harmonie et équilibre'}
-   Couleurs sacrées : ${(SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || ['blanc']).join(', ')}
-   Symbole : ${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.emoji || '🔮'}
-
-💫 Ambiance de l'édition "${edition}" : ${EDITION_TO_VAUDOU_CONTEXT[edition]?.energie || 'Ouverture et chemin'}
-
-${isRitual ? `⭐ DATE RITUELLE SPÉCIALE : **${ritualDate?.nomFrancais || ritualDate?.nomCreole || 'Cérémonie sacrée'}**
-   Loa associé : ${ritualDate?.famille || 'Multiple'}
-   Thème : ${ritualDate?.dimensionCulturelle?.split('.')[0] || 'Célébration traditionnelle'}
-` : ''}📚 LOAS PERTINENTS :
-${relevantLoas.map(l => `  - ${l.nomCreole} (${l.nomFrancais}): ${l.dimensionCulturelle.split('.')[0]}`).join('\n')}
-
-🐍 ANIMAUX SACRÉS PERTINENTS :
-${relevantAnimals.map(a => `  - ${a.nomCreole} (${a.nomFrancais}): ${a.dimensionCulturelle.split('.')[0]}`).join('\n')}
-
-🌿 PLANTES SACRÉES PERTINENTES :
-${relevantPlantes.map(p => `  - ${p.nomCreole} (${p.nomFrancais}): ${p.dimensionCulturelle.split('.')[0]}`).join('\n')}
+🔮 CONTEXTE VAUDOU — ${sign.name} :
+  Loa : **${vaudouContext.loa}** (${vaudouContext.famille}) — ${relevantLoas[0]?.dimensionCulturelle?.split('.')[0] || ''}
+  Énergie : ${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.energie || 'Harmonie et équilibre'}
+  Couleurs sacrées : ${(SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || ['blanc']).join(', ')}
+${isRitual ? `  ⭐ Date rituelle : ${ritualDate?.nomFrancais || ritualDate?.nomCreole} — ${ritualDate?.dimensionCulturelle?.split('.')[0] || ''}` : ''}
 
 ⚠️ DONNÉES DU SIGNE (totem — À UTILISER AVEC MODÉRATION, 1 fois max chacun) :
   - animal: ${sign.animal}${fauneDimension ? ` — ${fauneDimension}` : ''}${fauneSavoir ? ` | ${fauneSavoir}` : ''}
@@ -598,17 +571,12 @@ STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien cr
 6. "prediction" : UNE phrase - tendance pour les jours à venir. Métaphore naturelle propre au signe, vaudou ou HISTOIRE-DATA.
 7. "conseil" : UNE phrase - un geste symbolique ancré dans FLORE-DATA ou CONTEXTE VAUDOU. JAMAIS une bougie, une flamme, un feu.
 
-✨ **INTÈGRE LE CONTEXTE VAUDOU** ✨
-- **Le seul loa de cet horoscope est ${vaudouContext.loa}.** Cite-le UNE SEULE FOIS, dans la section la plus pertinente. Toutes les autres références spirituelles passent par des symboles naturels (plantes, animaux, lieux, couleurs) — pas par d'autres loas nommés.
-- **INTERDIT dans toutes les sections** : citer un loa autre que ${vaudouContext.loa} (ni Ezili, ni Legba, ni Damballa/Damballah, ni Baron, ni Ogoun, ni aucun autre). Si tu veux exprimer la tendresse, la mort, le chemin, utilise les symboles naturels du signe — jamais le nom d'un autre loa.
-- Si tu ressens le besoin de parler d'amour ou de mort ou de chemin, fais-le à travers les symboles naturels propres à CE signe (son animal, sa plante, son lieu) — pas à travers un loa, et pas à travers des images génériques partagées par tous les signes.
-- **INTERDIT dans "amour" et "amitie"** : soukougnan, volant, loup-garou, zombi, et toute créature de terreur ou de mort. Ces êtres n'ont aucune place dans les sections affectives — réserve-les à "prediction" si tu en as besoin.
-- **INTERDIT dans "conseil"** : Legba et toute bougie. Legba n'est pas le loa de tous les signes — n'utilise que ${vaudouContext.loa}. Le conseil doit être poétique, sans flamme, sans rituel physique.
-- **Utilise 1 mot créole vaudou max par section**, tiré du contexte vaudou du signe — NB : en créole guadeloupéen l'argent se dit "lajan", jamais "kòb"
-- Les dessins sacrés vaudou ne sont pas une image générique — n'évoque cette pratique que si elle est directement liée au loa du signe et au contexte de la section.
-- **NB orthographe** : la figure mythologique s'écrit "soukougnan" (orthographe guadeloupéenne), jamais "soukouyan" ni "soukounyan". Le soukougnan RETIRE SA PROPRE PEAU — ne jamais inventer de rituel de protection humaine contre lui qui n'existe pas dans le folklore.
-- **Priorité aux symboles vaudou** : couleurs (${(SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || []).join(', ')}), plantes (${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.plante}), animaux (${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.animal})
-- **Pour les dates rituelles** : Mentionne explicitement la fête (${ritualDate?.nomFrancais || 'N/A'}) et son loa associé
+✨ **CONTEXTE VAUDOU** ✨
+- Cite **${vaudouContext.loa}** UNE SEULE FOIS dans la section la plus pertinente.
+- Toutes les autres références spirituelles passent par les symboles naturels du signe (couleurs sacrées : ${(SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || []).join(', ')}, plante, animal, lieu) — jamais par le nom d'un autre loa.
+- **INTERDIT dans "amour" et "amitie"** : soukougnan, zombi, loup-garou, toute créature de terreur.
+- **INTERDIT dans "conseil"** : bougie, flamme, feu — le conseil reste poétique et symbolique.
+- 1 mot créole vaudou max par section. L'argent se dit "lajan", jamais "kòb".${isRitual ? `\n- Date rituelle du jour : ${ritualDate?.nomFrancais || ''} — mentionne-la dans la section prediction.` : ''}
 
 Note : Le champ "sante" (optionnel) peut être ajouté séparément avec EXACTEMENT 2 OU 4 phrases.
 
