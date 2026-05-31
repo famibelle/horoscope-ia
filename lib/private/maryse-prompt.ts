@@ -423,7 +423,12 @@ export function buildHoroscopeUserPrompt(
 
   // FAUNE-DATA : diversification — exclut le totem, préfère les entrées SACRÉ/Emblématique
   // Rotation par signe+date pour que chaque signe obtienne des animaux différents
+  // Entités dont l'usage dans un horoscope quotidien est culturellement inapproprié :
+  // le modèle extrait des métaphores de transformation/passage au lieu de la terreur réelle.
+  const FAUNE_EXCLUES = new Set(['soukougnan-myt', 'rat-nw-rat']);
+
   const faunePool = fauneData.filter(f => {
+    if (FAUNE_EXCLUES.has(f.id)) return false;
     if (isTotem(f.nomCreole, f.nomFrancais)) return false;
     const sacre = (f.sacreSymbolique || '').toUpperCase();
     return sacre.includes('SACRÉ') || sacre.includes('EMBLÉMATIQUE') || sacre.includes('EMBLEMATIQUE');
