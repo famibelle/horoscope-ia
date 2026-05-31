@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Heart, Briefcase, Coins, Users, Sparkles, Eye, Activity } from 'lucide-react';
+import { Heart, Briefcase, Coins, Users, Sparkles, Eye, Activity } from 'lucide-react';
 import { signs } from '@/lib/signs-data';
 import { detectLocalEditionWithNight, getLocalDynamicEditionLabels } from '@/lib/edition';
 import AudioPlayer from '@/components/AudioPlayer';
@@ -179,49 +179,106 @@ export default function HoroscopeSignPage() {
         />
       </div>
 
-      <div className="relative z-10 px-4 py-10 max-w-2xl mx-auto">
+      <div className="relative z-10 max-w-2xl mx-auto">
 
-        {/* Back link */}
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-ancestral-cream/35 text-sm hover:text-ancestral-cream/70 transition-colors mb-10"
+        {/* ── Header hero ──────────────────────────────────────────────── */}
+        <div
+          style={{
+            background: 'linear-gradient(180deg, #0D1A12 0%, #14291A 100%)',
+            padding: '16px 16px 20px',
+          }}
         >
-          <ArrowLeft size={14} />
-          Retour
-        </Link>
-
-        {/* Sign header */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="flex items-center gap-5 mb-8"
-        >
-          <span className="text-6xl sm:text-7xl">{sign.emoji}</span>
-          <div>
-            <h1
-              className="font-display text-4xl sm:text-5xl font-bold leading-tight text-ancestral-gold"
+          {/* Ligne haute : logo + avatar */}
+          <div className="flex items-center justify-between mb-4">
+            <span
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '12px',
+                color: '#D4AF50',
+                letterSpacing: '0.04em',
+              }}
             >
-              {sign.name}
-            </h1>
-            <p className="text-ancestral-cream/30 text-sm uppercase tracking-widest mt-1">
-              {sign.planet} · {sign.element}
-            </p>
-            <p className="text-xs mt-1 font-semibold text-ancestral-gold/90">
-              {sign.nomKreyol}
-            </p>
+              La Voix de nos Ancêtres
+            </span>
+            <div
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                border: '1.5px solid rgba(212,175,80,0.5)',
+                background: 'rgba(212,175,80,0.08)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '18px',
+              }}
+            >
+              🌿
+            </div>
           </div>
-        </motion.div>
 
-        {/* Date et heure locale */}
-        {localDateTime && (
-          <p className="text-ancestral-cream/35 text-xs mb-6 capitalize">
-            {localDateTime}
-          </p>
-        )}
+          {/* Pill du signe */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              background: 'rgba(212,175,80,0.08)',
+              border: '1px solid rgba(212,175,80,0.25)',
+              borderRadius: '16px',
+              padding: '10px 14px',
+            }}
+          >
+            <span style={{ fontSize: '28px', lineHeight: 1 }}>{sign.emoji}</span>
+            <div style={{ flex: 1 }}>
+              <p
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '18px',
+                  fontWeight: 700,
+                  color: '#E8D98A',
+                  lineHeight: 1.1,
+                }}
+              >
+                {sign.name}
+              </p>
+              <p style={{ fontSize: '10px', color: 'var(--color-text-muted)', marginTop: '2px', letterSpacing: '0.04em' }}>
+                {sign.planet} · {sign.element}
+              </p>
+            </div>
+            <Link
+              href="/"
+              style={{
+                fontSize: '10px',
+                color: 'var(--color-gold)',
+                border: '1px solid rgba(212,175,80,0.3)',
+                borderRadius: '8px',
+                padding: '4px 8px',
+                textDecoration: 'none',
+                fontWeight: 500,
+                letterSpacing: '0.03em',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              Changer
+            </Link>
+          </motion.div>
+
+          {/* Date et heure locale */}
+          {localDateTime && (
+            <p style={{ color: 'var(--color-text-muted)', fontSize: '11px', marginTop: '10px', textTransform: 'capitalize' }}>
+              {localDateTime}
+            </p>
+          )}
+        </div>
+
+        <div className="px-4 py-6">
 
         {/* Edition pills */}
-        <div className="flex gap-2 mb-10">
+        <div style={{ display: 'flex', gap: '6px', marginBottom: '20px' }}>
           {(['nuit', 'matin', 'midi', 'soir'] as const).map((ed) => {
             const dynamicLabels = getLocalDynamicEditionLabels(edition || 'matin');
             const { label, emoji: edEmoji } = dynamicLabels[ed];
@@ -230,19 +287,38 @@ export default function HoroscopeSignPage() {
               <motion.button
                 key={ed}
                 onClick={() => setEdition(ed)}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
-                className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium transition-colors"
+                whileTap={{ scale: 0.96 }}
                 style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '3px',
+                  padding: '7px 4px',
+                  minHeight: '48px',
+                  borderRadius: '10px',
+                  border: active
+                    ? '1px solid rgba(212,175,80,0.4)'
+                    : '1px solid rgba(255,255,255,0.08)',
                   background: active
-                    ? 'linear-gradient(135deg, rgba(210,105,30,0.35), rgba(255,215,0,0.25))'
-                    : 'rgba(245,245,220,0.05)',
-                  border: active ? '1px solid rgba(210,105,30,0.5)' : '1px solid rgba(245,245,220,0.08)',
-                  color: active ? '#F5F5DC' : 'rgba(245,245,220,0.35)',
+                    ? 'rgba(212,175,80,0.12)'
+                    : 'rgba(255,255,255,0.04)',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
                 }}
               >
-                <span>{edEmoji}</span>
-                <span>{label}</span>
+                <span style={{ fontSize: '14px', lineHeight: 1 }}>{edEmoji}</span>
+                <span
+                  style={{
+                    fontSize: '8px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.06em',
+                    fontWeight: 500,
+                    color: active ? '#D4AF50' : '#6B8A6E',
+                  }}
+                >
+                  {label}
+                </span>
               </motion.button>
             );
           })}
@@ -684,16 +760,7 @@ export default function HoroscopeSignPage() {
           </>
         )}
 
-        {/* Footer nav */}
-        <div className="text-center mt-16 pt-8 border-t border-ancestral-cream/5">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm text-ancestral-cream/50 hover:text-ancestral-cream/80 transition-colors border border-ancestral-cream/10 hover:border-ancestral-gold/30"
-            style={{ background: 'rgba(245,245,220,0.03)' }}
-          >
-            ← Retour à l&apos;accueil
-          </Link>
-        </div>
+        </div>{/* end px-4 py-6 */}
       </div>
     </main>
   );

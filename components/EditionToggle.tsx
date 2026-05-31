@@ -3,38 +3,60 @@
 import { motion } from 'framer-motion';
 import { getLocalDynamicEditionLabels } from '@/lib/edition';
 import { useEdition } from '@/contexts/EditionContext';
-import type { Edition } from '@/lib/private/maryse-prompt';
 
 export default function EditionToggle() {
   const { edition, setEdition, moonEmoji } = useEdition();
   const dynamicLabels = getLocalDynamicEditionLabels(edition);
 
   return (
-    <div className="flex justify-center gap-2 px-4 py-4">
+    <div
+      style={{
+        display: 'flex',
+        gap: '6px',
+        padding: '12px 16px',
+      }}
+    >
       {(['nuit', 'matin', 'midi', 'soir'] as const).map((ed) => {
         const { label, emoji } = dynamicLabels[ed];
         const active = edition === ed;
-        // Use dynamic moon emoji for "soir"
         const displayEmoji = ed === 'soir' ? moonEmoji : emoji;
         return (
           <motion.button
             key={ed}
             onClick={() => setEdition(ed)}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium transition-colors"
+            whileTap={{ scale: 0.96 }}
             style={{
-              background: active
-                ? 'linear-gradient(135deg, rgba(210,105,30,0.35), rgba(255,215,0,0.25))'
-                : 'rgba(245,245,220,0.05)',
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '3px',
+              padding: '7px 4px',
+              minHeight: '48px',
+              borderRadius: '10px',
               border: active
-                ? '1px solid rgba(210,105,30,0.5)'
-                : '1px solid rgba(245,245,220,0.08)',
-              color: active ? '#F5F5DC' : 'rgba(245,245,220,0.35)',
+                ? '1px solid rgba(212,175,80,0.4)'
+                : '1px solid rgba(255,255,255,0.08)',
+              background: active
+                ? 'rgba(212,175,80,0.12)'
+                : 'rgba(255,255,255,0.04)',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
             }}
           >
-            <span>{displayEmoji}</span>
-            <span>{label}</span>
+            <span style={{ fontSize: '14px', lineHeight: 1 }}>{displayEmoji}</span>
+            <span
+              style={{
+                fontSize: '8px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.06em',
+                fontWeight: 500,
+                color: active ? '#D4AF50' : '#6B8A6E',
+                fontFamily: 'var(--font-ui)',
+              }}
+            >
+              {label}
+            </span>
           </motion.button>
         );
       })}

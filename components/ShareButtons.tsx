@@ -92,24 +92,49 @@ export default function ShareButtons() {
         </h2>
       </motion.div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div style={{ display: 'flex', gap: '8px' }}>
         {platforms.map((platform, i) => (
           <motion.button
             key={platform.id}
             onClick={() => handleShare(platform)}
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: i * 0.08, duration: 0.5 }}
-            whileHover={{ scale: 1.04, y: -3 }}
-            whileTap={{ scale: 0.96 }}
-            className={`flex flex-col items-center gap-3 p-4 rounded-2xl bg-gradient-to-br ${platform.bgGradient} transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ancestral-gold`}
+            transition={{ delay: i * 0.07, duration: 0.4 }}
+            whileTap={{ scale: 0.95 }}
             style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '5px',
+              padding: '10px 4px',
+              borderRadius: '12px',
               border: `1px solid ${platform.borderColor}`,
+              background: platform.id === 'whatsapp'
+                ? 'rgba(37,211,102,0.1)'
+                : platform.id === 'facebook'
+                ? 'rgba(59,89,152,0.15)'
+                : platform.id === 'instagram'
+                ? 'rgba(225,48,108,0.1)'
+                : 'rgba(29,161,242,0.1)',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
             }}
           >
-            <span className="text-2xl">{platform.emoji}</span>
-            <span className="text-ancestral-cream/70 text-xs font-medium text-center leading-tight">
+            <span style={{ fontSize: '18px', lineHeight: 1 }}>{platform.emoji}</span>
+            <span
+              style={{
+                fontSize: '9px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.06em',
+                fontWeight: 500,
+                color: platform.color,
+                textAlign: 'center',
+                lineHeight: 1.2,
+              }}
+            >
               {platform.name}
             </span>
           </motion.button>

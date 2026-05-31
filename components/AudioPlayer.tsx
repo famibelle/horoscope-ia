@@ -254,131 +254,139 @@ export default function AudioPlayer({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
-        className="text-center mb-8"
+        className="text-center mb-6"
       >
-        <p className="text-violet-300/45 text-xs uppercase tracking-[0.35em] mb-3">
+        <p style={{ color: 'rgba(212,175,80,0.5)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.35em', marginBottom: '6px' }}>
           La Voix des Ancêtres
         </p>
-        <h2 className="font-display text-2xl sm:text-3xl font-bold text-white">
+        <h2 className="font-display" style={{ fontSize: '22px', fontWeight: 700, color: '#C8D8C0' }}>
           Écoutez Maryse
         </h2>
-        <p className="text-white/30 text-sm mt-2">
-          🎧 Horoscope audio
-        </p>
+        <p style={{ color: 'rgba(200,216,192,0.35)', fontSize: '13px', marginTop: '4px' }}>🎧 Horoscope audio</p>
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
+        initial={{ opacity: 0, scale: 0.97 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="relative rounded-3xl p-6 sm:p-8 overflow-hidden"
+        transition={{ duration: 0.5 }}
         style={{
-          background:
-            'linear-gradient(145deg, rgba(124,58,237,0.12) 0%, rgba(59,130,246,0.06) 100%)',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
-          border: '1px solid rgba(124,58,237,0.2)',
-          boxShadow: '0 0 60px rgba(124,58,237,0.15)',
+          position: 'relative',
+          borderRadius: '18px',
+          padding: '16px',
+          overflow: 'hidden',
+          background: 'rgba(212,175,80,0.10)',
+          border: '1px solid rgba(212,175,80,0.22)',
         }}
       >
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {Array.from({ length: 40 }).map((_, i) => (
+        {/* Barres audio animées */}
+        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+          {Array.from({ length: 30 }).map((_, i) => (
             <motion.div
               key={i}
-              className="absolute bottom-0 rounded-full"
               style={{
-                left: `${(i / 40) * 100}%`,
+                position: 'absolute',
+                bottom: 0,
+                left: `${(i / 30) * 100}%`,
                 width: '2px',
-                background: 'linear-gradient(to top, rgba(124,58,237,0.4), transparent)',
+                background: 'linear-gradient(to top, rgba(212,175,80,0.35), transparent)',
                 transformOrigin: 'bottom',
+                borderRadius: '2px',
               }}
               animate={
                 isPlaying
-                  ? { height: [`${15 + (i % 5) * 8}%`, `${30 + (i % 7) * 6}%`, `${10 + (i % 3) * 12}%`] }
-                  : { height: '12%' }
+                  ? { height: [`${12 + (i % 5) * 7}%`, `${25 + (i % 7) * 5}%`, `${8 + (i % 3) * 10}%`] }
+                  : { height: '8%' }
               }
               transition={{
-                duration: 0.6 + (i % 4) * 0.15,
+                duration: 0.55 + (i % 4) * 0.12,
                 repeat: isPlaying ? Infinity : 0,
                 repeatType: 'reverse',
                 ease: 'easeInOut',
-                delay: (i % 8) * 0.05,
+                delay: (i % 8) * 0.04,
               }}
             />
           ))}
         </div>
 
-        <div className="relative z-10 flex flex-col sm:flex-row items-center gap-6">
+        <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: '14px' }}>
+          {/* Bouton play circulaire doré */}
           <motion.button
             onClick={hasAudio ? togglePlay : generate}
             disabled={showLoading}
-            className="relative flex-shrink-0 w-16 h-16 rounded-full flex items-center justify-center focus:outline-none disabled:opacity-40"
             style={{
-              background: 'linear-gradient(135deg, #7c3aed, #3b82f6)',
+              flexShrink: 0,
+              width: '48px',
+              height: '48px',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: isPlaying
+                ? 'linear-gradient(135deg, #D4AF50, #E8D98A)'
+                : 'linear-gradient(135deg, #D4AF50, #B8943A)',
               boxShadow: isPlaying
-                ? '0 0 40px rgba(124,58,237,0.7), 0 0 80px rgba(124,58,237,0.3)'
-                : '0 0 20px rgba(124,58,237,0.4)',
+                ? '0 0 30px rgba(212,175,80,0.6), 0 0 60px rgba(212,175,80,0.2)'
+                : '0 0 16px rgba(212,175,80,0.3)',
+              border: 'none',
+              cursor: showLoading ? 'not-allowed' : 'pointer',
+              opacity: showLoading ? 0.6 : 1,
             }}
-            whileHover={!isGenerating ? { scale: 1.08 } : {}}
-            whileTap={!isGenerating ? { scale: 0.95 } : {}}
+            whileHover={!isGenerating ? { scale: 1.06 } : {}}
+            whileTap={!isGenerating ? { scale: 0.94 } : {}}
           >
             <AnimatePresence mode="wait">
               {showLoading ? (
                 <motion.div
                   key="calling"
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{
-                    rotate: [-5, 5, -5],
-                    x: [-2, 2, -2],
-                    scale: [1, 1.02, 1],
-                    opacity: [0.8, 1, 0.8]
-                  }}
-                  transition={{ duration: 0.5, repeat: Infinity, ease: "easeInOut" }}
+                  animate={{ rotate: [-5, 5, -5], x: [-2, 2, -2], opacity: [0.7, 1, 0.7] }}
+                  transition={{ duration: 0.5, repeat: Infinity, ease: 'easeInOut' }}
                   style={{ display: 'inline-flex' }}
                 >
-                  <PhoneCall size={22} className="text-white" />
+                  <PhoneCall size={20} style={{ color: '#0D1A12' }} />
                 </motion.div>
               ) : isPlaying ? (
                 <motion.div key="pause" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
-                  <Pause size={22} className="text-white" fill="white" />
+                  <Pause size={20} style={{ color: '#0D1A12', fill: '#0D1A12' }} />
                 </motion.div>
               ) : (
                 <motion.div key="play" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
-                  <Play size={22} className="text-white ml-1" fill="white" />
+                  <Play size={20} style={{ color: '#0D1A12', fill: '#0D1A12', marginLeft: '2px' }} />
                 </motion.div>
               )}
             </AnimatePresence>
-
             {isPlaying && (
               <motion.div
-                className="absolute inset-0 rounded-full border-2 border-violet-400"
-                animate={{ scale: [1, 1.8], opacity: [0.8, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: 'easeOut' }}
+                style={{
+                  position: 'absolute', inset: 0, borderRadius: '50%',
+                  border: '2px solid rgba(212,175,80,0.6)',
+                }}
+                animate={{ scale: [1, 1.7], opacity: [0.8, 0] }}
+                transition={{ duration: 1.4, repeat: Infinity, ease: 'easeOut' }}
               />
             )}
           </motion.button>
 
-          <div className="text-center sm:text-left flex-1 w-full">
+          {/* Texte + barre */}
+          <div style={{ flex: 1 }}>
             <AnimatePresence mode="wait">
               {showLoading ? (
                 <motion.p
                   key={callingMsg}
-                  className="text-violet-200 font-semibold text-base sm:text-lg italic"
-                  initial={{ opacity: 0, y: 6 }}
+                  style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: '14px', fontWeight: 600, color: '#E8D98A' }}
+                  initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.5 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.4 }}
                 >
                   {callingMsg}
                 </motion.p>
               ) : (
                 <motion.p
                   key="title"
-                  className="text-white/80 font-semibold text-base sm:text-lg"
+                  style={{ fontSize: '14px', fontWeight: 500, color: '#C8D8C0' }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ duration: 0.4 }}
                 >
                   {signName ? `Horoscope ${signName}` : 'Horoscope audio'}
                 </motion.p>
@@ -388,40 +396,49 @@ export default function AudioPlayer({
               {showLoading ? (
                 <motion.p
                   key={loadingMsg}
-                  className="text-violet-300/60 text-sm mt-1 italic"
-                  initial={{ opacity: 0, y: 4 }}
+                  style={{ fontSize: '11px', color: 'rgba(200,216,192,0.5)', marginTop: '2px', fontStyle: 'italic' }}
+                  initial={{ opacity: 0, y: 3 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.4 }}
+                  exit={{ opacity: 0, y: -3 }}
+                  transition={{ duration: 0.35 }}
                 >
                   {loadingMsg}
                 </motion.p>
               ) : (
-              <p className="text-white/35 text-sm mt-1">
-              {hasAudio && duration > 0
-                  ? `Maryse parle · ${formatTime(duration)}`
-                  : 'Votre signe lu par Maryse'}
-              </p>
+                <p style={{ fontSize: '11px', color: 'rgba(200,216,192,0.4)', marginTop: '2px' }}>
+                  {hasAudio && duration > 0
+                    ? `Maryse parle · ${formatTime(duration)}`
+                    : 'Votre signe lu par Maryse'}
+                </p>
               )}
             </AnimatePresence>
-            {error && <p className="text-rose-400/70 text-xs mt-1">{error}</p>}
+            {error && <p style={{ fontSize: '11px', color: 'rgba(220,80,80,0.7)', marginTop: '3px' }}>{error}</p>}
 
             {hasAudio && (
-              <div className="mt-3 h-1 rounded-full bg-white/10 overflow-hidden max-w-xs mx-auto sm:mx-0 cursor-pointer" 
-                   onClick={(e) => {
-                     const audio = audioRef.current;
-                     if (!audio || !duration) return;
-                     const rect = e.currentTarget.getBoundingClientRect();
-                     const clickPosition = e.clientX - rect.left;
-                     const newTime = (clickPosition / rect.width) * duration;
-                     audio.currentTime = newTime;
-                     setProgress(newTime / duration);
-                   }}
+              <div
+                style={{
+                  marginTop: '8px',
+                  height: '3px',
+                  borderRadius: '3px',
+                  background: 'rgba(212,175,80,0.15)',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  maxWidth: '240px',
+                }}
+                onClick={(e) => {
+                  const audio = audioRef.current;
+                  if (!audio || !duration) return;
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  const newTime = ((e.clientX - rect.left) / rect.width) * duration;
+                  audio.currentTime = newTime;
+                  setProgress(newTime / duration);
+                }}
               >
                 <motion.div
-                  className="h-full rounded-full"
                   style={{
-                    background: 'linear-gradient(90deg, #7c3aed, #3b82f6)',
+                    height: '100%',
+                    borderRadius: '3px',
+                    background: 'linear-gradient(90deg, #D4AF50, #E8D98A)',
                     width: `${progress * 100}%`,
                   }}
                   transition={{ duration: 0.1 }}
@@ -430,7 +447,7 @@ export default function AudioPlayer({
             )}
           </div>
 
-          <Volume2 size={18} className="text-white/25 flex-shrink-0" />
+          <Volume2 size={16} style={{ color: 'rgba(200,216,192,0.25)', flexShrink: 0 }} />
         </div>
       </motion.div>
     </section>

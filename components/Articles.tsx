@@ -26,65 +26,82 @@ export default function Articles() {
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {ARTICLES.map((article, index) => (
           <motion.div
             key={article.slug}
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: index * 0.07, duration: 0.6 }}
-            whileHover={{ y: -6, scale: 1.01 }}
+            transition={{ delay: index * 0.06, duration: 0.5 }}
           >
             <Link
               href={`/articles/${article.slug}`}
-              className="relative block rounded-2xl p-5 sm:p-6 group overflow-hidden h-full"
               style={{
-                background:
-                  'linear-gradient(145deg, rgba(245,245,220,0.08) 0%, rgba(139,69,19,0.04) 100%)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: '1px solid rgba(245,245,220,0.08)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                background: '#111e14',
+                borderRadius: '14px',
+                padding: '12px 14px',
+                border: '0.5px solid rgba(255,255,255,0.07)',
+                textDecoration: 'none',
+                transition: 'border-color 0.2s',
               }}
             >
-              {/* Hover shimmer */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 shimmer-bg" />
-
-              <div className="relative z-10 flex flex-col h-full">
-                {/* Tag + read time */}
-                <div className="flex items-center justify-between mb-4">
-                  <span
-                    className={`inline-flex items-center px-2.5 py-1 rounded-full text-ancestral-earth text-[10px] font-semibold uppercase tracking-wider bg-gradient-to-r ${article.tagColor}`}
-                  >
-                    {article.tag}
-                  </span>
-                  <span className="text-ancestral-cream/25 text-[10px] uppercase tracking-wider">
-                    {article.readTime}
-                  </span>
-                </div>
-
-                {/* Emoji */}
-                <div className="text-3xl mb-3">{article.emoji}</div>
-
-                {/* Title */}
-                <h3 className="font-display font-bold text-ancestral-cream text-base sm:text-lg leading-snug mb-3 group-hover:text-ancestral-gold transition-colors duration-200">
-                  {article.title}
-                </h3>
-
-                {/* Excerpt */}
-                <p className="text-ancestral-cream/40 text-sm leading-relaxed mb-5 line-clamp-3 flex-1">
-                  {article.excerpt}
-                </p>
-
-                {/* CTA */}
-                <div className="flex items-center gap-1.5 text-ancestral-gold/60 text-xs font-medium group-hover:text-ancestral-gold transition-colors duration-200">
-                  <span>Lire l&apos;article</span>
-                  <ArrowRight
-                    size={12}
-                    className="group-hover:translate-x-1 transition-transform duration-200"
-                  />
-                </div>
+              {/* Carré emoji */}
+              <div
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  flexShrink: 0,
+                  background: 'rgba(255,255,255,0.04)',
+                  borderRadius: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '20px',
+                }}
+              >
+                {article.emoji}
               </div>
+
+              {/* Centre : tag + titre + durée */}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <span
+                  style={{
+                    fontSize: '8px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.08em',
+                    color: '#D4AF50',
+                    fontWeight: 600,
+                  }}
+                >
+                  {article.tag}
+                </span>
+                <p
+                  className="font-display"
+                  style={{
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    color: '#C8D8C0',
+                    lineHeight: 1.35,
+                    overflow: 'hidden',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    marginTop: '2px',
+                  }}
+                >
+                  {article.title}
+                </p>
+                <p style={{ fontSize: '8px', color: '#6B8A6E', marginTop: '3px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  {article.readTime}
+                </p>
+              </div>
+
+              {/* Chevron */}
+              <ArrowRight size={14} style={{ color: '#4B6450', flexShrink: 0 }} />
             </Link>
           </motion.div>
         ))}

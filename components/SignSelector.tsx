@@ -29,91 +29,80 @@ export default function SignSelector({ selected, onSelect }: SignSelectorProps) 
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 sm:gap-4">
-        {signs.map((sign, index) => {
+      {/* Carousel horizontal scrollable */}
+      <div
+        className="scrollbar-hide"
+        style={{
+          display: 'flex',
+          overflowX: 'auto',
+          gap: '8px',
+          paddingLeft: '14px',
+          paddingRight: '14px',
+          paddingBottom: '4px',
+        }}
+      >
+        {signs.map((sign) => {
           const isSelected = selected === sign.id;
-
           return (
-            <motion.button
+            <button
               key={sign.id}
               onClick={() => onSelect(sign.id)}
-              className="relative flex flex-col items-center gap-2 p-3 sm:p-4 rounded-2xl border transition-colors duration-300 group focus:outline-none focus-visible:ring-2 focus-visible:ring-ancestral-gold"
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.04, duration: 0.5 }}
-              whileHover={{ scale: 1.06, y: -3 }}
-              whileTap={{ scale: 0.96 }}
-              style={
-                isSelected
-                  ? {
-                      background: `linear-gradient(135deg, rgba(210,105,30,0.18), rgba(255,215,0,0.12))`,
-                      borderColor: `rgba(210,105,30,0.5)`,
-                      boxShadow: `0 0 28px rgba(210,105,30,0.4), 0 0 60px rgba(210,105,30,0.2)`,
-                    }
-                  : {
-                      background: 'rgba(245,245,220,0.04)',
-                      borderColor: 'rgba(245,245,220,0.08)',
-                    }
-              }
               aria-pressed={isSelected}
-              aria-label={`${sign.name} — ${sign.tagline}`}
+              aria-label={sign.name}
+              style={{
+                flexDirection: 'column',
+                alignItems: 'center',
+                display: 'flex',
+                flexShrink: 0,
+                minWidth: '52px',
+                padding: '8px 10px',
+                borderRadius: '12px',
+                border: isSelected
+                  ? '1px solid rgba(212,175,80,0.4)'
+                  : '1px solid rgba(255,255,255,0.06)',
+                background: isSelected
+                  ? 'rgba(212,175,80,0.1)'
+                  : '#111e14',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                gap: '4px',
+                position: 'relative',
+              }}
             >
-              <span className="text-2xl sm:text-3xl leading-none">{sign.emoji}</span>
+              <span style={{ fontSize: '18px', lineHeight: 1 }}>{sign.emoji}</span>
               <span
-                className="text-xs font-medium leading-tight text-center transition-colors duration-200"
-                style={{ color: isSelected ? '#FFD700' : '#FFFFFF' }}
+                style={{
+                  fontSize: '8px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em',
+                  fontWeight: 500,
+                  color: isSelected ? '#D4AF50' : '#6B8A6E',
+                  whiteSpace: 'nowrap',
+                }}
               >
                 {sign.name}
               </span>
-              <span className="text-white text-[10px] leading-tight text-center hidden sm:block">
-                {elementEmoji[sign.element]} {sign.element}
-              </span>
-
               {isSelected && (
                 <motion.div
-                  className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 rounded-full border-2 border-ancestral-earth"
+                  style={{
+                    position: 'absolute',
+                    top: '-4px',
+                    right: '-4px',
+                    width: '10px',
+                    height: '10px',
+                    borderRadius: '50%',
+                    background: '#D4AF50',
+                    border: '2px solid #0D1A12',
+                  }}
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-                  style={{ background: '#FFD700' }}
                 />
               )}
-            </motion.button>
+            </button>
           );
         })}
       </div>
-
-      {/* Selected sign detail pill */}
-      {selected && (
-        <motion.div
-          key={selected}
-          className="mt-8 flex items-center justify-center gap-3"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          {(() => {
-            const sign = signs.find((s) => s.id === selected);
-            if (!sign) return null;
-            return (
-              <div
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm text-white"
-                style={{
-                  background: `linear-gradient(135deg, rgba(210,105,30,0.20), rgba(255,215,0,0.15))`,
-                  border: `1px solid rgba(210,105,30,0.35)`,
-                }}
-              >
-                <span>{sign.emoji}</span>
-                <span className="font-semibold">{sign.name}</span>
-                <span className="text-white">·</span>
-                <span className="text-white text-xs">{sign.tagline}</span>
-                <span className="text-white text-xs">· {sign.planet}</span>
-              </div>
-            );
-          })()}
-        </motion.div>
-      )}
     </section>
   );
 }

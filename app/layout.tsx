@@ -1,16 +1,20 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Playfair_Display } from 'next/font/google';
+import { Playfair_Display, DM_Sans } from 'next/font/google';
 import './globals.css';
+import TabBar from '@/components/TabBar';
 
-const inter = Inter({
-  variable: '--font-inter',
+const dmSans = DM_Sans({
+  variable: '--font-dm-sans',
   subsets: ['latin'],
+  weight: ['300', '400', '500'],
   display: 'swap',
 });
 
 const playfair = Playfair_Display({
   variable: '--font-playfair',
   subsets: ['latin'],
+  weight: ['400', '700'],
+  style: ['normal', 'italic'],
   display: 'swap',
 });
 
@@ -87,10 +91,9 @@ export default function RootLayout({
         />
         <meta name="google-adsense-account" content="ca-pub-3159683365493434" />
       </head>
-      {/* Thème ancestral activé - Pour revenir au thème cosmique, décommentez la ligne ci-dessous */}
-      {/* <body className={`${inter.variable} ${playfair.variable} antialiased bg-cosmic`}> */}
-      <body className={`${inter.variable} ${playfair.variable} antialiased`}>
+      <body className={`${dmSans.variable} ${playfair.variable} antialiased`} style={{ paddingBottom: '80px' }}>
         {children}
+        <TabBar />
       </body>
     </html>
   );
