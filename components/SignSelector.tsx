@@ -10,23 +10,20 @@ interface SignSelectorProps {
 
 export default function SignSelector({ selected, onSelect }: SignSelectorProps) {
   return (
-    <section id="signs" className="px-4 py-20 max-w-5xl mx-auto">
+    <section id="signs" className="px-4 pt-2 pb-8 max-w-5xl mx-auto">
       <motion.div
-        className="text-center mb-14"
-        initial={{ opacity: 0, y: 24 }}
+        className="text-center mb-5"
+        initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.5 }}
       >
-        <p className="text-white text-xs uppercase tracking-[0.35em] mb-4">
+        <p style={{ color: 'rgba(212,175,80,0.5)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.3em', marginBottom: '4px' }}>
           Sagesse de Karukera
         </p>
-        <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
-          Découvrez votre totem
+        <h2 className="font-display font-bold" style={{ fontSize: '22px', color: '#C8D8C0' }}>
+          Choisissez votre totem
         </h2>
-        <p className="text-white text-sm sm:text-base max-w-xs mx-auto leading-relaxed">
-          Les esprits de la Guadeloupe vous guident vers votre destin ancestral
-        </p>
       </motion.div>
 
       {/* Grille 4 colonnes mobile, 6 colonnes desktop */}
