@@ -97,6 +97,31 @@ function limitVeve(text: string): string {
   });
 }
 
+// Limite le totem du signe (nomKreyol + tokens du faune) à 1 occurrence
+// dans tout le JSON généré — même logique que limitVeve().
+// Le totem est déjà injecté 3× dans le prompt (animal, nomKreyol, spirituel) ;
+// sans ce filtre il sature le texte produit.
+// Remplacement : "l'ancêtre" — terme générique spirituellement cohérent.
+function limitTotem(text: string, sign: { nomKreyol: string; faune?: { nom_creole: string } }): string {
+  // Extraire les tokens significatifs (≥4 chars) du nomKreyol et du nom créole du faune
+  const raw = [sign.nomKreyol, sign.faune?.nom_creole || ''];
+  const keywords = new Set<string>(
+    raw.flatMap(s => s.split(/[/\s\-]+/).map(t => t.trim().toLowerCase()))
+       .filter(t => t.length >= 5)
+  );
+
+  let result = text;
+  for (const kw of keywords) {
+    const pattern = new RegExp(`\\b${kw}\\b`, 'gi');
+    let count = 0;
+    result = result.replace(pattern, (match) => {
+      count++;
+      return count <= 1 ? match : "l'ancêtre";
+    });
+  }
+  return result;
+}
+
 // Élimine le doublon "ka ka" produit quand tambour→ka s'applique
 // à un texte qui contenait déjà "ka" (ex: "rythme du tambour ka" → "rythme du ka ka")
 function fixKaKa(text: string): string {
@@ -776,10 +801,10 @@ export async function generateAllHoroscopes() {
         }
         // Nettoyage post-génération
         const cleanedContent = removeRedundantParentheses(
-          limitVeve(restoreApostrophes(fixKaKa(removeSeve(structured)
+          limitTotem(limitVeve(restoreApostrophes(fixKaKa(removeSeve(structured)
             .replace(/\btambours?\b/gi, 'ka'))
             .replace(/—/g, ',')
-            .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan')))
+            .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan'))), sign)
         );
 
         // Générer le teaser
@@ -910,10 +935,10 @@ export async function generateAllHoroscopes() {
         }
         // Nettoyage post-génération
         const cleanedContent = removeRedundantParentheses(
-          limitVeve(restoreApostrophes(fixKaKa(removeSeve(structured)
+          limitTotem(limitVeve(restoreApostrophes(fixKaKa(removeSeve(structured)
             .replace(/\btambours?\b/gi, 'ka'))
             .replace(/—/g, ',')
-            .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan')))
+            .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan'))), sign)
         );
 
         const teaser = await generateTeaser(sign.name, cleanedContent);
