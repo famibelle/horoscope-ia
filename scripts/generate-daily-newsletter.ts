@@ -4,9 +4,13 @@
  * et affiche le résultat
  */
 
+import { config } from 'dotenv';
+config();
+
 import { generateDailyNewsletter } from '@/lib/newsletter-generator';
 import { saveNewsletter } from '@/lib/newsletter-storage';
 import { getTodaysNewsletter } from '@/lib/newsletter-storage';
+import { createEmailCampaign, sendCampaignNow } from '@/lib/brevo-api';
 
 async function main() {
   console.log('🌅 Génération de la newsletter du jour...\n');
@@ -55,6 +59,25 @@ async function main() {
     .substring(0, 500) + '...';
   console.log(previewText);
   console.log('─'.repeat(60));
+
+  // Envoi via Brevo (si BREVO_API_KEY est défini)
+  if (process.env.BREVO_API_KEY) {
+    console.log('\n📨 Envoi de la campagne Brevo...');
+    try {
+      const campaign = await createEmailCampaign(
+        `Horoscope Guadeloupéen — ${saved.id}`,
+        newsletter.subject,
+        newsletter.html,
+        newsletter.text,
+      );
+      await sendCampaignNow(campaign.id);
+      console.log(`✅ Campagne Brevo envoyée (id: ${campaign.id})`);
+    } catch (err: any) {
+      console.error('❌ Erreur Brevo:', err?.message ?? err);
+    }
+  } else {
+    console.log('\n⚠️  BREVO_API_KEY absent — envoi ignoré');
+  }
 
   console.log('\n✨ Newsletter du jour générée et sauvegardée !');
 }

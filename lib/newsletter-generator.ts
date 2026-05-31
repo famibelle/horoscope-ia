@@ -14,6 +14,66 @@ import { lieuxData } from './private/lieux-data';
 import { kreyolData } from './private/kreyol-data';
 import { histoireData } from './private/histoire-data';
 
+// Charger les horoscopes depuis Supabase via REST (sans SDK, compatible CI)
+async function fetchHoroscopesFromSupabase(date: string, edition: string): Promise<SignHoroscope[]> {
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !key) {
+    console.warn('⚠️  SUPABASE_URL / clé absents — données simulées');
+    return [];
+  }
+
+  try {
+    const res = await fetch(
+      `${supabaseUrl}/rest/v1/horoscopes?date=eq.${date}&edition=eq.${edition}&select=*`,
+      { headers: { apikey: key, Authorization: `Bearer ${key}` } },
+    );
+
+    if (!res.ok) {
+      console.warn(`⚠️  Supabase ${res.status} — données simulées`);
+      return [];
+    }
+
+    const rows: Record<string, any>[] = await res.json();
+
+    const result: SignHoroscope[] = rows
+      .map(row => {
+        const sign = signs.find(s => s.id === row.sign_id);
+        if (!sign) return null;
+        return {
+          sign,
+          horoscope: {
+            ouverture:  row.ouverture  ?? '',
+            amour:      row.amour      ?? '',
+            travail:    row.travail    ?? '',
+            argent:     row.argent     ?? '',
+            amitie:     row.amitie     ?? '',
+            prediction: row.prediction ?? '',
+            conseil:    row.conseil    ?? '',
+            teaser:     row.teaser     ?? '',
+            signFr:     row.sign_fr    ?? sign.name,
+            weather:    row.weather    ?? '',
+            edition:    row.edition,
+            source:     row.source     ?? 'supabase',
+          } as HoroscopeResponse,
+        };
+      })
+      .filter((x): x is SignHoroscope => x !== null);
+
+    // Conserver l'ordre canonique des signes
+    result.sort((a, b) =>
+      signs.findIndex(s => s.id === a.sign.id) - signs.findIndex(s => s.id === b.sign.id),
+    );
+
+    console.log(`✅ ${result.length}/12 horoscopes Supabase (${date} / ${edition})`);
+    return result;
+  } catch (err) {
+    console.error('❌ Supabase fetch error:', err);
+    return [];
+  }
+}
+
 // Types pour la structure de la newsletter
 interface SignHoroscope {
   sign: typeof signs[0];
@@ -482,8 +542,9 @@ export async function generateDailyNewsletter(
   date: string = todayGuadeloupe(),
   subscriberName?: string
 ): Promise<Newsletter> {
-  // Générer avec tous les signes
-  return generateNewsletter(date, [], subscriberName);
+  // Charger les vrais horoscopes depuis Supabase (édition matin — newsletter lue au réveil)
+  const horoscopes = await fetchHoroscopesFromSupabase(date, 'matin');
+  return generateNewsletter(date, horoscopes, subscriberName);
 }
 
 // Générateur de newsletter pour un signe spécifique
