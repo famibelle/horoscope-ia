@@ -285,6 +285,20 @@ function isLongPeriod(periode: string): boolean {
   return /\b\d{4}\s*[-–—]\s*\d{4}\b/.test(periode);
 }
 
+// Rotation déterministe d'un tableau : chaque (signId, date) obtient un point d'entrée différent.
+// Évite que les mêmes entrées apparaissent toujours en tête pour tous les signes.
+function rotateBySignDate<T>(arr: T[], signId: string, date: string, take: number): T[] {
+  if (arr.length === 0) return [];
+  let hash = 0;
+  const key = signId + date;
+  for (let i = 0; i < key.length; i++) {
+    hash = ((hash << 5) - hash + key.charCodeAt(i)) & 0x7fffffff;
+  }
+  const offset = hash % arr.length;
+  const rotated = [...arr.slice(offset), ...arr.slice(0, offset)];
+  return rotated.slice(0, take);
+}
+
 export function buildHoroscopeUserPrompt(
   sign: Sign,
   rawText: string,
@@ -408,11 +422,13 @@ export function buildHoroscopeUserPrompt(
   }
 
   // FAUNE-DATA : diversification — exclut le totem, préfère les entrées SACRÉ/Emblématique
-  const fauneEnrichies = fauneData.filter(f => {
+  // Rotation par signe+date pour que chaque signe obtienne des animaux différents
+  const faunePool = fauneData.filter(f => {
     if (isTotem(f.nomCreole, f.nomFrancais)) return false;
     const sacre = (f.sacreSymbolique || '').toUpperCase();
     return sacre.includes('SACRÉ') || sacre.includes('EMBLÉMATIQUE') || sacre.includes('EMBLEMATIQUE');
-  }).slice(0, 6);
+  });
+  const fauneEnrichies = rotateBySignDate(faunePool, sign.id, dateToUse + edition, 6);
 
   // FLORE-DATA : exclut l'entrée exacte du totem (évite le doublon flanbwayan×2)
   const floreTotemNom = (floreEntry?.nomCreole || '').toLowerCase();
