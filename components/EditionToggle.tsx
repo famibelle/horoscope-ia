@@ -48,9 +48,9 @@ export default function EditionToggle() {
             <span
               className="font-ui"
             style={{
-              fontSize: '8px',
+              fontSize: '11px',
               textTransform: 'uppercase',
-              letterSpacing: '0.06em',
+              letterSpacing: '0.05em',
               fontWeight: 500,
               color: active ? '#D4AF50' : '#6B8A6E',
             }}

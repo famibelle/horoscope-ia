@@ -32,10 +32,10 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
         >
-          <span className="block text-4xl sm:text-5xl" style={{ color: '#D4AF50' }}>
+          <span className="block text-5xl sm:text-6xl" style={{ color: '#D4AF50' }}>
             Maryse CondAI
           </span>
-          <span className="block text-xl sm:text-2xl font-light mt-1" style={{ color: 'rgba(200,216,192,0.7)' }}>
+          <span className="block text-2xl sm:text-3xl font-light mt-1" style={{ color: 'rgba(200,216,192,0.7)' }}>
             vous parle
           </span>
         </motion.h1>

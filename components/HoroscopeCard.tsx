@@ -181,14 +181,14 @@ function FilledCard({
       >
         <span
           className="font-ui"
-          style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#D4AF50', fontWeight: 500 }}
+          style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#D4AF50', fontWeight: 500 }}
         >
           Maryse vous parle
         </span>
         <span
           className="font-ui"
           style={{
-            fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.06em',
+            fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em',
             color: '#4CAF74', background: 'rgba(76,175,116,0.12)',
             border: '1px solid rgba(76,175,116,0.2)', borderRadius: '6px',
             padding: '3px 7px', fontWeight: 500,
@@ -213,7 +213,7 @@ function FilledCard({
             >
               <div className="flex items-center gap-2" style={{ marginBottom: '4px' }}>
                 <Icon size={12} className={`${colorClass} flex-shrink-0`} />
-                <span className={`font-ui font-semibold uppercase tracking-widest ${colorClass}`} style={{ fontSize: '9px', letterSpacing: '0.08em' }}>
+                <span className={`font-ui font-semibold uppercase tracking-widest ${colorClass}`} style={{ fontSize: '11px', letterSpacing: '0.08em' }}>
                   {label}
                 </span>
               </div>
@@ -224,8 +224,8 @@ function FilledCard({
                     <p
                       className={`font-display ${isPrediction ? 'italic' : ''}`}
                       style={{
-                        fontSize: '13px',
-                        lineHeight: 1.7,
+                        fontSize: '16px',
+                        lineHeight: 1.75,
                         color: '#C8D8C0',
                         paddingLeft: '16px',
                       }}
@@ -254,10 +254,10 @@ function FilledCard({
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.4 }}
         >
-          <p style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B8A6E', marginBottom: '4px' }}>
+          <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B8A6E', marginBottom: '4px' }}>
             Dimension spirituelle
           </p>
-          <p style={{ fontSize: '11px', lineHeight: 1.6, color: '#C8D8C0', opacity: 0.7, fontStyle: 'italic' }}>{sign.spirituel}</p>
+          <p style={{ fontSize: '14px', lineHeight: 1.65, color: '#C8D8C0', opacity: 0.7, fontStyle: 'italic' }}>{sign.spirituel}</p>
         </motion.div>
 
         {/* Contexte Vaudou */}
@@ -275,9 +275,9 @@ function FilledCard({
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
               <span style={{ fontSize: '14px' }}>{data.vaudou.emoji}</span>
-              <p style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B8A6E' }}>Protection Vaudou</p>
+              <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B8A6E' }}>Protection Vaudou</p>
             </div>
-            <p style={{ fontSize: '11px', lineHeight: 1.6, color: '#C8D8C0', opacity: 0.8 }}>
+            <p style={{ fontSize: '14px', lineHeight: 1.65, color: '#C8D8C0', opacity: 0.8 }}>
               <span style={{ fontWeight: 600, color: '#D4AF50' }}>{data.vaudou.loa}</span> ({data.vaudou.famille}) vous accompagne.
               Énergie : {data.vaudou.energie}. Couleurs : {data.vaudou.couleurs.join(', ')}.
             </p>
@@ -288,11 +288,11 @@ function FilledCard({
         {data.weather && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingTop: '4px' }}>
             <Cloud size={11} style={{ color: '#6B8A6E', flexShrink: 0 }} />
-            <span style={{ fontSize: '10px', color: '#6B8A6E' }}>Pointe-à-Pitre · {data.weather}</span>
+            <span style={{ fontSize: '12px', color: '#6B8A6E' }}>Pointe-à-Pitre · {data.weather}</span>
           </div>
         )}
 
-        <p style={{ fontSize: '11px', color: '#D4AF50', opacity: 0.7, textAlign: 'right', marginTop: '4px' }}>
+        <p style={{ fontSize: '13px', color: '#D4AF50', opacity: 0.7, textAlign: 'right', marginTop: '4px' }}>
           lire la suite →
         </p>
       </div>

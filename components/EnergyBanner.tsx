@@ -123,10 +123,10 @@ export default function EnergyBanner() {
           >
             <span className="text-2xl">{energy.icon}</span>
             <div className="text-center">
-              <p className="font-display font-semibold text-sm leading-tight text-ancestral-cream/80">
+              <p className="font-display font-semibold text-base leading-tight text-ancestral-cream/80">
                 {energy.value}
               </p>
-              <p className="font-ui text-ancestral-cream/30 text-[10px] uppercase tracking-wider mt-0.5">
+              <p className="font-ui text-ancestral-cream/30 text-xs uppercase tracking-wider mt-0.5">
                 {energy.label}
               </p>
             </div>

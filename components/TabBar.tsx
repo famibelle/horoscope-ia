@@ -77,9 +77,9 @@ export default function TabBar() {
             <span
               className="font-ui"
               style={{
-                fontSize: '9px',
+                fontSize: '11px',
                 fontWeight: 500,
-                letterSpacing: '0.04em',
+                letterSpacing: '0.03em',
                 color: active ? '#D4AF50' : '#4B6450',
                 transition: 'color 0.2s',
               }}

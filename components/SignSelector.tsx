@@ -18,10 +18,10 @@ export default function SignSelector({ selected, onSelect }: SignSelectorProps) 
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
       >
-        <p style={{ color: 'rgba(212,175,80,0.5)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.3em', marginBottom: '4px' }}>
+        <p style={{ color: 'rgba(212,175,80,0.5)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.25em', marginBottom: '4px' }}>
           Sagesse de Karukera
         </p>
-        <h2 className="font-display font-bold" style={{ fontSize: '22px', color: '#C8D8C0' }}>
+        <h2 className="font-display font-bold" style={{ fontSize: '26px', color: '#C8D8C0' }}>
           Choisissez votre totem
         </h2>
       </motion.div>
@@ -64,7 +64,7 @@ export default function SignSelector({ selected, onSelect }: SignSelectorProps) 
               <span style={{ fontSize: '22px', lineHeight: 1 }}>{sign.emoji}</span>
               <span
                 className="font-ui"
-                style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 500, color: isSelected ? '#D4AF50' : '#6B8A6E', textAlign: 'center', lineHeight: 1.2 }}
+                style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 500, color: isSelected ? '#D4AF50' : '#6B8A6E', textAlign: 'center', lineHeight: 1.2 }}
               >
                 {sign.name}
               </span>
