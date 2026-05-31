@@ -580,18 +580,32 @@ async function fetchWeather(): Promise<string> {
     const tmin = Math.round(d.temperature_2m_min[0]);
     const rain = d.precipitation_sum[0] as number;
     const wind = Math.round(d.windspeed_10m_max[0]);
+
     const rainLabel =
-      rain === 0
-        ? 'pas de pluie'
-        : rain < 5
-          ? 'légère pluie'
-          : rain < 20
-            ? 'pluie modérée'
-            : 'fortes pluies';
-    const windLabel =
-      wind < 20 ? 'vent faible' : wind < 40 ? 'vent modéré' : 'vent fort';
-    
-    const result = `${tmin}–${tmax}°C, ${rainLabel}, ${windLabel} (${wind} km/h)`;
+      rain === 0  ? 'pas de pluie'
+      : rain < 5  ? 'légère pluie'
+      : rain < 20 ? 'pluie modérée'
+      :             'fortes pluies';
+
+    // "alizé" = terme local guadeloupéen — évite que le modèle réutilise
+    // "vent" comme image générique dans les horoscopes
+    const alizeLabel =
+      wind < 20 ? `alizé léger (${wind} km/h)`
+      : wind < 40 ? `alizé modéré (${wind} km/h)`
+      :             `grains forts (${wind} km/h)`;
+
+    // Phase lunaire calculée localement — zéro coût API, varie chaque jour,
+    // donne au modèle une image naturelle quotidienne alternative au "vent"
+    const known = new Date('2000-01-06').getTime();
+    const days  = (Date.now() - known) / 86_400_000;
+    const cycle = ((days % 29.53) + 29.53) % 29.53;
+    const moonIdx = Math.floor((cycle / 29.53) * 8) % 8;
+    const moonLabel = [
+      'Nouvelle lune', 'Croissant naissant', 'Premier quartier', 'Croissant gibbeuse',
+      'Pleine lune',   'Gibbeuse décroissante', 'Dernier quartier', 'Croissant décroissant',
+    ][moonIdx];
+
+    const result = `${tmin}–${tmax}°C, ${rainLabel}, ${alizeLabel}, ${moonLabel}`;
     logVerbose(`Météo formatée: ${result}`);
     return result;
   } catch (e) {
