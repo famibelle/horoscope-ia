@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 const TABS = [
   { id: 'accueil',   href: '/',          icon: '🌿', label: 'Accueil'   },
   { id: 'signe',     href: '/horoscope', icon: '♊', label: 'Mon signe' },
-  { id: 'contes',    href: '/articles',  icon: '📜', label: 'Contes'    },
+  { id: 'contes',    href: '/#articles', icon: '📜', label: 'Contes'    },
   { id: 'partager',  href: '/#partager', icon: '📲', label: 'Partager'  },
 ] as const;
 
@@ -34,7 +34,7 @@ export default function TabBar() {
   function isActive(tab: (typeof TABS)[number]) {
     if (tab.id === 'accueil') return pathname === '/';
     if (tab.id === 'signe')   return pathname.startsWith('/horoscope');
-    if (tab.id === 'contes')  return pathname.startsWith('/articles') || pathname.startsWith('/dictionnaire-vaudou') || pathname.startsWith('/calendrier-vaudou');
+    if (tab.id === 'contes')  return pathname.startsWith('/articles') || pathname.startsWith('/dictionnaire-vaudou') || pathname.startsWith('/calendrier-vaudou') || pathname.startsWith('/quiz-vaudou');
     if (tab.id === 'partager') return false;
     return false;
   }
