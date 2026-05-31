@@ -29,55 +29,51 @@ export default function SignSelector({ selected, onSelect }: SignSelectorProps) 
         </p>
       </motion.div>
 
-      {/* Carousel horizontal scrollable */}
-      <div
-        className="scrollbar-hide"
-        style={{
-          display: 'flex',
-          overflowX: 'auto',
-          gap: '8px',
-          paddingLeft: '14px',
-          paddingRight: '14px',
-          paddingBottom: '4px',
-        }}
-      >
-        {signs.map((sign) => {
+      {/* Grille 4 colonnes mobile, 6 colonnes desktop */}
+      <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+        {signs.map((sign, index) => {
           const isSelected = selected === sign.id;
           return (
-            <button
+            <motion.button
               key={sign.id}
               onClick={() => onSelect(sign.id)}
               aria-pressed={isSelected}
               aria-label={sign.name}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.03, duration: 0.35 }}
+              whileTap={{ scale: 0.94 }}
               style={{
                 flexDirection: 'column',
                 alignItems: 'center',
+                justifyContent: 'center',
                 display: 'flex',
-                flexShrink: 0,
-                minWidth: '52px',
-                padding: '8px 10px',
-                borderRadius: '12px',
+                padding: '10px 6px',
+                borderRadius: '14px',
                 border: isSelected
-                  ? '1px solid rgba(212,175,80,0.4)'
+                  ? '1px solid rgba(212,175,80,0.45)'
                   : '1px solid rgba(255,255,255,0.06)',
                 background: isSelected
                   ? 'rgba(212,175,80,0.1)'
                   : '#111e14',
                 cursor: 'pointer',
                 transition: 'all 0.2s',
-                gap: '4px',
+                gap: '5px',
                 position: 'relative',
+                minHeight: '64px',
               }}
             >
-              <span style={{ fontSize: '18px', lineHeight: 1 }}>{sign.emoji}</span>
+              <span style={{ fontSize: '22px', lineHeight: 1 }}>{sign.emoji}</span>
               <span
                 style={{
-                  fontSize: '8px',
+                  fontSize: '9px',
                   textTransform: 'uppercase',
                   letterSpacing: '0.04em',
                   fontWeight: 500,
                   color: isSelected ? '#D4AF50' : '#6B8A6E',
-                  whiteSpace: 'nowrap',
+                  textAlign: 'center',
+                  lineHeight: 1.2,
                 }}
               >
                 {sign.name}
@@ -99,7 +95,7 @@ export default function SignSelector({ selected, onSelect }: SignSelectorProps) 
                   transition={{ type: 'spring', stiffness: 400, damping: 15 }}
                 />
               )}
-            </button>
+            </motion.button>
           );
         })}
       </div>
