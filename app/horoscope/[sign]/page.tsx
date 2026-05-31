@@ -112,6 +112,23 @@ export default function HoroscopeSignPage() {
   const [horoscope, setHoroscope] = useState<HoroscopeResponse | null>(null);
   const [ambiance, setAmbiance] = useState<AmbianceData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [localDateTime, setLocalDateTime] = useState('');
+
+  function formatLocalDateTime(): string {
+    const now = new Date();
+    const date = now.toLocaleDateString('fr-FR', {
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+    });
+    const h = now.getHours();
+    const m = now.getMinutes().toString().padStart(2, '0');
+    return `${date}, ${h}h${m}`;
+  }
+
+  useEffect(() => {
+    setLocalDateTime(formatLocalDateTime());
+    const id = setInterval(() => setLocalDateTime(formatLocalDateTime()), 60_000);
+    return () => clearInterval(id);
+  }, []);
 
   useEffect(() => {
     // Détecter l'édition basée sur l'heure LOCALE du navigateur
@@ -195,6 +212,13 @@ export default function HoroscopeSignPage() {
             </p>
           </div>
         </motion.div>
+
+        {/* Date et heure locale */}
+        {localDateTime && (
+          <p className="text-ancestral-cream/35 text-xs mb-6 capitalize">
+            {localDateTime}
+          </p>
+        )}
 
         {/* Edition pills */}
         <div className="flex gap-2 mb-10">
