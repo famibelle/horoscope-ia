@@ -145,15 +145,8 @@ export default function ShareButtons() {
           >
             <platform.Icon size={20} />
             <span
-              style={{
-                fontSize: '9px',
-                textTransform: 'uppercase',
-                letterSpacing: '0.06em',
-                fontWeight: 500,
-                color: platform.color,
-                textAlign: 'center',
-                lineHeight: 1.2,
-              }}
+              className="font-ui"
+              style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 500, color: platform.color, textAlign: 'center', lineHeight: 1.2 }}
             >
               {platform.name}
             </span>

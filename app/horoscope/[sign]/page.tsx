@@ -191,12 +191,8 @@ export default function HoroscopeSignPage() {
           {/* Ligne haute : logo + avatar */}
           <div className="flex items-center justify-between mb-4">
             <span
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '12px',
-                color: '#D4AF50',
-                letterSpacing: '0.04em',
-              }}
+              className="font-accent italic"
+              style={{ fontSize: '13px', color: '#D4AF50', letterSpacing: '0.02em' }}
             >
               La Voix de nos Ancêtres
             </span>
@@ -235,17 +231,12 @@ export default function HoroscopeSignPage() {
             <span style={{ fontSize: '28px', lineHeight: 1 }}>{sign.emoji}</span>
             <div style={{ flex: 1 }}>
               <p
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '18px',
-                  fontWeight: 700,
-                  color: '#E8D98A',
-                  lineHeight: 1.1,
-                }}
+                className="font-display"
+                style={{ fontSize: '18px', fontWeight: 700, color: '#E8D98A', lineHeight: 1.1 }}
               >
                 {sign.name}
               </p>
-              <p style={{ fontSize: '10px', color: 'var(--color-text-muted)', marginTop: '2px', letterSpacing: '0.04em' }}>
+              <p className="font-ui" style={{ fontSize: '10px', color: 'var(--color-text-muted)', marginTop: '2px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
                 {sign.planet} · {sign.element}
               </p>
             </div>
@@ -269,7 +260,7 @@ export default function HoroscopeSignPage() {
 
           {/* Date et heure locale */}
           {localDateTime && (
-            <p style={{ color: 'var(--color-text-muted)', fontSize: '11px', marginTop: '10px', textTransform: 'capitalize' }}>
+            <p className="font-ui" style={{ color: 'var(--color-text-muted)', fontSize: '11px', marginTop: '10px', textTransform: 'capitalize' }}>
               {localDateTime}
             </p>
           )}
@@ -309,13 +300,8 @@ export default function HoroscopeSignPage() {
               >
                 <span style={{ fontSize: '14px', lineHeight: 1 }}>{edEmoji}</span>
                 <span
-                  style={{
-                    fontSize: '8px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.06em',
-                    fontWeight: 500,
-                    color: active ? '#D4AF50' : '#6B8A6E',
-                  }}
+                  className="font-ui"
+                  style={{ fontSize: '8px', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 500, color: active ? '#D4AF50' : '#6B8A6E' }}
                 >
                   {label}
                 </span>
@@ -386,8 +372,8 @@ export default function HoroscopeSignPage() {
                     border: `1px solid rgba(210,105,30,0.18)`,
                   }}
                 >
-                  <p className="text-ancestral-cream/35 text-xs uppercase tracking-widest mb-1.5">Dimension spirituelle</p>
-                  <p className="text-ancestral-cream/45 text-xs leading-relaxed italic">{sign.spirituel}</p>
+                  <p className="font-ui text-ancestral-cream/35 text-xs uppercase tracking-widest mb-1.5">Dimension spirituelle</p>
+                  <p className="font-accent italic text-ancestral-cream/45 text-xs leading-relaxed">{sign.spirituel}</p>
                 </div>
               </motion.section>
             )}

@@ -46,14 +46,14 @@ export default function EditionToggle() {
           >
             <span style={{ fontSize: '14px', lineHeight: 1 }}>{displayEmoji}</span>
             <span
-              style={{
-                fontSize: '8px',
-                textTransform: 'uppercase',
-                letterSpacing: '0.06em',
-                fontWeight: 500,
-                color: active ? '#D4AF50' : '#6B8A6E',
-                fontFamily: 'var(--font-ui)',
-              }}
+              className="font-ui"
+            style={{
+              fontSize: '8px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.06em',
+              fontWeight: 500,
+              color: active ? '#D4AF50' : '#6B8A6E',
+            }}
             >
               {label}
             </span>

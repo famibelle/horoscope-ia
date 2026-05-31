@@ -69,33 +69,22 @@ export default function Articles() {
               {/* Centre : tag + titre + durée */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <span
-                  style={{
-                    fontSize: '8px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.08em',
-                    color: '#D4AF50',
-                    fontWeight: 600,
-                  }}
+                  className="font-ui"
+                  style={{ fontSize: '8px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#D4AF50', fontWeight: 600 }}
                 >
                   {article.tag}
                 </span>
                 <p
                   className="font-display"
                   style={{
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    color: '#C8D8C0',
-                    lineHeight: 1.35,
-                    overflow: 'hidden',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    marginTop: '2px',
+                    fontSize: '13px', fontWeight: 700, color: '#C8D8C0', lineHeight: 1.35,
+                    overflow: 'hidden', display: '-webkit-box',
+                    WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', marginTop: '2px',
                   }}
                 >
                   {article.title}
                 </p>
-                <p style={{ fontSize: '8px', color: '#6B8A6E', marginTop: '3px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                <p className="font-ui" style={{ fontSize: '8px', color: '#6B8A6E', marginTop: '3px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                   {article.readTime}
                 </p>
               </div>

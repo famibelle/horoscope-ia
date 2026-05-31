@@ -11,9 +11,10 @@
   --color-text:       #C8D8C0;
   --color-text-muted: #6B8A6E;
   --color-green:      #4CAF74;
-  /* ── Typographie ── */
-  --font-display: var(--font-playfair), Georgia, serif;
-  --font-ui:      var(--font-dm-sans), system-ui, sans-serif;
+  /* ── Typographie (variables injectées par next/font via layout.tsx) ── */
+  /* --font-display → Cormorant Garamond */
+  /* --font-ui      → Outfit             */
+  /* --font-accent  → IM Fell English    */
   /* ── Ancienne palette (conservée pour compatibilité composants existants) ── */
   --ancestral-earth:     #8B4513;
   --ancestral-forest:    #228B22;

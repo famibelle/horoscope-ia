@@ -43,7 +43,7 @@ export default function Hero() {
         {/* CTA */}
         <motion.button
           onClick={scrollToSigns}
-          className="relative px-8 py-3 rounded-2xl font-semibold text-sm overflow-hidden"
+          className="relative px-8 py-3 rounded-2xl font-ui font-medium text-sm overflow-hidden"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.5 }}

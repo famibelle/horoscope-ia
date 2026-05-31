@@ -180,27 +180,18 @@ function FilledCard({
         }}
       >
         <span
-          style={{
-            fontSize: '9px',
-            textTransform: 'uppercase',
-            letterSpacing: '0.1em',
-            color: '#D4AF50',
-            fontWeight: 500,
-          }}
+          className="font-ui"
+          style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#D4AF50', fontWeight: 500 }}
         >
           Maryse vous parle
         </span>
         <span
+          className="font-ui"
           style={{
-            fontSize: '9px',
-            textTransform: 'uppercase',
-            letterSpacing: '0.06em',
-            color: '#4CAF74',
-            background: 'rgba(76,175,116,0.12)',
-            border: '1px solid rgba(76,175,116,0.2)',
-            borderRadius: '6px',
-            padding: '3px 7px',
-            fontWeight: 500,
+            fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.06em',
+            color: '#4CAF74', background: 'rgba(76,175,116,0.12)',
+            border: '1px solid rgba(76,175,116,0.2)', borderRadius: '6px',
+            padding: '3px 7px', fontWeight: 500,
           }}
         >
           {badgeLabel}
@@ -222,7 +213,7 @@ function FilledCard({
             >
               <div className="flex items-center gap-2" style={{ marginBottom: '4px' }}>
                 <Icon size={12} className={`${colorClass} flex-shrink-0`} />
-                <span className={`text-xs font-semibold uppercase tracking-widest ${colorClass}`} style={{ fontSize: '9px', letterSpacing: '0.08em' }}>
+                <span className={`font-ui font-semibold uppercase tracking-widest ${colorClass}`} style={{ fontSize: '9px', letterSpacing: '0.08em' }}>
                   {label}
                 </span>
               </div>
@@ -231,9 +222,8 @@ function FilledCard({
                   ...markdownComponents,
                   p: ({ children }) => (
                     <p
+                      className={`font-display ${isPrediction ? 'italic' : ''}`}
                       style={{
-                        fontFamily: 'var(--font-display)',
-                        fontStyle: isPrediction ? 'italic' : 'normal',
                         fontSize: '13px',
                         lineHeight: 1.7,
                         color: '#C8D8C0',

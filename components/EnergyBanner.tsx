@@ -123,10 +123,10 @@ export default function EnergyBanner() {
           >
             <span className="text-2xl">{energy.icon}</span>
             <div className="text-center">
-              <p className="text-ancestral-cream/75 text-xs sm:text-sm font-semibold leading-tight">
+              <p className="font-display font-semibold text-sm leading-tight text-ancestral-cream/80">
                 {energy.value}
               </p>
-              <p className="text-ancestral-cream/30 text-[10px] uppercase tracking-wider mt-0.5">
+              <p className="font-ui text-ancestral-cream/30 text-[10px] uppercase tracking-wider mt-0.5">
                 {energy.label}
               </p>
             </div>
@@ -147,10 +147,10 @@ export default function EnergyBanner() {
           viewport={{ once: true }}
           transition={{ delay: 0.5, duration: 0.8 }}
         >
-          <p className="text-ancestral-gold/40 text-xs uppercase tracking-widest mb-1.5">
+          <p className="font-ui text-ancestral-gold/40 text-xs uppercase tracking-widest mb-1.5">
             Les esprits de Karukera murmurent
           </p>
-          <p className="text-ancestral-cream/70 text-sm sm:text-base leading-relaxed italic">{signe.phrase}</p>
+          <p className="font-accent italic text-ancestral-cream/70 text-sm sm:text-base leading-relaxed">{signe.phrase}</p>
         </motion.div>
       )}
 

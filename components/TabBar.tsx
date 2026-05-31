@@ -75,9 +75,9 @@ export default function TabBar() {
           >
             <span style={{ fontSize: '20px', lineHeight: 1 }}>{tab.icon}</span>
             <span
+              className="font-ui"
               style={{
                 fontSize: '9px',
-                fontFamily: 'var(--font-ui)',
                 fontWeight: 500,
                 letterSpacing: '0.04em',
                 color: active ? '#D4AF50' : '#4B6450',

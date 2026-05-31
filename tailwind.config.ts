@@ -21,8 +21,10 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
-        display: ['var(--font-playfair)', 'Georgia', 'serif'],
+        sans:    ['var(--font-ui)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'Georgia', 'serif'],
+        ui:      ['var(--font-ui)', 'system-ui', 'sans-serif'],
+        accent:  ['var(--font-accent)', 'Georgia', 'serif'],
       },
       animation: {
         float: 'float 6s ease-in-out infinite',

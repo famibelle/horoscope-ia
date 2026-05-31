@@ -63,15 +63,8 @@ export default function SignSelector({ selected, onSelect }: SignSelectorProps) 
             >
               <span style={{ fontSize: '22px', lineHeight: 1 }}>{sign.emoji}</span>
               <span
-                style={{
-                  fontSize: '9px',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.04em',
-                  fontWeight: 500,
-                  color: isSelected ? '#D4AF50' : '#6B8A6E',
-                  textAlign: 'center',
-                  lineHeight: 1.2,
-                }}
+                className="font-ui"
+                style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 500, color: isSelected ? '#D4AF50' : '#6B8A6E', textAlign: 'center', lineHeight: 1.2 }}
               >
                 {sign.name}
               </span>

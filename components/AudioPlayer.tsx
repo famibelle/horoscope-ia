@@ -373,7 +373,8 @@ export default function AudioPlayer({
               {showLoading ? (
                 <motion.p
                   key={callingMsg}
-                  style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: '14px', fontWeight: 600, color: '#E8D98A' }}
+                  className="font-accent italic"
+                  style={{ fontSize: '15px', fontWeight: 400, color: '#E8D98A' }}
                   initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
