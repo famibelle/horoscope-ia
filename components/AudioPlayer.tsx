@@ -2,7 +2,9 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Pause, Volume2, Loader2, PhoneCall } from 'lucide-react';
+import { Play, Pause, Volume2, PhoneCall } from 'lucide-react';
+import { useAudioPlayer } from '@/contexts/AudioPlayerContext';
+import { signs } from '@/lib/signs-data';
 
 interface AudioPlayerProps {
   signName: string;
@@ -91,16 +93,15 @@ const LOADING_MESSAGES = [
   "Les vagues de la Pointe des Châteaux sculptent ton destin sous mes yeux…",
 ];
 
-export default function AudioPlayer({ 
-  signName, 
-  horoscope, 
+export default function AudioPlayer({
+  signName,
+  horoscope,
   edition = 'matin',
   userDate,
-  userHour 
+  userHour
 }: AudioPlayerProps) {
+  const ctx = useAudioPlayer();
   const [state, setState]         = useState<PlayerState>('idle');
-  const [progress, setProgress]   = useState(0);
-  const [duration, setDuration]   = useState(0);
   const [error, setError]         = useState<string | null>(null);
   const [loadingMsg, setLoadingMsg] = useState(() =>
     LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)]
@@ -108,12 +109,17 @@ export default function AudioPlayer({
   const [callingMsg, setCallingMsg] = useState(CALLING_MESSAGES[0]);
   const callingIndexRef = useRef(0);
   const [showLoading, setShowLoading] = useState(false);
-  const audioRef   = useRef<HTMLAudioElement | null>(null);
   const blobUrlRef = useRef<string | null>(null);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Derive isPlaying/progress/duration from context when this track is active
+  const trackKey = `${signName}-${edition}`;
+  const isThisTrack = ctx.track?.src === blobUrlRef.current && blobUrlRef.current !== null;
+  const isPlaying   = isThisTrack ? ctx.isPlaying : state === 'playing';
+  const progress    = isThisTrack ? ctx.progress  : 0;
+  const duration    = isThisTrack ? ctx.duration  : 0;
+
   const isGenerating = state === 'generating';
-  const isPlaying    = state === 'playing';
-  const hasAudio     = state === 'ready' || state === 'playing' || state === 'paused';
+  const hasAudio     = isThisTrack || state === 'ready' || state === 'paused';
 
   // Cycle through loading messages during generation
   useEffect(() => {
@@ -142,58 +148,34 @@ export default function AudioPlayer({
     return () => clearInterval(interval);
   }, [showLoading]);
 
-  // Reset when horoscope changes
+  // Reset local state when horoscope changes (audio stays alive in context)
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
-    if (blobUrlRef.current) {
-      URL.revokeObjectURL(blobUrlRef.current);
-      blobUrlRef.current = null;
-    }
-    setProgress(0);
-    setDuration(0);
+    setState('idle');
     setError(null);
+    blobUrlRef.current = null;
   }, [horoscope, signName, edition, userDate, userHour]);
 
   async function generate() {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
-    if (blobUrlRef.current) {
-      URL.revokeObjectURL(blobUrlRef.current);
-      blobUrlRef.current = null;
-    }
-    
     const initialMsgIndex = Math.floor(Math.random() * LOADING_MESSAGES.length);
     setLoadingMsg(LOADING_MESSAGES[initialMsgIndex]);
-    
     setState('generating');
     setShowLoading(true);
     setError(null);
 
     try {
-      if (!horoscope) {
-        setError('Aucun horoscope à narrer');
-        return;
-      }
+      if (!horoscope) { setError('Aucun horoscope à narrer'); return; }
 
-      // Utiliser l'heure actuelle du navigateur
       const now = new Date();
       const currentHour = now.getHours();
-      const currentDate = now.toISOString().split('T')[0]; // Format YYYY-MM-DD
+      const currentDate = now.toISOString().split('T')[0];
 
       const res = await fetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          horoscope: horoscope,
-          signName: signName,
-          edition: edition,
+          horoscope, signName, edition,
           userDate: userDate || currentDate,
-          userHour: userHour || currentHour.toString()
+          userHour: userHour || currentHour.toString(),
         }),
       });
       if (!res.ok) throw new Error(`TTS ${res.status}`);
@@ -201,24 +183,13 @@ export default function AudioPlayer({
       const url = URL.createObjectURL(blob);
       blobUrlRef.current = url;
 
-      const audio = new Audio(url);
-      audioRef.current = audio;
+      // Trouver le glyphe du signe
+      const signData = signs.find(s => s.name === signName || s.id === signName.toLowerCase());
+      const glyph = signData?.emoji ?? '🌿';
+      const momentLabel = edition.charAt(0).toUpperCase() + edition.slice(1);
 
-      audio.addEventListener('loadedmetadata', () => {
-        setDuration(audio.duration);
-      });
-      audio.addEventListener('timeupdate', () => {
-        if (audio.duration > 0) {
-          setProgress(audio.currentTime / audio.duration);
-        }
-      });
-      audio.addEventListener('ended', () => {
-        setState('ready');
-        setProgress(0);
-      });
-
-      setState('ready');
-      audio.play();
+      // Déléguer la lecture au contexte global
+      ctx.play({ signe: signName, glyph, moment: momentLabel, src: url });
       setState('playing');
       setShowLoading(false);
     } catch (e) {
@@ -229,13 +200,11 @@ export default function AudioPlayer({
   }
 
   function togglePlay() {
-    const audio = audioRef.current;
-    if (!audio) return;
-    if (state === 'playing') {
-      audio.pause();
+    if (isPlaying) {
+      ctx.pause();
       setState('paused');
-    } else {
-      audio.play();
+    } else if (isThisTrack) {
+      ctx.play(ctx.track!);
       setState('playing');
     }
   }
@@ -427,12 +396,9 @@ export default function AudioPlayer({
                   maxWidth: '240px',
                 }}
                 onClick={(e) => {
-                  const audio = audioRef.current;
-                  if (!audio || !duration) return;
+                  if (!duration) return;
                   const rect = e.currentTarget.getBoundingClientRect();
-                  const newTime = ((e.clientX - rect.left) / rect.width) * duration;
-                  audio.currentTime = newTime;
-                  setProgress(newTime / duration);
+                  ctx.seek((e.clientX - rect.left) / rect.width);
                 }}
               >
                 <motion.div

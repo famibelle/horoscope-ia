@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import { Cormorant_Garamond, Outfit, IM_Fell_English } from 'next/font/google';
 import './globals.css';
 import TabBar from '@/components/TabBar';
+import MiniPlayer from '@/components/MiniPlayer';
+import { AudioPlayerProvider } from '@/contexts/AudioPlayerContext';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -100,7 +102,10 @@ export default function RootLayout({
         <meta name="google-adsense-account" content="ca-pub-3159683365493434" />
       </head>
       <body className={`${cormorant.variable} ${outfit.variable} ${imFell.variable} antialiased`} style={{ paddingBottom: '80px' }}>
-        {children}
+        <AudioPlayerProvider>
+          {children}
+          <MiniPlayer />
+        </AudioPlayerProvider>
         <TabBar />
       </body>
     </html>
