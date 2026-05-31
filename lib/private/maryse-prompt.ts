@@ -686,16 +686,6 @@ export function buildHoroscopeMetadata(
     l.nomCreole.toLowerCase().includes(loaName?.toLowerCase() || '')
   ).slice(0, 1);
 
-  const relevantAnimals = animauxData.filter(a =>
-    a.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase() ||
-    animalTokens.some(t => a.nomCreole.toLowerCase().includes(t))
-  ).slice(0, 3);
-
-  const relevantPlantes = plantesData.filter(p =>
-    p.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase() ||
-    planteTokens.some(t => p.nomCreole.toLowerCase().includes(t))
-  ).slice(0, 3);
-
   const signConditions = [...(sign.faune?.conditions || []), ...(sign.flore?.conditions || [])];
   const signEditions = [...(sign.faune?.editions || []), ...(sign.flore?.editions || [])];
   const weatherLower = weather.toLowerCase();
@@ -718,7 +708,7 @@ export function buildHoroscopeMetadata(
     famille_vaudou: vaudouContext.famille || '',
     energie_vaudou: SIGN_TO_VAUDOU_CONTEXT[sign.id]?.energie || '',
     couleurs_sacrees: SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || [],
-    edition_energie: EDITION_TO_VAUDOU_CONTEXT[edition]?.energie || '',
+    edition_energie: '',
     heure_locale: getGuadeloupeTime(),
     is_ritual_date: isRitual,
     date_rituelle: ritualDate?.nomFrancais || ritualDate?.nomCreole || null,
@@ -728,8 +718,8 @@ export function buildHoroscopeMetadata(
     kreyol_enrichis: kreyolEnrichis.map(k => k.nomCreole),
     histoire_enrichies: histoireEnrichies.map(h => h.periode),
     loas_pertinents: relevantLoas.map(l => l.nomCreole),
-    animaux_sacres: relevantAnimals.map(a => a.nomCreole),
-    plantes_sacrees: relevantPlantes.map(p => p.nomCreole),
+    animaux_sacres: [],
+    plantes_sacrees: [],
     contexte_dynamique,
   };
 }
