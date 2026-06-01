@@ -249,20 +249,67 @@ function analyzeHoroscopes(rows: HoroscopeRow[]): { alerts: Alert[]; md: string 
     }
   }
 
+  // ── Fréquences globales sur 7 jours ──────────────────────────────────────
+  function topFreq(items: string[], total: number, top = 15): string[] {
+    const freq = new Map<string, number>();
+    for (const item of items) freq.set(item, (freq.get(item) ?? 0) + 1);
+    return [...freq.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, top)
+      .map(([el, n]) => {
+        const pct = Math.round((n / total) * 100);
+        const flag = pct >= 30 ? '🔴' : pct >= 15 ? '🟠' : '🟡';
+        return `| ${flag} **${el}** | ${n} | ${pct}% |`;
+      });
+  }
+
+  const totalRows = rows.length;
+  const allFaune    = rows.flatMap(r => r.faune_enrichies ?? []);
+  const allFlore    = rows.flatMap(r => r.flore_enrichies ?? []);
+  const allLieux    = rows.flatMap(r => r.lieux_enrichis  ?? []);
+  const allHistoire = rows.flatMap(r => r.histoire_enrichies ?? []);
+  const allLoa      = rows.map(r => r.loa).filter(Boolean) as string[];
+
+  const freqHeader = '| Élément | Occurrences | % horoscopes |';
+  const freqSep    = '|---------|------------|--------------|';
+
+  md.push('### 📊 Fréquences globales sur la période\n');
+  md.push(`> Sur **${totalRows} horoscopes**. 🔴 ≥30% · 🟠 ≥15% · 🟡 <15%\n`);
+
+  if (allFaune.length) {
+    md.push('**🦎 Faune**\n', freqHeader, freqSep, ...topFreq(allFaune, totalRows), '');
+  }
+  if (allFlore.length) {
+    md.push('**🌿 Flore**\n', freqHeader, freqSep, ...topFreq(allFlore, totalRows), '');
+  }
+  if (allLieux.length) {
+    md.push('**🏔️ Lieux sacrés**\n', freqHeader, freqSep, ...topFreq(allLieux, totalRows), '');
+  }
+  if (allHistoire.length) {
+    md.push('**📜 Histoires**\n', freqHeader, freqSep, ...topFreq(allHistoire, totalRows), '');
+  }
+  if (allLoa.length) {
+    md.push('**🌀 Loa**\n', freqHeader, freqSep, ...topFreq(allLoa, totalRows), '');
+  }
+  if (!allFaune.length && !allFlore.length && !allLieux.length) {
+    md.push('> ℹ️ Colonnes enrichies vides — ces données se rempliront au fil des prochaines générations.\n');
+  }
+  md.push('');
+
   if (fauneRows.length) {
-    md.push('### 🦎 Répétitions faune\n', TH4, SEP4, ...fauneRows, '');
+    md.push('### 🦎 Répétitions faune (même jour)\n', TH4, SEP4, ...fauneRows, '');
   }
   if (floreRows.length) {
-    md.push('### 🌿 Répétitions flore\n', TH4, SEP4, ...floreRows, '');
+    md.push('### 🌿 Répétitions flore (même jour)\n', TH4, SEP4, ...floreRows, '');
   }
   if (lieuxRows.length) {
-    md.push('### 🏔️ Répétitions lieux sacrés\n', TH4, SEP4, ...lieuxRows, '');
+    md.push('### 🏔️ Répétitions lieux sacrés (même jour)\n', TH4, SEP4, ...lieuxRows, '');
   }
   if (histoireRows.length) {
-    md.push('### 📜 Répétitions histoires\n', TH4, SEP4, ...histoireRows, '');
+    md.push('### 📜 Répétitions histoires (même jour)\n', TH4, SEP4, ...histoireRows, '');
   }
   if (loaRows.length) {
-    md.push('### 🌀 Répétitions loa\n', TH4, SEP4, ...loaRows, '');
+    md.push('### 🌀 Répétitions loa (même jour)\n', TH4, SEP4, ...loaRows, '');
   }
   if (ouvertureRows.length) {
     md.push(
@@ -283,7 +330,7 @@ function analyzeHoroscopes(rows: HoroscopeRow[]): { alerts: Alert[]; md: string 
 
   const total = fauneRows.length + floreRows.length + lieuxRows.length +
     histoireRows.length + loaRows.length + ouvertureRows.length + shortRows.length;
-  if (total === 0) md.push('✅ Aucune alerte structurelle détectée.\n');
+  if (total === 0) md.push('✅ Aucune alerte répétition détectée.\n');
 
   return { alerts, md: md.join('\n') };
 }
