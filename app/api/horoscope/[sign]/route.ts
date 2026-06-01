@@ -115,8 +115,19 @@ async function fetchWeather(date?: string): Promise<string> {
       : rain < 5  ? 'légère pluie'
       : rain < 20 ? 'pluie modérée'
       : 'fortes pluies';
-    const windLabel = wind < 20 ? 'vent faible' : wind < 40 ? 'vent modéré' : 'vent fort';
-    return `${tmin}–${tmax}°C, ${rainLabel}, ${windLabel} (${wind} km/h)`;
+    const alizeLabel =
+      wind < 20 ? `alizé léger (${wind} km/h)`
+      : wind < 40 ? `alizé modéré (${wind} km/h)`
+      :             `grains forts (${wind} km/h)`;
+    const known = new Date('2000-01-06').getTime();
+    const days  = (Date.now() - known) / 86_400_000;
+    const cycle = ((days % 29.53) + 29.53) % 29.53;
+    const moonIdx = Math.floor((cycle / 29.53) * 8) % 8;
+    const moonLabel = [
+      'Nouvelle lune', 'Croissant naissant', 'Premier quartier', 'Croissant gibbeuse',
+      'Pleine lune',   'Gibbeuse décroissante', 'Dernier quartier', 'Croissant décroissant',
+    ][moonIdx];
+    return `${tmin}–${tmax}°C, ${rainLabel}, ${alizeLabel}, ${moonLabel}`;
   } catch {
     return '';
   }

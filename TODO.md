@@ -1,96 +1,58 @@
 # TODO - Optimisations & Améliorations
 
-## 🎯 Priorités
+## 📬 Newsletter
 
-### ✅ En cours / Terminé
-- [x] **Option 1 : Cache en mémoire** pour les données culturelles dans `lib/cultural-context.ts`
-  - `getMedicinalPlant`, `getResistancePratique`, `getResistanceObjet`
-  - `getSignFaune`, `getSignFlore`, `getSignLieu`
-  - `getAmbianceBienetre`, `getAmbianceBeaute`, `getAmbianceEsprit`, `getAmbianceMaison`, `getAmbianceJardinage`
-  - Utilise une `Map<string, any>` pour éviter les recalculs inutiles
+### ✅ Critique — fait
+- [x] Brancher les vrais horoscopes Supabase dans le générateur (édition matin)
+- [x] Ajouter l'envoi Brevo dans le CI (GitHub Actions)
+- [x] Script de migration abonnés fichier chiffré → Brevo (`scripts/migrate-subscribers-to-brevo.ts`)
 
----
+### ✅ Important — fait
+- [x] Refaire le template HTML dans le style du site (palette ancestral sombre)
+- [x] Corriger les labels des sections (Parole des ancêtres, Lyannaj, Présage ancestral…)
+- [x] Intégrer le présage du jour depuis la table `presages`
+- [x] Stocker les newsletters dans Supabase (table `newsletters`, plus de filesystem éphémère)
 
-## 📋 Backlog
+### 🔲 Confort — à faire
+- [ ] Lien de désabonnement réel (remplacer `{{unsubscribe_url}}` par une vraie route)
+- [ ] Page de prévisualisation de la newsletter avant envoi
+- [ ] Corriger l'erreur Brevo `sendCampaignNow` (réponse JSON vide sur 204)
+- [ ] Supprimer le log trompeur "📁 Chemin: private_data/newsletters/…" dans le script CI
 
-### 🔄 Optimisation Cache (Option 3)
-**Objectif :** Pré-calculer les données culturelles lors de la génération programmée pour éviter TOUS les calculs à la volée.
-
-- [ ] **Modifier `netlify/functions/generate-horoscopes.mts`**
-  - Pré-calculer et stocker les données culturelles pour tous les signes de la journée
-  - Structure : `{ date: string; signs: Record<signId, { medicinal, faune, flore, lieu, pratique, objet }> }`
-  - Stocker dans Netlify Blobs avec clé `cultural|${date}`
-
-- [ ] **Modifier `app/api/horoscope/[sign]/route.ts`**
-  - Récupérer les données culturelles pré-calculées depuis Netlify Blobs
-  - Fallback sur le cache en mémoire si non trouvé
-
-- [ ] **Modifier `scripts/generate-horoscopes.ts`**
-  - Même logique de pré-calcul pour la génération locale
-
-**Bénéfices attendus :**
-- ⚡ Éliminer 100% des calculs de hash à la volée
-- 💰 Réduction des coûts Mistral (moins de temps d'attente)
-- 🚀 Réponse API plus rapide
+### 🔲 Affinage — à faire plus tard
+- [ ] Affiner le design de la newsletter (polices, espacement, mobile)
+- [ ] Ajouter un lien vers la page web de chaque newsletter (`/newsletter/[id]`)
+- [ ] Tester l'affichage dans Gmail, Apple Mail, Outlook
 
 ---
 
-### 🎵 Audio / TTS
-- [x] **Implémenté** `normalizeForTTS` dans `lib/tts-utils.ts`
-  - Remplace `–`, `—` par `,`
-  - Supprime `«`, `»`, `*`, `[`, `]`, `…`
-  - Normalise `°C` → `degrés Celsius`, `°F` → `degrés Fahrenheit`
-  - Nettoie espaces et ponctuation
-- [x] Intégré dans `app/api/tts/route.ts`
+## 🎵 TTS / Audio
 
-### 🌙 Heure du navigateur
-- [x] **Ajout de l'édition "nuit"** (0h-6h)
-  - `EDITION_CONFIGS.nuit` avec `moment: 'cette nuit'`
-  - `detectEditionWithNight()` pour détecter la nuit
-  - `EDITION_LABELS` et `getDynamicEditionLabels` mis à jour
-- [x] **Contexte temporel dans le prompt**
-  - Date et heure du navigateur passées au backend
-  - `buildHoroscopeUserPrompt` accepte `date` et `hour` optionnels
-  - Frontend envoie `userDate` et `userHour` dans les requêtes
-- [x] **Types mis à jour**
-  - `HoroscopeResponse.edition` inclut `'nuit'`
-  - `EditionWithNight` exporté depuis `lib/edition.ts`
+### ✅ Fait
+- [x] `normalizeForTTS` dans `lib/tts-utils.ts`
+- [x] Prononciations créoles guadeloupéennes portées depuis FlashInfoKarukera
 
 ---
 
-### 📝 Configuration & Nettoyage
-- [ ] Ajouter `data/` au `.gitignore`
-- [ ] Vérifier que `data/horoscopes/` n'est pas commité
-- [ ] Nettoyer les anciens fichiers de test dans `data/`
+## 🌙 Horoscopes
+
+### ✅ Fait
+- [x] Cache en mémoire pour les données culturelles
+- [x] Édition "nuit" (0h–6h)
+- [x] Contexte temporel (date et heure du navigateur)
+
+### 🔲 Backlog
+- [ ] Pré-calculer les données culturelles en CI pour éviter les calculs à la volée (Option 3)
+- [ ] Ajouter `data/` au `.gitignore` et nettoyer les fichiers de test
 
 ---
 
-### 🧪 Tests & Validation
-- [ ] Tester le cache en mémoire localement
-- [ ] Vérifier que la génération des 36 horoscopes fonctionne toujours
-- [ ] Tester l'API `GET /api/horoscope/[sign]` avec le cache
-- [ ] Valider que les données culturelles sont bien réutilisées entre appels
+## 🗄️ Base de données Supabase
 
----
+### ✅ Fait
+- [x] Tables : `horoscopes`, `ambiances`, `presages`, `glossaire`, `newsletters`
+- [x] `supabase/newsletters.sql` — DDL à exécuter manuellement
 
-### 🚀 Déploiement
-- [ ] Pousser les changements sur GitHub pour déclencher Netlify
-- [ ] Vérifier que la Netlify Scheduled Function fonctionne toujours
-- [ ] Monitorer les logs pour détecter d'éventuelles erreurs de cache
-
----
-
-## 📊 Métriques d'Amélioration
-
-| Métrique | Avant | Après Option 1 | Après Option 3 |
-|----------|-------|----------------|----------------|
-| Calculs de hash | 11 × 36 × 3 = 1188/jour | ~0 (cache mémoire) | 0 (pré-calculé) |
-| Temps CPU | ~X ms | ~X/2 ms | ~X/4 ms |
-| Latence API | ~Y ms | ~Y-10ms | ~Y-20ms |
-
----
-
-## 🔗 Liens Utiles
-
-- [Netlify Blobs Documentation](https://docs.netlify.com/store/blobs/)
-- [Map MDN Documentation](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Map)
+### 🔲 À faire
+- [ ] Créer un schéma en étoile si des besoins analytiques émergent (mis de côté)
+- [ ] Script `parse-vaudou-ref.ts` manquant (seule référence sans pipeline automatisé)

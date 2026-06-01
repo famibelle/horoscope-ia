@@ -60,7 +60,7 @@ if (options.force) {
   console.log('⚡ Mode force activé - régénération forcée');
 }
 
-import { MARYSE_SYSTEM, buildHoroscopeUserPrompt, buildHoroscopeMetadata, type Edition, type HoroscopeMetadata } from '@/lib/private/maryse-prompt';
+import { MARYSE_SYSTEM, buildHoroscopeUserPrompt, buildHoroscopeMetadata, type Edition, type HoroscopeMetadata, type CulturalContext } from '@/lib/private/maryse-prompt';
 import {
   getMedicinalPlant,
   getResistancePratique,
@@ -95,6 +95,37 @@ function limitVeve(text: string): string {
     count++;
     return count <= 1 ? match : 'signe sacré';
   });
+}
+
+// Limite le totem du signe (nomKreyol + tokens du faune) à 1 occurrence
+// dans tout le JSON généré — même logique que limitVeve().
+// Le totem est déjà injecté 3× dans le prompt (animal, nomKreyol, spirituel) ;
+// sans ce filtre il sature le texte produit.
+// Remplacement : "l'ancêtre" — terme générique spirituellement cohérent.
+function limitTotem(text: string, sign: { nomKreyol: string; faune?: { nom_creole: string } }): string {
+  // Extraire les tokens significatifs (≥4 chars) du nomKreyol et du nom créole du faune
+  const raw = [sign.nomKreyol, sign.faune?.nom_creole || ''];
+  const keywords = new Set<string>(
+    raw.flatMap(s => s.split(/[/\s\-]+/).map(t => t.trim().toLowerCase()))
+       .filter(t => t.length >= 5)
+  );
+
+  let result = text;
+  for (const kw of keywords) {
+    const pattern = new RegExp(`\\b${kw}\\b`, 'gi');
+    let count = 0;
+    result = result.replace(pattern, (match) => {
+      count++;
+      return count <= 1 ? match : "l'ancêtre";
+    });
+  }
+  return result;
+}
+
+// Élimine le doublon "ka ka" produit quand tambour→ka s'applique
+// à un texte qui contenait déjà "ka" (ex: "rythme du tambour ka" → "rythme du ka ka")
+function fixKaKa(text: string): string {
+  return text.replace(/\bka\s+ka\b/gi, 'ka');
 }
 
 // Remplace "lajan circule/coule comme la sève de/du/dans [plante]"
@@ -374,7 +405,17 @@ async function generateWithMistral(
   const loasPertinents = [SIGN_TO_LOA[signId], ...Object.values(SIGN_TO_LOA).filter(l => l !== SIGN_TO_LOA[signId])].slice(0, 3);
   logVerbose('📚 LOAS PERTINENTS (pour le prompt)', loasPertinents);
 
-  const userPrompt = buildHoroscopeUserPrompt(sign, rawText, weather, edition, undefined, undefined);
+  const culturalCtx: CulturalContext = {
+    medicinal,
+    pratique,
+    objet,
+    faune:    faune?.nomCreole ? faune : undefined,
+    flore:    flore?.nomCreole ? flore : undefined,
+    lieu:     lieu?.nomCreole  ? lieu  : undefined,
+    historicalResonance,
+  };
+
+  const userPrompt = buildHoroscopeUserPrompt(sign, rawText, weather, edition, undefined, undefined, culturalCtx);
   logVerbose(`Prompt utilisateur généré (${userPrompt.length} caractères)`);
   logVerbose(`Modèle: mistral-large-latest, Temp: 0.75, Max tokens: 900`);
 
@@ -506,11 +547,11 @@ async function generateTeaser(
     // Nettoyage post-génération du teaser
     // Si le corps contient déjà vèvè, on le supprime du teaser pour éviter le doublon
     const bodyHasVeve = /vèvè/i.test(rawContent);
-    teaser = restoreApostrophes(teaser
+    teaser = restoreApostrophes(fixKaKa(teaser
       .replace(/\btambours?\b/gi, 'ka')
       .replace(/—/g, ',')
       .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan')
-      .replace(bodyHasVeve ? /vèvè/gi : /(?!)/g, 'signe sacré'));
+      .replace(bodyHasVeve ? /vèvè/gi : /(?!)/g, 'signe sacré')));
 
     const teaserTerms = extractGlossaryTerms(teaser);
     if (teaserTerms.length > 0) {
@@ -564,18 +605,32 @@ async function fetchWeather(): Promise<string> {
     const tmin = Math.round(d.temperature_2m_min[0]);
     const rain = d.precipitation_sum[0] as number;
     const wind = Math.round(d.windspeed_10m_max[0]);
+
     const rainLabel =
-      rain === 0
-        ? 'pas de pluie'
-        : rain < 5
-          ? 'légère pluie'
-          : rain < 20
-            ? 'pluie modérée'
-            : 'fortes pluies';
-    const windLabel =
-      wind < 20 ? 'vent faible' : wind < 40 ? 'vent modéré' : 'vent fort';
-    
-    const result = `${tmin}–${tmax}°C, ${rainLabel}, ${windLabel} (${wind} km/h)`;
+      rain === 0  ? 'pas de pluie'
+      : rain < 5  ? 'légère pluie'
+      : rain < 20 ? 'pluie modérée'
+      :             'fortes pluies';
+
+    // "alizé" = terme local guadeloupéen — évite que le modèle réutilise
+    // "vent" comme image générique dans les horoscopes
+    const alizeLabel =
+      wind < 20 ? `alizé léger (${wind} km/h)`
+      : wind < 40 ? `alizé modéré (${wind} km/h)`
+      :             `grains forts (${wind} km/h)`;
+
+    // Phase lunaire calculée localement — zéro coût API, varie chaque jour,
+    // donne au modèle une image naturelle quotidienne alternative au "vent"
+    const known = new Date('2000-01-06').getTime();
+    const days  = (Date.now() - known) / 86_400_000;
+    const cycle = ((days % 29.53) + 29.53) % 29.53;
+    const moonIdx = Math.floor((cycle / 29.53) * 8) % 8;
+    const moonLabel = [
+      'Nouvelle lune', 'Croissant naissant', 'Premier quartier', 'Croissant gibbeuse',
+      'Pleine lune',   'Gibbeuse décroissante', 'Dernier quartier', 'Croissant décroissant',
+    ][moonIdx];
+
+    const result = `${tmin}–${tmax}°C, ${rainLabel}, ${alizeLabel}, ${moonLabel}`;
     logVerbose(`Météo formatée: ${result}`);
     return result;
   } catch (e) {
@@ -746,10 +801,10 @@ export async function generateAllHoroscopes() {
         }
         // Nettoyage post-génération
         const cleanedContent = removeRedundantParentheses(
-          limitVeve(restoreApostrophes(removeSeve(structured)
-            .replace(/\btambours?\b/gi, 'ka')
+          limitTotem(limitVeve(restoreApostrophes(fixKaKa(removeSeve(structured)
+            .replace(/\btambours?\b/gi, 'ka'))
             .replace(/—/g, ',')
-            .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan')))
+            .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan'))), sign)
         );
 
         // Générer le teaser
@@ -880,10 +935,10 @@ export async function generateAllHoroscopes() {
         }
         // Nettoyage post-génération
         const cleanedContent = removeRedundantParentheses(
-          limitVeve(restoreApostrophes(removeSeve(structured)
-            .replace(/\btambours?\b/gi, 'ka')
+          limitTotem(limitVeve(restoreApostrophes(fixKaKa(removeSeve(structured)
+            .replace(/\btambours?\b/gi, 'ka'))
             .replace(/—/g, ',')
-            .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan')))
+            .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan'))), sign)
         );
 
         const teaser = await generateTeaser(sign.name, cleanedContent);

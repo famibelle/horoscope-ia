@@ -24,7 +24,7 @@ export default function Footer() {
       <div className="max-w-5xl mx-auto pt-14">
         {/* Brand */}
         <div className="text-center mb-14">
-          <div className="font-display text-2xl font-bold text-ancestral-cream mb-2">
+          <div className="font-accent italic text-xl text-ancestral-cream/70 mb-2">
             🌿 Votre voyage ancestral dans la sagesse de Karukera
           </div>
           

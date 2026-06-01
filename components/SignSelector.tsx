@@ -10,110 +10,85 @@ interface SignSelectorProps {
 
 export default function SignSelector({ selected, onSelect }: SignSelectorProps) {
   return (
-    <section id="signs" className="px-4 py-20 max-w-5xl mx-auto">
+    <section id="signs" className="px-4 pt-2 pb-8 max-w-5xl mx-auto">
       <motion.div
-        className="text-center mb-14"
-        initial={{ opacity: 0, y: 24 }}
+        className="text-center mb-5"
+        initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.5 }}
       >
-        <p className="text-white text-xs uppercase tracking-[0.35em] mb-4">
+        <p style={{ color: 'rgba(212,175,80,0.5)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.25em', marginBottom: '4px' }}>
           Sagesse de Karukera
         </p>
-        <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
-          Découvrez votre totem
+        <h2 className="font-display font-bold" style={{ fontSize: '26px', color: '#C8D8C0' }}>
+          Choisissez votre totem
         </h2>
-        <p className="text-white text-sm sm:text-base max-w-xs mx-auto leading-relaxed">
-          Les esprits de la Guadeloupe vous guident vers votre destin ancestral
-        </p>
       </motion.div>
 
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 sm:gap-4">
+      {/* Grille 4 colonnes mobile, 6 colonnes desktop */}
+      <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
         {signs.map((sign, index) => {
           const isSelected = selected === sign.id;
-
           return (
             <motion.button
               key={sign.id}
               onClick={() => onSelect(sign.id)}
-              className="relative flex flex-col items-center gap-2 p-3 sm:p-4 rounded-2xl border transition-colors duration-300 group focus:outline-none focus-visible:ring-2 focus-visible:ring-ancestral-gold"
-              initial={{ opacity: 0, y: 16 }}
+              aria-pressed={isSelected}
+              aria-label={sign.name}
+              initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.04, duration: 0.5 }}
-              whileHover={{ scale: 1.06, y: -3 }}
-              whileTap={{ scale: 0.96 }}
-              style={
-                isSelected
-                  ? {
-                      background: `linear-gradient(135deg, rgba(210,105,30,0.18), rgba(255,215,0,0.12))`,
-                      borderColor: `rgba(210,105,30,0.5)`,
-                      boxShadow: `0 0 28px rgba(210,105,30,0.4), 0 0 60px rgba(210,105,30,0.2)`,
-                    }
-                  : {
-                      background: 'rgba(245,245,220,0.04)',
-                      borderColor: 'rgba(245,245,220,0.08)',
-                    }
-              }
-              aria-pressed={isSelected}
-              aria-label={`${sign.name} — ${sign.tagline}`}
+              transition={{ delay: index * 0.03, duration: 0.35 }}
+              whileTap={{ scale: 0.94 }}
+              style={{
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                display: 'flex',
+                padding: '10px 6px',
+                borderRadius: '14px',
+                border: isSelected
+                  ? '1px solid rgba(212,175,80,0.45)'
+                  : '1px solid rgba(255,255,255,0.06)',
+                background: isSelected
+                  ? 'rgba(212,175,80,0.1)'
+                  : '#111e14',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                gap: '5px',
+                position: 'relative',
+                minHeight: '64px',
+              }}
             >
-              <span className="text-2xl sm:text-3xl leading-none">{sign.emoji}</span>
+              <span style={{ fontSize: '22px', lineHeight: 1 }}>{sign.emoji}</span>
               <span
-                className="text-xs font-medium leading-tight text-center transition-colors duration-200"
-                style={{ color: isSelected ? '#FFD700' : '#FFFFFF' }}
+                className="font-ui"
+                style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 500, color: isSelected ? '#D4AF50' : '#6B8A6E', textAlign: 'center', lineHeight: 1.2 }}
               >
                 {sign.name}
               </span>
-              <span className="text-white text-[10px] leading-tight text-center hidden sm:block">
-                {elementEmoji[sign.element]} {sign.element}
-              </span>
-
               {isSelected && (
                 <motion.div
-                  className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 rounded-full border-2 border-ancestral-earth"
+                  style={{
+                    position: 'absolute',
+                    top: '-4px',
+                    right: '-4px',
+                    width: '10px',
+                    height: '10px',
+                    borderRadius: '50%',
+                    background: '#D4AF50',
+                    border: '2px solid #0D1A12',
+                  }}
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-                  style={{ background: '#FFD700' }}
                 />
               )}
             </motion.button>
           );
         })}
       </div>
-
-      {/* Selected sign detail pill */}
-      {selected && (
-        <motion.div
-          key={selected}
-          className="mt-8 flex items-center justify-center gap-3"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          {(() => {
-            const sign = signs.find((s) => s.id === selected);
-            if (!sign) return null;
-            return (
-              <div
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm text-white"
-                style={{
-                  background: `linear-gradient(135deg, rgba(210,105,30,0.20), rgba(255,215,0,0.15))`,
-                  border: `1px solid rgba(210,105,30,0.35)`,
-                }}
-              >
-                <span>{sign.emoji}</span>
-                <span className="font-semibold">{sign.name}</span>
-                <span className="text-white">·</span>
-                <span className="text-white text-xs">{sign.tagline}</span>
-                <span className="text-white text-xs">· {sign.planet}</span>
-              </div>
-            );
-          })()}
-        </motion.div>
-      )}
     </section>
   );
 }

@@ -1,16 +1,30 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Playfair_Display } from 'next/font/google';
+import { Cormorant_Garamond, Outfit, IM_Fell_English } from 'next/font/google';
 import './globals.css';
+import TabBar from '@/components/TabBar';
+import MiniPlayer from '@/components/MiniPlayer';
+import { AudioPlayerProvider } from '@/contexts/AudioPlayerContext';
 
-const inter = Inter({
-  variable: '--font-inter',
+const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
+  weight: ['300', '600', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-display',
   display: 'swap',
 });
 
-const playfair = Playfair_Display({
-  variable: '--font-playfair',
+const outfit = Outfit({
   subsets: ['latin'],
+  weight: ['300', '400', '500'],
+  variable: '--font-ui',
+  display: 'swap',
+});
+
+const imFell = IM_Fell_English({
+  subsets: ['latin'],
+  weight: ['400'],
+  style: ['italic'],
+  variable: '--font-accent',
   display: 'swap',
 });
 
@@ -87,10 +101,12 @@ export default function RootLayout({
         />
         <meta name="google-adsense-account" content="ca-pub-3159683365493434" />
       </head>
-      {/* Thème ancestral activé - Pour revenir au thème cosmique, décommentez la ligne ci-dessous */}
-      {/* <body className={`${inter.variable} ${playfair.variable} antialiased bg-cosmic`}> */}
-      <body className={`${inter.variable} ${playfair.variable} antialiased`}>
-        {children}
+      <body className={`${cormorant.variable} ${outfit.variable} ${imFell.variable} antialiased`} style={{ paddingBottom: '80px' }}>
+        <AudioPlayerProvider>
+          {children}
+          <MiniPlayer />
+        </AudioPlayerProvider>
+        <TabBar />
       </body>
     </html>
   );

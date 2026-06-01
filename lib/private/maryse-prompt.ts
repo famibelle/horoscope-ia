@@ -8,15 +8,12 @@ import { histoireData } from '@/lib/private/histoire-data';
 import {
   SIGN_TO_LOA,
   SIGN_TO_VAUDOU_CONTEXT,
-  EDITION_TO_VAUDOU_CONTEXT,
   getVaudouContextForSign,
   getRitualDateContext,
   isRitualDate
 } from '@/lib/private/vaudou-mappings';
 import {
   loasData,
-  animauxData,
-  plantesData
 } from '@/lib/private/vaudou-data';
 
 /*
@@ -247,6 +244,18 @@ Tu rédiges UNIQUEMENT le signe du jour — une plante, un arbre ou un animal de
 /* ── Prompts utilisateur - Voir horoscope_instructions.md ━ */
 /* Structure : 1 phrase (ouverture/prediction/conseil) ou 2-4 phrases (amour/travail/argent/amitie/sante) */
 
+// ── Contexte culturel quotidien (depuis cultural-context.ts) ─────────────────
+// Passé par generateWithMistral — évite de dupliquer les lookups
+export interface CulturalContext {
+  medicinal?: { nomCreole: string; nomFr: string; usage: string };
+  pratique?:  { nomCreole: string; nomFr: string; dimension: string };
+  objet?:     { nomCreole: string; nomFr: string; dimension: string };
+  faune?:     { nomCreole: string; nomFr: string; culture: string };
+  flore?:     { nomCreole: string; nomFr: string; culture: string };
+  lieu?:      { nomCreole: string; nomFr: string; culture: string };
+  historicalResonance?: string | null;
+}
+
 // Word-boundary match — évite les faux positifs comme "feuille" pour "feu"
 function matchesWord(text: string, word: string): boolean {
   return new RegExp(`\\b${word}\\b`, 'i').test(text);
@@ -273,6 +282,20 @@ function isLongPeriod(periode: string): boolean {
   return /\b\d{4}\s*[-–—]\s*\d{4}\b/.test(periode);
 }
 
+// Rotation déterministe d'un tableau : chaque (signId, date) obtient un point d'entrée différent.
+// Évite que les mêmes entrées apparaissent toujours en tête pour tous les signes.
+function rotateBySignDate<T>(arr: T[], signId: string, date: string, take: number): T[] {
+  if (arr.length === 0) return [];
+  let hash = 0;
+  const key = signId + date;
+  for (let i = 0; i < key.length; i++) {
+    hash = ((hash << 5) - hash + key.charCodeAt(i)) & 0x7fffffff;
+  }
+  const offset = hash % arr.length;
+  const rotated = [...arr.slice(offset), ...arr.slice(0, offset)];
+  return rotated.slice(0, take);
+}
+
 export function buildHoroscopeUserPrompt(
   sign: Sign,
   rawText: string,
@@ -280,6 +303,7 @@ export function buildHoroscopeUserPrompt(
   edition: Edition = 'matin',
   date?: string,
   hour?: string,
+  culturalCtx?: CulturalContext,
 ): string {
   const cfg = EDITION_CONFIGS[edition];
   const dateToUse = date || todayGuadeloupe();
@@ -293,35 +317,57 @@ export function buildHoroscopeUserPrompt(
   const floreSavoir = sign.flore?.savoir.split('.')[0] || '';
   const lieuSymbolique = sign.lieuDetails?.symbolique || '';
   
-  // Récupérer l'usage de la plante depuis flore-data.ts
-  const floreNom = sign.flore?.nom_creole || sign.plante || '';
-  const floreEntry = floreData.find(f => 
-    f.nomCreole.toLowerCase().includes(floreNom.toLowerCase()) || 
-    f.nomFrancais.toLowerCase().includes(floreNom.toLowerCase()) ||
-    floreNom.toLowerCase().includes(f.nomCreole.toLowerCase()) ||
-    floreNom.toLowerCase().includes(f.nomFrancais.toLowerCase())
+  // Clé de rotation quotidienne — déterministe, reproductible en cas de retry
+  const rotKey = sign.id + dateToUse;
+
+  // ── fauneEntry : rotation dans la famille du totem ────────────────────────
+  // Pool = toutes les entrées de la même famille (reptiles, oiseaux…)
+  // Priorité : d'abord les entrées qui matchent exactement le nom du totem,
+  // puis le reste de la famille — évite qu'un signe "oiseaux" affiche
+  // le totem d'un autre signe "oiseaux".
+  const fauneNom    = sign.faune?.nom_creole || sign.nomKreyol || '';
+  const fauneFamille = sign.faune?.famille || '';
+  const fauneExact  = fauneData.filter(f => {
+    const nom = f.nomCreole.toLowerCase();
+    const fr  = (f.nomFrancais || '').toLowerCase();
+    const key = fauneNom.toLowerCase();
+    return nom.includes(key) || fr.includes(key) || key.includes(nom) || key.includes(fr);
+  });
+  const fauneByFamille = fauneData.filter(f =>
+    fauneFamille && f.categorie.toLowerCase().includes(fauneFamille.toLowerCase()) &&
+    !fauneExact.some(e => e.id === f.id)
   );
-  const floreUsage = floreEntry?.usage || '';
-  const floreDimension = floreEntry?.dimensionCulturelle || '';
-  
-  // Récupérer la dimension culturelle de la faune
-  const fauneNom = sign.faune?.nom_creole || sign.nomKreyol || '';
-  const fauneEntry = fauneData.find(f => 
-    f.nomCreole.toLowerCase().includes(fauneNom.toLowerCase()) || 
-    f.nomFrancais.toLowerCase().includes(fauneNom.toLowerCase()) ||
-    fauneNom.toLowerCase().includes(f.nomCreole.toLowerCase()) ||
-    fauneNom.toLowerCase().includes(f.nomFrancais.toLowerCase())
-  );
+  const faunePool2  = [...fauneExact, ...fauneByFamille]; // exact en tête
+  const fauneEntry  = rotateBySignDate(faunePool2, sign.id, rotKey, 1)[0] || null;
   const fauneDimension = fauneEntry?.dimensionCulturelle || '';
-  
-  // Récupérer la dimension culturelle du lieu
-  const lieuEntry = lieuxData.find(l => 
+
+  // ── floreEntry : rotation dans la famille de la plante ────────────────────
+  const floreNom    = sign.flore?.nom_creole || sign.plante || '';
+  const floreFamille = sign.flore?.famille || '';
+  const floreExact  = floreData.filter(f => {
+    const nom = f.nomCreole.toLowerCase();
+    const fr  = f.nomFrancais.toLowerCase();
+    const key = floreNom.toLowerCase();
+    return nom.includes(key) || fr.includes(key) || key.includes(nom) || key.includes(fr);
+  });
+  const floreByFamille = floreData.filter(f =>
+    floreFamille && f.categorie?.toLowerCase().includes(floreFamille.toLowerCase()) &&
+    !floreExact.some(e => e.nomCreole === f.nomCreole)
+  );
+  const florePool2  = [...floreExact, ...floreByFamille];
+  const floreEntry  = rotateBySignDate(florePool2, sign.id, rotKey, 1)[0] || null;
+  const floreUsage     = floreEntry?.usage || '';
+  const floreDimension = floreEntry?.dimensionCulturelle || '';
+
+  // ── lieuEntry : rotation parmi les lieux correspondant au signe ───────────
+  const lieuPool2   = lieuxData.filter(l =>
     l.nom.toLowerCase().includes(sign.lieu.toLowerCase()) ||
     sign.lieu.toLowerCase().includes(l.nom.toLowerCase())
   );
+  const lieuEntry   = rotateBySignDate(lieuPool2, sign.id, rotKey, 1)[0] || null;
   const lieuDimension = lieuEntry?.dimensionCulturelle || '';
-  
-  // Récupérer un événement historique pertinent (par mois, année ou élément)
+
+  // ── histoireEntry : rotation parmi les événements du mois ────────────────
   const [year, month, day] = dateToUse.split('-');
   const moisNom = new Date(dateToUse).toLocaleString('fr-FR', { month: 'long' });
   const histoireByMonth = histoireData.filter(h =>
@@ -331,23 +377,22 @@ export function buildHoroscopeUserPrompt(
       h.periode.includes(month)
     )
   );
-  const histoireEntry = histoireByMonth[0] || null;
-  const histoireFait = histoireEntry?.faitHistorique || '';
+  const histoireEntry  = rotateBySignDate(histoireByMonth, sign.id, rotKey, 1)[0] || null;
+  const histoireFait   = histoireEntry?.faitHistorique || '';
   const histoirePeriode = histoireEntry?.periode || '';
-  
-  // Récupérer un symbole créole pertinent (par nom, élément ou animal/plante)
-  const kreyolEntry = kreyolData.find(k =>
-    k.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '') ||
-    k.nomCreole.toLowerCase().includes(sign.nomKreyol?.toLowerCase() || '') ||
-    k.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '') ||
+
+  // ── kreyolEntry : rotation dans un pool élargi (élément + animal/plante) ──
+  const kreyolPool2 = kreyolData.filter(k =>
     matchesWord(k.famille, sign.element) ||
+    k.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '') ||
     (k.tags && k.tags.some(tag =>
       matchesWord(tag, sign.element) ||
       tag.includes(sign.animal?.toLowerCase() || '') ||
       tag.includes(sign.plante?.toLowerCase() || '')
     ))
   );
-  const kreyolSymbol = kreyolEntry?.nomCreole || '';
+  const kreyolEntry    = rotateBySignDate(kreyolPool2, sign.id, rotKey, 1)[0] || null;
+  const kreyolSymbol   = kreyolEntry?.nomCreole || '';
   const kreyolDimension = kreyolEntry?.dimensionCulturelle || '';
 
   // ============================================
@@ -366,33 +411,49 @@ export function buildHoroscopeUserPrompt(
     l.nomCreole.toLowerCase().includes(loaName.toLowerCase())
   ).slice(0, 1);
   
-  const relevantAnimals = animauxData.filter(a => 
-    a.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase() ||
-    a.nomCreole.toLowerCase().includes(sign.animal?.toLowerCase() || '')
-  ).slice(0, 3);
-  
-  const relevantPlantes = plantesData.filter(p => 
-    p.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase() ||
-    p.nomCreole.toLowerCase().includes(sign.plante?.toLowerCase() || '')
-  ).slice(0, 3);
-
   // Tokens découpés pour gérer les noms composés ("Colibri huppé / Foufou")
   const animalTokens = splitTokens(sign.animal, sign.nomKreyol);
   const planteTokens = splitTokens(sign.plante);
 
-  // Filtrer les données enrichies pour ne garder que les pertinentes
-  // FAUNE-DATA : nomCreole ET nomFrancais pour couvrir les variantes d'orthographe
-  const fauneEnrichies = fauneData.filter(f => {
-    const nom = f.nomCreole.toLowerCase();
-    const fr = (f.nomFrancais || '').toLowerCase();
-    return animalTokens.some(t => nom.includes(t) || fr.includes(t));
-  }).slice(0, 8);
+  // Helper : vrai si une entrée correspond au totem du signe.
+  // Décompose les tokens composés ("colibri huppé" → "colibri") et normalise
+  // les variantes français/créole (colibri → kolibri) pour ne pas manquer
+  // les entrées créoles quand le sign.animal est en français.
+  function isTotem(nomCreole: string, nomFrancais: string = ''): boolean {
+    const nom = nomCreole.toLowerCase();
+    const fr  = nomFrancais.toLowerCase();
+    const words = animalTokens.flatMap(t =>
+      [t, ...t.split(/[\s\-]+/).filter(w => w.length >= 3)]
+    ).flatMap(t => [
+      t,
+      t.replace(/\bcolibri\b/, 'kolibri'),   // fr → créole
+      t.replace(/\biguane?\b/, 'igwann'),    // fr → créole
+    ]);
+    return words.some(t => nom.includes(t) || fr.includes(t)) ||
+           planteTokens.some(t => nom.includes(t) || fr.includes(t));
+  }
 
-  // FLORE-DATA : nomCreole ET nomFrancais
+  // FAUNE-DATA : diversification — exclut le totem, préfère les entrées SACRÉ/Emblématique
+  // Rotation par signe+date pour que chaque signe obtienne des animaux différents
+  // Entités dont l'usage dans un horoscope quotidien est culturellement inapproprié :
+  // le modèle extrait des métaphores de transformation/passage au lieu de la terreur réelle.
+  const FAUNE_EXCLUES = new Set(['soukougnan-myt', 'rat-nw-rat']);
+
+  const faunePool = fauneData.filter(f => {
+    if (FAUNE_EXCLUES.has(f.id)) return false;
+    if (isTotem(f.nomCreole, f.nomFrancais)) return false;
+    const sacre = (f.sacreSymbolique || '').toUpperCase();
+    return sacre.includes('SACRÉ') || sacre.includes('EMBLÉMATIQUE') || sacre.includes('EMBLEMATIQUE');
+  });
+  const fauneEnrichies = rotateBySignDate(faunePool, sign.id, dateToUse + edition, 6);
+
+  // FLORE-DATA : exclut l'entrée exacte du totem (évite le doublon flanbwayan×2)
+  const floreTotemNom = (floreEntry?.nomCreole || '').toLowerCase();
   const floreEnrichies = floreData.filter(f => {
     const nom = f.nomCreole.toLowerCase();
-    const fr = f.nomFrancais.toLowerCase();
-    return planteTokens.some(t => nom.includes(t) || fr.includes(t));
+    const fr  = f.nomFrancais.toLowerCase();
+    return planteTokens.some(t => nom.includes(t) || fr.includes(t)) &&
+           nom !== floreTotemNom;
   }).slice(0, 8);
 
   // LIEUX-DATA : entrées liées au signe par lieu uniquement
@@ -401,18 +462,12 @@ export function buildHoroscopeUserPrompt(
     sign.lieu?.toLowerCase().includes(l.nom.toLowerCase())
   ).slice(0, 5);
 
-  // KREYOL-DATA : entrées liées au signe par animal/plante/nomKreyol uniquement
-  const kreyolEnrichis = kreyolData.filter(k => {
-    const nom = k.nomCreole.toLowerCase();
-    return (
-      animalTokens.some(t => nom.includes(t)) ||
-      planteTokens.some(t => nom.includes(t)) ||
-      (k.tags && k.tags.some(tag =>
-        animalTokens.some(t => tag.includes(t)) ||
-        planteTokens.some(t => tag.includes(t))
-      ))
-    );
-  }).slice(0, 5);
+  // KREYOL-DATA : diversification — exclut le totem via isTotem() (gère les variantes
+  // orthographiques fr/créole), puis rotation déterministe par signe+date+édition.
+  // kreyolByElement supprimé : k.famille contient "animaux-symboles de résistance"
+  // et non les éléments (Feu/Air…) → le filtre était toujours vide.
+  const kreyolNonTotem = kreyolData.filter(k => !isTotem(k.nomCreole));
+  const kreyolEnrichis = rotateBySignDate(kreyolNonTotem, sign.id, dateToUse + edition, 5);
 
   // HISTOIRE-DATA : 2-3 entrées pertinentes (filtre par date uniquement)
   const histoireEnrichies = histoireData.filter(h =>
@@ -445,12 +500,34 @@ export function buildHoroscopeUserPrompt(
     ? `\n${dynamicContext.join('\n')}\n`
     : '';
 
+  // ── Section données du jour (depuis cultural-context.ts) ──────────────────
+  const donneesJourLines: string[] = [];
+  if (culturalCtx) {
+    if (culturalCtx.faune?.nomCreole)
+      donneesJourLines.push(`  Animal du jour       : ${culturalCtx.faune.nomCreole} (${culturalCtx.faune.nomFr}) — ${culturalCtx.faune.culture.split('.')[0]}`);
+    if (culturalCtx.flore?.nomCreole)
+      donneesJourLines.push(`  Plante du jour       : ${culturalCtx.flore.nomCreole} (${culturalCtx.flore.nomFr}) — ${culturalCtx.flore.culture.split('.')[0]}`);
+    if (culturalCtx.lieu?.nomCreole)
+      donneesJourLines.push(`  Lieu du jour         : ${culturalCtx.lieu.nomCreole} (${culturalCtx.lieu.nomFr}) — ${culturalCtx.lieu.culture.split('.')[0]}`);
+    if (culturalCtx.medicinal?.nomCreole)
+      donneesJourLines.push(`  Plante médicinale    : ${culturalCtx.medicinal.nomCreole} (${culturalCtx.medicinal.nomFr}) — ${culturalCtx.medicinal.usage.split('.')[0]}`);
+    if (culturalCtx.pratique?.nomCreole)
+      donneesJourLines.push(`  Pratique résistance  : ${culturalCtx.pratique.nomCreole} (${culturalCtx.pratique.nomFr}) — ${culturalCtx.pratique.dimension.split('.')[0]}`);
+    if (culturalCtx.objet?.nomCreole)
+      donneesJourLines.push(`  Objet créole         : ${culturalCtx.objet.nomCreole} (${culturalCtx.objet.nomFr}) — ${culturalCtx.objet.dimension.split('.')[0]}`);
+    if (culturalCtx.historicalResonance)
+      donneesJourLines.push(`  Résonance historique : ${culturalCtx.historicalResonance.split('.')[0]}`);
+  }
+  const donneesJourBlock = donneesJourLines.length > 0
+    ? `\n🌿 DONNÉES CULTURELLES DU JOUR (sélection rotation quotidienne — PRIORITÉ HAUTE) :\n${donneesJourLines.join('\n')}\n`
+    : '';
+
   return `CONTEXTE TEMPOREL À KARUKERA :
 ${dynamicContextBlock}Date : ${dateToUse}
 Heure locale : ${hourToUse}
 Moment : ${cfg.moment}
 ${weatherBlock}
-
+${donneesJourBlock}
 🌍 HOROSCOPE BRUT (source anglaise - pour inspiration uniquement) :
 ${sign.name} : ${rawText}
 
@@ -458,54 +535,46 @@ ${sign.name} : ${rawText}
 
 ⭐ DONNÉES ENRICHIES CULTURELLES (PRIORITÉ ABSOLUE) ⭐
 
-📚 FAUNE-DATA (symboles animaux pertinents) :
-${fauneEnrichies.map(f => `  - ${f.nomCreole} (${f.nomFrancais}): ${f.dimensionCulturelle || ''}`).join('\n')}
+📚 FAUNE-DATA :
+  Totem du signe (citer AU PLUS 1 FOIS — déjà dans "Données du signe") :
+  - ${fauneEntry?.nomCreole || sign.animal} : ${fauneDimension}${fauneSavoir ? ` | Savoir : ${fauneSavoir}` : ''}
+  Diversification (animaux différents — à utiliser en priorité dans le texte) :
+${fauneEnrichies.length > 0 ? fauneEnrichies.map(f => `  - ${f.nomCreole} (${f.nomFrancais}): ${f.dimensionCulturelle || ''}`).join('\n') : '  (aucune entrée — utiliser les données vaudou)'}
 
-🌺 FLORE-DATA (plantes et arbres sacrés) :
-${floreEnrichies.map(f => `  - ${f.nomCreole} (${f.nomFrancais}): ${f.usage ? `USAGE=${f.usage}, ` : ''}DIMENSION=${f.dimensionCulturelle || ''}`).join('\n')}
+🌺 FLORE-DATA :
+  Plante du signe (citer AU PLUS 1 FOIS) :
+  - ${floreEntry?.nomCreole || sign.plante}${floreUsage ? ` : USAGE=${floreUsage}` : ''}${floreDimension ? ` | ${floreDimension}` : ''}${floreSavoir ? ` | Savoir : ${floreSavoir}` : ''}
+  Autres plantes :
+${floreEnrichies.length > 0 ? floreEnrichies.map(f => `  - ${f.nomCreole} (${f.nomFrancais}): ${f.usage ? `USAGE=${f.usage}, ` : ''}DIMENSION=${f.dimensionCulturelle || ''}`).join('\n') : '  (aucune entrée)'}
 
-🏞️  LIEUX-DATA (sites sacrés et symboliques) :
-${lieuxEnrichis.map(l => `  - ${l.nom} (${l.localisation}): ${l.dimensionCulturelle || ''}`).join('\n')}
+🏞️  LIEUX-DATA :
+  Lieu du signe (citer AU PLUS 1 FOIS) :
+  - ${lieuEntry?.nom || sign.lieu}${lieuDimension ? ` : ${lieuDimension}` : ''}${lieuSymbolique ? ` | Symbolique : ${lieuSymbolique}` : ''}
 
 🎭 KREYOL-DATA (symboles de résistance) :
-${kreyolEnrichis.map(k => `  - ${k.nomCreole}: ${k.dimensionCulturelle || k.typeResistance || ''}`).join('\n')}
+${[
+  kreyolSymbol ? `  - ${kreyolSymbol} (spécifique au signe) : ${kreyolDimension}` : '',
+  ...kreyolEnrichis.map(k => `  - ${k.nomCreole}: ${k.dimensionCulturelle || k.typeResistance || ''}`),
+].filter(Boolean).join('\n')}
 
-📜 HISTOIRE-DATA (événements historiques) :
-${histoireEnrichies.map(h => `  - ${h.periode}: ${h.faitHistorique}`).join('\n')}
+📜 HISTOIRE-DATA :
+${histoirePeriode ? `  - ${histoirePeriode} : ${histoireFait}` : ''}
+${histoireEnrichies.filter(h => h.periode !== histoirePeriode).map(h => `  - ${h.periode}: ${h.faitHistorique}`).join('\n')}
 
-🔮 **CONTEXTE VAUDOU GUADELOUPÉEN** (NOUVEAU - À INTÉGRER DANS TON HOROSCOPE) :
-📌 Signe ${sign.name} → Loa principal : **${vaudouContext.loa}** (${vaudouContext.famille})
-   Énergie : ${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.energie || 'Harmonie et équilibre'}
-   Couleurs sacrées : ${(SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || ['blanc']).join(', ')}
-   Symbole : ${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.emoji || '🔮'}
+🔮 CONTEXTE VAUDOU — ${sign.name} :
+  Loa : **${vaudouContext.loa}** (${vaudouContext.famille}) — ${relevantLoas[0]?.dimensionCulturelle?.split('.')[0] || ''}
+  Énergie : ${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.energie || 'Harmonie et équilibre'}
+  Couleurs sacrées : ${(SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || ['blanc']).join(', ')}
+${isRitual ? `  ⭐ Date rituelle : ${ritualDate?.nomFrancais || ritualDate?.nomCreole} — ${ritualDate?.dimensionCulturelle?.split('.')[0] || ''}` : ''}
 
-💫 Ambiance de l'édition "${edition}" : ${EDITION_TO_VAUDOU_CONTEXT[edition]?.energie || 'Ouverture et chemin'}
-
-${isRitual ? `⭐ DATE RITUELLE SPÉCIALE : **${ritualDate?.nomFrancais || ritualDate?.nomCreole || 'Cérémonie sacrée'}**
-   Loa associé : ${ritualDate?.famille || 'Multiple'}
-   Thème : ${ritualDate?.dimensionCulturelle?.split('.')[0] || 'Célébration traditionnelle'}
-` : ''}📚 LOAS PERTINENTS :
-${relevantLoas.map(l => `  - ${l.nomCreole} (${l.nomFrancais}): ${l.dimensionCulturelle.split('.')[0]}`).join('\n')}
-
-🐍 ANIMAUX SACRÉS PERTINENTS :
-${relevantAnimals.map(a => `  - ${a.nomCreole} (${a.nomFrancais}): ${a.dimensionCulturelle.split('.')[0]}`).join('\n')}
-
-🌿 PLANTES SACRÉES PERTINENTES :
-${relevantPlantes.map(p => `  - ${p.nomCreole} (${p.nomFrancais}): ${p.dimensionCulturelle.split('.')[0]}`).join('\n')}
-
-⚠️ DONNÉES DU SIGNE (pour référence - À UTILISER AVEC MODÉRATION) :
-  - id: ${sign.id}
-  - name: ${sign.name}
-  - animal: ${sign.animal}
-  - nomKreyol: ${sign.nomKreyol}
-  - plante: ${sign.plante}
+⚠️ DONNÉES DU SIGNE (totem — À UTILISER AVEC MODÉRATION, 1 fois max chacun) :
+  - animal: ${sign.animal}${fauneDimension ? ` — ${fauneDimension}` : ''}${fauneSavoir ? ` | ${fauneSavoir}` : ''}
+  - plante: ${sign.plante}${floreUsage ? ` — ${floreUsage}` : ''}${floreSavoir ? ` | ${floreSavoir}` : ''}
   - arbre: ${sign.arbre}
-  - lieu: ${sign.lieu}
+  - lieu: ${sign.lieu}${lieuDimension ? ` — ${lieuDimension}` : ''}${lieuSymbolique ? ` | ${lieuSymbolique}` : ''}
   - element: ${sign.element}
-  - spirituel: ${sign.spirituel.substring(0, 150)}${sign.spirituel.length > 150 ? '...' : ''}
-  - dateRange: ${sign.dateRange}
   - planet: ${sign.planet}
-  - tagline: ${sign.tagline}
+  - spirituel: ${sign.spirituel.substring(0, 150)}${sign.spirituel.length > 150 ? '...' : ''}
 
 ÉDITION : ${cfg.instruction}
 
@@ -513,22 +582,17 @@ STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien cr
 1. "ouverture" : UNE phrase - image caribéenne qui pose le ton du jour. Ancre dans l'animal, la plante ou le lieu du signe, ou dans une couleur sacrée du loa — pas une formule générique. INTERDIT : toute phrase avec "vèvè" dans cette section.
 2. "amour" : 2 à 4 phrases. **OBLIGATOIRE : le nom créole d'un élément de FAUNE-DATA ou FLORE-DATA doit apparaître dans le texte.** INTERDIT comme images de remplacement : "mer", "vague", "vent", "racines", "danse".
 3. "travail" : 2 à 4 phrases. **OBLIGATOIRE : le nom créole d'un élément de FAUNE-DATA ou LIEUX-DATA doit apparaître dans le texte.** INTERDIT : "chemin", "vent", "racines" comme métaphores génériques.
-4. "argent" : 2 à 4 phrases. **OBLIGATOIRE : une image tirée du comportement de l'animal du signe ou d'une pratique économique créole (marché, pêche, récolte, troc).** INTERDIT : HISTOIRE-DATA, "sève", "racines", "mer", "vent".
+4. "argent" : 2 à 4 phrases. **OBLIGATOIRE : une image tirée du comportement d'un animal de FAUNE-DATA (diversification) ou d'une pratique économique créole (marché, pêche, récolte, troc) — pas le totem du signe.** INTERDIT : HISTOIRE-DATA, "sève", "racines", "mer", "vent".
 5. "amitie" : 2 à 4 phrases. **OBLIGATOIRE : le nom créole d'un élément de LIEUX-DATA ou KREYOL-DATA doit apparaître dans le texte.** INTERDIT : "comme les racines de [arbre]" (formule identique pour 8 signes sur 12).
 6. "prediction" : UNE phrase - tendance pour les jours à venir. Métaphore naturelle propre au signe, vaudou ou HISTOIRE-DATA.
 7. "conseil" : UNE phrase - un geste symbolique ancré dans FLORE-DATA ou CONTEXTE VAUDOU. JAMAIS une bougie, une flamme, un feu.
 
-✨ **INTÈGRE LE CONTEXTE VAUDOU** ✨
-- **Le seul loa de cet horoscope est ${vaudouContext.loa}.** Cite-le UNE SEULE FOIS, dans la section la plus pertinente. Toutes les autres références spirituelles passent par des symboles naturels (plantes, animaux, lieux, couleurs) — pas par d'autres loas nommés.
-- **INTERDIT dans toutes les sections** : citer un loa autre que ${vaudouContext.loa} (ni Ezili, ni Legba, ni Damballa/Damballah, ni Baron, ni Ogoun, ni aucun autre). Si tu veux exprimer la tendresse, la mort, le chemin, utilise les symboles naturels du signe — jamais le nom d'un autre loa.
-- Si tu ressens le besoin de parler d'amour ou de mort ou de chemin, fais-le à travers les symboles naturels propres à CE signe (son animal, sa plante, son lieu) — pas à travers un loa, et pas à travers des images génériques partagées par tous les signes.
-- **INTERDIT dans "amour" et "amitie"** : soukougnan, volant, loup-garou, zombi, et toute créature de terreur ou de mort. Ces êtres n'ont aucune place dans les sections affectives — réserve-les à "prediction" si tu en as besoin.
-- **INTERDIT dans "conseil"** : Legba et toute bougie. Legba n'est pas le loa de tous les signes — n'utilise que ${vaudouContext.loa}. Le conseil doit être poétique, sans flamme, sans rituel physique.
-- **Utilise 1 mot créole vaudou max par section**, tiré du contexte vaudou du signe — NB : en créole guadeloupéen l'argent se dit "lajan", jamais "kòb"
-- Les dessins sacrés vaudou ne sont pas une image générique — n'évoque cette pratique que si elle est directement liée au loa du signe et au contexte de la section.
-- **NB orthographe** : la figure mythologique s'écrit "soukougnan" (orthographe guadeloupéenne), jamais "soukouyan" ni "soukounyan". Le soukougnan RETIRE SA PROPRE PEAU — ne jamais inventer de rituel de protection humaine contre lui qui n'existe pas dans le folklore.
-- **Priorité aux symboles vaudou** : couleurs (${(SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || []).join(', ')}), plantes (${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.plante}), animaux (${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.animal})
-- **Pour les dates rituelles** : Mentionne explicitement la fête (${ritualDate?.nomFrancais || 'N/A'}) et son loa associé
+✨ **CONTEXTE VAUDOU** ✨
+- Cite **${vaudouContext.loa}** UNE SEULE FOIS dans la section la plus pertinente.
+- Toutes les autres références spirituelles passent par les symboles naturels du signe (couleurs sacrées : ${(SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || []).join(', ')}, plante, animal, lieu) — jamais par le nom d'un autre loa.
+- **INTERDIT dans "amour" et "amitie"** : soukougnan, zombi, loup-garou, toute créature de terreur.
+- **INTERDIT dans "conseil"** : bougie, flamme, feu — le conseil reste poétique et symbolique.
+- 1 mot créole vaudou max par section. L'argent se dit "lajan", jamais "kòb".${isRitual ? `\n- Date rituelle du jour : ${ritualDate?.nomFrancais || ''} — mentionne-la dans la section prediction.` : ''}
 
 Note : Le champ "sante" (optionnel) peut être ajouté séparément avec EXACTEMENT 2 OU 4 phrases.
 
@@ -638,16 +702,6 @@ export function buildHoroscopeMetadata(
     l.nomCreole.toLowerCase().includes(loaName?.toLowerCase() || '')
   ).slice(0, 1);
 
-  const relevantAnimals = animauxData.filter(a =>
-    a.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase() ||
-    animalTokens.some(t => a.nomCreole.toLowerCase().includes(t))
-  ).slice(0, 3);
-
-  const relevantPlantes = plantesData.filter(p =>
-    p.famille.toLowerCase() === SIGN_TO_VAUDOU_CONTEXT[sign.id]?.famille.toLowerCase() ||
-    planteTokens.some(t => p.nomCreole.toLowerCase().includes(t))
-  ).slice(0, 3);
-
   const signConditions = [...(sign.faune?.conditions || []), ...(sign.flore?.conditions || [])];
   const signEditions = [...(sign.faune?.editions || []), ...(sign.flore?.editions || [])];
   const weatherLower = weather.toLowerCase();
@@ -670,7 +724,7 @@ export function buildHoroscopeMetadata(
     famille_vaudou: vaudouContext.famille || '',
     energie_vaudou: SIGN_TO_VAUDOU_CONTEXT[sign.id]?.energie || '',
     couleurs_sacrees: SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || [],
-    edition_energie: EDITION_TO_VAUDOU_CONTEXT[edition]?.energie || '',
+    edition_energie: '',
     heure_locale: getGuadeloupeTime(),
     is_ritual_date: isRitual,
     date_rituelle: ritualDate?.nomFrancais || ritualDate?.nomCreole || null,
@@ -680,8 +734,8 @@ export function buildHoroscopeMetadata(
     kreyol_enrichis: kreyolEnrichis.map(k => k.nomCreole),
     histoire_enrichies: histoireEnrichies.map(h => h.periode),
     loas_pertinents: relevantLoas.map(l => l.nomCreole),
-    animaux_sacres: relevantAnimals.map(a => a.nomCreole),
-    plantes_sacrees: relevantPlantes.map(p => p.nomCreole),
+    animaux_sacres: [],
+    plantes_sacrees: [],
     contexte_dynamique,
   };
 }

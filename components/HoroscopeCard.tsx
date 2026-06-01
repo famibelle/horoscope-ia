@@ -41,28 +41,19 @@ function CardSkeleton({ sign }: { sign: ReturnType<typeof signs.find> }) {
   if (!sign) return null;
   return (
     <div
-      className="relative rounded-3xl overflow-hidden animate-pulse"
-      style={{
-        background: 'linear-gradient(145deg, rgba(245,245,220,0.08) 0%, rgba(139,69,19,0.04) 100%)',
-        border: `1px solid rgba(139,69,19,0.2)`,
-      }}
+      className="animate-pulse"
+      style={{ background: '#111e14', borderRadius: '18px', border: '0.5px solid rgba(255,255,255,0.07)', overflow: 'hidden' }}
     >
-      <div className="px-6 pt-8 pb-6 sm:px-8">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-full bg-ancestral-cream/10" />
-          <div className="space-y-2">
-            <div className="h-5 w-24 rounded-lg bg-ancestral-cream/10" />
-            <div className="h-3 w-16 rounded-lg bg-ancestral-cream/5" />
-          </div>
-        </div>
-        <div className="h-3 w-36 rounded-lg bg-ancestral-cream/5 mt-2" />
+      <div style={{ padding: '14px 16px 10px', borderBottom: '0.5px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ height: '10px', width: '100px', borderRadius: '4px', background: 'rgba(212,175,80,0.1)' }} />
+        <div style={{ height: '10px', width: '60px', borderRadius: '4px', background: 'rgba(76,175,116,0.1)' }} />
       </div>
-      <div className="px-6 sm:px-8 pb-8 space-y-5">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="space-y-2">
-            <div className="h-3 w-20 rounded-lg bg-ancestral-cream/8" />
-            <div className="h-4 w-full rounded-lg bg-ancestral-cream/5" />
-            <div className="h-4 w-4/5 rounded-lg bg-ancestral-cream/5" />
+      <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <div style={{ height: '8px', width: '70px', borderRadius: '4px', background: 'rgba(200,216,192,0.06)' }} />
+            <div style={{ height: '13px', width: '100%', borderRadius: '4px', background: 'rgba(200,216,192,0.04)' }} />
+            <div style={{ height: '13px', width: '80%', borderRadius: '4px', background: 'rgba(200,216,192,0.04)' }} />
           </div>
         ))}
       </div>
@@ -144,105 +135,85 @@ function FilledCard({
   data: HoroscopeResponse;
   date: string;
 }) {
+  const editionLabel: Record<string, string> = {
+    nuit: 'Cette nuit', matin: 'Ce matin', midi: 'Ce midi', soir: 'Ce soir',
+  };
+  const badgeLabel = editionLabel[data.edition ?? 'matin'] ?? 'Ce matin';
+
   return (
-    <>
-      {/* Thème ancestral - Pour revenir au cosmique, restaurer les couleurs d'origine */}
-      <Link
+    <Link
       href={`/horoscope/${sign.id}`}
-      className="block relative rounded-3xl overflow-hidden transition-shadow duration-300"
+      className="block relative overflow-hidden transition-shadow duration-300"
       style={{
-        background:
-          'linear-gradient(145deg, rgba(245,245,220,0.08) 0%, rgba(139,69,19,0.04) 100%)',
-        backdropFilter: 'blur(32px)',
-        WebkitBackdropFilter: 'blur(32px)',
-        border: `1px solid rgba(139,69,19,0.2)`,
-        boxShadow: `0 0 80px rgba(139,69,19,0.2), 0 20px 60px rgba(0,0,0,0.4)`,
+        background: '#111e14',
+        borderRadius: '18px',
+        border: '0.5px solid rgba(255,255,255,0.07)',
+        boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
       }}
     >
-      {/* Top glow bar */}
-      <div
-        className="absolute top-0 left-0 right-0 h-px"
+      {/* Watermark glyphe */}
+      <span
+        aria-hidden
         style={{
-          background: `linear-gradient(90deg, transparent, rgba(210,105,30,0.8), rgba(255,215,0,0.6), transparent)`,
+          position: 'absolute',
+          top: '12px',
+          right: '16px',
+          fontSize: '80px',
+          opacity: 0.04,
+          lineHeight: 1,
+          fontFamily: 'var(--font-display)',
+          pointerEvents: 'none',
+          userSelect: 'none',
         }}
-      />
+      >
+        {sign.emoji}
+      </span>
 
-      {/* Header */}
-      <div className="px-6 pt-8 pb-5 sm:px-8">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <span className="text-4xl">{sign.emoji}</span>
-            <div>
-              <h2
-                className="font-display text-2xl sm:text-3xl font-bold text-ancestral-gold"
-              >
-                {sign.name}
-              </h2>
-              <p className="text-white text-xs uppercase tracking-widest mt-0.5">
-                {sign.planet} · {sign.element}
-              </p>
-            </div>
-          </div>
-
-          {/* Totem badge */}
-          <div
-            className="flex-shrink-0 text-right px-3 py-2 rounded-2xl"
-            style={{
-              background: `linear-gradient(135deg, rgba(210,105,30,0.18), rgba(255,215,0,0.12))`,
-              border: `1px solid rgba(210,105,30,0.28)`,
-            }}
-          >
-            <p className="text-xs font-semibold text-ancestral-gold">
-              {sign.nomKreyol}
-            </p>
-            <p className="text-white text-[10px] uppercase tracking-wider mt-0.5">totem</p>
-          </div>
-        </div>
-
-        <p className="text-white text-sm capitalize mt-3">{date}</p>
-
-        {/* Lieu + plante */}
-        <div className="flex flex-wrap gap-2 mt-3">
-          {[
-            { label: sign.lieu,   emoji: '📍' },
-            { label: sign.plante, emoji: '🌿' },
-          ].map((tag) => (
-            <span
-              key={tag.label}
-              className="inline-flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full text-white"
-              style={{ background: 'rgba(245,245,220,0.05)', border: '1px solid rgba(245,245,220,0.07)' }}
-            >
-              {tag.emoji} {tag.label}
-            </span>
-          ))}
-        </div>
+      {/* Header de card */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '14px 16px 10px',
+          borderBottom: '0.5px solid rgba(255,255,255,0.05)',
+        }}
+      >
+        <span
+          className="font-ui"
+          style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#D4AF50', fontWeight: 500 }}
+        >
+          Maryse vous parle
+        </span>
+        <span
+          className="font-ui"
+          style={{
+            fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em',
+            color: '#4CAF74', background: 'rgba(76,175,116,0.12)',
+            border: '1px solid rgba(76,175,116,0.2)', borderRadius: '6px',
+            padding: '3px 7px', fontWeight: 500,
+          }}
+        >
+          {badgeLabel}
+        </span>
       </div>
 
-      {/* Divider */}
-      <div
-        className="mx-6 sm:mx-8 h-px mb-6"
-        style={{ background: `linear-gradient(90deg, rgba(210,105,30,0.3), transparent)` }}
-      />
-
-      {/* 6 sections */}
-      <div className="px-6 sm:px-8 pb-8 space-y-5">
+      {/* Sections horoscope */}
+      <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
         {SECTIONS.map(({ key, label, Icon, colorClass }) => {
           const text = data[key as keyof HoroscopeResponse] as string;
           if (!text) return null;
-
           const isPrediction = key === 'prediction';
-
           return (
             <motion.div
               key={key}
-              className="space-y-1.5"
-              initial={{ opacity: 0, x: -8 }}
+              initial={{ opacity: 0, x: -6 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: SECTIONS.findIndex((s) => s.key === key) * 0.06, duration: 0.4 }}
+              transition={{ delay: SECTIONS.findIndex((s) => s.key === key) * 0.05, duration: 0.35 }}
             >
-              <div className="flex items-center gap-2">
-                <Icon size={13} className={`${colorClass} flex-shrink-0`} />
-                <span className={`text-xs font-semibold uppercase tracking-widest ${colorClass}`}>
+              <div className="flex items-center gap-2" style={{ marginBottom: '4px' }}>
+                <Icon size={12} className={`${colorClass} flex-shrink-0`} />
+                <span className={`font-ui font-semibold uppercase tracking-widest ${colorClass}`} style={{ fontSize: '11px', letterSpacing: '0.08em' }}>
                   {label}
                 </span>
               </div>
@@ -250,7 +221,15 @@ function FilledCard({
                 components={{
                   ...markdownComponents,
                   p: ({ children }) => (
-                    <p className={`text-sm leading-relaxed pl-5 ${isPrediction ? 'italic text-white' : 'text-white'}`}>
+                    <p
+                      className={`font-display ${isPrediction ? 'italic' : ''}`}
+                      style={{
+                        fontSize: '16px',
+                        lineHeight: 1.75,
+                        color: '#C8D8C0',
+                        paddingLeft: '16px',
+                      }}
+                    >
                       {children}
                     </p>
                   ),
@@ -264,74 +243,59 @@ function FilledCard({
 
         {/* Dimension spirituelle */}
         <motion.div
-          className="mt-2 rounded-2xl p-4"
           style={{
-            background: `linear-gradient(135deg, rgba(210,105,30,0.10), rgba(255,215,0,0.08))`,
-            border: `1px solid rgba(210,105,30,0.18)`,
+            marginTop: '4px',
+            borderRadius: '12px',
+            padding: '10px 12px',
+            background: 'rgba(212,175,80,0.06)',
+            border: '1px solid rgba(212,175,80,0.14)',
           }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.45, duration: 0.5 }}
+          transition={{ delay: 0.4, duration: 0.4 }}
         >
-          <p className="text-white text-xs uppercase tracking-widest mb-1.5">
+          <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B8A6E', marginBottom: '4px' }}>
             Dimension spirituelle
           </p>
-          <p className="text-white text-xs leading-relaxed italic">{sign.spirituel}</p>
+          <p style={{ fontSize: '14px', lineHeight: 1.65, color: '#C8D8C0', opacity: 0.7, fontStyle: 'italic' }}>{sign.spirituel}</p>
         </motion.div>
 
         {/* Contexte Vaudou */}
         {data.vaudou && (
           <motion.div
-            className="mt-2 rounded-2xl p-4"
             style={{
-              background: `linear-gradient(135deg, rgba(138,43,226,0.12), rgba(75,0,130,0.10))`,
-              border: `1px solid rgba(138,43,226,0.22)`,
+              borderRadius: '12px',
+              padding: '10px 12px',
+              background: 'rgba(76,175,116,0.06)',
+              border: '1px solid rgba(76,175,116,0.15)',
             }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.52, duration: 0.5 }}
+            transition={{ delay: 0.48, duration: 0.4 }}
           >
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-lg">{data.vaudou.emoji}</span>
-              <p className="text-white text-xs uppercase tracking-widest">
-                Protection Vaudou
-              </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+              <span style={{ fontSize: '14px' }}>{data.vaudou.emoji}</span>
+              <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B8A6E' }}>Protection Vaudou</p>
             </div>
-            <p className="text-white text-xs leading-relaxed">
-              <span className="font-semibold text-ancestral-gold">{data.vaudou.loa}</span> ({data.vaudou.famille}) vous accompagne aujourd'hui. 
-              Énergie : {data.vaudou.energie}. 
-              Couleurs sacrées : {data.vaudou.couleurs.join(', ')}.
+            <p style={{ fontSize: '14px', lineHeight: 1.65, color: '#C8D8C0', opacity: 0.8 }}>
+              <span style={{ fontWeight: 600, color: '#D4AF50' }}>{data.vaudou.loa}</span> ({data.vaudou.famille}) vous accompagne.
+              Énergie : {data.vaudou.energie}. Couleurs : {data.vaudou.couleurs.join(', ')}.
             </p>
           </motion.div>
         )}
 
-        {/* Météo + source */}
+        {/* Météo */}
         {data.weather && (
-          <div className="flex items-center gap-1.5 pt-2">
-            <Cloud size={11} className="text-white flex-shrink-0" />
-            <span className="text-white text-[10px]">
-              Pointe-à-Pitre · {data.weather}
-            </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingTop: '4px' }}>
+            <Cloud size={11} style={{ color: '#6B8A6E', flexShrink: 0 }} />
+            <span style={{ fontSize: '12px', color: '#6B8A6E' }}>Pointe-à-Pitre · {data.weather}</span>
           </div>
         )}
-        {data.source === 'mistral' && (
-          <p className="text-white text-[10px] text-right -mt-1">
-            Paroles transmises par Maryse
-          </p>
-        )}
-        <p className="text-ancestral-gold/70 text-xs mt-3 text-right">
+
+        <p style={{ fontSize: '13px', color: '#D4AF50', opacity: 0.7, textAlign: 'right', marginTop: '4px' }}>
           lire la suite →
         </p>
       </div>
-
-      {/* Bottom glow bar */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-px"
-        style={{
-          background: `linear-gradient(90deg, transparent, rgba(255,215,0,0.4), transparent)`,
-        }}
-      />
     </Link>
-    </>
   );
 }

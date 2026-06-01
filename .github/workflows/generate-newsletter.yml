@@ -28,7 +28,11 @@ jobs:
 
       - run: npm install
 
-      - name: Générer la newsletter
+      - name: Générer et envoyer la newsletter
         env:
-          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          BREVO_LIST_ID: ${{ secrets.BREVO_LIST_ID }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
         run: npx tsx scripts/generate-daily-newsletter.ts
