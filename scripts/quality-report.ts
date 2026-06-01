@@ -395,6 +395,155 @@ function analyzePresages(rows: PresageRow[]): { alerts: Alert[]; md: string } {
   return { alerts, md: md.join('\n') };
 }
 
+// ─── Pass 0 : Analyse du Prompt ──────────────────────────────────────────────
+
+async function analyzePrompt(date: string): Promise<string> {
+  const md: string[] = ['## 🔬 Analyse du Master Prompt\n'];
+
+  try {
+    const [year, month] = date.split('-');
+    const moisNom = new Date(date).toLocaleString('fr-FR', { month: 'long' });
+
+    const { SIGN_TO_LOA }    = await import('@/lib/private/vaudou-mappings');
+    const { histoireData }   = await import('@/lib/private/histoire-data');
+    const { fauneData }      = await import('@/lib/private/faune-data');
+    const { floreData }      = await import('@/lib/private/flore-data');
+    const { lieuxData }      = await import('@/lib/private/lieux-data');
+    const { signs }          = await import('@/lib/signs-data');
+
+    // ── 1. Loas partagés entre signes ─────────────────────────────────────
+    const loaToSigns = new Map<string, string[]>();
+    for (const [signId, loa] of Object.entries(SIGN_TO_LOA)) {
+      if (!loaToSigns.has(loa)) loaToSigns.set(loa, []);
+      loaToSigns.get(loa)!.push(signId);
+    }
+    const sharedLoas = [...loaToSigns.entries()]
+      .filter(([, s]) => s.length > 1)
+      .sort((a, b) => b[1].length - a[1].length);
+
+    md.push('### 🌀 Loas partagés entre signes\n');
+    md.push('> Un même loa injecté chez plusieurs signes le même jour garantit une répétition si le seuil est atteint.\n');
+    md.push('| Loa | Nb signes | Signes |');
+    md.push('|-----|-----------|--------|');
+    for (const [loa, signIds] of sharedLoas) {
+      const flag = signIds.length >= LOA_THRESHOLD ? '⚠️' : 'ℹ️';
+      md.push(`| **${loa}** | ${flag} ${signIds.length} | ${signIds.join(', ')} |`);
+    }
+    md.push('');
+
+    // ── 2. Pool histoire pour la période courante ─────────────────────────
+    function isLongPeriod(p: string) { return /\b\d{4}\s*[-–—]\s*\d{4}\b/.test(p); }
+    const histoirePool = histoireData.filter((h: any) =>
+      !isLongPeriod(h.periode) && (
+        h.periode.includes(year) ||
+        h.periode.includes(moisNom) ||
+        h.periode.includes(month)
+      )
+    );
+
+    md.push('### 📜 Pool Histoire pour la période\n');
+    md.push(`> \`histoireEnrichies\` est injecté **sans rotation par signe** (même 3 entrées pour les 12 signes).\n`);
+    md.push(`**${histoirePool.length} entrée(s)** correspondent à la période ${moisNom} ${year} :\n`);
+    if (histoirePool.length === 0) {
+      md.push('> ⚠️ Aucune entrée histoire pour cette période — le champ sera vide pour tous les signes.\n');
+    } else {
+      md.push('| # | Période | Fait historique (début) |');
+      md.push('|---|---------|------------------------|');
+      histoirePool.slice(0, 10).forEach((h: any, i: number) => {
+        const flag = i < 3 ? '🔴' : '⚪'; // Les 3 premières sont injectées (.slice(0,3))
+        md.push(`| ${flag} ${i + 1} | ${h.periode} | ${h.faitHistorique.substring(0, 80)}… |`);
+      });
+      if (histoirePool.length > 3) {
+        md.push(`\n> 🔴 = injectée chez **tous les signes** (les ${Math.min(3, histoirePool.length)} premières du slice)\n`);
+      }
+    }
+    md.push('');
+
+    // ── 3. Pool faune SACRÉ/EMBLÉMATIQUE ─────────────────────────────────
+    const FAUNE_EXCLUES = new Set(['soukougnan-myt', 'rat-nw-rat']);
+    const faunePool = fauneData.filter((f: any) => {
+      if (FAUNE_EXCLUES.has(f.id)) return false;
+      const sacre = (f.sacreSymbolique || '').toUpperCase();
+      return sacre.includes('SACRÉ') || sacre.includes('EMBLÉMATIQUE') || sacre.includes('EMBLEMATIQUE');
+    });
+
+    // Calculer combien d'entrées distinctes sont disponibles par signe (pool après exclusion du totem)
+    const poolPerSign = signs.map((sign: any) => {
+      const animalTokens = (sign.animal || '').toLowerCase().split(/[\s\-\/()]+/).filter((t: string) => t.length >= 3);
+      const kreyolTokens = (sign.nomKreyol || '').toLowerCase().split(/[\s\-\/()]+/).filter((t: string) => t.length >= 3);
+      const allTokens = [...animalTokens, ...kreyolTokens];
+      const pool = faunePool.filter((f: any) => {
+        const nom = f.nomCreole.toLowerCase();
+        const fr  = (f.nomFrancais || '').toLowerCase();
+        return !allTokens.some((t: string) => nom.includes(t) || fr.includes(t));
+      });
+      return { sign: sign.id, poolSize: pool.length };
+    });
+
+    const minPool = Math.min(...poolPerSign.map((p: any) => p.poolSize));
+    const smallPools = poolPerSign.filter((p: any) => p.poolSize < 8);
+
+    md.push('### 🦎 Pool Faune (SACRÉ/EMBLÉMATIQUE)\n');
+    md.push(`**${faunePool.length} entrées** dans le pool global (après exclusions).`);
+    md.push(`Le prompt injecte **6 animaux** par signe via rotation déterministe.\n`);
+
+    if (minPool < 8) {
+      md.push('> ⚠️ Certains signes ont un pool réduit — collisions possibles entre signes :\n');
+      md.push('| Signe | Pool dispo |');
+      md.push('|-------|-----------|');
+      for (const { sign, poolSize } of smallPools) {
+        md.push(`| ${sign} | ${poolSize < 6 ? '🔴' : '⚠️'} ${poolSize} |`);
+      }
+    } else {
+      md.push(`> ✅ Pool suffisant pour tous les signes (min = ${minPool} entrées après exclusion du totem).\n`);
+    }
+    md.push('');
+
+    // ── 4. Taille des pools flore & lieux ────────────────────────────────
+    md.push('### 🌿 Pools Flore & Lieux\n');
+    md.push('| Pool | Taille totale | Injecté par signe |');
+    md.push('|------|--------------|-------------------|');
+    md.push(`| Flore | ${floreData.length} | jusqu'à 8 (filtre par plante du signe) |`);
+    md.push(`| Lieux | ${lieuxData.length} | jusqu'à 5 (filtre par lieu du signe) |`);
+    md.push('');
+
+    // ── 5. Interdictions actives dans le prompt ────────────────────────
+    md.push('### 🚫 Interdictions actives dans le prompt\n');
+    md.push('| Catégorie | Interdiction |');
+    md.push('|-----------|-------------|');
+    md.push('| Sécurité | bougie, flamme, feu, encens |');
+    md.push('| Créatures | soukougnan, zombi, loup-garou dans amour/amitie |');
+    md.push('| Métaphores génériques | mer, vent, vague, racines, danse, chemin, "laisse-toi porter" |');
+    md.push('| Usage créole | "le lajan", "la lajan", "l\'lajan" → "lajan" seul |');
+    md.push('| Répétitions internes | totem du signe max 1×, lieu max 1×, loa max 1×, ka max 2× |');
+    md.push('');
+
+    // ── 6. Lacunes identifiées ────────────────────────────────────────
+    md.push('### ⚠️ Lacunes structurelles identifiées\n');
+    const lacunes: string[] = [];
+
+    lacunes.push('**Pas de contrainte inter-signes** : le modèle génère chaque signe en isolation et ne sait pas ce que les autres signes ont reçu — impossibilité de se diversifier mutuellement.');
+
+    if (histoirePool.length <= 3) {
+      lacunes.push(`**Pool histoire trop petit** (${histoirePool.length} entrée(s) pour ${moisNom} ${year}) : tous les signes reçoivent les mêmes références historiques.`);
+    } else {
+      lacunes.push(`**histoireEnrichies sans rotation par signe** : les 3 premières entrées du pool (sur ${histoirePool.length}) sont injectées identiquement chez tous les signes — ajouter \`rotateBySignDate()\` comme pour faune.`);
+    }
+
+    const sharedLoaWarnings = sharedLoas.filter(([, s]) => s.length >= LOA_THRESHOLD);
+    if (sharedLoaWarnings.length > 0) {
+      lacunes.push(`**${sharedLoaWarnings.length} loa(s) partagé(s) entre ${LOA_THRESHOLD}+ signes** : ${sharedLoaWarnings.map(([l]) => l).join(', ')} — répétition structurellement inévitable dans les rapports.`);
+    }
+
+    lacunes.forEach(l => md.push(`- ${l}\n`));
+
+  } catch (e) {
+    md.push(`> ⚠️ Données privées indisponibles — analyse du prompt ignorée (${e instanceof Error ? e.message : e}).\n`);
+  }
+
+  return md.join('\n');
+}
+
 // ─── Pass 2 : Sémantique (Mistral) ───────────────────────────────────────────
 
 async function semanticPass(horoscopes: HoroscopeRow[]): Promise<string> {
@@ -455,7 +604,7 @@ async function main() {
   console.log('🔍 Rapport qualité 7 jours glissants\n');
 
   const dates       = last7Days();
-  const periodStart = dates[0];
+  const periodStart = dates[0] < '2026-06-01' ? '2026-06-01' : dates[0];
   const periodEnd   = dates[dates.length - 1];
   console.log(`📅 Période : ${periodStart} → ${periodEnd}\n`);
 
@@ -479,6 +628,11 @@ async function main() {
     }) as Promise<PresageRow[]>,
   ]);
   console.log(`   ✅ ${horoscopes.length} horoscopes · ${ambiances.length} ambiances · ${presages.length} présages\n`);
+
+  // Pass 0 : analyse du prompt
+  console.log('🔬 Pass 0 — Analyse du master prompt...');
+  const promptMd = await analyzePrompt(periodEnd);
+  console.log('   ✅ Terminée\n');
 
   // Pass 1 : structurelle
   console.log('🔧 Pass 1 — Analyse structurelle...');
@@ -529,6 +683,11 @@ async function main() {
     `| ⚠️ Alertes structurelles | ${warnings} |`,
     `| ℹ️ Informations | ${infos} |`,
     '',
+    '---',
+    '',
+    '# Pass 0 — Analyse du Master Prompt',
+    '',
+    promptMd,
     '---',
     '',
     '# Pass 1 — Analyse Structurelle',
