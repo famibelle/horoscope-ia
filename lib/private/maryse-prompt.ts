@@ -433,28 +433,24 @@ export function buildHoroscopeUserPrompt(
            planteTokens.some(t => nom.includes(t) || fr.includes(t));
   }
 
-  // FAUNE-DATA : diversification — exclut le totem, préfère les entrées SACRÉ/Emblématique
-  // Rotation par signe+date pour que chaque signe obtienne des animaux différents
-  // Entités dont l'usage dans un horoscope quotidien est culturellement inapproprié :
-  // le modèle extrait des métaphores de transformation/passage au lieu de la terreur réelle.
+  // FAUNE-DATA : diversification — exclut le totem et les entités inappropriées
+  // Pool élargi : SACRÉ, EMBLÉMATIQUE, Symbolique, Culturel, Ambivalent, Résistance, Rituel
+  // (anciennement restreint à SACRÉ+EMBLÉMATIQUE = 38 entrées → désormais ~95 entrées)
   const FAUNE_EXCLUES = new Set(['soukougnan-myt', 'rat-nw-rat']);
 
   const faunePool = fauneData.filter(f => {
     if (FAUNE_EXCLUES.has(f.id)) return false;
     if (isTotem(f.nomCreole, f.nomFrancais)) return false;
-    const sacre = (f.sacreSymbolique || '').toUpperCase();
-    return sacre.includes('SACRÉ') || sacre.includes('EMBLÉMATIQUE') || sacre.includes('EMBLEMATIQUE');
+    const sacre = (f.sacreSymbolique || '').trim().toUpperCase();
+    return sacre.length > 0;
   });
   const fauneEnrichies = rotateBySignDate(faunePool, sign.id, dateToUse + edition, 6);
 
-  // FLORE-DATA : exclut l'entrée exacte du totem (évite le doublon flanbwayan×2)
+  // FLORE-DATA : pool élargi (toutes entrées sauf le totem), rotation déterministe
+  // (anciennement filtré par planteTokens → pool de 1-2 → même totem répété pour tous les signes)
   const floreTotemNom = (floreEntry?.nomCreole || '').toLowerCase();
-  const floreEnrichies = floreData.filter(f => {
-    const nom = f.nomCreole.toLowerCase();
-    const fr  = f.nomFrancais.toLowerCase();
-    return planteTokens.some(t => nom.includes(t) || fr.includes(t)) &&
-           nom !== floreTotemNom;
-  }).slice(0, 8);
+  const florePool = floreData.filter(f => f.nomCreole.toLowerCase() !== floreTotemNom);
+  const floreEnrichies = rotateBySignDate(florePool, sign.id, dateToUse + edition, 6);
 
   // LIEUX-DATA : entrées liées au signe par lieu uniquement
   const lieuxEnrichis = lieuxData.filter(l =>
@@ -667,11 +663,14 @@ export function buildHoroscopeMetadata(
     return animalTokens.some(t => nom.includes(t) || fr.includes(t));
   }).slice(0, 8);
 
-  const floreEnrichies = floreData.filter(f => {
-    const nom = f.nomCreole.toLowerCase();
-    const fr = f.nomFrancais.toLowerCase();
-    return planteTokens.some(t => nom.includes(t) || fr.includes(t));
-  }).slice(0, 8);
+  const floreTotemNom2 = (floreData.find(f => {
+    const key = (sign.flore?.nom_creole || sign.plante || '').toLowerCase();
+    return f.nomCreole.toLowerCase().includes(key) || key.includes(f.nomCreole.toLowerCase());
+  })?.nomCreole || '').toLowerCase();
+  const floreEnrichies = rotateBySignDate(
+    floreData.filter(f => f.nomCreole.toLowerCase() !== floreTotemNom2),
+    sign.id, dateToUse, 6
+  );
 
   const lieuxEnrichis = lieuxData.filter(l =>
     l.nom.toLowerCase().includes(sign.lieu?.toLowerCase() || '') ||
