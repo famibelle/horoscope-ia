@@ -465,11 +465,11 @@ export function buildHoroscopeUserPrompt(
   const florePool = floreData.filter(f => f.nomCreole.toLowerCase() !== floreTotemNom);
   const floreEnrichies = rotateBySignDate(florePool, sign.id, dateToUse + edition, 6);
 
-  // LIEUX-DATA : entrées liées au signe par lieu uniquement
-  const lieuxEnrichis = lieuxData.filter(l =>
-    l.nom.toLowerCase().includes(sign.lieu?.toLowerCase() || '') ||
-    sign.lieu?.toLowerCase().includes(l.nom.toLowerCase())
-  ).slice(0, 5);
+  // LIEUX-DATA : pool complet hors totem, rotation déterministe
+  // (anciennement filtré par sign.lieu → 0-2 entrées → 80% du pool jamais utilisé)
+  const lieuTotemNom = (lieuEntry?.nom || '').toLowerCase();
+  const lieuxPool = lieuxData.filter(l => l.nom.toLowerCase() !== lieuTotemNom);
+  const lieuxEnrichis = rotateBySignDate(lieuxPool, sign.id, dateToUse + edition, 5);
 
   // KREYOL-DATA : diversification — exclut le totem via isTotem() (gère les variantes
   // orthographiques fr/créole), puis rotation déterministe par signe+date+édition.
@@ -703,10 +703,14 @@ export function buildHoroscopeMetadata(
     sign.id, dateToUse, 6
   );
 
-  const lieuxEnrichis = lieuxData.filter(l =>
+  const lieuTotemNomMeta = lieuxData.find(l =>
     l.nom.toLowerCase().includes(sign.lieu?.toLowerCase() || '') ||
-    sign.lieu?.toLowerCase().includes(l.nom.toLowerCase())
-  ).slice(0, 5);
+    (sign.lieu?.toLowerCase() || '').includes(l.nom.toLowerCase())
+  )?.nom.toLowerCase() || '';
+  const lieuxEnrichis = rotateBySignDate(
+    lieuxData.filter(l => l.nom.toLowerCase() !== lieuTotemNomMeta),
+    sign.id, dateToUse, 5
+  );
 
   const kreyolEnrichis = kreyolData.filter(k => {
     const nom = k.nomCreole.toLowerCase();
