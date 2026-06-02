@@ -19,6 +19,7 @@ import type { Edition } from '@/lib/private/maryse-prompt';
 // Import vaudou compatibility
 import { getVaudouCompatibility, mergeCompatibilities } from '@/lib/private/vaudou-compatibility';
 import { getVaudouContextForSign, SIGN_TO_LOA, SIGN_TO_VAUDOU_CONTEXT } from '@/lib/private/vaudou-mappings';
+import { animauxData, rituelsData } from '@/lib/private/vaudou-data';
 
 // Importer le système de garde-fous de sécurité
 import { applySafetyFilters, applySafetyFiltersToObject } from '@/lib/private/safety-filter';
@@ -240,7 +241,21 @@ async function generateAmbience(
   const vaudouContext = getVaudouContextForSign(signId);
   const loa = SIGN_TO_LOA[signId];
   const signVaudouContext = SIGN_TO_VAUDOU_CONTEXT[signId];
-  
+
+  // Rotation déterministe par signe+date (évite les répétitions inter-signes)
+  function pickBySignDate<T>(arr: T[], count: number): T[] {
+    if (!arr.length) return [];
+    let hash = 0;
+    const key = signId + today;
+    for (let i = 0; i < key.length; i++) hash = ((hash << 5) - hash + key.charCodeAt(i)) | 0;
+    const start = Math.abs(hash) % arr.length;
+    const result: T[] = [];
+    for (let i = 0; i < Math.min(count, arr.length); i++) result.push(arr[(start + i) % arr.length]);
+    return result;
+  }
+  const rituelsJour  = pickBySignDate(rituelsData, 2);
+  const animauxSacres = pickBySignDate(animauxData, 1);
+
   // Récupérer la compatibilité vaudou
   const vaudouCompat = getVaudouCompatibility(signId);
   
@@ -282,6 +297,8 @@ ${culturalContext}
    Énergie : ${signVaudouContext?.energie || 'Harmonie et équilibre'}
    Couleurs sacrées : ${(signVaudouContext?.couleurs || ['blanc']).join(', ')}
    Symbole : ${signVaudouContext?.emoji || '🔮'}
+   Animaux sacrés du jour : ${animauxSacres.map(a => `${a.nomCreole} (${a.nomFrancais}) — ${a.dimensionCulturelle}`).join(' | ')}
+   Rituels du jour : ${rituelsJour.map(r => `${r.nomCreole} (${r.nomFrancais}) — ${r.description}`).join(' | ')}
 
 Scores énergétiques du jour (FIXES — calculés depuis les cycles planétaires, la météo et le calendrier guadeloupéen) :
 Amour ${scores.amour}% · Travail ${scores.travail}% · Bien-être ${scores.bienetre}% · Vie sociale ${scores.vieSociale}% · Finances ${scores.finances}%
@@ -299,7 +316,7 @@ Réponds avec un objet JSON valide et ces clés exactes :
   "lune": {
     "bienetre": "conseil bien-être ancré sur le rimèd razié du jour : ${luneBienetre.nomCreole} (${luneBienetre.nomFr}) — ${luneBienetre.usage}. Mentionne le nom créole et son usage pour le corps. 2 phrases.",
     "beaute": "conseil beauté/soin naturel ancré sur la plante du jour : ${luneBeaute.nomCreole} (${luneBeaute.nomFr}) — ${luneBeaute.culture}. Mentionne le nom créole et son usage beauté ou soin. 2 phrases.",
-    "esprit": "conseil mental ou spirituel ancré sur l'objet ou lieu de résistance du jour : ${luneEsprit.nomCreole} (${luneEsprit.nomFr}) — ${luneEsprit.dimension}. Lié aussi à la ${lunarPhase}. 2 phrases.",
+    "esprit": "conseil mental ou spirituel ancré sur un des rituels vaudou du jour (${rituelsJour.map(r => r.nomCreole).join(', ')}) OU sur l'objet/lieu de résistance : ${luneEsprit.nomCreole} (${luneEsprit.nomFr}) — ${luneEsprit.dimension}. Lié aussi à la ${lunarPhase}. 2 phrases.",
     "maison": "conseil maison/espace de vie créole ancré sur l'objet ou pratique du jour : ${luneMaison.nomCreole} (${luneMaison.nomFr}) — ${luneMaison.dimension}. 2 phrases.",
     "jardinage": "conseil jardinage créole ancré sur la plante du jour : ${luneJardinage.nomCreole} (${luneJardinage.nomFr}) — ${luneJardinage.culture}. Mentionne le nom créole et comment la cultiver ou l'utiliser selon la ${lunarPhase}. 2 phrases."
   }

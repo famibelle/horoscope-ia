@@ -14,6 +14,9 @@ import {
 } from '@/lib/private/vaudou-mappings';
 import {
   loasData,
+  animauxData,
+  objetsData,
+  rituelsData,
 } from '@/lib/private/vaudou-data';
 
 /*
@@ -446,6 +449,10 @@ export function buildHoroscopeUserPrompt(
   });
   const fauneEnrichies = rotateBySignDate(faunePool, sign.id, dateToUse + edition, 6);
 
+  // VAUDOU — animaux sacrés et objets rituels (rotation par signe+date)
+  const animauxSacres   = rotateBySignDate(animauxData, sign.id, dateToUse + edition, 2);
+  const objetsRituels   = rotateBySignDate(objetsData,  sign.id, dateToUse + edition, 2);
+
   // FLORE-DATA : pool élargi (toutes entrées sauf le totem), rotation déterministe
   // (anciennement filtré par planteTokens → pool de 1-2 → même totem répété pour tous les signes)
   const floreTotemNom = (floreEntry?.nomCreole || '').toLowerCase();
@@ -536,6 +543,8 @@ ${sign.name} : ${rawText}
   - ${fauneEntry?.nomCreole || sign.animal} : ${fauneDimension}${fauneSavoir ? ` | Savoir : ${fauneSavoir}` : ''}
   Diversification (animaux différents — à utiliser en priorité dans le texte) :
 ${fauneEnrichies.length > 0 ? fauneEnrichies.map(f => `  - ${f.nomCreole} (${f.nomFrancais}): ${f.dimensionCulturelle || ''}`).join('\n') : '  (aucune entrée — utiliser les données vaudou)'}
+  Animaux sacrés vaudou (symboles spirituels — enrichissent la dimension rituelle) :
+${animauxSacres.map(a => `  - ${a.nomCreole} (${a.nomFrancais}) [${a.sacreSymbolique}]: ${a.dimensionCulturelle}`).join('\n')}
 
 🌺 FLORE-DATA :
   Plante du signe (citer AU PLUS 1 FOIS) :
@@ -546,6 +555,9 @@ ${floreEnrichies.length > 0 ? floreEnrichies.map(f => `  - ${f.nomCreole} (${f.n
 🏞️  LIEUX-DATA :
   Lieu du signe (citer AU PLUS 1 FOIS) :
   - ${lieuEntry?.nom || sign.lieu}${lieuDimension ? ` : ${lieuDimension}` : ''}${lieuSymbolique ? ` | Symbolique : ${lieuSymbolique}` : ''}
+
+🪨 OBJETS RITUELS (gestes symboliques pour le "conseil") :
+${objetsRituels.map(o => `  - ${o.nomCreole} (${o.nomFrancais}) : ${o.description} — ${o.dimensionCulturelle}`).join('\n')}
 
 🎭 KREYOL-DATA (symboles de résistance) :
 ${[
@@ -581,7 +593,7 @@ STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien cr
 4. "argent" : 2 à 4 phrases. **OBLIGATOIRE : une image tirée du comportement d'un animal de FAUNE-DATA (diversification) ou d'une pratique économique créole (marché, pêche, récolte, troc) — pas le totem du signe.** INTERDIT : HISTOIRE-DATA, "sève", "racines", "mer", "vent".
 5. "amitie" : 2 à 4 phrases. **OBLIGATOIRE : le nom créole d'un élément de LIEUX-DATA ou KREYOL-DATA doit apparaître dans le texte.** INTERDIT : "comme les racines de [arbre]" (formule identique pour 8 signes sur 12).
 6. "prediction" : UNE phrase - tendance pour les jours à venir. Métaphore naturelle propre au signe, vaudou ou HISTOIRE-DATA.
-7. "conseil" : UNE phrase - un geste symbolique ancré dans FLORE-DATA ou CONTEXTE VAUDOU. JAMAIS une bougie, une flamme, un feu.
+7. "conseil" : UNE phrase - un geste symbolique concret ancré dans OBJETS-RITUELS DATA (vèvè, ason, pwen, wanga…) ou FLORE-DATA. JAMAIS une bougie, une flamme, un feu. Le geste doit nommer l'objet ou la plante en créole.
 
 ✨ **CONTEXTE VAUDOU** ✨
 - Cite **${vaudouContext.loa}** UNE SEULE FOIS dans la section la plus pertinente.
@@ -630,6 +642,8 @@ export interface HoroscopeMetadata {
   histoire_enrichies: string[];
   loas_pertinents: string[];
   animaux_sacres: string[];
+  animaux_sacres_vaudou: string[];
+  objets_rituels: string[];
   plantes_sacrees: string[];
   contexte_dynamique: string | null;
 }
@@ -662,6 +676,9 @@ export function buildHoroscopeMetadata(
     const fr = (f.nomFrancais || '').toLowerCase();
     return animalTokens.some(t => nom.includes(t) || fr.includes(t));
   }).slice(0, 8);
+
+  const animauxSacresVaudou = rotateBySignDate(animauxData, sign.id, dateToUse, 2);
+  const objetsRituelsVaudou = rotateBySignDate(objetsData,  sign.id, dateToUse, 2);
 
   const floreTotemNom2 = (floreData.find(f => {
     const key = (sign.flore?.nom_creole || sign.plante || '').toLowerCase();
@@ -734,6 +751,8 @@ export function buildHoroscopeMetadata(
     histoire_enrichies: histoireEnrichies.map(h => h.periode),
     loas_pertinents: relevantLoas.map(l => l.nomCreole),
     animaux_sacres: [],
+    animaux_sacres_vaudou: animauxSacresVaudou.map(a => a.nomCreole),
+    objets_rituels: objetsRituelsVaudou.map(o => o.nomCreole),
     plantes_sacrees: [],
     contexte_dynamique,
   };
