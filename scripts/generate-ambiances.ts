@@ -19,7 +19,13 @@ import type { Edition } from '@/lib/private/maryse-prompt';
 // Import vaudou compatibility
 import { getVaudouCompatibility, mergeCompatibilities } from '@/lib/private/vaudou-compatibility';
 import { getVaudouContextForSign, SIGN_TO_LOA, SIGN_TO_VAUDOU_CONTEXT } from '@/lib/private/vaudou-mappings';
-import { animauxData, rituelsData } from '@/lib/private/vaudou-data';
+import {
+  animauxData,
+  rituelsData,
+  plantesData as plantesVaudouData,
+  chantsData,
+  lieuxData as lieuxVaudouData,
+} from '@/lib/private/vaudou-data';
 
 // Importer le système de garde-fous de sécurité
 import { applySafetyFilters, applySafetyFiltersToObject } from '@/lib/private/safety-filter';
@@ -253,8 +259,11 @@ async function generateAmbience(
     for (let i = 0; i < Math.min(count, arr.length); i++) result.push(arr[(start + i) % arr.length]);
     return result;
   }
-  const rituelsJour  = pickBySignDate(rituelsData, 2);
-  const animauxSacres = pickBySignDate(animauxData, 1);
+  const rituelsJour    = pickBySignDate(rituelsData,       2);
+  const animauxSacres  = pickBySignDate(animauxData,       1);
+  const plantesSacrees = pickBySignDate(plantesVaudouData, 1);
+  const chantsJour     = pickBySignDate(chantsData,        1);
+  const lieuxVaudou    = pickBySignDate(lieuxVaudouData,   1);
 
   // Récupérer la compatibilité vaudou
   const vaudouCompat = getVaudouCompatibility(signId);
@@ -298,6 +307,9 @@ ${culturalContext}
    Couleurs sacrées : ${(signVaudouContext?.couleurs || ['blanc']).join(', ')}
    Symbole : ${signVaudouContext?.emoji || '🔮'}
    Animaux sacrés du jour : ${animauxSacres.map(a => `${a.nomCreole} (${a.nomFrancais}) — ${a.dimensionCulturelle}`).join(' | ')}
+   Plante sacrée du jour : ${plantesSacrees.map(p => `${p.nomCreole} (${p.nomFrancais}) — ${p.dimensionCulturelle}`).join(' | ')}
+   Lieu sacré du jour : ${lieuxVaudou.map(l => `${l.nomCreole} (${l.nomFrancais})${l.localisation ? `, ${l.localisation}` : ''} — ${l.dimensionCulturelle}`).join(' | ')}
+   Chant d'invocation : "${chantsJour.map(c => `${c.nomCreole}`).join('')}" — ${chantsJour.map(c => c.description).join('')}
    Rituels du jour : ${rituelsJour.map(r => `${r.nomCreole} (${r.nomFrancais}) — ${r.description}`).join(' | ')}
 
 Scores énergétiques du jour (FIXES — calculés depuis les cycles planétaires, la météo et le calendrier guadeloupéen) :

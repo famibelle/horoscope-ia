@@ -17,6 +17,9 @@ import {
   animauxData,
   objetsData,
   rituelsData,
+  plantesData as plantesVaudouData,
+  chantsData,
+  lieuxData as lieuxVaudouData,
 } from '@/lib/private/vaudou-data';
 
 /*
@@ -449,9 +452,12 @@ export function buildHoroscopeUserPrompt(
   });
   const fauneEnrichies = rotateBySignDate(faunePool, sign.id, dateToUse + edition, 6);
 
-  // VAUDOU — animaux sacrés et objets rituels (rotation par signe+date)
-  const animauxSacres   = rotateBySignDate(animauxData, sign.id, dateToUse + edition, 2);
-  const objetsRituels   = rotateBySignDate(objetsData,  sign.id, dateToUse + edition, 2);
+  // VAUDOU — 6 catégories injectées par rotation déterministe signe+date
+  const animauxSacres   = rotateBySignDate(animauxData,      sign.id, dateToUse + edition, 2);
+  const objetsRituels   = rotateBySignDate(objetsData,       sign.id, dateToUse + edition, 2);
+  const plantesSacrees  = rotateBySignDate(plantesVaudouData,sign.id, dateToUse + edition, 2);
+  const chantsRituels   = rotateBySignDate(chantsData,       sign.id, dateToUse + edition, 1);
+  const lieuxVaudou     = rotateBySignDate(lieuxVaudouData,  sign.id, dateToUse + edition, 2);
 
   // FLORE-DATA : pool élargi (toutes entrées sauf le totem), rotation déterministe
   // (anciennement filtré par planteTokens → pool de 1-2 → même totem répété pour tous les signes)
@@ -551,10 +557,14 @@ ${animauxSacres.map(a => `  - ${a.nomCreole} (${a.nomFrancais}) [${a.sacreSymbol
   - ${floreEntry?.nomCreole || sign.plante}${floreUsage ? ` : USAGE=${floreUsage}` : ''}${floreDimension ? ` | ${floreDimension}` : ''}${floreSavoir ? ` | Savoir : ${floreSavoir}` : ''}
   Autres plantes :
 ${floreEnrichies.length > 0 ? floreEnrichies.map(f => `  - ${f.nomCreole} (${f.nomFrancais}): ${f.usage ? `USAGE=${f.usage}, ` : ''}DIMENSION=${f.dimensionCulturelle || ''}`).join('\n') : '  (aucune entrée)'}
+  Plantes sacrées vaudou (dimension rituelle) :
+${plantesSacrees.map(p => `  - ${p.nomCreole} (${p.nomFrancais}) [${p.sacreSymbolique}]: ${p.dimensionCulturelle}`).join('\n')}
 
 🏞️  LIEUX-DATA :
   Lieu du signe (citer AU PLUS 1 FOIS) :
   - ${lieuEntry?.nom || sign.lieu}${lieuDimension ? ` : ${lieuDimension}` : ''}${lieuSymbolique ? ` | Symbolique : ${lieuSymbolique}` : ''}
+  Lieux sacrés vaudou (espaces spirituels) :
+${lieuxVaudou.map(l => `  - ${l.nomCreole} (${l.nomFrancais})${l.localisation ? ` — ${l.localisation}` : ''}: ${l.dimensionCulturelle}`).join('\n')}
 
 🪨 OBJETS RITUELS (gestes symboliques pour le "conseil") :
 ${objetsRituels.map(o => `  - ${o.nomCreole} (${o.nomFrancais}) : ${o.description} — ${o.dimensionCulturelle}`).join('\n')}
@@ -573,7 +583,8 @@ ${histoireEnrichies.filter(h => h.periode !== histoirePeriode).map(h => `  - ${h
   Loa : **${vaudouContext.loa}** (${vaudouContext.famille}) — ${relevantLoas[0]?.dimensionCulturelle?.split('.')[0] || ''}
   Énergie : ${SIGN_TO_VAUDOU_CONTEXT[sign.id]?.energie || 'Harmonie et équilibre'}
   Couleurs sacrées : ${(SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || ['blanc']).join(', ')}
-${isRitual ? `  ⭐ Date rituelle : ${ritualDate?.nomFrancais || ritualDate?.nomCreole} — ${ritualDate?.dimensionCulturelle?.split('.')[0] || ''}` : ''}
+  Chant d'invocation du jour : "${chantsRituels[0]?.nomCreole || ''}" (${chantsRituels[0]?.nomFrancais || ''}) — ${chantsRituels[0]?.description || ''}
+${isRitual ? `  ⭐ Date rituelle : ${ritualDate?.nomFrancais || ritualDate?.nomCreole} (${ritualDate?.datePeriod}) — ${ritualDate?.dimensionCulturelle || ''}` : ''}
 
 ⚠️ DONNÉES DU SIGNE (totem — À UTILISER AVEC MODÉRATION, 1 fois max chacun) :
   - animal: ${sign.animal}${fauneDimension ? ` — ${fauneDimension}` : ''}${fauneSavoir ? ` | ${fauneSavoir}` : ''}
@@ -645,6 +656,7 @@ export interface HoroscopeMetadata {
   animaux_sacres_vaudou: string[];
   objets_rituels: string[];
   plantes_sacrees: string[];
+  lieux_vaudou: string[];
   contexte_dynamique: string | null;
 }
 
@@ -677,8 +689,10 @@ export function buildHoroscopeMetadata(
     return animalTokens.some(t => nom.includes(t) || fr.includes(t));
   }).slice(0, 8);
 
-  const animauxSacresVaudou = rotateBySignDate(animauxData, sign.id, dateToUse, 2);
-  const objetsRituelsVaudou = rotateBySignDate(objetsData,  sign.id, dateToUse, 2);
+  const animauxSacresVaudou  = rotateBySignDate(animauxData,       sign.id, dateToUse, 2);
+  const objetsRituelsVaudou  = rotateBySignDate(objetsData,        sign.id, dateToUse, 2);
+  const plantesSacreesVaudou = rotateBySignDate(plantesVaudouData, sign.id, dateToUse, 2);
+  const lieuxVaudouMeta      = rotateBySignDate(lieuxVaudouData,   sign.id, dateToUse, 2);
 
   const floreTotemNom2 = (floreData.find(f => {
     const key = (sign.flore?.nom_creole || sign.plante || '').toLowerCase();
@@ -753,7 +767,8 @@ export function buildHoroscopeMetadata(
     animaux_sacres: [],
     animaux_sacres_vaudou: animauxSacresVaudou.map(a => a.nomCreole),
     objets_rituels: objetsRituelsVaudou.map(o => o.nomCreole),
-    plantes_sacrees: [],
+    plantes_sacrees: plantesSacreesVaudou.map(p => p.nomCreole),
+    lieux_vaudou: lieuxVaudouMeta.map(l => l.nomCreole),
     contexte_dynamique,
   };
 }

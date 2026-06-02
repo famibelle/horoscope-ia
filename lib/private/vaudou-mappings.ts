@@ -375,20 +375,25 @@ export function getVaudouElementByName(name: string, type: 'loa' | 'plante' | 'a
 
 /**
  * Récupère le contexte pour une date rituelle spécifique
+ * datePeriod est au format français ("1er novembre", "25 décembre") — pas numérique
  */
 export function getRitualDateContext(date: string) {
   const dateObj = new Date(date);
-  const month = dateObj.getMonth() + 1; // 1-12
-  const day = dateObj.getDate(); // 1-31
-  const monthDay = `${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-  
-  // Chercher dans les dates rituelles
-  const dateRituelle = datesData.find(d => d.datePeriod.includes(monthDay));
+  const day = dateObj.getDate();
+  const monthIdx = dateObj.getMonth(); // 0-11
+  const FR_MONTHS = [
+    'janvier','février','mars','avril','mai','juin',
+    'juillet','août','septembre','octobre','novembre','décembre'
+  ];
+  const monthName = FR_MONTHS[monthIdx];
+  const dayStr = day === 1 ? '1er' : String(day);
+
+  const dateRituelle = datesData.find(d => {
+    const p = d.datePeriod.toLowerCase();
+    return p.includes(monthName) && (p.startsWith(dayStr) || p.includes(` ${dayStr} `) || p.includes(` ${dayStr}(`));
+  });
   if (!dateRituelle) return null;
-  
-  return {
-    ...dateRituelle
-  };
+  return { ...dateRituelle };
 }
 
 // ============================================
