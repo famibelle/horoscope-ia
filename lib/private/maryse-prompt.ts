@@ -289,7 +289,6 @@ function isLongPeriod(periode: string): boolean {
 }
 
 // Rotation déterministe d'un tableau : chaque (signId, date) obtient un point d'entrée différent.
-// Évite que les mêmes entrées apparaissent toujours en tête pour tous les signes.
 function rotateBySignDate<T>(arr: T[], signId: string, date: string, take: number): T[] {
   if (arr.length === 0) return [];
   let hash = 0;
@@ -300,6 +299,22 @@ function rotateBySignDate<T>(arr: T[], signId: string, date: string, take: numbe
   const offset = hash % arr.length;
   const rotated = [...arr.slice(offset), ...arr.slice(0, offset)];
   return rotated.slice(0, take);
+}
+
+// Mélange déterministe (Fisher-Yates seedé) : casse l'ordre relatif fixe après rotation.
+// Sans ça, Mistral choisit toujours la 1ère entrée (la plus évocatrice) comme métaphore principale.
+function shuffleDeterministic<T>(arr: T[], seed: string): T[] {
+  const result = [...arr];
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = ((hash << 5) - hash + seed.charCodeAt(i)) & 0x7fffffff;
+  }
+  for (let i = result.length - 1; i > 0; i--) {
+    hash = ((hash * 1664525) + 1013904223) & 0x7fffffff;
+    const j = hash % (i + 1);
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
 }
 
 export function buildHoroscopeUserPrompt(
@@ -450,26 +465,34 @@ export function buildHoroscopeUserPrompt(
     const sacre = (f.sacreSymbolique || '').trim().toUpperCase();
     return sacre.length > 0;
   });
-  const fauneEnrichies = rotateBySignDate(faunePool, sign.id, dateToUse + edition, 6);
+  const fauneEnrichies = shuffleDeterministic(
+    rotateBySignDate(faunePool, sign.id, dateToUse + edition, 6),
+    sign.id + dateToUse + edition + 'f'
+  );
 
-  // VAUDOU — 6 catégories injectées par rotation déterministe signe+date
-  const animauxSacres   = rotateBySignDate(animauxData,      sign.id, dateToUse + edition, 2);
-  const objetsRituels   = rotateBySignDate(objetsData,       sign.id, dateToUse + edition, 2);
-  const plantesSacrees  = rotateBySignDate(plantesVaudouData,sign.id, dateToUse + edition, 2);
-  const chantsRituels   = rotateBySignDate(chantsData,       sign.id, dateToUse + edition, 1);
-  const lieuxVaudou     = rotateBySignDate(lieuxVaudouData,  sign.id, dateToUse + edition, 2);
+  // VAUDOU — 6 catégories injectées par rotation + shuffle déterministe
+  const animauxSacres   = shuffleDeterministic(rotateBySignDate(animauxData,      sign.id, dateToUse + edition, 2), sign.id + dateToUse + 'a');
+  const objetsRituels   = shuffleDeterministic(rotateBySignDate(objetsData,       sign.id, dateToUse + edition, 2), sign.id + dateToUse + 'o');
+  const plantesSacrees  = shuffleDeterministic(rotateBySignDate(plantesVaudouData,sign.id, dateToUse + edition, 2), sign.id + dateToUse + 'p');
+  const chantsRituels   = rotateBySignDate(chantsData, sign.id, dateToUse + edition, 1); // 1 seul → pas besoin de shuffle
+  const lieuxVaudou     = shuffleDeterministic(rotateBySignDate(lieuxVaudouData,  sign.id, dateToUse + edition, 2), sign.id + dateToUse + 'lv');
 
-  // FLORE-DATA : pool élargi (toutes entrées sauf le totem), rotation déterministe
-  // (anciennement filtré par planteTokens → pool de 1-2 → même totem répété pour tous les signes)
+  // FLORE-DATA : pool élargi (toutes entrées sauf le totem), rotation + shuffle
   const floreTotemNom = (floreEntry?.nomCreole || '').toLowerCase();
   const florePool = floreData.filter(f => f.nomCreole.toLowerCase() !== floreTotemNom);
-  const floreEnrichies = rotateBySignDate(florePool, sign.id, dateToUse + edition, 6);
+  const floreEnrichies = shuffleDeterministic(
+    rotateBySignDate(florePool, sign.id, dateToUse + edition, 6),
+    sign.id + dateToUse + edition + 'fl'
+  );
 
   // LIEUX-DATA : pool complet hors totem, rotation déterministe
   // (anciennement filtré par sign.lieu → 0-2 entrées → 80% du pool jamais utilisé)
   const lieuTotemNom = (lieuEntry?.nom || '').toLowerCase();
   const lieuxPool = lieuxData.filter(l => l.nom.toLowerCase() !== lieuTotemNom);
-  const lieuxEnrichis = rotateBySignDate(lieuxPool, sign.id, dateToUse + edition, 5);
+  const lieuxEnrichis = shuffleDeterministic(
+    rotateBySignDate(lieuxPool, sign.id, dateToUse + edition, 5),
+    sign.id + dateToUse + edition + 'l'
+  );
 
   // KREYOL-DATA : diversification — exclut le totem via isTotem() (gère les variantes
   // orthographiques fr/créole), puis rotation déterministe par signe+date+édition.
