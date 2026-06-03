@@ -489,7 +489,7 @@ async function analyzePrompt(date: string): Promise<string> {
     );
 
     md.push('### 📜 Pool Histoire pour la période\n');
-    md.push(`> \`histoireEnrichies\` est injecté **sans rotation par signe** (même 3 entrées pour les 12 signes).\n`);
+    md.push(`> ⚠️ \`histoireEnrichies\` est filtré par mois/année mais les périodes sont du type \`"**1685**"\` — le filtre ne matche jamais \`"juin"\` ou \`"2026"\` seul. Pool toujours vide en pratique.\n`);
     md.push(`**${histoirePool.length} entrée(s)** correspondent à la période ${moisNom} ${year} :\n`);
     if (histoirePool.length === 0) {
       md.push('> ⚠️ Aucune entrée histoire pour cette période — le champ sera vide pour tous les signes.\n');
@@ -506,15 +506,15 @@ async function analyzePrompt(date: string): Promise<string> {
     }
     md.push('');
 
-    // ── 3. Pool faune SACRÉ/EMBLÉMATIQUE ─────────────────────────────────
+    // ── 3. Pool faune (tous sacreSymbolique non vide, hors exclusions) ────
     const FAUNE_EXCLUES = new Set(['soukougnan-myt', 'rat-nw-rat']);
     const faunePool = fauneData.filter((f: any) => {
       if (FAUNE_EXCLUES.has(f.id)) return false;
-      const sacre = (f.sacreSymbolique || '').toUpperCase();
-      return sacre.includes('SACRÉ') || sacre.includes('EMBLÉMATIQUE') || sacre.includes('EMBLEMATIQUE');
+      const sacre = (f.sacreSymbolique || '').trim();
+      return sacre.length > 0;
     });
 
-    // Calculer combien d'entrées distinctes sont disponibles par signe (pool après exclusion du totem)
+    // Pool par signe : hors totem (tokens animal + nomKreyol)
     const poolPerSign = signs.map((sign: any) => {
       const animalTokens = (sign.animal || '').toLowerCase().split(/[\s\-\/()]+/).filter((t: string) => t.length >= 3);
       const kreyolTokens = (sign.nomKreyol || '').toLowerCase().split(/[\s\-\/()]+/).filter((t: string) => t.length >= 3);
@@ -530,9 +530,9 @@ async function analyzePrompt(date: string): Promise<string> {
     const minPool = Math.min(...poolPerSign.map((p: any) => p.poolSize));
     const smallPools = poolPerSign.filter((p: any) => p.poolSize < 8);
 
-    md.push('### 🦎 Pool Faune (SACRÉ/EMBLÉMATIQUE)\n');
-    md.push(`**${faunePool.length} entrées** dans le pool global (après exclusions).`);
-    md.push(`Le prompt injecte **6 animaux** par signe via rotation déterministe.\n`);
+    md.push('### 🦎 Pool Faune\n');
+    md.push(`**${faunePool.length} entrées** dans le pool global (tous \`sacreSymbolique\` non vides, hors exclusions).`);
+    md.push(`Le prompt injecte **6 animaux** par signe via rotation + shuffle déterministe.\n`);
 
     if (minPool < 8) {
       md.push('> ⚠️ Certains signes ont un pool réduit — collisions possibles entre signes :\n');
@@ -547,11 +547,17 @@ async function analyzePrompt(date: string): Promise<string> {
     md.push('');
 
     // ── 4. Taille des pools flore & lieux ────────────────────────────────
+    // Flore : pool complet hors totem du signe (178 entrées - 1 totem ≈ 177)
+    const florePoolSize = floreData.length - 1; // -1 totem exclu par signe
+    // Lieux : pool complet hors totem du signe (102 entrées - 1 totem ≈ 101)
+    const lieuxPoolSize = lieuxData.length - 1;
+
     md.push('### 🌿 Pools Flore & Lieux\n');
-    md.push('| Pool | Taille totale | Injecté par signe |');
-    md.push('|------|--------------|-------------------|');
-    md.push(`| Flore | ${floreData.length} | jusqu'à 8 (filtre par plante du signe) |`);
-    md.push(`| Lieux | ${lieuxData.length} | jusqu'à 5 (filtre par lieu du signe) |`);
+    md.push('| Pool | Total | Injecté par signe | Méthode |');
+    md.push('|------|-------|-------------------|---------|');
+    md.push(`| Flore | ${floreData.length} | 6 (hors totem) | rotation + shuffle déterministe |`);
+    md.push(`| Lieux | ${lieuxData.length} | 5 (hors totem) | rotation + shuffle déterministe |`);
+    md.push(`\n> ✅ Pools élargis — plus de filtre par nom du signe (ancienne méthode : 0-2 entrées par signe).\n`);
     md.push('');
 
     // ── 5. Interdictions actives dans le prompt ────────────────────────
@@ -569,17 +575,13 @@ async function analyzePrompt(date: string): Promise<string> {
     md.push('### ⚠️ Lacunes structurelles identifiées\n');
     const lacunes: string[] = [];
 
-    lacunes.push('**Pas de contrainte inter-signes** : le modèle génère chaque signe en isolation et ne sait pas ce que les autres signes ont reçu — impossibilité de se diversifier mutuellement.');
+    lacunes.push('**Pas de contrainte inter-signes** : le modèle génère chaque signe en isolation — impossibilité de se diversifier mutuellement entre signes.');
 
-    if (histoirePool.length <= 3) {
-      lacunes.push(`**Pool histoire trop petit** (${histoirePool.length} entrée(s) pour ${moisNom} ${year}) : tous les signes reçoivent les mêmes références historiques.`);
-    } else {
-      lacunes.push(`**histoireEnrichies sans rotation par signe** : les 3 premières entrées du pool (sur ${histoirePool.length}) sont injectées identiquement chez tous les signes — ajouter \`rotateBySignDate()\` comme pour faune.`);
-    }
+    lacunes.push(`**Pool histoire inutilisable** (${histoirePool.length} entrée(s) matchée(s) pour ${moisNom} ${year}) : le filtre cherche le mois/année dans des périodes type \`"**1685**"\` — jamais de match. Toutes les 77 entrées sont disponibles mais le filtre les masque.`);
 
     const sharedLoaWarnings = sharedLoas.filter(([, s]) => s.length >= LOA_THRESHOLD);
     if (sharedLoaWarnings.length > 0) {
-      lacunes.push(`**${sharedLoaWarnings.length} loa(s) partagé(s) entre ${LOA_THRESHOLD}+ signes** : ${sharedLoaWarnings.map(([l]) => l).join(', ')} — répétition structurellement inévitable dans les rapports.`);
+      lacunes.push(`**${sharedLoaWarnings.length} loa(s) partagé(s) entre ${LOA_THRESHOLD}+ signes** : ${sharedLoaWarnings.map(([l]) => l).join(', ')} — répétition structurellement inévitable.`);
     }
 
     lacunes.forEach(l => md.push(`- ${l}\n`));
