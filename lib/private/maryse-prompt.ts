@@ -288,7 +288,10 @@ function isLongPeriod(periode: string): boolean {
   return /\b\d{4}\s*[-–—]\s*\d{4}\b/.test(periode);
 }
 
-// Rotation déterministe d'un tableau : chaque (signId, date) obtient un point d'entrée différent.
+// Sélection par enjambées déterministe : spread les picks sur tout le pool.
+// Remplace la fenêtre glissante (6 entrées consécutives → chevauchements entre éditions).
+// Avec stride = pool.length / take, deux éditions avec offsets différents
+// piochent dans des zones distinctes du pool — plus de dartrier dans les 4 éditions.
 function rotateBySignDate<T>(arr: T[], signId: string, date: string, take: number): T[] {
   if (arr.length === 0) return [];
   let hash = 0;
@@ -296,9 +299,14 @@ function rotateBySignDate<T>(arr: T[], signId: string, date: string, take: numbe
   for (let i = 0; i < key.length; i++) {
     hash = ((hash << 5) - hash + key.charCodeAt(i)) & 0x7fffffff;
   }
-  const offset = hash % arr.length;
-  const rotated = [...arr.slice(offset), ...arr.slice(0, offset)];
-  return rotated.slice(0, take);
+  const n = arr.length;
+  const stride = Math.max(1, Math.floor(n / take));
+  const offset = hash % n;
+  const result: T[] = [];
+  for (let i = 0; i < Math.min(take, n); i++) {
+    result.push(arr[(offset + i * stride) % n]);
+  }
+  return result;
 }
 
 // Mélange déterministe (Fisher-Yates seedé) : casse l'ordre relatif fixe après rotation.
