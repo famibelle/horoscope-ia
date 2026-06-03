@@ -1,0 +1,64 @@
+name: 🎙️ Génération TTS (Supabase Storage)
+
+on:
+  schedule:
+    - cron: '0 5 * * *'   # 05h00 UTC — après les horoscopes (03h45) + newsletter (04h30)
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Date (YYYY-MM-DD)'
+        required: false
+      signs:
+        description: 'Signes à générer (ex: belier,lion) — vide = tous'
+        required: false
+      force:
+        description: 'Forcer la régénération même si les MP3 existent'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛡️ Vérification de la branche
+        run: |
+          if [ "${{ github.ref_name }}" != "vaudou" ]; then
+            echo "❌ ERREUR: Branche vaudou requise."
+            exit 1
+          fi
+
+      - name: Configurer SSH pour le sous-module privé
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SUBMODULE_DEPLOY_KEY }}
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: 🎙️ Génération des MP3
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          ARGS=""
+          if [ -n "${{ github.event.inputs.date }}" ]; then
+            ARGS="$ARGS --date=${{ github.event.inputs.date }}"
+          fi
+          if [ -n "${{ github.event.inputs.signs }}" ]; then
+            ARGS="$ARGS --signs=${{ github.event.inputs.signs }}"
+          fi
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            ARGS="$ARGS --force"
+          fi
+          npx tsx scripts/generate-tts.ts $ARGS
