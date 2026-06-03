@@ -5,6 +5,7 @@
   # Commande de build : GitHub Actions génère déjà les fichiers
   # Le prebuild est désactivé car les fichiers sont générés par GitHub Actions
   command = "next build"
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- app/ components/ public/ styles/ next.config.ts next.config.js netlify.toml package.json"
   
   # Dossier à déployer (généré par Next.js)
   publish = ".next"
