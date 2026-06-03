@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { saveEmail, getSubscriberCount } from '@/lib/private/email-storage';
+import { addContactToBrevo } from '@/lib/brevo-api';
 
 // Configuration CORS
 type CorsHeaders = {
@@ -41,25 +41,23 @@ export async function POST(req: Request) {
       );
     }
 
-    // Sauvegarder l'email
-    const result = await saveEmail(email);
+    const normalizedEmail = email.trim().toLowerCase();
 
-    if (!result.success) {
-      return NextResponse.json(
-        { error: result.error || 'Erreur lors de l\'inscription' },
-        { status: 400, headers: corsHeaders }
-      );
+    try {
+      await addContactToBrevo(normalizedEmail);
+    } catch (err: any) {
+      const msg: string = err?.message || '';
+      if (msg.includes('Contact already exist') || msg.includes('already exist')) {
+        return NextResponse.json(
+          { error: 'Email déjà inscrit' },
+          { status: 400, headers: corsHeaders }
+        );
+      }
+      throw err;
     }
 
-    // Compter les abonnés
-    const subscriberCount = await getSubscriberCount();
-
     return NextResponse.json(
-      {
-        success: true,
-        message: 'Inscription réussie !',
-        subscribers: subscriberCount
-      },
+      { success: true, message: 'Inscription réussie !' },
       { status: 200, headers: corsHeaders }
     );
 
@@ -74,17 +72,5 @@ export async function POST(req: Request) {
 
 // Gérer les requêtes GET (pour obtenir le nombre d'abonnés)
 export async function GET() {
-  try {
-    const subscriberCount = await getSubscriberCount();
-    
-    return NextResponse.json(
-      { subscribers: subscriberCount },
-      { status: 200, headers: corsHeaders }
-    );
-  } catch (error) {
-    return NextResponse.json(
-      { error: 'Erreur serveur' },
-      { status: 500, headers: corsHeaders }
-    );
-  }
+  return NextResponse.json({ subscribers: 0 }, { status: 200, headers: corsHeaders });
 }
