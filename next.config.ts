@@ -80,17 +80,16 @@ const nextConfig: NextConfig = {
     ];
   },
   
-  // Configuration de l'asset prefix pour la production
-  assetPrefix: process.env.NODE_ENV === 'production' 
-    ? 'https://horoscope-karukera.netlify.app' 
-    : undefined,
-  
   // Configuration pour les images (si utilisé)
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'horoscope-karukera.netlify.app',
+      },
+      {
+        protocol: 'https',
+        hostname: 'zodyak-karukera.com',
       },
     ],
   },
