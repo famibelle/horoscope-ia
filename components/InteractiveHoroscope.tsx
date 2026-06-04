@@ -14,15 +14,24 @@ import type { Edition } from '@/lib/private/maryse-prompt';
 export default function InteractiveHoroscope() {
   const { edition } = useEdition();
   const [selectedSignId, setSelectedSignId] = useState<string>('lion');
-  const [data, setData]       = useState<HoroscopeResponse | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState<string | null>(null);
+  const [ready, setReady]      = useState(false);
+  const [data, setData]        = useState<HoroscopeResponse | null>(null);
+  const [loading, setLoading]  = useState(true);
+  const [error, setError]      = useState<string | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+
+  // Restaurer le signe sauvegardé avant le premier fetch
+  useEffect(() => {
+    const saved = localStorage.getItem('lastSign');
+    if (saved) setSelectedSignId(saved);
+    setReady(true);
+  }, []);
 
   useEffect(() => {
     const handler = (e: Event) => {
       const signId = (e as CustomEvent<string>).detail;
       setSelectedSignId(signId);
+      localStorage.setItem('lastSign', signId);
       setTimeout(() => cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
     };
     window.addEventListener('select-sign', handler);
@@ -53,8 +62,9 @@ export default function InteractiveHoroscope() {
   }, []);
 
   useEffect(() => {
+    if (!ready) return;
     fetchHoroscope(selectedSignId, edition);
-  }, [selectedSignId, edition, fetchHoroscope]);
+  }, [selectedSignId, edition, fetchHoroscope, ready]);
 
   const sign = signs.find((s) => s.id === selectedSignId);
 
