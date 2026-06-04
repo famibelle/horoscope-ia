@@ -6,6 +6,24 @@ import SignSelector from './SignSelector';
 import HoroscopeCard from './HoroscopeCard';
 import AudioPlayer from './AudioPlayer';
 import { signs } from '@/lib/signs-data';
+
+function getCurrentSign(): string {
+  const now = new Date();
+  const m = now.getMonth() + 1;
+  const d = now.getDate();
+  if ((m === 3 && d >= 21) || (m === 4 && d <= 19)) return 'belier';
+  if ((m === 4 && d >= 20) || (m === 5 && d <= 20)) return 'taureau';
+  if ((m === 5 && d >= 21) || (m === 6 && d <= 20)) return 'gemeaux';
+  if ((m === 6 && d >= 21) || (m === 7 && d <= 22)) return 'cancer';
+  if ((m === 7 && d >= 23) || (m === 8 && d <= 22)) return 'lion';
+  if ((m === 8 && d >= 23) || (m === 9 && d <= 22)) return 'vierge';
+  if ((m === 9 && d >= 23) || (m === 10 && d <= 22)) return 'balance';
+  if ((m === 10 && d >= 23) || (m === 11 && d <= 21)) return 'scorpion';
+  if ((m === 11 && d >= 22) || (m === 12 && d <= 21)) return 'sagittaire';
+  if ((m === 12 && d >= 22) || (m === 1 && d <= 19)) return 'capricorne';
+  if ((m === 1 && d >= 20) || (m === 2 && d <= 18)) return 'verseau';
+  return 'poissons';
+}
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
 import { todayISO } from '@/lib/horoscope-data';
 import { useEdition } from '@/contexts/EditionContext';
@@ -20,10 +38,10 @@ export default function InteractiveHoroscope() {
   const [error, setError]      = useState<string | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // Restaurer le signe sauvegardé avant le premier fetch
+  // Restaurer le signe sauvegardé, ou utiliser le signe du jour en cours
   useEffect(() => {
     const saved = localStorage.getItem('lastSign');
-    if (saved) setSelectedSignId(saved);
+    setSelectedSignId(saved || getCurrentSign());
     setReady(true);
   }, []);
 
