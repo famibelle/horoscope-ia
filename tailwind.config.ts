@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
+  darkMode: 'class',
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -12,12 +13,13 @@ const config: Config = {
         cosmic: '#020617',
         // Thème ancestral (Karukera/Guadeloupe)
         ancestral: {
-          earth: '#8B4513',      // Terre de Guadeloupe
-          forest: '#228B22',      // Vert mangrove
-          gold: '#FFD700',        // Or sacré
-          terracotta: '#CD5C5C',  // Rouge terre
-          cream: '#F5F5DC',      // Beige clair
-          deepBrown: '#5C4033',   // Brun profond
+          earth: '#8B4513',
+          forest: '#228B22',
+          gold: 'rgb(var(--tw-gold) / <alpha-value>)',
+          terracotta: '#CD5C5C',
+          cream: 'rgb(var(--tw-cream) / <alpha-value>)',
+          deepBrown: '#5C4033',
+          dark: 'rgb(var(--tw-dark) / <alpha-value>)',
         },
       },
       fontFamily: {

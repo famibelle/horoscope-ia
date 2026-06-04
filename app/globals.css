@@ -2,8 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Light mode (défaut) ── */
 :root {
-  /* ── Palette Karukera verte ── */
+  --color-bg:         #F2ECE0;
+  --color-surface:    #EAE3D2;
+  --color-gold:       #8B6914;
+  --color-gold-light: #A8831C;
+  --color-text:       #1A2E1A;
+  --color-text-muted: #4A7A50;
+  --color-green:      #2A7A4A;
+  /* RGB pour Tailwind (opacité /N) */
+  --tw-dark:  242 236 224;   /* #F2ECE0 */
+  --tw-cream: 26 46 26;      /* #1A2E1A */
+  --tw-gold:  139 105 20;    /* #8B6914 */
+  /* Legacy */
+  --ancestral-earth:      #8B4513;
+  --ancestral-forest:     #228B22;
+  --ancestral-gold:       #8B6914;
+  --ancestral-terracotta: #CD5C5C;
+  --ancestral-cream:      #1A2E1A;
+  --ancestral-deepBrown:  #F2ECE0;
+}
+
+/* ── Dark mode ── */
+.dark {
   --color-bg:         #0D1A12;
   --color-surface:    #111e14;
   --color-gold:       #D4AF50;
@@ -11,17 +33,17 @@
   --color-text:       #C8D8C0;
   --color-text-muted: #6B8A6E;
   --color-green:      #4CAF74;
-  /* ── Typographie (variables injectées par next/font via layout.tsx) ── */
-  /* --font-display → Cormorant Garamond */
-  /* --font-ui      → Outfit             */
-  /* --font-accent  → IM Fell English    */
-  /* ── Ancienne palette (conservée pour compatibilité composants existants) ── */
-  --ancestral-earth:     #8B4513;
-  --ancestral-forest:    #228B22;
-  --ancestral-gold:      #D4AF50;
-  --ancestral-terracotta:#CD5C5C;
-  --ancestral-cream:     #C8D8C0;
-  --ancestral-deepBrown: #0D1A12;
+  /* RGB pour Tailwind (opacité /N) */
+  --tw-dark:  13 26 18;      /* #0D1A12 */
+  --tw-cream: 200 216 192;   /* #C8D8C0 */
+  --tw-gold:  212 175 80;    /* #D4AF50 */
+  /* Legacy */
+  --ancestral-earth:      #8B4513;
+  --ancestral-forest:     #228B22;
+  --ancestral-gold:       #D4AF50;
+  --ancestral-terracotta: #CD5C5C;
+  --ancestral-cream:      #C8D8C0;
+  --ancestral-deepBrown:  #0D1A12;
 }
 
 * {
@@ -50,6 +72,13 @@ body {
   font-family: var(--font-ui);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+:root:not(.dark) body {
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% -10%, rgba(139, 105, 20, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 10%, rgba(42, 122, 74, 0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 80%, rgba(234, 227, 210, 0.5) 0%, transparent 50%);
 }
 
 html {

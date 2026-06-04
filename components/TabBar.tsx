@@ -47,8 +47,8 @@ export default function TabBar() {
         left: 0,
         right: 0,
         height: '64px',
-        background: '#0D1A12',
-        borderTop: '0.5px solid rgba(255,255,255,0.08)',
+        background: 'var(--color-bg)',
+        borderTop: '0.5px solid rgba(var(--tw-cream) / 0.08)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-around',
@@ -80,7 +80,7 @@ export default function TabBar() {
                 fontSize: '11px',
                 fontWeight: 500,
                 letterSpacing: '0.03em',
-                color: active ? '#D4AF50' : '#4B6450',
+                color: active ? 'var(--color-gold)' : 'var(--color-text-muted)',
                 transition: 'color 0.2s',
               }}
             >
