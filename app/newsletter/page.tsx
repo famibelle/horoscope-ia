@@ -30,15 +30,16 @@ function NewsletterCard({ newsletter, index }: { newsletter: StoredNewsletter; i
   const cleanPreviewText = cleanPreview(newsletter.preview);
   
   return (
-    <article 
-      className="bg-ancestral-dark/40 border border-ancestral-cream/10 rounded-2xl p-6 
-                hover:border-ancestral-gold/40 hover:bg-ancestral-dark/50 
-                transition-all duration-300 group"
-      style={{
-        animationDelay: `${index * 100}ms`,
-      }}
+    <article
+      className="relative bg-ancestral-dark/40 border border-ancestral-cream/10 rounded-2xl p-6
+                hover:border-ancestral-gold/40 hover:bg-ancestral-dark/50
+                transition-all duration-300 group cursor-pointer"
+      style={{ animationDelay: `${index * 100}ms` }}
     >
-      {/* En-tête de la carte avec gradient subtil */}
+      {/* Lien couvrant toute la carte */}
+      <Link href={`/newsletter/${newsletter.id}/email-preview`} className="absolute inset-0 z-0 rounded-2xl" aria-label={newsletter.subject} />
+
+      {/* En-tête */}
       <header className="mb-5">
         <div className="flex items-start gap-3">
           <span className="text-3xl">🌿</span>
@@ -58,19 +59,6 @@ function NewsletterCard({ newsletter, index }: { newsletter: StoredNewsletter; i
         {cleanPreviewText}
       </p>
 
-      {/* Bouton avec effet */}
-      <div className="flex justify-end">
-        <Link
-          href={`/newsletter/${newsletter.id}`}
-          className="inline-flex items-center gap-2 px-6 py-3 
-                    bg-gradient-to-r from-ancestral-gold/80 to-ancestral-gold 
-                    text-ancestral-dark font-semibold rounded-xl 
-                    hover:from-ancestral-gold hover:to-ancestral-gold/80 
-                    transition-all duration-200 shadow-lg hover:shadow-xl"
-        >
-          Lire la newsletter →
-        </Link>
-      </div>
     </article>
   );
 }

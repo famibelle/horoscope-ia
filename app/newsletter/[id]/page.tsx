@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getNewsletter, getAllNewsletters, type StoredNewsletter } from '@/lib/newsletter-storage';
+import { ShareButton } from '@/components/ShareButton';
 
 // Fonction pour formater la date en français
 function formatDate(dateString: string): string {
@@ -606,7 +607,11 @@ export default async function NewsletterDetailPage(props: any) {
         
         <div className="mb-4">
           <h1 className="text-4xl font-bold text-ancestral-cream mb-3">{newsletter.subject}</h1>
-          <time className="text-ancestral-cream/70 text-lg">{formatDate(newsletter.date)}</time>
+          <div className="flex items-center gap-4 flex-wrap">
+            <time className="text-ancestral-cream/70 text-lg">{formatDate(newsletter.date)}</time>
+            <span className="text-ancestral-cream/40 text-sm">· Version web de la newsletter</span>
+            <ShareButton url={`${process.env.NEXT_PUBLIC_BASE_URL ?? ''}/newsletter/${newsletter.id}`} />
+          </div>
         </div>
       </header>
 
