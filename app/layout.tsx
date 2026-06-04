@@ -4,7 +4,6 @@ import './globals.css';
 import TabBar from '@/components/TabBar';
 import MiniPlayer from '@/components/MiniPlayer';
 import { AudioPlayerProvider } from '@/contexts/AudioPlayerContext';
-import { ThemeToggle } from '@/components/ThemeToggle';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -93,10 +92,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className="scroll-smooth" data-scroll-behavior="smooth" suppressHydrationWarning>
+    <html lang="fr" className="scroll-smooth" data-scroll-behavior="smooth">
       <head>
-        {/* Initialise le thème avant le premier rendu pour éviter le flash */}
-        <script dangerouslySetInnerHTML={{ __html: `(function(){var t=localStorage.getItem('theme');if(t!=='light')document.documentElement.classList.add('dark');})();` }} />
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3159683365493434"
@@ -110,7 +107,6 @@ export default function RootLayout({
           <MiniPlayer />
         </AudioPlayerProvider>
         <TabBar />
-        <ThemeToggle />
       </body>
     </html>
   );

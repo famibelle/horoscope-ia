@@ -29,13 +29,9 @@ function extractSignFromSubject(subject: string): string | null {
   return null;
 }
 
-// Fonction pour générer le HTML de l'iframe avec styles optimisés pour les tantes
 function getIframeHtml(htmlContent: string, subject: string): string {
-  // Extraire le contenu du body
   const bodyMatch = htmlContent.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
   const bodyContent = bodyMatch ? bodyMatch[1] : htmlContent;
-  
-  // Extraire le signe si possible
   const sign = extractSignFromSubject(subject);
   const signEmoji = sign ? '✨' : '🌿';
 
@@ -45,8 +41,20 @@ function getIframeHtml(htmlContent: string, subject: string): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* ===== VARIABLES DE COULEURS ===== */
+    /* ── Light mode (défaut) ── */
     :root {
+      --text-primary: #1A2E1A;
+      --text-secondary: #2A4A2A;
+      --text-muted: #8B6914;
+      --bg-primary: #F2ECE0;
+      --bg-secondary: #EAE3D2;
+      --bg-tertiary: #E0D8C4;
+      --accent: #8B6914;
+      --accent-light: #A8831C;
+      --border: rgba(26, 46, 26, 0.12);
+    }
+    /* ── Dark mode ── */
+    :root.dark {
       --text-primary: #ffffff;
       --text-secondary: #ffe6cc;
       --text-muted: #d4af37;
@@ -55,302 +63,128 @@ function getIframeHtml(htmlContent: string, subject: string): string {
       --bg-tertiary: #0f240f;
       --accent: #d4af37;
       --accent-light: #f4d03f;
-      --success: #2ecc71;
       --border: rgba(255, 255, 255, 0.1);
     }
 
-    /* ===== RESET & BASE ===== */
     body {
       margin: 0;
       padding: 0;
-      background: transparent;
+      background: var(--bg-primary);
       color: var(--text-primary);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-size: 18px;
       line-height: 1.8;
+      transition: background 0.2s, color 0.2s;
     }
 
-    /* Supprimer tous les backgrounds blancs/clair par défaut */
+    /* Neutraliser les inline backgrounds de l'email pour laisser les variables CSS prendre le dessus */
     [style*="background"], [style*="background-color"] {
       background: transparent !important;
       background-color: transparent !important;
     }
+    /* En light mode, neutraliser aussi les inline text colors (crème/beige illisibles sur fond clair) */
+    :root:not(.dark) [style*="color:#F5F5DC"],
+    :root:not(.dark) [style*="color:#c8c8a0"],
+    :root:not(.dark) [style*="color:#creamFaint"] {
+      color: var(--text-secondary) !important;
+    }
 
-    /* ===== CONTEUR PRINCIPAL ===== */
     .newsletter-wrapper {
       max-width: 680px;
       margin: 0 auto;
       background: var(--bg-primary);
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      animation: fadeIn 0.5s ease-out;
     }
 
-    /* ===== EN-TÊTE ===== */
+    /* Header : toujours vert foncé pour garder l'identité visuelle */
     .newsletter-header {
       background: linear-gradient(135deg, #1a4a2e 0%, #2d5a3d 50%, #1a4a2e 100%);
-      color: var(--text-primary);
+      color: #ffffff !important;
       padding: 40px 32px;
       text-align: center;
       position: relative;
       overflow: hidden;
     }
-
     .newsletter-header::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="p" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23p)"/></svg>');
       opacity: 0.3;
     }
+    .newsletter-header h1 { margin: 0 0 12px; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; color: #ffffff !important; }
+    .newsletter-header p  { margin: 0; font-size: 16px; opacity: 0.9; color: #ffe6cc !important; }
+    .header-icon { font-size: 40px; margin-bottom: 16px; }
 
-    .newsletter-header h1 {
-      margin: 0 0 12px 0;
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    .newsletter-header p {
-      margin: 0;
-      font-size: 16px;
-      opacity: 0.9;
-      color: var(--text-secondary);
-    }
-
-    .header-icon {
-      font-size: 40px;
-      margin-bottom: 16px;
-    }
-
-    /* ===== CONTENU PRINCIPAL ===== */
     .newsletter-main {
       padding: 32px;
       background: var(--bg-secondary);
     }
 
-    /* ===== SECTIONS ===== */
     section {
       margin-bottom: 40px;
       padding-bottom: 32px;
       border-bottom: 1px solid var(--border);
     }
+    section:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
 
-    section:last-child {
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border-bottom: none;
-    }
+    h1, h2, h3, h4, h5, h6 { color: var(--text-primary); font-weight: 600; }
+    h2 { font-size: 22px; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); display: inline-block; }
+    h3 { font-size: 18px; margin-bottom: 14px; color: var(--text-secondary); }
 
-    /* ===== TITRES ===== */
-    h1, h2, h3, h4, h5, h6 {
-      color: var(--text-primary);
-      font-weight: 600;
-    }
+    p { margin: 0 0 20px; line-height: 1.8; color: var(--text-secondary); text-align: justify; }
+    p:last-child { margin-bottom: 0; }
 
-    h2 {
-      font-size: 22px;
-      margin-bottom: 20px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid var(--accent);
-      display: inline-block;
-    }
+    a { color: var(--accent-light); text-decoration: none; font-weight: 500; }
+    a:hover { text-decoration: underline; }
 
-    h3 {
-      font-size: 18px;
-      margin-bottom: 14px;
-      color: var(--text-secondary);
-    }
+    .domains-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+    .domain-card { background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 12px; padding: 20px; transition: transform 0.2s, border-color 0.2s; }
+    .domain-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .domain-card h3 { color: var(--accent); font-size: 17px; margin-bottom: 12px; border-bottom: none; padding-bottom: 0; }
+    .domain-card p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--text-secondary); }
 
-    /* ===== PARAGRAPHES ===== */
-    p {
-      margin: 0 0 20px 0;
-      line-height: 1.8;
-      color: var(--text-secondary);
-      text-align: justify;
-    }
+    .special-box { background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin: 20px 0; }
+    .wisdom-box  { border-left: 4px solid var(--accent); }
+    .creole-box  { border-left: 4px solid var(--accent-light); }
+    .ritual-box  { background: linear-gradient(135deg, rgba(212, 175, 55, 0.12), rgba(212, 175, 55, 0.12)); border-left: 4px solid var(--accent); }
+    .special-box h3     { color: var(--accent-light); font-size: 17px; margin-bottom: 12px; }
+    .special-box p      { margin: 0 0 10px; font-size: 15px; line-height: 1.7; }
+    .special-box strong { color: var(--accent); }
 
-    p:last-child {
-      margin-bottom: 0;
-    }
+    .newsletter-footer { padding: 28px 32px; text-align: center; color: var(--text-muted); font-size: 13px; border-top: 1px solid var(--border); background: var(--bg-tertiary); }
+    .newsletter-footer p { margin: 8px 0; color: var(--text-muted); }
 
-    /* ===== LIENS ===== */
-    a {
-      color: var(--accent-light);
-      text-decoration: none;
-      font-weight: 500;
-    }
+    .emoji { display: inline-block; margin-right: 8px; font-size: 1.1em; }
 
-    a:hover {
-      text-decoration: underline;
-    }
-
-    /* ===== CONSEILS PAR DOMAINE (Grille) ===== */
-    .domains-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-
-    .domain-card {
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-
-    .domain-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
-
-    .domain-card h3 {
-      color: var(--accent);
-      font-size: 17px;
-      margin-bottom: 12px;
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-
-    .domain-card p {
-      margin: 0;
-      font-size: 15px;
-      line-height: 1.6;
-      color: var(--text-secondary);
-    }
-
-    /* ===== BOX SPÉCIALES (Sagesse, Créole, Rituel) ===== */
-    .special-box {
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-      margin: 20px 0;
-    }
-
-    .wisdom-box {
-      border-left: 4px solid var(--accent);
-    }
-
-    .creole-box {
-      border-left: 4px solid var(--accent-light);
-    }
-
-    .ritual-box {
-      background: linear-gradient(135deg, rgba(244, 208, 63, 0.15), rgba(212, 175, 55, 0.15));
-      border-left: 4px solid var(--accent);
-    }
-
-    .special-box h3 {
-      color: var(--accent-light);
-      font-size: 17px;
-      margin-bottom: 12px;
-    }
-
-    .special-box p {
-      margin: 0 0 10px 0;
-      font-size: 15px;
-      line-height: 1.7;
-    }
-
-    .special-box strong {
-      color: var(--accent);
-    }
-
-    /* ===== FOOTER ===== */
-    .newsletter-footer {
-      padding: 28px 32px;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 13px;
-      border-top: 1px solid var(--border);
-      background: var(--bg-tertiary);
-    }
-
-    .newsletter-footer p {
-      margin: 8px 0;
-      color: var(--text-muted);
-    }
-
-    /* ===== EMOJIS & ICÔNES ===== */
-    .emoji {
-      display: inline-block;
-      margin-right: 8px;
-      font-size: 1.1em;
-    }
-
-    /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
-      body {
-        font-size: 16px;
-        line-height: 1.7;
-      }
-
-      .newsletter-header {
-        padding: 32px 24px;
-      }
-
-      .newsletter-header h1 {
-        font-size: 24px;
-      }
-
-      .newsletter-main {
-        padding: 24px 20px;
-      }
-
-      section {
-        margin-bottom: 32px;
-        padding-bottom: 24px;
-      }
-
-      h2 {
-        font-size: 20px;
-      }
-
-      .domains-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .newsletter-wrapper {
-        border-radius: 8px;
-      }
-
-      .newsletter-footer {
-        padding: 20px;
-        font-size: 12px;
-      }
+      body { font-size: 16px; line-height: 1.7; }
+      .newsletter-header { padding: 32px 24px; }
+      .newsletter-header h1 { font-size: 24px; }
+      .newsletter-main { padding: 24px 20px; }
+      section { margin-bottom: 32px; padding-bottom: 24px; }
+      h2 { font-size: 20px; }
+      .domains-grid { grid-template-columns: 1fr; }
+      .newsletter-wrapper { border-radius: 8px; }
+      .newsletter-footer { padding: 20px; font-size: 12px; }
     }
-
     @media (max-width: 480px) {
-      .newsletter-header h1 {
-        font-size: 22px;
-      }
-
-      h2 {
-        font-size: 18px;
-      }
-
-      body {
-        font-size: 15px;
-      }
+      .newsletter-header h1 { font-size: 22px; }
+      h2 { font-size: 18px; }
+      body { font-size: 15px; }
     }
 
-    /* ===== ANIMATIONS SUBTILES ===== */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .newsletter-wrapper {
-      animation: fadeIn 0.5s ease-out;
+      to   { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
+  <script>(function(){try{var w=window.parent.document.getElementById('nl-theme');var d=w?w.classList.contains('dark'):true;document.documentElement.classList.toggle('dark',d);}catch(e){}})();</script>
   <div class="newsletter-wrapper">
     <div class="newsletter-header">
       <div class="header-icon">${signEmoji}</div>
