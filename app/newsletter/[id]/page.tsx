@@ -397,7 +397,7 @@ export async function generateMetadata(props: any): Promise<Metadata> {
     openGraph: {
       title: newsletter.subject,
       description: newsletter.preview,
-      url: `https://horoscope-karukera.botiran.news/newsletter/${newsletter.id}`,
+      url: `https://zodyak-karukera.com/newsletter/${newsletter.id}`,
       type: 'article',
     },
   };

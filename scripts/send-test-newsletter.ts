@@ -130,7 +130,7 @@ async function sendTestNewsletter(
     const info = await transporter.sendMail({
       from: {
         name: 'Horoscope Guadeloupéen',
-        address: process.env.EMAIL_FROM || 'newsletter@horoscope-guadeloupe.com'
+        address: process.env.EMAIL_FROM || 'newsletter@zodyak-karukera.com'
       },
       to,
       subject: newsletter.subject,
@@ -292,7 +292,7 @@ Configuration:
   
   # Pour SendGrid
   SENDGRID_API_KEY=votre-api-key
-  EMAIL_FROM=newsletter@horoscope-guadeloupe.com
+  EMAIL_FROM=newsletter@zodyak-karukera.com
 
 Note:
   Pour Gmail, vous devrez peut-être:

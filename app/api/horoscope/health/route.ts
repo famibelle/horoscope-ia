@@ -95,7 +95,7 @@ export async function GET(req: NextRequest) {
       const baseUrl = process.env.NETLIFY_URL 
         || process.env.VERCEL_URL
         || req.nextUrl.origin
-        || 'https://horoscope-karukera.netlify.app';
+        || 'https://zodyak-karukera.com';
       
       const url = new URL(`/data/horoscopes/${date}.json`, baseUrl);
       const response = await fetch(url.toString(), { cache: 'no-store' });

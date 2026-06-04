@@ -213,11 +213,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Newsletter - Horoscope Karukera | Horoscopes Quotidiens avec Sagesse Guadeloupéenne',
     description: 'Recevez chaque jour votre horoscope enrichi de la sagesse de Karukera, avec des conseils culturels, des rituels et des symboles guadeloupéens.',
-    url: 'https://horoscope-karukera.botiran.news/newsletter',
+    url: 'https://zodyak-karukera.com/newsletter',
     type: 'website',
   },
   alternates: {
-    canonical: 'https://horoscope-karukera.botiran.news/newsletter',
+    canonical: 'https://zodyak-karukera.com/newsletter',
   },
 };
 

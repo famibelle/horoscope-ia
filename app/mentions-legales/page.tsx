@@ -6,11 +6,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Mentions Légales - Horoscope Karukera | Horoscope et Astrologie en Ligne',
     description: 'Découvrez les mentions légales de Horoscope Karukera pour nos services d\'horoscope et d\'astrologie en ligne.',
-    url: 'https://horoscope-karukera.botiran.news/mentions-legales',
+    url: 'https://zodyak-karukera.com/mentions-legales',
     type: 'website',
   },
   alternates: {
-    canonical: 'https://horoscope-karukera.botiran.news/mentions-legales',
+    canonical: 'https://zodyak-karukera.com/mentions-legales',
   },
 };
 

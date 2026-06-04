@@ -7,6 +7,8 @@
 import { Sign } from './signs-data';
 import { HoroscopeResponse } from './horoscope-data';
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://zodyak-karukera.com';
+
 // ── Palette ──────────────────────────────────────────────────────────────────
 const C = {
   bg:           '#0d0d1a',   // fond principal
@@ -136,7 +138,7 @@ export function getSignHtmlTemplate(data: NewsletterData): string {
   ${sections}
 
   <div style="margin:20px 0 0;text-align:center;">
-    <a href="https://horoscope-guadeloupe.com/horoscope/${sign.id}"
+    <a href="${BASE_URL}/horoscope/${sign.id}"
        style="display:inline-block;padding:10px 24px;background:transparent;color:${C.gold};border:1px solid ${C.gold};font-family:Arial,sans-serif;font-size:13px;text-decoration:none;letter-spacing:1px;">
       Lire l'horoscope complet →
     </a>
@@ -152,7 +154,7 @@ export function getSignTextTemplate(data: NewsletterData): string {
     const text = (horoscope as any)[key];
     if (text) lines.push(`${label} :\n${text}`);
   }
-  lines.push(`\nhttps://horoscope-guadeloupe.com/horoscope/${sign.id}\n`);
+  lines.push(`\n${BASE_URL}/horoscope/${sign.id}\n`);
   return lines.join('\n\n');
 }
 
@@ -164,7 +166,7 @@ export function getFooterTemplate(unsubscribeUrl = '{{unsubscribe_url}}'): strin
     Transmis depuis Karukera avec amour
   </p>
   <p style="margin:0 0 16px;font-family:Arial,sans-serif;font-size:12px;color:${C.border};">
-    <a href="https://horoscope-guadeloupe.com" style="color:${C.gold};text-decoration:none;">horoscope-guadeloupe.com</a>
+    <a href="${BASE_URL}" style="color:${C.gold};text-decoration:none;">${BASE_URL.replace(/^https?:\/\//, '')}</a>
     &nbsp;·&nbsp;
     <a href="${unsubscribeUrl}" style="color:${C.creamFaint};text-decoration:none;">Se désabonner</a>
   </p>

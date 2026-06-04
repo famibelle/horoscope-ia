@@ -6,11 +6,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Contact - Horoscope Karukera | Questions, Support et Collaboration',
     description: 'Contactez Horoscope Karukera pour toute question sur nos horoscopes, partenariats ou support technique. Réponse sous 48h.',
-    url: 'https://horoscope-karukera.botiran.news/contact',
+    url: 'https://zodyak-karukera.com/contact',
     type: 'website',
   },
   alternates: {
-    canonical: 'https://horoscope-karukera.botiran.news/contact',
+    canonical: 'https://zodyak-karukera.com/contact',
   },
 };
 

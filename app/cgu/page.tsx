@@ -6,11 +6,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'CGU - Horoscope Karukera | Conditions d\'Utilisation de l\'Horoscope en Ligne',
     description: 'Lisez les CGU de Horoscope Karukera : règles d\'utilisation, droits et obligations pour profiter de nos horoscopes gratuits.',
-    url: 'https://horoscope-karukera.botiran.news/cgu',
+    url: 'https://zodyak-karukera.com/cgu',
     type: 'website',
   },
   alternates: {
-    canonical: 'https://horoscope-karukera.botiran.news/cgu',
+    canonical: 'https://zodyak-karukera.com/cgu',
   },
 };
 

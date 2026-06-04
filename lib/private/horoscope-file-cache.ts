@@ -165,7 +165,7 @@ export async function loadHoroscopeData(
     const baseUrl = process.env.NETLIFY_URL 
       || process.env.VERCEL_URL
       || req.nextUrl?.origin
-      || 'https://horoscope-karukera.netlify.app';
+      || 'https://zodyak-karukera.com';
     
     const url = new URL(`/data/horoscopes/${date}.json`, baseUrl);
     console.log(`[CACHE] Étape 1/2: Fetch HTTP - URL: ${url.toString()}`);
@@ -293,7 +293,7 @@ export async function loadSigneDuJourData(date: string, req?: any): Promise<any 
     const baseUrl = process.env.NETLIFY_URL 
       || process.env.VERCEL_URL
       || req.nextUrl?.origin
-      || 'https://horoscope-karukera.netlify.app';
+      || 'https://zodyak-karukera.com';
     
     const url = new URL(`/data/presage-du-jour/${date}.json`, baseUrl);
     console.log(`[SIGNE-DU-JOUR] Fetch HTTP: ${url.toString()}`);
@@ -362,7 +362,7 @@ export async function loadAmbianceData(
     const baseUrl = process.env.NETLIFY_URL 
       || process.env.VERCEL_URL
       || req.nextUrl?.origin
-      || 'https://horoscope-karukera.netlify.app';
+      || 'https://zodyak-karukera.com';
     
     const url = new URL(`/data/ambiance/${date}.json`, baseUrl);
     console.log(`[AMBIANCE] Fetch HTTP: ${url.toString()}`);

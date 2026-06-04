@@ -15,7 +15,7 @@ export async function POST(req: Request) {
       return Response.json({ error: 'Newsletter introuvable' }, { status: 404 });
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://horoscope-karukera.netlify.app';
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://zodyak-karukera.com';
     const webUrl = `${baseUrl}/newsletter/${newsletter.id}`;
     const emailHtml = generateEmailHtml(newsletter, webUrl);
 

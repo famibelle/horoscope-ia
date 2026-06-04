@@ -6,11 +6,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Politique de Confidentialité - Horoscope Karukera | Données Personnelles et Cookies',
     description: 'Comment Horoscope Karukera protège vos données ? Découvrez notre politique de confidentialité, l\'utilisation des cookies et vos droits RGPD.',
-    url: 'https://horoscope-karukera.botiran.news/politique-de-confidentialite',
+    url: 'https://zodyak-karukera.com/politique-de-confidentialite',
     type: 'website',
   },
   alternates: {
-    canonical: 'https://horoscope-karukera.botiran.news/politique-de-confidentialite',
+    canonical: 'https://zodyak-karukera.com/politique-de-confidentialite',
   },
 };
 

@@ -9,7 +9,7 @@ type CorsHeaders = {
 };
 
 const corsHeaders: CorsHeaders = {
-  'Access-Control-Allow-Origin': process.env.ALLOWED_ORIGINS || 'https://horoscope-guadeloupe.com',
+  'Access-Control-Allow-Origin': process.env.ALLOWED_ORIGINS || 'https://zodyak-karukera.com',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
 };

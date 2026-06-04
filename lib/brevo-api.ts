@@ -108,7 +108,7 @@ export async function sendEmailViaBrevo(
   
   const request: SendEmailRequest = {
     sender: {
-      email: senderEmail || process.env.EMAIL_FROM || 'newsletter@horoscope-guadeloupe.com',
+      email: senderEmail || process.env.EMAIL_FROM || 'newsletter@zodyak-karukera.com',
       name: senderName || 'Horoscope Guadeloupéen'
     },
     to: emailList.map(email => ({ email })),
@@ -196,7 +196,7 @@ export async function createEmailCampaign(
     name,
     subject,
     sender: {
-      email: process.env.EMAIL_FROM || 'newsletter@horoscope-guadeloupe.com',
+      email: process.env.EMAIL_FROM || 'newsletter@zodyak-karukera.com',
       name: 'Horoscope Guadeloupéen'
     },
     type: 'classic',

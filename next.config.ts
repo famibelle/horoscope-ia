@@ -91,6 +91,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'zodyak-karukera.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'zodyak-karukera.com',
+      },
     ],
   },
   
