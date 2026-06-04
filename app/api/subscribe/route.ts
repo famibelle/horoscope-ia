@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     }
 
     // Récupérer les données
-    const { email } = await req.json();
+    const { email, sign } = await req.json();
 
     // Validation basique
     if (!email || typeof email !== 'string') {
@@ -44,15 +44,8 @@ export async function POST(req: Request) {
     const normalizedEmail = email.trim().toLowerCase();
 
     try {
-      await addContactToBrevo(normalizedEmail);
+      await addContactToBrevo(normalizedEmail, undefined, { sign: sign || '' });
     } catch (err: any) {
-      const msg: string = err?.message || '';
-      if (msg.includes('Contact already exist') || msg.includes('already exist')) {
-        return NextResponse.json(
-          { error: 'Email déjà inscrit' },
-          { status: 400, headers: corsHeaders }
-        );
-      }
       throw err;
     }
 

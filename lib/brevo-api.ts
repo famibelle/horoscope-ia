@@ -55,16 +55,6 @@ export async function addContactToBrevo(
 ): Promise<any> {
   const apiKey = getBrevoApiKey();
 
-  const contact: BrevoContact = {
-    email: email.toLowerCase().trim(),
-    listIds: [listId],
-    attributes: {
-      SIGN: attributes.sign || '',
-      NAME: attributes.name || '',
-      ...attributes
-    }
-  };
-
   try {
     const response = await fetch(`${BREVO_API_URL}/contacts`, {
       method: 'POST',
@@ -72,7 +62,16 @@ export async function addContactToBrevo(
         'Content-Type': 'application/json',
         'api-key': apiKey
       },
-      body: JSON.stringify({ contacts: [contact] })
+      body: JSON.stringify({
+        email: email.toLowerCase().trim(),
+        listIds: [listId],
+        attributes: {
+          SIGN: attributes.sign || '',
+          NAME: attributes.name || '',
+          ...attributes
+        },
+        updateEnabled: true,
+      })
     });
 
     if (!response.ok) {
@@ -82,7 +81,7 @@ export async function addContactToBrevo(
     }
 
     const data = await response.json();
-    console.log('✅ Contact ajouté à Brevo:', data.contacts?.[0]?.email);
+    console.log('✅ Contact ajouté à Brevo:', email.toLowerCase().trim());
     return data;
 
   } catch (error) {

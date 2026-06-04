@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { generateDailyNewsletter } from '@/lib/newsletter-generator';
-import { getAllNewsletters, saveNewsletter, type StoredNewsletter } from '@/lib/newsletter-storage';
+import { getAllNewsletters, type StoredNewsletter } from '@/lib/newsletter-storage';
+import NewsletterSubscribeForm from '@/components/NewsletterSubscribeForm';
 
 // Fonction pour formater la date en français
 function formatDate(dateString: string): string {
@@ -60,83 +60,6 @@ function NewsletterCard({ newsletter, index }: { newsletter: StoredNewsletter; i
       </p>
 
     </article>
-  );
-}
-
-// Composant pour le formulaire d'abonnement
-function SubscriptionForm() {
-  return (
-    <form action="#" method="POST" className="max-w-lg mx-auto space-y-5">
-      <div>
-        <label htmlFor="email" className="block text-ancestral-cream mb-2 text-sm font-medium">
-          Adresse email *
-        </label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          required
-          placeholder="ex: marie@email.com"
-          className="w-full p-4 bg-ancestral-dark/50 border-2 border-ancestral-cream/15 rounded-xl 
-                    text-ancestral-cream placeholder-ancestral-cream/50
-                    focus:outline-none focus:border-ancestral-gold focus:bg-ancestral-dark/30
-                    transition-all duration-200"
-        />
-      </div>
-      
-      <div>
-        <label htmlFor="signe" className="block text-ancestral-cream mb-2 text-sm font-medium">
-          Votre signe astrologique (optionnel)
-        </label>
-        <select
-          id="signe"
-          name="signe"
-          className="w-full p-4 bg-ancestral-dark/50 border-2 border-ancestral-cream/15 rounded-xl 
-                    text-ancestral-cream focus:outline-none focus:border-ancestral-gold focus:bg-ancestral-dark/30
-                    transition-all duration-200"
-        >
-          <option value="">-- Sélectionnez votre signe --</option>
-          <option value="bélier">🐏 Bélier</option>
-          <option value="taureau">🐂 Taureau</option>
-          <option value="gémeaux">👫 Gémeaux</option>
-          <option value="cancer">🦀 Cancer</option>
-          <option value="lion">🦁 Lion</option>
-          <option value="vierge">👗 Vierge</option>
-          <option value="balance">⚖️ Balance</option>
-          <option value="scorpion">🦂 Scorpion</option>
-          <option value="sagittaire">🏹 Sagittaire</option>
-          <option value="capricorne">🐐 Capricorne</option>
-          <option value="verseau">💧 Verseau</option>
-          <option value="poissons">🐟 Poissons</option>
-        </select>
-      </div>
-
-      <div className="flex items-start gap-3 p-4 bg-ancestral-dark/30 rounded-xl border border-ancestral-cream/10">
-        <input
-          type="checkbox"
-          id="consentement"
-          name="consentement"
-          required
-          className="mt-1 flex-shrink-0 w-5 h-5 accent-ancestral-gold rounded border-2 border-ancestral-gold/30"
-        />
-        <label htmlFor="consentement" className="text-ancestral-cream/80 text-sm">
-          J&apos;accepte de recevoir la newsletter et j&apos;ai lu la
-          <Link href="/politique-de-confidentialite" className="text-ancestral-gold hover:underline font-medium ml-1">
-            Politique de Confidentialité
-          </Link>.
-        </label>
-      </div>
-
-      <button
-        type="submit"
-        className="w-full py-4 bg-gradient-to-r from-ancestral-gold to-ancestral-gold/80 
-                  text-ancestral-dark font-bold rounded-xl text-lg
-                  hover:from-ancestral-gold/80 hover:to-ancestral-gold 
-                  transition-all duration-200 shadow-lg hover:shadow-xl"
-      >
-        S&apos;abonner gratuitement
-      </button>
-    </form>
   );
 }
 
@@ -268,7 +191,7 @@ export default async function NewsletterPage() {
           </p>
         </div>
         
-        <SubscriptionForm />
+        <NewsletterSubscribeForm />
       </section>
 
       {/* ===== SECTION DERNIÈRES NEWSLETTERS ===== */}

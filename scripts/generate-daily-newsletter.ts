@@ -38,7 +38,7 @@ async function main() {
   // Sauvegarder dans le stockage
   const saved = await saveNewsletter({
     subject: newsletter.subject,
-    preview: newsletter.html.substring(0, 200) + '...',
+    preview: newsletter.html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 200) + '...',
     htmlContent: newsletter.html,
     text: newsletter.text,
   });
