@@ -225,13 +225,13 @@ export default function AudioPlayer({
         transition={{ duration: 0.8 }}
         className="text-center mb-6"
       >
-        <p style={{ color: 'rgba(212,175,80,0.5)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.35em', marginBottom: '6px' }}>
+        <p style={{ color: 'rgba(212,175,80,0.5)', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.35em', marginBottom: '6px' }}>
           La Voix des Ancêtres
         </p>
         <h2 className="font-display" style={{ fontSize: '22px', fontWeight: 700, color: '#C8D8C0' }}>
           Écoutez Maryse
         </h2>
-        <p style={{ color: 'rgba(200,216,192,0.35)', fontSize: '13px', marginTop: '4px' }}>🎧 Horoscope audio</p>
+        <p style={{ color: 'rgba(200,216,192,0.35)', fontSize: '15px', marginTop: '4px' }}>🎧 Horoscope audio</p>
       </motion.div>
 
       <motion.div
@@ -354,7 +354,7 @@ export default function AudioPlayer({
               ) : (
                 <motion.p
                   key="title"
-                  style={{ fontSize: '14px', fontWeight: 500, color: '#C8D8C0' }}
+                  style={{ fontSize: '15px', fontWeight: 500, color: '#C8D8C0' }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                 >

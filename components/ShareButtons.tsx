@@ -109,7 +109,7 @@ export default function ShareButtons() {
         transition={{ duration: 0.8 }}
         className="text-center mb-8"
       >
-        <p className="text-ancestral-gold/45 text-xs uppercase tracking-[0.35em] mb-3">
+        <p className="text-ancestral-gold/45 text-[12px] uppercase tracking-[0.35em] mb-3">
           Transmettre la sagesse
         </p>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-ancestral-cream">
@@ -146,7 +146,7 @@ export default function ShareButtons() {
             <platform.Icon size={20} />
             <span
               className="font-ui"
-              style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 500, color: platform.color, textAlign: 'center', lineHeight: 1.2 }}
+              style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 500, color: platform.color, textAlign: 'center', lineHeight: 1.2 }}
             >
               {platform.name}
             </span>
@@ -164,7 +164,7 @@ export default function ShareButtons() {
       >
         <button
           onClick={handleCopy}
-          className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-ancestral-cream/50 text-sm transition-all duration-200 hover:text-ancestral-cream/70 focus:outline-none"
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-ancestral-cream/50 text-[15px] transition-all duration-200 hover:text-ancestral-cream/70 focus:outline-none"
           style={{
             background: 'rgba(245,245,220,0.04)',
             border: '1px solid rgba(245,245,220,0.07)',

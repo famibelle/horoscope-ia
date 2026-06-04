@@ -213,7 +213,7 @@ function FilledCard({
             >
               <div className="flex items-center gap-2" style={{ marginBottom: '4px' }}>
                 <Icon size={12} className={`${colorClass} flex-shrink-0`} />
-                <span className={`font-ui font-semibold uppercase tracking-widest ${colorClass}`} style={{ fontSize: '11px', letterSpacing: '0.08em' }}>
+                <span className={`font-ui font-semibold uppercase tracking-widest ${colorClass}`} style={{ fontSize: '12px', letterSpacing: '0.08em' }}>
                   {label}
                 </span>
               </div>
@@ -257,7 +257,7 @@ function FilledCard({
           <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B8A6E', marginBottom: '4px' }}>
             Dimension spirituelle
           </p>
-          <p style={{ fontSize: '14px', lineHeight: 1.65, color: '#C8D8C0', opacity: 0.7, fontStyle: 'italic' }}>{sign.spirituel}</p>
+          <p style={{ fontSize: '15px', lineHeight: 1.65, color: '#C8D8C0', opacity: 0.7, fontStyle: 'italic' }}>{sign.spirituel}</p>
         </motion.div>
 
         {/* Contexte Vaudou */}
@@ -277,7 +277,7 @@ function FilledCard({
               <span style={{ fontSize: '14px' }}>{data.vaudou.emoji}</span>
               <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B8A6E' }}>Protection Vaudou</p>
             </div>
-            <p style={{ fontSize: '14px', lineHeight: 1.65, color: '#C8D8C0', opacity: 0.8 }}>
+            <p style={{ fontSize: '15px', lineHeight: 1.65, color: '#C8D8C0', opacity: 0.8 }}>
               <span style={{ fontWeight: 600, color: '#D4AF50' }}>{data.vaudou.loa}</span> ({data.vaudou.famille}) vous accompagne.
               Énergie : {data.vaudou.energie}. Couleurs : {data.vaudou.couleurs.join(', ')}.
             </p>
@@ -288,11 +288,11 @@ function FilledCard({
         {data.weather && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingTop: '4px' }}>
             <Cloud size={11} style={{ color: '#6B8A6E', flexShrink: 0 }} />
-            <span style={{ fontSize: '12px', color: '#6B8A6E' }}>Pointe-à-Pitre · {data.weather}</span>
+            <span style={{ fontSize: '15px', color: '#6B8A6E' }}>Pointe-à-Pitre · {data.weather}</span>
           </div>
         )}
 
-        <p style={{ fontSize: '13px', color: '#D4AF50', opacity: 0.7, textAlign: 'right', marginTop: '4px' }}>
+        <p style={{ fontSize: '15px', color: '#D4AF50', opacity: 0.7, textAlign: 'right', marginTop: '4px' }}>
           lire la suite →
         </p>
       </div>

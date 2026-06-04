@@ -91,6 +91,10 @@ html {
 }
 
 @layer utilities {
+  .font-display {
+    font-family: var(--font-display), Georgia, serif;
+  }
+
   .glass {
     background: rgba(200, 216, 192, 0.03);
     backdrop-filter: blur(24px);
@@ -147,9 +151,6 @@ html {
     animation: shimmer 2.5s linear infinite;
   }
 
-  .font-display {
-    font-family: var(--font-display);
-  }
 }
 
 @keyframes twinkle {

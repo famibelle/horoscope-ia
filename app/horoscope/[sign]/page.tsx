@@ -192,7 +192,7 @@ export default function HoroscopeSignPage() {
           <div className="flex items-center justify-between mb-4">
             <span
               className="font-accent italic"
-              style={{ fontSize: '13px', color: '#D4AF50', letterSpacing: '0.02em' }}
+              style={{ fontSize: '15px', color: '#D4AF50', letterSpacing: '0.02em' }}
             >
               La Voix de nos Ancêtres
             </span>
@@ -236,14 +236,14 @@ export default function HoroscopeSignPage() {
               >
                 {sign.name}
               </p>
-              <p className="font-ui" style={{ fontSize: '10px', color: 'var(--color-text-muted)', marginTop: '2px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+              <p className="font-ui" style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '2px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
                 {sign.planet} · {sign.element}
               </p>
             </div>
             <Link
               href="/"
               style={{
-                fontSize: '10px',
+                fontSize: '12px',
                 color: 'var(--color-gold)',
                 border: '1px solid rgba(212,175,80,0.3)',
                 borderRadius: '8px',
@@ -322,7 +322,7 @@ export default function HoroscopeSignPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <p className="text-ancestral-gold/45 text-xs uppercase tracking-[0.35em] mb-1">Paroles de Maryse CondAI</p>
+                <p className="text-ancestral-gold/45 text-[12px] uppercase tracking-[0.35em] mb-1">Paroles de Maryse CondAI</p>
                 <h2 className="font-display text-xl font-bold text-ancestral-cream mb-6">Horoscope du jour</h2>
 
                 <div
@@ -343,13 +343,13 @@ export default function HoroscopeSignPage() {
                         <div key={key} className="space-y-1.5">
                           <div className="flex items-center gap-2">
                             <Icon size={13} className={`${colorClass} flex-shrink-0`} />
-                            <span className={`text-xs font-semibold uppercase tracking-widest ${colorClass}`}>{label}</span>
+                            <span className={`text-[12px] font-semibold uppercase tracking-widest ${colorClass}`}>{label}</span>
                           </div>
                           <ReactMarkdown
                             components={{
                               ...markdownComponents,
                               p: ({ children }) => (
-                                <p className={`text-sm leading-relaxed pl-5 ${isPrediction ? 'italic text-ancestral-cream/60' : 'text-ancestral-cream/70'}`}>
+                                <p className={`text-[16px] leading-relaxed pl-5 ${isPrediction ? 'italic text-ancestral-cream/60' : 'text-ancestral-cream/70'}`}>
                                   {children}
                                 </p>
                               ),
@@ -372,8 +372,8 @@ export default function HoroscopeSignPage() {
                     border: `1px solid rgba(210,105,30,0.18)`,
                   }}
                 >
-                  <p className="font-ui text-ancestral-cream/35 text-xs uppercase tracking-widest mb-1.5">Dimension spirituelle</p>
-                  <p className="font-accent italic text-ancestral-cream/45 text-xs leading-relaxed">{sign.spirituel}</p>
+                  <p className="font-ui text-ancestral-cream/35 text-[12px] uppercase tracking-widest mb-1.5">Dimension spirituelle</p>
+                  <p className="font-accent italic text-ancestral-cream/45 text-[15px] leading-relaxed">{sign.spirituel}</p>
                 </div>
               </motion.section>
             )}
@@ -386,10 +386,10 @@ export default function HoroscopeSignPage() {
                 transition={{ duration: 0.5, delay: 0.3 }}
                 className="mb-14"
               >
-                <p className="text-ancestral-gold/45 text-xs uppercase tracking-[0.35em] mb-1">Savoirs de Karukera</p>
+                <p className="text-ancestral-gold/45 text-[12px] uppercase tracking-[0.35em] mb-1">Savoirs de Karukera</p>
                 <h2 className="font-display text-xl font-bold text-ancestral-cream mb-2">🌿 Totems et symboles</h2>
                 {/* Teaser dynamique selon l'édition */}
-                <p className="text-ancestral-cream/60 text-sm mb-6 italic">
+                <p className="text-ancestral-cream/60 text-[15px] mb-6 italic">
                   {(!edition && "Les esprits de Karukera vous attendent...") ||
                    (edition === 'nuit' && "Cette nuit, les esprits de Karukera dansent sous la lune, écoutez leurs murmures dans le vent.") ||
                    (edition === 'matin' && "Ce matin, le soleil se lève sur les mornes de Guadeloupe, éveillant les forces ancestrales.") ||
@@ -419,11 +419,11 @@ export default function HoroscopeSignPage() {
                           <span className="text-2xl">🦎</span>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-ancestral-cream text-sm flex items-center gap-2">
+                          <h3 className="font-semibold text-ancestral-cream text-[15px] flex items-center gap-2">
                             {horoscope.culturalData.faune.nom_commun}
-                            <span className="text-ancestral-cream/40 text-xs">({horoscope.culturalData.faune.nom_creole})</span>
+                            <span className="text-ancestral-cream/40 text-[12px]">({horoscope.culturalData.faune.nom_creole})</span>
                           </h3>
-                          <p className="text-ancestral-cream/50 text-xs mt-2 leading-relaxed italic">
+                          <p className="text-ancestral-cream/50 text-[15px] mt-2 leading-relaxed italic">
                             {horoscope.culturalData.faune.savoir}
                           </p>
                           {horoscope.culturalData.faune.conditions.length > 0 && (
@@ -431,7 +431,7 @@ export default function HoroscopeSignPage() {
                               {horoscope.culturalData.faune.conditions.map((c) => (
                                 <span
                                   key={c}
-                                  className="px-2 py-0.5 rounded-full text-[10px] font-medium"
+                                  className="px-2 py-0.5 rounded-full text-[12px] font-medium"
                                   style={{
                                     background: 'rgba(245,245,220,0.10)',
                                     color: 'rgba(245,245,220,0.60)',
@@ -465,11 +465,11 @@ export default function HoroscopeSignPage() {
                           <span className="text-2xl">🌺</span>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-ancestral-cream text-sm flex items-center gap-2">
+                          <h3 className="font-semibold text-ancestral-cream text-[15px] flex items-center gap-2">
                             {horoscope.culturalData.flore.nom_commun}
-                            <span className="text-ancestral-cream/40 text-xs">({horoscope.culturalData.flore.nom_creole})</span>
+                            <span className="text-ancestral-cream/40 text-[12px]">({horoscope.culturalData.flore.nom_creole})</span>
                           </h3>
-                          <p className="text-ancestral-cream/50 text-xs mt-2 leading-relaxed italic">
+                          <p className="text-ancestral-cream/50 text-[15px] mt-2 leading-relaxed italic">
                             {horoscope.culturalData.flore.savoir}
                           </p>
                           {horoscope.culturalData.flore.conditions.length > 0 && (
@@ -477,7 +477,7 @@ export default function HoroscopeSignPage() {
                               {horoscope.culturalData.flore.conditions.map((c) => (
                                 <span
                                   key={c}
-                                  className="px-2 py-0.5 rounded-full text-[10px] font-medium"
+                                  className="px-2 py-0.5 rounded-full text-[12px] font-medium"
                                   style={{
                                     background: 'rgba(245,245,220,0.10)',
                                     color: 'rgba(245,245,220,0.60)',
@@ -511,13 +511,13 @@ export default function HoroscopeSignPage() {
                           <span className="text-2xl">📍</span>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-ancestral-cream text-sm flex items-center gap-2">
+                          <h3 className="font-semibold text-ancestral-cream text-[15px] flex items-center gap-2">
                             {horoscope.culturalData.lieu}
                           </h3>
-                          <p className="text-ancestral-cream/50 text-xs mt-2 leading-relaxed">
+                          <p className="text-ancestral-cream/50 text-[15px] mt-2 leading-relaxed">
                             {horoscope.culturalData.lieuDetails.description}
                           </p>
-                          <p className="text-ancestral-cream/40 text-xs mt-2 italic">
+                          <p className="text-ancestral-cream/40 text-[15px] mt-2 italic">
                             "{horoscope.culturalData.lieuDetails.symbolique}"
                           </p>
                         </div>
@@ -567,7 +567,7 @@ export default function HoroscopeSignPage() {
                   </div>
                   Recevez votre horoscope du {sign.name} tous les matins
                 </h3>
-                <p className="text-ancestral-cream/40 text-sm mb-5">
+                <p className="text-ancestral-cream/40 text-[15px] mb-5">
                   Les prédictions de Maryse CondAI directement dans votre boîte mail.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -588,7 +588,7 @@ export default function HoroscopeSignPage() {
                     S'abonner
                   </motion.button>
                 </div>
-                <p className="text-ancestral-cream/30 text-[10px] mt-3">
+                <p className="text-ancestral-cream/30 text-[12px] mt-3">
                   Désabonnement en un clic. Vos données restent privées.
                 </p>
               </div>
@@ -601,7 +601,7 @@ export default function HoroscopeSignPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.15 }}
               >
-                <p className="text-ancestral-gold/45 text-xs uppercase tracking-[0.35em] mb-1">Sagesse du jour</p>
+                <p className="text-ancestral-gold/45 text-[12px] uppercase tracking-[0.35em] mb-1">Sagesse du jour</p>
                 <h2 className="font-display text-xl font-bold text-ancestral-cream mb-6">✦ Énergie de Karukera</h2>
 
                 {/* Ambiance text */}
@@ -616,7 +616,7 @@ export default function HoroscopeSignPage() {
                     components={{
                       ...markdownComponents,
                       p: ({ children }) => (
-                        <p className="text-ancestral-cream/65 text-sm sm:text-base leading-relaxed italic">{children}</p>
+                        <p className="text-ancestral-cream/65 text-[16px] leading-relaxed italic">{children}</p>
                       ),
                     }}
                   >
@@ -630,7 +630,7 @@ export default function HoroscopeSignPage() {
                     const score = ambiance.scores?.[key as keyof AmbianceScores] ?? 0;
                     return (
                       <div key={key} className="flex items-center gap-3">
-                        <span className="text-ancestral-cream/40 text-xs w-24 flex-shrink-0">{label}</span>
+                        <span className="text-ancestral-cream/40 text-[12px] w-24 flex-shrink-0">{label}</span>
                         <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'rgba(245,245,220,0.06)' }}>
                           <motion.div
                             className="h-full rounded-full"
@@ -640,7 +640,7 @@ export default function HoroscopeSignPage() {
                             transition={{ duration: 1, delay: 0.3 + i * 0.1, ease: 'easeOut' }}
                           />
                         </div>
-                        <span className="text-ancestral-cream/50 text-xs w-9 text-right font-medium">{score}%</span>
+                        <span className="text-ancestral-cream/50 text-[12px] w-9 text-right font-medium">{score}%</span>
                       </div>
                     );
                   })}
@@ -655,7 +655,7 @@ export default function HoroscopeSignPage() {
                       border: '1px solid rgba(210,105,30,0.22)',
                     }}
                   >
-                    <p className="text-ancestral-gold/60 text-[10px] uppercase tracking-widest mb-2">
+                    <p className="text-ancestral-gold/60 text-[12px] uppercase tracking-widest mb-2">
                       Chiffre sacré
                     </p>
                     <span className="font-display text-5xl font-bold text-ancestral-gold">
@@ -670,7 +670,7 @@ export default function HoroscopeSignPage() {
                       border: '1px solid rgba(228,196,144,0.22)',
                     }}
                   >
-                    <p className="text-ancestral-gold/60 text-[10px] uppercase tracking-widest mb-3">
+                    <p className="text-ancestral-gold/60 text-[12px] uppercase tracking-widest mb-3">
                       Totems alliés
                     </p>
                     <div className="flex flex-col gap-2.5">
@@ -684,7 +684,7 @@ export default function HoroscopeSignPage() {
                             className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                           >
                             <span className="text-xl">{compSign.emoji}</span>
-                            <span className="text-ancestral-cream/65 text-sm">{compSign.name}</span>
+                            <span className="text-ancestral-cream/65 text-[15px]">{compSign.name}</span>
                           </Link>
                         );
                       })}
@@ -694,8 +694,8 @@ export default function HoroscopeSignPage() {
 
                 {/* Lunar sections */}
                 <div>
-                  <p className="text-ancestral-cream/30 text-[10px] uppercase tracking-widest mb-0.5">Phase lunaire</p>
-                  <p className="text-ancestral-cream/50 text-sm mb-5">🌕 {moonLabel}</p>
+                  <p className="text-ancestral-cream/30 text-[12px] uppercase tracking-widest mb-0.5">Phase lunaire</p>
+                  <p className="text-ancestral-cream/50 text-[15px] mb-5">🌕 {moonLabel}</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {LUNE_ITEMS.map(({ key, label, emoji: luneEmoji }) => {
                       const text = ambiance.lune?.[key as keyof AmbianceLune];
@@ -712,14 +712,14 @@ export default function HoroscopeSignPage() {
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.4 }}
                         >
-                          <p className="text-ancestral-cream/50 text-xs font-semibold uppercase tracking-wider mb-2">
+                          <p className="text-ancestral-cream/50 text-[12px] font-semibold uppercase tracking-wider mb-2">
                             {luneEmoji} {label}
                           </p>
                           <ReactMarkdown
                             components={{
                               ...markdownComponents,
                               p: ({ children }) => (
-                                <p className="text-ancestral-cream/45 text-xs leading-relaxed">{children}</p>
+                                <p className="text-ancestral-cream/45 text-[15px] leading-relaxed">{children}</p>
                               ),
                             }}
                           >

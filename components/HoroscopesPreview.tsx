@@ -85,7 +85,7 @@ export default function HoroscopesPreview() {
         transition={{ duration: 0.8 }}
         className="text-center mb-10"
       >
-        <p className="text-ancestral-gold/45 text-xs uppercase tracking-[0.35em] mb-3">
+        <p className="text-ancestral-gold/45 text-[12px] uppercase tracking-[0.35em] mb-3">
           Maryse CondAI
         </p>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-ancestral-cream">
@@ -126,13 +126,13 @@ export default function HoroscopesPreview() {
                   border: '1px solid rgba(245,245,220,0.07)',
                 }}
               >
-                <p className="text-ancestral-cream/80 text-sm font-semibold mb-2">
+                <p className="text-ancestral-cream/80 text-[15px] font-semibold mb-2">
                   {p.emoji} {p.name}
                 </p>
-                <p className="text-ancestral-cream/45 text-sm leading-relaxed mb-3">
+                <p className="text-ancestral-cream/45 text-[15px] leading-relaxed mb-3">
                   {truncate(p.ouverture)}
                 </p>
-                <span className="text-ancestral-gold/70 text-xs font-medium">
+                <span className="text-ancestral-gold/70 text-[12px] font-medium">
                   lire la suite →
                 </span>
               </Link>

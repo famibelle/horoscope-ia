@@ -94,7 +94,7 @@ export default function EnergyBanner() {
         transition={{ duration: 0.8 }}
         className="text-center mb-10"
       >
-        <p className="text-ancestral-gold/70 text-xs uppercase tracking-[0.35em] mb-3">
+        <p className="text-ancestral-gold/70 text-[12px] uppercase tracking-[0.35em] mb-3">
           Paroles des ancêtres
         </p>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-ancestral-cream">
@@ -126,7 +126,7 @@ export default function EnergyBanner() {
               <p className="font-display font-semibold text-base leading-tight text-ancestral-cream/80">
                 {energy.value}
               </p>
-              <p className="font-ui text-ancestral-cream/30 text-xs uppercase tracking-wider mt-0.5">
+              <p className="font-ui text-ancestral-cream/30 text-[12px] uppercase tracking-wider mt-0.5">
                 {energy.label}
               </p>
             </div>
@@ -147,10 +147,10 @@ export default function EnergyBanner() {
           viewport={{ once: true }}
           transition={{ delay: 0.5, duration: 0.8 }}
         >
-          <p className="font-ui text-ancestral-gold/40 text-xs uppercase tracking-widest mb-1.5">
+          <p className="font-ui text-ancestral-gold/40 text-[12px] uppercase tracking-widest mb-1.5">
             Les esprits de Karukera murmurent
           </p>
-          <p className="font-accent italic text-ancestral-cream/70 text-sm sm:text-base leading-relaxed">{signe.phrase}</p>
+          <p className="font-accent italic text-ancestral-cream/70 text-[15px] leading-relaxed">{signe.phrase}</p>
         </motion.div>
       )}
 
