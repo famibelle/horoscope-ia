@@ -1,3 +1,5 @@
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import StarField from '@/components/StarField';
 import Hero from '@/components/Hero';
 import InteractiveHoroscope from '@/components/InteractiveHoroscope';
@@ -9,8 +11,49 @@ import AdSpace from '@/components/AdSpace';
 import Articles from '@/components/Articles';
 import Footer from '@/components/Footer';
 import { EditionProvider } from '@/contexts/EditionContext';
+import type { HoroscopeResponse } from '@/lib/horoscope-data';
 
-export default function Home() {
+function getDefaultSign(d: Date): string {
+  const m = d.getMonth() + 1;
+  const day = d.getDate();
+  if ((m === 3 && day >= 21) || (m === 4 && day <= 19)) return 'belier';
+  if ((m === 4 && day >= 20) || (m === 5 && day <= 20)) return 'taureau';
+  if ((m === 5 && day >= 21) || (m === 6 && day <= 20)) return 'gemeaux';
+  if ((m === 6 && day >= 21) || (m === 7 && day <= 22)) return 'cancer';
+  if ((m === 7 && day >= 23) || (m === 8 && day <= 22)) return 'lion';
+  if ((m === 8 && day >= 23) || (m === 9 && day <= 22)) return 'vierge';
+  if ((m === 9 && day >= 23) || (m === 10 && day <= 22)) return 'balance';
+  if ((m === 10 && day >= 23) || (m === 11 && day <= 21)) return 'scorpion';
+  if ((m === 11 && day >= 22) || (m === 12 && day <= 21)) return 'sagittaire';
+  if ((m === 12 && day >= 22) || (m === 1 && day <= 19)) return 'capricorne';
+  if ((m === 1 && day >= 20) || (m === 2 && day <= 18)) return 'verseau';
+  return 'poissons';
+}
+
+async function prefetchHoroscope(): Promise<{ data: HoroscopeResponse; sign: string } | null> {
+  try {
+    // Guadeloupe = UTC-4
+    const now = new Date();
+    const gp = new Date(now.getTime() - 4 * 60 * 60 * 1000);
+    const dateStr = gp.toISOString().split('T')[0];
+    const sign = getDefaultSign(gp);
+
+    const filePath = join(process.cwd(), 'public', 'data', 'horoscopes', `${dateStr}.json`);
+    const raw = readFileSync(filePath, 'utf-8');
+    const all = JSON.parse(raw) as Record<string, HoroscopeResponse>;
+
+    // matin = édition par défaut
+    const data = all[`${dateStr}|${sign}|matin`];
+    if (data) return { data, sign };
+  } catch {
+    // fichier statique absent — le client fera le fetch normalement
+  }
+  return null;
+}
+
+export default async function Home() {
+  const prefetched = await prefetchHoroscope();
+
   return (
     <main className="relative min-h-screen overflow-x-hidden">
       <StarField />
@@ -50,7 +93,10 @@ export default function Home() {
         <div className="relative z-10">
           <EditionToggle />
           <Hero />
-          <InteractiveHoroscope />
+          <InteractiveHoroscope
+            prefetchedData={prefetched?.data ?? null}
+            prefetchedSign={prefetched?.sign ?? null}
+          />
           <AdSpace variant="banner" />
           <HoroscopesPreview />
           <EnergyBanner />

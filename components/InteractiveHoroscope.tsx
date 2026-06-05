@@ -29,12 +29,18 @@ import { todayISO } from '@/lib/horoscope-data';
 import { useEdition } from '@/contexts/EditionContext';
 import type { Edition } from '@/lib/private/maryse-prompt';
 
-export default function InteractiveHoroscope() {
+export default function InteractiveHoroscope({
+  prefetchedData,
+  prefetchedSign,
+}: {
+  prefetchedData?: HoroscopeResponse | null;
+  prefetchedSign?: string | null;
+}) {
   const { edition } = useEdition();
-  const [selectedSignId, setSelectedSignId] = useState<string>('lion');
+  const [selectedSignId, setSelectedSignId] = useState<string>(prefetchedSign ?? 'lion');
   const [ready, setReady]      = useState(false);
-  const [data, setData]        = useState<HoroscopeResponse | null>(null);
-  const [loading, setLoading]  = useState(true);
+  const [data, setData]        = useState<HoroscopeResponse | null>(prefetchedData ?? null);
+  const [loading, setLoading]  = useState(!prefetchedData);
   const [error, setError]      = useState<string | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -81,8 +87,14 @@ export default function InteractiveHoroscope() {
 
   useEffect(() => {
     if (!ready) return;
+    // Réutilise les données prefetchées si le signe correspond, évite un fetch inutile
+    if (prefetchedData && selectedSignId === prefetchedSign && edition === 'matin') {
+      setData(prefetchedData);
+      setLoading(false);
+      return;
+    }
     fetchHoroscope(selectedSignId, edition);
-  }, [selectedSignId, edition, fetchHoroscope, ready]);
+  }, [selectedSignId, edition, fetchHoroscope, ready, prefetchedData, prefetchedSign]);
 
   const sign = signs.find((s) => s.id === selectedSignId);
 
