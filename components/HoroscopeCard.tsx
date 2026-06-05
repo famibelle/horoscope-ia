@@ -222,12 +222,13 @@ function FilledCard({
                   ...markdownComponents,
                   p: ({ children }) => (
                     <p
-                      className={`font-display ${isPrediction ? 'italic' : ''}`}
+                      className={`font-ui ${isPrediction ? 'italic' : ''}`}
                       style={{
-                        fontSize: '16px',
-                        lineHeight: 1.75,
+                        fontSize: '15px',
+                        lineHeight: 1.8,
                         color: '#C8D8C0',
                         paddingLeft: '16px',
+                        fontWeight: isPrediction ? 400 : 300,
                       }}
                     >
                       {children}
