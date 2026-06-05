@@ -1,43 +1,68 @@
-/**
- * Script pour générer la newsletter quotidienne
- * Sauvegarde automatiquement dans private_data/newsletters/
- * et affiche le résultat
- */
-
 import { config } from 'dotenv';
 config();
 
-import { generateDailyNewsletter } from '@/lib/newsletter-generator';
-import { saveNewsletter } from '@/lib/newsletter-storage';
-import { getTodaysNewsletter } from '@/lib/newsletter-storage';
-import { createEmailCampaign, sendCampaignNow } from '@/lib/brevo-api';
+import { generateDailyNewsletter, generatePersonalizedNewsletter } from '@/lib/newsletter-generator';
+import { saveNewsletter, getTodaysNewsletter } from '@/lib/newsletter-storage';
+import { getContactsFromList, sendEmailViaBrevo } from '@/lib/brevo-api';
+import { signs } from '@/lib/signs-data';
 
-async function sendBrevoForNewsletter(saved: { id: string; subject: string; htmlContent: string; text: string }) {
+const VALID_SIGN_IDS = new Set(signs.map(s => s.id));
+
+async function sendPersonalized(newsletter: { subject: string; html: string; text: string }) {
   if (!process.env.BREVO_API_KEY) {
     console.log('\n⚠️  BREVO_API_KEY absent — envoi ignoré');
     return;
   }
-  console.log('\n📨 Envoi de la campagne Brevo...');
-  try {
-    const campaign = await createEmailCampaign(
-      `Horoscope Guadeloupéen — ${saved.id}`,
-      saved.subject,
-      saved.htmlContent,
-      saved.text,
-    );
-    await sendCampaignNow(campaign.id);
-    console.log(`✅ Campagne Brevo envoyée (id: ${campaign.id})`);
-  } catch (err: any) {
-    console.error('❌ Erreur Brevo:', err?.message ?? err);
-    process.exit(1);
+
+  console.log('\n📋 Récupération des abonnés Brevo...');
+  const contacts = await getContactsFromList();
+  console.log(`   ${contacts.length} abonné(s) trouvé(s)`);
+
+  // Grouper par signe
+  const bySign = new Map<string, string[]>();
+  const noSign: string[] = [];
+
+  for (const { email, sign } of contacts) {
+    if (sign && VALID_SIGN_IDS.has(sign)) {
+      if (!bySign.has(sign)) bySign.set(sign, []);
+      bySign.get(sign)!.push(email);
+    } else {
+      noSign.push(email);
+    }
   }
+
+  console.log(`   Avec signe : ${contacts.length - noSign.length} | Sans signe : ${noSign.length}`);
+
+  // Envoi personnalisé par signe
+  for (const [signId, emails] of bySign) {
+    console.log(`\n📨 Génération + envoi pour ${signId} (${emails.length} abonné(s))...`);
+    try {
+      const personalized = await generatePersonalizedNewsletter(signId);
+      await sendEmailViaBrevo(emails, personalized.subject, personalized.html, personalized.text);
+      console.log(`   ✅ ${signId} envoyé`);
+    } catch (err: any) {
+      console.error(`   ❌ Erreur pour ${signId}:`, err?.message ?? err);
+    }
+  }
+
+  // Abonnés sans signe → newsletter complète
+  if (noSign.length > 0) {
+    console.log(`\n📨 Envoi newsletter complète à ${noSign.length} abonné(s) sans signe...`);
+    try {
+      await sendEmailViaBrevo(noSign, newsletter.subject, newsletter.html, newsletter.text);
+      console.log('   ✅ Newsletter complète envoyée');
+    } catch (err: any) {
+      console.error('   ❌ Erreur newsletter complète:', err?.message ?? err);
+    }
+  }
+
+  console.log('\n✅ Envois terminés');
 }
 
 async function main() {
   const forceSend = process.argv.includes('--force-send');
   console.log('🌅 Génération de la newsletter du jour...\n');
 
-  // Vérifier si une newsletter a déjà été générée aujourd'hui
   const existingToday = await getTodaysNewsletter();
 
   if (existingToday) {
@@ -46,13 +71,12 @@ async function main() {
     console.log(`   Sujet: ${existingToday.subject}`);
     console.log(`   Date: ${new Date(existingToday.date).toLocaleString('fr-FR')}\n`);
     if (forceSend) {
-      console.log('🔁 --force-send : renvoi de la campagne existante...');
-      await sendBrevoForNewsletter(existingToday);
+      console.log('🔁 --force-send : renvoi personnalisé...');
+      await sendPersonalized(existingToday);
     }
     return;
   }
 
-  // Générer la newsletter du jour
   const newsletter = await generateDailyNewsletter();
 
   console.log('✅ Newsletter générée avec succès !\n');
@@ -61,7 +85,6 @@ async function main() {
   console.log(`📊 Taille HTML: ${(newsletter.html.length / 1024).toFixed(2)} KB`);
   console.log(`📄 Taille Texte: ${(newsletter.text.length / 1024).toFixed(2)} KB\n`);
 
-  // Sauvegarder dans le stockage
   const saved = await saveNewsletter({
     subject: newsletter.subject,
     preview: newsletter.html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 200) + '...',
@@ -72,26 +95,13 @@ async function main() {
   console.log('💾 Newsletter sauvegardée :');
   console.log(`   ID: ${saved.id}`);
   console.log(`   Date: ${new Date(saved.date).toLocaleString('fr-FR')}`);
-  console.log(`\n📁 Chemin: private_data/newsletters/${saved.id}.json`);
 
-  // Afficher un aperçu
-  console.log('\n👇 Aperçu du contenu :');
-  console.log('─'.repeat(60));
-  console.log(newsletter.subject);
-  console.log('─'.repeat(60));
-  // Extraire les 5 premières lignes du HTML (sans les balises)
-  const previewText = newsletter.html
-    .replace(/<[^>]*>/g, '')
-    .substring(0, 500) + '...';
-  console.log(previewText);
-  console.log('─'.repeat(60));
+  await sendPersonalized(newsletter);
 
-  await sendBrevoForNewsletter(saved);
-
-  console.log('\n✨ Newsletter du jour générée et sauvegardée !');
+  console.log('\n✨ Newsletter du jour générée et envoyée !');
 }
 
 main().catch((error) => {
-  console.error('❌ Erreur lors de la génération de la newsletter :', error);
+  console.error('❌ Erreur:', error);
   process.exit(1);
 });

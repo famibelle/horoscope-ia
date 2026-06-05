@@ -151,16 +151,16 @@ export async function sendEmailViaBrevo(
 /**
  * Récupérer tous les contacts d'une liste
  */
-export async function getContactsFromList(listId: number = getBrevoListId()): Promise<string[]> {
+export async function getContactsFromList(
+  listId: number = getBrevoListId()
+): Promise<{ email: string; sign: string }[]> {
   const apiKey = getBrevoApiKey();
 
   try {
-    const response = await fetch(`${BREVO_API_URL}/contacts?listIds=${listId}&limit=500`, {
-      method: 'GET',
-      headers: {
-        'api-key': apiKey
-      }
-    });
+    const response = await fetch(
+      `${BREVO_API_URL}/contacts?listIds=${listId}&limit=500&attributes=SIGN`,
+      { method: 'GET', headers: { 'api-key': apiKey } }
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -169,8 +169,13 @@ export async function getContactsFromList(listId: number = getBrevoListId()): Pr
 
     const data = await response.json();
     const contacts = data.contacts || [];
-    
-    return contacts.map((c: any) => c.email).filter(Boolean);
+
+    return contacts
+      .filter((c: any) => c.email)
+      .map((c: any) => ({
+        email: c.email as string,
+        sign: ((c.attributes?.SIGN as string) || '').toLowerCase().trim(),
+      }));
 
   } catch (error) {
     console.error('Erreur lors de la récupération des contacts:', error);
