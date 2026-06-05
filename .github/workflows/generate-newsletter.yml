@@ -40,4 +40,5 @@ jobs:
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
           BREVO_LIST_ID: ${{ secrets.BREVO_LIST_ID }}
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          NEXT_PUBLIC_BASE_URL: https://zodyak-karukera.com
         run: npx tsx scripts/generate-daily-newsletter.ts ${{ inputs.force_send == true && '--force-send' || '' }}
