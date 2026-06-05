@@ -448,6 +448,40 @@ Voici votre horoscope guadeloupéen pour aujourd'hui.
 }
 
 // Générateur de newsletter pour un signe spécifique
+async function generateEmailSubject(signName: string, horoscope: Partial<HoroscopeResponse>): Promise<string> {
+  const fallback = `✦ ${signName} — les ancêtres de Karukera ont un message pour toi`;
+  const apiKey = process.env.MISTRAL_API_KEY;
+  if (!apiKey) return fallback;
+
+  const context = [horoscope.ouverture, horoscope.prediction, horoscope.conseil]
+    .filter(Boolean).join(' ').substring(0, 400);
+
+  try {
+    const res = await fetch('https://api.mistral.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'mistral-small-latest',
+        temperature: 0.9,
+        max_tokens: 60,
+        messages: [
+          {
+            role: 'system',
+            content: `Tu es Maryse CondAI. Génère UN objet d'email accrocheur (max 70 caractères) pour la newsletter horoscope du signe ${signName}. L'objet doit être mystérieux, ancré dans la culture guadeloupéenne et ancestrale, donner envie d'ouvrir le mail. Réponds uniquement avec l'objet, sans guillemets ni ponctuation finale.`,
+          },
+          { role: 'user', content: context || signName },
+        ],
+      }),
+    });
+    if (!res.ok) return fallback;
+    const data = await res.json();
+    const generated = data.choices?.[0]?.message?.content?.trim() ?? '';
+    return generated.length > 10 ? generated : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 async function generateSignNewsletter(
   signId: string,
   date: string = todayGuadeloupe(),
@@ -458,11 +492,7 @@ async function generateSignNewsletter(
 
   const presage = await fetchPresageFromSupabase(date);
 
-  const subject = `✦ Horoscope ${sign.name} — ${
-    new Date(date + 'T12:00:00').toLocaleDateString('fr-FR', {
-      weekday: 'long', day: 'numeric', month: 'long',
-    })
-  }`;
+  const subject = await generateEmailSubject(sign.name, horoscopeData);
 
   let htmlBody = getHeaderTemplate(date);
   let text = `HOROSCOPE KARUKERA — ${sign.name} — ${date}\n${'═'.repeat(50)}\n`;
