@@ -251,7 +251,9 @@ export async function sendCampaignNow(campaignId: number): Promise<any> {
       throw new Error(`Erreur: ${errorData.message || response.statusText}`);
     }
 
-    return await response.json();
+    // Brevo renvoie 204 No Content sur sendNow — corps vide
+    const text = await response.text();
+    return text ? JSON.parse(text) : {};
 
   } catch (error) {
     console.error('Erreur lors de l\'envoi de la campagne:', error);
