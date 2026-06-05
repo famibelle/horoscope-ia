@@ -79,7 +79,8 @@ export async function addContactToBrevo(
       throw new Error(`Erreur Brevo: ${errorData.message || response.statusText}`);
     }
 
-    const data = await response.json();
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : {};
     console.log('✅ Contact ajouté à Brevo:', email.toLowerCase().trim());
     return data;
 
