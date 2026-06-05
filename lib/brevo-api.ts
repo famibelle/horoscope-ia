@@ -158,7 +158,7 @@ export async function getContactsFromList(
 
   try {
     const response = await fetch(
-      `${BREVO_API_URL}/contacts?listIds=${listId}&limit=500&attributes=SIGN`,
+      `${BREVO_API_URL}/contacts?listIds=${listId}&limit=500`,
       { method: 'GET', headers: { 'api-key': apiKey } }
     );
 
