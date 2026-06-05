@@ -68,7 +68,6 @@ export async function addContactToBrevo(
         attributes: {
           SIGN: attributes.sign || '',
           NAME: attributes.name || '',
-          ...attributes
         },
         updateEnabled: true,
       })
