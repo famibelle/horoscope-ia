@@ -3,7 +3,12 @@ name: Générer la newsletter quotidienne
 on:
   schedule:
     - cron: '30 4 * * *'  # Tous les jours à 4h30 UTC = 00:30 heure Guadeloupe (après les horoscopes)
-  workflow_dispatch:       # Déclenchement manuel
+  workflow_dispatch:
+    inputs:
+      force_send:
+        description: 'Renvoyer la campagne du jour même si déjà générée'
+        type: boolean
+        default: false
 
 jobs:
   generate:
@@ -35,4 +40,4 @@ jobs:
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
           BREVO_LIST_ID: ${{ secrets.BREVO_LIST_ID }}
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
-        run: npx tsx scripts/generate-daily-newsletter.ts
+        run: npx tsx scripts/generate-daily-newsletter.ts ${{ inputs.force_send == true && '--force-send' || '' }}

@@ -12,17 +12,43 @@ import { saveNewsletter } from '@/lib/newsletter-storage';
 import { getTodaysNewsletter } from '@/lib/newsletter-storage';
 import { createEmailCampaign, sendCampaignNow } from '@/lib/brevo-api';
 
+async function sendBrevoForNewsletter(saved: { id: string; subject: string; htmlContent: string; text: string }) {
+  if (!process.env.BREVO_API_KEY) {
+    console.log('\n⚠️  BREVO_API_KEY absent — envoi ignoré');
+    return;
+  }
+  console.log('\n📨 Envoi de la campagne Brevo...');
+  try {
+    const campaign = await createEmailCampaign(
+      `Horoscope Guadeloupéen — ${saved.id}`,
+      saved.subject,
+      saved.htmlContent,
+      saved.text,
+    );
+    await sendCampaignNow(campaign.id);
+    console.log(`✅ Campagne Brevo envoyée (id: ${campaign.id})`);
+  } catch (err: any) {
+    console.error('❌ Erreur Brevo:', err?.message ?? err);
+    process.exit(1);
+  }
+}
+
 async function main() {
+  const forceSend = process.argv.includes('--force-send');
   console.log('🌅 Génération de la newsletter du jour...\n');
 
   // Vérifier si une newsletter a déjà été générée aujourd'hui
   const existingToday = await getTodaysNewsletter();
-  
+
   if (existingToday) {
     console.log('⚠️  Une newsletter a déjà été générée aujourd\'hui :');
     console.log(`   ID: ${existingToday.id}`);
     console.log(`   Sujet: ${existingToday.subject}`);
     console.log(`   Date: ${new Date(existingToday.date).toLocaleString('fr-FR')}\n`);
+    if (forceSend) {
+      console.log('🔁 --force-send : renvoi de la campagne existante...');
+      await sendBrevoForNewsletter(existingToday);
+    }
     return;
   }
 
@@ -60,24 +86,7 @@ async function main() {
   console.log(previewText);
   console.log('─'.repeat(60));
 
-  // Envoi via Brevo (si BREVO_API_KEY est défini)
-  if (process.env.BREVO_API_KEY) {
-    console.log('\n📨 Envoi de la campagne Brevo...');
-    try {
-      const campaign = await createEmailCampaign(
-        `Horoscope Guadeloupéen — ${saved.id}`,
-        newsletter.subject,
-        newsletter.html,
-        newsletter.text,
-      );
-      await sendCampaignNow(campaign.id);
-      console.log(`✅ Campagne Brevo envoyée (id: ${campaign.id})`);
-    } catch (err: any) {
-      console.error('❌ Erreur Brevo:', err?.message ?? err);
-    }
-  } else {
-    console.log('\n⚠️  BREVO_API_KEY absent — envoi ignoré');
-  }
+  await sendBrevoForNewsletter(saved);
 
   console.log('\n✨ Newsletter du jour générée et sauvegardée !');
 }
