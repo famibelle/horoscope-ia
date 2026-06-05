@@ -6,7 +6,7 @@
 import { signs } from './signs-data';
 import { todayGuadeloupe } from './edition';
 import { getEditionFromDate } from './private/tts-prompt';
-import NewsletterTemplates, { NewsletterData, PresageData, getHeaderTemplate, getPresageTemplate, getSignHtmlTemplate, getSignTextTemplate, getFooterTemplate, wrapHtml } from './newsletter-templates';
+import NewsletterTemplates, { NewsletterData, PresageData, getHeaderTemplate, getPresageTemplate, getSignHtmlTemplate, getSignTextTemplate, getFooterTemplate, getIndexTemplate, wrapHtml } from './newsletter-templates';
 import { HoroscopeResponse } from './horoscope-data';
 import { floreData } from './private/flore-data';
 import { fauneData } from './private/faune-data';
@@ -527,16 +527,51 @@ async function generateSignNewsletter(
   };
 }
 
+async function generateDailyEmailSubject(presage: PresageData | null, date: string): Promise<string> {
+  const day = new Date(date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+  const fallback = `✦ Horoscope Karukera — ${day}`;
+  const apiKey = process.env.MISTRAL_API_KEY;
+  if (!apiKey) return fallback;
+
+  const context = presage
+    ? `Signe du jour : ${presage.nom_creole} (${presage.nom_commun}). "${presage.presage_naturel}"`
+    : `Horoscope du ${day}`;
+
+  try {
+    const res = await fetch('https://api.mistral.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'mistral-small-latest',
+        temperature: 0.9,
+        max_tokens: 60,
+        messages: [
+          {
+            role: 'system',
+            content: `Tu es Maryse CondAI. Génère UN objet d'email accrocheur (max 70 caractères) pour la newsletter horoscope quotidienne des 12 signes. L'objet doit être mystérieux, ancré dans la culture ancestrale guadeloupéenne, s'inspirer du signe du jour si disponible, donner envie d'ouvrir le mail. Réponds uniquement avec l'objet, sans guillemets ni ponctuation finale.`,
+          },
+          { role: 'user', content: context },
+        ],
+      }),
+    });
+    if (!res.ok) return fallback;
+    const data = await res.json();
+    const generated = data.choices?.[0]?.message?.content?.trim() ?? '';
+    return generated.length > 10 ? generated : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 // Générateur de newsletter quotidienne complète
 export async function generateDailyNewsletter(
   date: string = todayGuadeloupe(),
   subscriberName?: string
 ): Promise<Newsletter> {
-  // Charger les vrais horoscopes depuis Supabase (édition matin — newsletter lue au réveil)
   const horoscopes = await fetchHoroscopesFromSupabase(date, 'matin');
   const presage    = await fetchPresageFromSupabase(date);
 
-  const subject = `✦ Horoscope Karukera — ${new Date(date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}`;
+  const subject = await generateDailyEmailSubject(presage, date);
 
   let htmlBody = getHeaderTemplate(date);
   let text = `HOROSCOPE KARUKERA — ${date}\n${'═'.repeat(50)}\n`;
@@ -547,7 +582,6 @@ export async function generateDailyNewsletter(
     text += `"${presage.presage_naturel}"\n`;
   }
 
-  // Signes — vrais ou simulés
   const allSignsData: SignHoroscope[] = horoscopes.length > 0
     ? horoscopes
     : signs.map(sign => ({
@@ -567,6 +601,9 @@ export async function generateDailyNewsletter(
         } as HoroscopeResponse,
       }));
 
+  // Index cliquable : permet d'aller directement à son signe
+  htmlBody += getIndexTemplate(allSignsData);
+
   for (const { sign, horoscope } of allSignsData) {
     const data: NewsletterData = { date, sign, horoscope };
     htmlBody += getSignHtmlTemplate(data);
@@ -575,9 +612,14 @@ export async function generateDailyNewsletter(
 
   htmlBody += getFooterTemplate();
 
+  // Preview text depuis le presage (invisible dans le mail, visible dans l'aperçu Gmail)
+  const previewDiv = presage
+    ? `<div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">${presage.presage_naturel}</div>`
+    : '';
+
   return {
     subject,
-    html: wrapHtml(subject, htmlBody),
+    html: wrapHtml(subject, previewDiv + htmlBody),
     text,
     date,
   };

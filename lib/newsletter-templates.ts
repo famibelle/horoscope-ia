@@ -94,6 +94,35 @@ export function getPresageTemplate(presage: PresageData): string {
 </div>`.trim();
 }
 
+// ── Index des 12 signes (liens d'ancrage) ─────────────────────────────────────
+export function getIndexTemplate(allSigns: Array<{ sign: Sign; horoscope: HoroscopeResponse }>): string {
+  const rows = allSigns.map(({ sign, horoscope }) => {
+    const snippet = (horoscope.teaser || horoscope.ouverture || '').split('.')[0].trim();
+    return `<tr>
+      <td style="padding:5px 10px 5px 0;vertical-align:top;width:130px;">
+        <a href="#sign-${sign.id}" style="font-family:Georgia,serif;font-size:14px;color:${C.gold};text-decoration:none;white-space:nowrap;">
+          ${sign.emoji} ${sign.name}
+        </a>
+      </td>
+      <td style="padding:5px 0;vertical-align:top;">
+        <span style="font-family:Arial,sans-serif;font-size:13px;color:${C.creamFaint};line-height:1.5;">
+          ${snippet}${snippet && !snippet.endsWith('.') ? '…' : ''}
+        </span>
+      </td>
+    </tr>`;
+  }).join('');
+
+  return `
+<div style="margin:0;padding:24px 32px;background:${C.cardAlt};border-bottom:1px solid ${C.border};">
+  <p style="margin:0 0 14px;font-family:Georgia,serif;font-size:11px;letter-spacing:3px;color:${C.gold};text-transform:uppercase;">
+    Aller à mon signe
+  </p>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tbody>${rows}</tbody>
+  </table>
+</div>`.trim();
+}
+
 // ── Carte d'un signe ─────────────────────────────────────────────────────────
 export function getSignHtmlTemplate(data: NewsletterData): string {
   const { sign, horoscope } = data;
@@ -125,7 +154,7 @@ export function getSignHtmlTemplate(data: NewsletterData): string {
   ].filter(Boolean).join(' · ');
 
   return `
-<div style="margin:0;padding:28px 32px;border-bottom:1px solid ${C.border};background:${C.card};">
+<div id="sign-${sign.id}" style="margin:0;padding:28px 32px;border-bottom:1px solid ${C.border};background:${C.card};">
   <div style="margin:0 0 20px;">
     <h3 style="margin:0 0 4px;font-family:Georgia,serif;font-size:22px;color:${C.cream};">
       ${sign.name}
