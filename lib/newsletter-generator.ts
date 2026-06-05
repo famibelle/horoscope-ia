@@ -494,8 +494,8 @@ async function generateSignNewsletter(
 
   const subject = await generateEmailSubject(sign.name, horoscopeData);
 
-  let htmlBody = getHeaderTemplate(date);
-  let text = `HOROSCOPE KARUKERA — ${sign.name} — ${date}\n${'═'.repeat(50)}\n`;
+  let htmlBody = '';
+  let text = `${sign.name} — ${date}\n${'═'.repeat(50)}\n`;
 
   if (presage) {
     htmlBody += getPresageTemplate(presage);
