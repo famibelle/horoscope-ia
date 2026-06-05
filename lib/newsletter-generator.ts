@@ -452,107 +452,43 @@ async function generateSignNewsletter(
   signId: string,
   date: string = todayGuadeloupe(),
   horoscopeData: Partial<HoroscopeResponse> = {},
-  subscriberName?: string
 ): Promise<Newsletter> {
   const sign = signs.find(s => s.id === signId);
-  
-  if (!sign) {
-    throw new Error(`Signe non trouvé: ${signId}`);
+  if (!sign) throw new Error(`Signe non trouvé: ${signId}`);
+
+  const presage = await fetchPresageFromSupabase(date);
+
+  const subject = `✦ Horoscope ${sign.name} — ${
+    new Date(date + 'T12:00:00').toLocaleDateString('fr-FR', {
+      weekday: 'long', day: 'numeric', month: 'long',
+    })
+  }`;
+
+  let htmlBody = getHeaderTemplate(date);
+  let text = `HOROSCOPE KARUKERA — ${sign.name} — ${date}\n${'═'.repeat(50)}\n`;
+
+  if (presage) {
+    htmlBody += getPresageTemplate(presage);
+    text += `\nSIGNE DU JOUR : ${presage.nom_creole} (${presage.nom_commun})\n"${presage.presage_naturel}"\n`;
   }
 
-  // Compléter avec des données par défaut si nécessaire
-  const completeHoroscope: HoroscopeResponse = {
-    ouverture: horoscopeData.ouverture || `Une journée ${['favorable', 'intéressante', 'challengante'][Math.floor(Math.random() * 3)]} pour les natifs du ${sign.name}.`,
-    amour: horoscopeData.amour || `En amour, ${['soyez ouvert', 'prenez votre temps', 'exprimez vos sentiments'][Math.floor(Math.random() * 3)]}.`,
-    travail: horoscopeData.travail || `Au travail, ${['votre créativité', 'votre persévérance', 'votre intuition'][Math.floor(Math.random() * 3)]} sera votre atout.`,
-    argent: horoscopeData.argent || `Côté finances, ${['évitez les dépenses inutiles', 'une opportunité pourrait se présenter'][Math.floor(Math.random() * 2)]}.`,
-    amitie: horoscopeData.amitie || `Vos amis ${['vous soutiendront', 'auront besoin de vous'][Math.floor(Math.random() * 2)]} aujourd'hui.`,
-    prediction: horoscopeData.prediction || `Prédiction : ${['un changement positif', 'une bonne nouvelle'][Math.floor(Math.random() * 2)]} vous attend.`,
-    conseil: horoscopeData.conseil || `Conseil : utilisez les plantes locales pour vous accompagner aujourd'hui.`,
-    sante: horoscopeData.sante || `Votre santé est bonne, ${['prenez soin de vous', 'écoutez votre corps'][Math.floor(Math.random() * 2)]}.`,
-    signFr: sign.name,
-    weather: horoscopeData.weather || 'Ensoleillé',
-    source: horoscopeData.source || 'fallback'
+  const horoscope: HoroscopeResponse = {
+    ouverture: '', amour: '', travail: '', argent: '',
+    amitie: '', prediction: '', conseil: '', teaser: '',
+    signFr: sign.name, weather: '', edition: 'matin', source: 'supabase',
+    ...horoscopeData,
   };
 
-  const newsletterData: NewsletterData = {
-    date,
-    sign,
-    horoscope: completeHoroscope,
-    culturalTip: generateCulturalTip(sign, date),
-    ritual: generateRitual(sign, date)
-  };
-
-  const edition = getEditionFromDate(date);
-  const dayName = getDayName(date);
-  const culturalSection = generateCulturalSection(date);
-
-  const subject = subscriberName 
-    ? `🌟 ${subscriberName}, votre horoscope ${sign.name} pour le ${date}`
-    : `🌟 Horoscope ${sign.name} - ${date}`;
-
-  let htmlContent = '';
-  let textContent = '';
-
-  // En-tête
-  htmlContent += NewsletterTemplates.getHeaderTemplate(date);
-  textContent += `HOROSCOPE GUADELOUPÉEN - ${sign.name} - ${date}\n`;
-
-  // Introduction
-  const intro = `Bonjour ${subscriberName || 'ami(e)'}, voici votre horoscope pour le ${sign.name} en ce ${dayName} ${date}.`;
-  htmlContent += `
-<div style="padding: 24px; color: #4a5568; line-height: 1.6;">
-  <p style="font-size: 16px;">${intro}</p>
-</div>
-  `;
-  textContent += `${intro}\n\n`;
-
-  // Horoscope du signe
-  htmlContent += NewsletterTemplates.getSignHtmlTemplate(newsletterData);
-  textContent += NewsletterTemplates.getSignTextTemplate(newsletterData);
-
-  // Section culturelle
-  htmlContent += NewsletterTemplates.getCulturalSectionTemplate(
-    culturalSection.title,
-    culturalSection.content,
-    culturalSection.imageUrl
-  );
-  textContent += `\n=== ${culturalSection.title} ===\n${culturalSection.content}\n\n`;
-
-  // Rituel
-  htmlContent += `
-<div style="padding: 8px 24px;">
-  <h2 style="color: #2d3748; font-size: 18px; margin: 20px 0 12px 0;">
-    🌿 Rituel du Jour
-  </h2>
-  <div style="background: rgba(59, 130, 246, 0.05); border-left: 2px solid #3b82f6; padding: 12px; border-radius: 6px;">
-    <p style="color: #4a5568; margin: 0; line-height: 1.5;">${newsletterData.ritual}</p>
-  </div>
-</div>
-  `;
-  textContent += `\nRITUEL DU JOUR:\n${newsletterData.ritual}\n\n`;
-
-  // Pied de page
-  htmlContent += NewsletterTemplates.getFooterTemplate();
-  textContent += `\n\n${NewsletterTemplates.getFooterTemplate().replace(/<[^>]*>/g, '')}`;
+  const data: NewsletterData = { date, sign, horoscope };
+  htmlBody += getSignHtmlTemplate(data);
+  text += getSignTextTemplate(data);
+  htmlBody += getFooterTemplate();
 
   return {
     subject,
-    html: `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${subject}</title>
-</head>
-<body style="margin: 0; padding: 0; background-color: #f7fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-  <div style="max-width: 600px; margin: 0 auto; background: white;">
-    ${htmlContent}
-  </div>
-</body>
-</html>`,
-    text: textContent,
-    date
+    html: wrapHtml(subject, htmlBody),
+    text,
+    date,
   };
 }
 
