@@ -13,6 +13,7 @@ import AudioPlayer from '@/components/AudioPlayer';
 import type { Edition } from '@/lib/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
 import { Markdown as ReactMarkdown, markdownComponents } from '@/lib/markdown-components';
+import HoroscopeSubscribeForm from '@/components/HoroscopeSubscribeForm';
 
 /* ── Types ─────────────────────────────────────────────────────────────────── */
 
@@ -570,24 +571,7 @@ export default function HoroscopeSignPage() {
                 <p className="text-ancestral-cream/40 text-[15px] mb-5">
                   Les prédictions de Maryse CondAI directement dans votre boîte mail.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <input
-                    type="email"
-                    placeholder="votre@email.com"
-                    className="flex-1 px-4 py-2.5 rounded-xl text-ancestral-cream/80 placeholder-ancestral-cream/20 text-sm"
-                    style={{
-                      background: 'rgba(245,245,220,0.05)',
-                      border: '1px solid rgba(245,245,220,0.15)',
-                    }}
-                  />
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="px-6 py-2.5 rounded-xl text-sm font-semibold text-ancestral-dark bg-gradient-to-r from-ancestral-gold/90 to-ancestral-gold/60"
-                  >
-                    S'abonner
-                  </motion.button>
-                </div>
+                <HoroscopeSubscribeForm defaultSignId={sign.id} />
                 <p className="text-ancestral-cream/30 text-[12px] mt-3">
                   Désabonnement en un clic. Vos données restent privées.
                 </p>
