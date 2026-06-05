@@ -47,7 +47,9 @@ export default function InteractiveHoroscope({
   // Restaurer le signe sauvegardé, ou utiliser le signe du jour en cours
   useEffect(() => {
     const saved = localStorage.getItem('lastSign');
-    setSelectedSignId(saved || getCurrentSign());
+    const validIds = new Set(signs.map(s => s.id));
+    const resolved = (saved && validIds.has(saved)) ? saved : getCurrentSign();
+    setSelectedSignId(resolved);
     setReady(true);
   }, []);
 
