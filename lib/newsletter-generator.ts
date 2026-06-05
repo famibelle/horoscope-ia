@@ -573,7 +573,7 @@ export async function generateDailyNewsletter(
 
   const subject = await generateDailyEmailSubject(presage, date);
 
-  let htmlBody = getHeaderTemplate(date);
+  let htmlBody = '';
   let text = `HOROSCOPE KARUKERA — ${date}\n${'═'.repeat(50)}\n`;
 
   if (presage) {
