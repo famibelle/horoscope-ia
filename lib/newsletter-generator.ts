@@ -514,9 +514,14 @@ async function generateSignNewsletter(
   text += getSignTextTemplate(data);
   htmlBody += getFooterTemplate();
 
+  // Preview text : teaser injecté en div invisible pour les clients mail (Gmail, Apple Mail)
+  const previewDiv = horoscope.teaser
+    ? `<div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">${horoscope.teaser}</div>`
+    : '';
+
   return {
     subject,
-    html: wrapHtml(subject, htmlBody),
+    html: wrapHtml(subject, previewDiv + htmlBody),
     text,
     date,
   };

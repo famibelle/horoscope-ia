@@ -137,10 +137,10 @@ export function getSignHtmlTemplate(data: NewsletterData): string {
   ${teaser}
   ${sections}
 
-  <div style="margin:20px 0 0;text-align:center;">
+  <div style="margin:24px 0 0;text-align:center;">
     <a href="${BASE_URL}/horoscope/${sign.id}"
-       style="display:inline-block;padding:10px 24px;background:transparent;color:${C.gold};border:1px solid ${C.gold};font-family:Arial,sans-serif;font-size:13px;text-decoration:none;letter-spacing:1px;">
-      Lire l'horoscope complet →
+       style="display:inline-block;padding:14px 32px;background:${C.gold};color:${C.bg};font-family:Arial,sans-serif;font-size:14px;font-weight:bold;text-decoration:none;letter-spacing:1px;border-radius:4px;">
+      Lire mon horoscope complet →
     </a>
   </div>
 </div>`.trim();
