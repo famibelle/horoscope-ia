@@ -28,3 +28,8 @@ next-env.d.ts
 # Ignorer data/ sauf les horoscopes générés (qui sont commités par GitHub Actions)
 data/*
 !data/horoscopes/
+
+# Local Netlify folder
+.netlify
+
+.claude/

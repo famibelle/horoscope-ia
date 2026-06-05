@@ -1,0 +1,598 @@
+{
+  "2026-06-01|belier|nuit": {
+    "ouverture": "Ce matin, sous la pluie fine qui danse avec les feuilles du palmis montagn, Ogoun t’a murmuré un secret en vert et rouge , la forêt se souvient de ton nom.",
+    "amour": "Ton cœur bat comme le kolibri madè, rapide et pourpre, quand l’autre approche. Laisse-toi surprendre par cette douceur qui ne dure qu’un instant, comme la fleur du zeb kabrit au petit jour. Les lucioles de cette nuit ont vu ton sourire avant toi.",
+    "travail": "Aux Mornes de Basse-Terre, les anciens disent que le travail vrai ne se mesure pas en heures, mais en sueur qui nourrit la terre. Aujourd’hui, tes mains savent ce que ta tête ignore , écoute le pic de Gwadloup frapper l’écorce, il te montre le rythme.",
+    "argent": "Gwo zandoli ne court pas après la nourriture, il attend qu’elle tombe de l’arbre. Aujourd’hui, ton lajan viendra de là où tu ne l’attends pas , une vieille dette, un marché oublié, ou ce fruit mûr que tu croyais perdu.",
+    "amitie": "Entre deux averses, retrouve tes gens sous le fromager où les soukougnan accrochent leur peau. Les rires y résonnent plus clair, et les silences y sont pleins de ce qu’on ne dit pas. Ici, même les ombres ont une histoire à raconter.",
+    "prediction": "Les rêves de cette nuit porteront l’odeur du bois bandé , quelque chose en toi se prépare à résister, à grandir, à ne plus plier. Ogoun veille, sa lame invisible tranche les chaînes que tu ne vois pas encore.",
+    "conseil": "Cueille une feuille de zeb kabrit au bord du chemin et glisse-la dans ta poche , elle portera ta fatigue à ta place, comme les ancêtres portaient les fardeaux des vivants.",
+    "teaser": "Ce matin, sous la pluie fine qui danse avec les feuilles du palmis montagn, Ogoun t’a murmuré un secret en vert et rouge la forêt te réclame. Laisse-toi emporter par le frémissement de tes hanches quand l’autre approche, car le kolibri madè ne butine que l’essentiel.",
+    "signFr": "Bélier",
+    "weather": "25–29°C, légère pluie, vent faible (18 km/h)",
+    "edition": "nuit",
+    "source": "mistral-raw",
+    "raw_text": "On May 31st, you might feel a bit restless and eager to take on new challenges, Aries. This is a great time to tackle that project you've been putting off, as your energy and motivation are high. Just be sure to prioritize and focus on one thing at a time, or you might spread yourself too thin. At work or in your personal life, you may need to have a tough conversation with someone, but try to approach it calmly and objectively. By staying grounded and practical, you can make some real progress today.",
+    "element": "Feu",
+    "animal": "Iguane / Gwo Zandoli",
+    "plante": "Flamboyant",
+    "arbre": "Flanbwayan",
+    "lieu": "Pointe des Châteaux",
+    "planet": "Mars",
+    "loa": "Ogoun",
+    "famille_vaudou": "Rada",
+    "energie_vaudou": "Force, travail, justice",
+    "couleurs_sacrees": [
+      "vert",
+      "rouge"
+    ],
+    "edition_energie": "Communication avec les esprits et les rêves",
+    "heure_locale": "08:58",
+    "is_ritual_date": false,
+    "date_rituelle": null,
+    "faune_enrichies": [
+      "Igwann vèt / Igwann péyi",
+      "Igwann péyi"
+    ],
+    "flore_enrichies": [
+      "Flanbwayan"
+    ],
+    "lieux_enrichis": [
+      "Pointe des Châteaux"
+    ],
+    "kreyol_enrichis": [],
+    "histoire_enrichies": [],
+    "loas_pertinents": [
+      "Ogoun"
+    ],
+    "animaux_sacres": [],
+    "plantes_sacrees": [],
+    "contexte_dynamique": null
+  },
+  "2026-06-01|belier|matin": {
+    "ouverture": "Ce matin, le ka d’Ogoun résonne dans tes veines comme le tambourinage du pic de Gwadloup sur l’écorce des gommiers, te rappelant que chaque jour est un champ de bataille où tu dois planter ta lance.",
+    "amour": "Ton cœur bat au rythme des ailes du kolibri madè, ce petit oiseau pourpre qui danse entre les fleurs sans jamais se poser. Aujourd’hui, l’amour n’est pas une prison, mais un vol libre entre deux cœurs qui osent se frôler sans s’enchaîner. Laisse les mots doux s’envoler comme lui, légers et éclatants.",
+    "travail": "Les mornes de Basse-Terre t’observent ce matin, leurs pentes raides couvertes de palmis montagn qui ploient sous la pluie fine. Comme les esclaves marrons qui y ont trouvé refuge, tu dois gravir ta montagne sans te retourner. Ogoun te souffle que le travail n’est pas une punition, mais une ascension vers ta propre liberté.",
+    "argent": "Lajan ne tombe pas du ciel comme la manne, il se gagne comme le gouti qui grignote patiemment les racines du jardin. Aujourd’hui, chaque pièce que tu touches doit porter l’odeur de la terre et la sueur de ton front. Ne compte pas sur la chance, mais sur ta ruse, comme l’iguane qui attend des heures sous le soleil pour attraper sa proie.",
+    "amitie": "Les flûtes en bambou des anciens résonnent encore dans les ravines, là où les amis se retrouvaient en secret pour partager des mélodies interdites. Aujourd’hui, cherche ceux qui savent écouter le silence entre les notes, ceux avec qui tu n’as pas besoin de parler pour te comprendre. La vraie amitié, c’est comme le bwa bandé – elle te renforce sans que tu aies à le demander.",
+    "prediction": "Attention aux ombres qui rôdent ce soir, car le soukougnan pourrait bien enlever sa peau et errer sous forme de boule de feu. Les jours à venir te mettront à l’épreuve, mais souviens-toi : même les flammes les plus folles finissent par s’éteindre si tu sais où poser tes pieds.",
+    "conseil": "Cueille une feuille de zeb kabrit ce matin et frotte-la entre tes doigts pour en libérer l’odeur âcre. Respire profondément, et laisse cette plante sauvage te rappeler que la force ne vient pas toujours de ce qui brille, mais de ce qui résiste.",
+    "teaser": "Aujourd’hui, le marronnage brûle dans tes veines comme l’odeur du zeb kabrit sous tes doigts , tu sens cette force sauvage qui te pousse à franchir la ligne sans même regarder en arrière",
+    "signFr": "Bélier",
+    "weather": "25–29°C, légère pluie, vent faible (18 km/h)",
+    "edition": "matin",
+    "source": "mistral-raw",
+    "raw_text": "On May 31st, you might feel a bit restless and eager to take on new challenges, Aries. This is a great time to tackle that project you've been putting off, as your energy and motivation are high. Just be sure to prioritize and focus on one thing at a time, or you might spread yourself too thin. At work or in your personal life, you may need to have a tough conversation with someone, but try to approach it calmly and objectively. By staying grounded and practical, you can make some real progress today.",
+    "element": "Feu",
+    "animal": "Iguane / Gwo Zandoli",
+    "plante": "Flamboyant",
+    "arbre": "Flanbwayan",
+    "lieu": "Pointe des Châteaux",
+    "planet": "Mars",
+    "loa": "Ogoun",
+    "famille_vaudou": "Rada",
+    "energie_vaudou": "Force, travail, justice",
+    "couleurs_sacrees": [
+      "vert",
+      "rouge"
+    ],
+    "edition_energie": "Ouverture des chemins spirituels et des portes entre les mondes",
+    "heure_locale": "08:58",
+    "is_ritual_date": false,
+    "date_rituelle": null,
+    "faune_enrichies": [
+      "Igwann vèt / Igwann péyi",
+      "Igwann péyi"
+    ],
+    "flore_enrichies": [
+      "Flanbwayan"
+    ],
+    "lieux_enrichis": [
+      "Pointe des Châteaux"
+    ],
+    "kreyol_enrichis": [],
+    "histoire_enrichies": [],
+    "loas_pertinents": [
+      "Ogoun"
+    ],
+    "animaux_sacres": [],
+    "plantes_sacrees": [],
+    "contexte_dynamique": "ADAPTÉ"
+  },
+  "2026-06-01|belier|midi": {
+    "ouverture": "Ce midi, le soleil tape sur les feuilles du palmis montagn comme un ka d’Ogoun, et toi, Bélier, tu sens ce feu qui monte , c’est l’heure d’agir, pas d’attendre.",
+    "amour": "Ton cœur bat comme un kolibri madè, vif et précis, mais attention , l’amour aujourd’hui n’est pas un jeu. Si tu veux garder quelqu’un près de toi, montre-lui la tendresse d’un ti flambeau dans la nuit, pas les éclairs de ton impatience. La lumière douce attire plus que le feu qui brûle.",
+    "travail": "À midi, les mornes de Basse-Terre gardent la mémoire des marrons, et toi, tu portes cette force en toi. Ogoun te regarde : ce dossier qui traîne depuis des lunes, c’est aujourd’hui qu’il faut le boucler. Pas demain, pas plus tard , maintenant, comme un pic de Gwadloup frappe l’écorce pour en faire sortir la vie.",
+    "argent": "Lajan ne tombe pas du ciel comme la pluie de ce matin, Bélier. Aujourd’hui, il faut aller le chercher comme un igwann péyi cherche son ombre , avec patience, mais sans hésiter. Si une opportunité se présente, saisis-la comme on cueille un fruit mûr, sans attendre qu’un autre le fasse à ta place.",
+    "amitie": "Tes amis ont besoin de toi comme les mornes ont besoin de la pluie , sans eux, tu sèches, sans toi, ils perdent leur éclat. Aujourd’hui, c’est le jour de tendre la main à celui qui, comme toi, marche sur les sentiers escarpés de la vie. Ensemble, vous êtes plus forts que les vents qui soufflent sur Pointe-à-Pitre.",
+    "prediction": "Dans les jours qui viennent, méfie-toi des soukougnans qui rôdent , ceux qui promettent monts et merveilles sans jamais tenir parole. Ogoun te protège, mais il ne fait pas les choix à ta place. Reste ancré dans la réalité, comme un fromager dont les racines plongent profond dans la terre.",
+    "conseil": "Prends une feuille de zeb kabrit ce midi, frotte-la entre tes doigts et respire son parfum âpre , c’est la force de la terre qui entre en toi. Aujourd’hui, laisse cette énergie te guider, comme Ogoun guide ceux qui osent avancer sans peur.",
+    "teaser": "Ce midi, le feu d'Ogoun court dans tes veines, Bélier, et cette flamme-là n'est pas pour les tièdes.",
+    "signFr": "Bélier",
+    "weather": "25–29°C, légère pluie, vent faible (18 km/h)",
+    "edition": "midi",
+    "source": "mistral-raw",
+    "raw_text": "On May 31st, you might feel a bit restless and eager to take on new challenges, Aries. This is a great time to tackle that project you've been putting off, as your energy and motivation are high. Just be sure to prioritize and focus on one thing at a time, or you might spread yourself too thin. At work or in your personal life, you may need to have a tough conversation with someone, but try to approach it calmly and objectively. By staying grounded and practical, you can make some real progress today.",
+    "element": "Feu",
+    "animal": "Iguane / Gwo Zandoli",
+    "plante": "Flamboyant",
+    "arbre": "Flanbwayan",
+    "lieu": "Pointe des Châteaux",
+    "planet": "Mars",
+    "loa": "Ogoun",
+    "famille_vaudou": "Rada",
+    "energie_vaudou": "Force, travail, justice",
+    "couleurs_sacrees": [
+      "vert",
+      "rouge"
+    ],
+    "edition_energie": "Force, travail et justice pour accomplir vos tâches",
+    "heure_locale": "08:59",
+    "is_ritual_date": false,
+    "date_rituelle": null,
+    "faune_enrichies": [
+      "Igwann vèt / Igwann péyi",
+      "Igwann péyi"
+    ],
+    "flore_enrichies": [
+      "Flanbwayan"
+    ],
+    "lieux_enrichis": [
+      "Pointe des Châteaux"
+    ],
+    "kreyol_enrichis": [],
+    "histoire_enrichies": [],
+    "loas_pertinents": [
+      "Ogoun"
+    ],
+    "animaux_sacres": [],
+    "plantes_sacrees": [],
+    "contexte_dynamique": null
+  },
+  "2026-06-01|belier|soir": {
+    "ouverture": "Ce soir, les lucioles ti-flambeau dansent sur les mornes comme des étincelles d’Ogoun, te rappelant que même la nuit porte sa lumière.",
+    "amour": "Ton cœur bat au rythme du kolibri madè, ce petit oiseau qui butine sans s’arrêter. Aujourd’hui, laisse-toi surprendre par une tendresse aussi vive que sa gorge pourpre. L’amour, c’est comme lui : ça passe, mais ça laisse une trace de feu.",
+    "travail": "Les mornes de Basse-Terre t’observent, silencieux. Tu as gravi leurs pentes aujourd’hui, et Ogoun sait que tu mérites ton repos. Demain, la terre te rendra ce que tu lui as donné, mais ce soir, lâche la pioche.",
+    "argent": "L’iguane attend, immobile, que le soleil lui réchauffe le dos avant de bouger. Toi aussi, attends. Lajan viendra, mais pas en courant,en se posant, comme une feuille après la pluie.",
+    "amitie": "Entre les flûtes en bambou et les rires, tes amis t’ont offert ce que les mornes offrent aux marrons : un abri. Ne l’oublie pas quand le vent souffle trop fort.",
+    "prediction": "Les soukougnans rôdent ce soir, mais ils ne toucheront pas à ta peau. Ogoun veille, et son épée est plus forte que leurs griffes.",
+    "conseil": "Glisse une feuille de zeb kabrit sous ton oreiller. Pas pour dormir,pour te souvenir que la guérison pousse là où on ne l’attend pas.",
+    "teaser": "Ce soir, les lucioles te murmurent que ton feu intérieur attire les étincelles justes. Laisse-toi consumer par cette flamme qui danse avec les mornes, avant qu’elle ne s’éteigne...",
+    "signFr": "Bélier",
+    "weather": "25–29°C, légère pluie, vent faible (18 km/h)",
+    "edition": "soir",
+    "source": "mistral-raw",
+    "raw_text": "On May 31st, you might feel a bit restless and eager to take on new challenges, Aries. This is a great time to tackle that project you've been putting off, as your energy and motivation are high. Just be sure to prioritize and focus on one thing at a time, or you might spread yourself too thin. At work or in your personal life, you may need to have a tough conversation with someone, but try to approach it calmly and objectively. By staying grounded and practical, you can make some real progress today.",
+    "element": "Feu",
+    "animal": "Iguane / Gwo Zandoli",
+    "plante": "Flamboyant",
+    "arbre": "Flanbwayan",
+    "lieu": "Pointe des Châteaux",
+    "planet": "Mars",
+    "loa": "Ogoun",
+    "famille_vaudou": "Rada",
+    "energie_vaudou": "Force, travail, justice",
+    "couleurs_sacrees": [
+      "vert",
+      "rouge"
+    ],
+    "edition_energie": "Transformation, réflexion et connexion avec les ancêtres",
+    "heure_locale": "08:59",
+    "is_ritual_date": false,
+    "date_rituelle": null,
+    "faune_enrichies": [
+      "Igwann vèt / Igwann péyi",
+      "Igwann péyi"
+    ],
+    "flore_enrichies": [
+      "Flanbwayan"
+    ],
+    "lieux_enrichis": [
+      "Pointe des Châteaux"
+    ],
+    "kreyol_enrichis": [],
+    "histoire_enrichies": [],
+    "loas_pertinents": [
+      "Ogoun"
+    ],
+    "animaux_sacres": [],
+    "plantes_sacrees": [],
+    "contexte_dynamique": "ADAPTÉ"
+  },
+  "2026-06-01|gemeaux|nuit": {
+    "ouverture": "Ce matin, l'Urakan plane au-dessus de Petite-Terre sans jamais se poser, ses ailes noires frôlant les vagues comme un message de Legba aux rêveurs de la nuit.",
+    "amour": "Ton cœur bat au rythme d'un Jakòt qui chante dans les manguiers, mais tu hésites à répondre. Laisse tomber les mots, écoute plutôt le silence entre les branches. L'amour, c'est comme ce perroquet disparu - rare, précieux, et impossible à retenir.",
+    "travail": "À Petite-Terre, les iguanes ne courent pas après les opportunités, ils les attendent, immobiles sous le soleil. Aujourd'hui, ton travail est comme eux - observer, patienter, puis bondir quand le moment sera juste. Pas besoin de forcer la porte, Legba l'ouvrira.",
+    "argent": "Le Chadékié mûrit lentement, ses fruits lourds de jus sucré. Ne te presse pas pour récolter ton lajan, laisse-le grandir comme ce pomélo - plus tu attends, plus il sera doux et généreux. Les fourmis ne stockent pas pour demain, elles travaillent pour aujourd'hui.",
+    "amitie": "Un panier tressé en latanier ne se remplit pas seul. Aujourd'hui, tes amis sont comme ces fibres entrelacées - chacun apporte sa force pour créer quelque chose de solide. Kwèyòl n'est pas qu'une langue, c'est une manière de tisser des liens qui résistent à tout.",
+    "prediction": "La pluie de cette nuit a lavé les feuilles de Sitwonèl, et demain, leur parfum embaumera l'air. Quelque chose de neuf se prépare, comme une tempête qui nettoie avant de renaître.",
+    "conseil": "Écrase une feuille de Sitwonèl'entre tes doigts et respire profondément. Son parfum te rappellera que les solutions les plus simples sont souvent les plus puissantes.",
+    "teaser": "\"Ton Jakòt murmure sous les manguiers, et tu sens déjà son appel vibrer dans tes os, mais oses-tu vraiment écouter la mélodie secrète du vent dans les feuilles de Sitwonèl ce soir ?\"",
+    "signFr": "Gémeaux",
+    "weather": "25–29°C, légère pluie, vent faible (18 km/h)",
+    "edition": "nuit",
+    "source": "mistral-raw",
+    "raw_text": "For Gemini, May 31st is a day to focus on your finances and make some practical decisions about how you're managing your money. Take some time to review your budget and see where you can cut back on unnecessary expenses. You might also consider talking to a financial advisor or doing some research to find ways to save or invest your money more effectively. This is a good opportunity to get your finances in order and set yourself up for long-term stability. By being responsible and proactive, you can reduce stress and feel more secure about your financial future.",
+    "element": "Air",
+    "animal": "Colibri huppé / Foufou",
+    "plante": "Alpinia / Lavande rouge",
+    "arbre": "Gommié blan (Gommier)",
+    "lieu": "Jardin botanique de Deshaies",
+    "planet": "Mercure",
+    "loa": "Legba",
+    "famille_vaudou": "Rada",
+    "energie_vaudou": "Communication, choix, ouverture",
+    "couleurs_sacrees": [
+      "rouge",
+      "noir"
+    ],
+    "edition_energie": "Communication avec les esprits et les rêves",
+    "heure_locale": "08:59",
+    "is_ritual_date": false,
+    "date_rituelle": null,
+    "faune_enrichies": [
+      "Fwou-fwou / Kolibri"
+    ],
+    "flore_enrichies": [
+      "Lavand wouj / Alpinia"
+    ],
+    "lieux_enrichis": [],
+    "kreyol_enrichis": [],
+    "histoire_enrichies": [],
+    "loas_pertinents": [
+      "Papa Legba"
+    ],
+    "animaux_sacres": [
+      "Fwou-fwou"
+    ],
+    "plantes_sacrees": [],
+    "contexte_dynamique": "FAVORABLE"
+  },
+  "2026-06-01|gemeaux|matin": {
+    "ouverture": "Ce matin, l'Urakan déploie ses ailes au-dessus de Petite-Terre, et toi, tu sens le vent du large qui t'appelle à choisir sans hésiter , comme un ka qui frappe droit au cœur des choses.",
+    "amour": "Ton cœur bat comme le tambourinage du Pic de Gwadloup sur le fromager, ce matin. Laisse le rouge de Legba te rappeler que l'amour, c'est d'abord une porte qu'on ouvre, pas une cage qu'on referme. Le Chadékié, lourd de ses fruits, te murmure que la patience porte ses plus doux parfums.",
+    "travail": "Aujourd'hui, ton labeur ressemble à la Petite-Terre , isolé, mais riche de ce que tu y sèmes. Les iguanes, gardiens silencieux, te regardent avancer sans bruit. Chaque pas compte, même si personne ne le voit.",
+    "argent": "Foufou ne stocke pas, il butine , et pourtant, il nourrit la forêt entière. Aujourd'hui, ton lajan circule comme le pollen, léger mais indispensable. Ne le retiens pas trop, laisse-le féconder ce qui en a besoin.",
+    "amitie": "Les paniers tressés de latanier ne se remplissent pas seuls. Aujourd'hui, c'est à toi de tendre la main, comme on tend une feuille de Sitwonèl pour chasser les mauvaises énergies. Kwèyòl, cette langue qui a sauvé tant de vies, te rappelle que les mots justes valent tous les trésors.",
+    "prediction": "Les nuages de mai cachent parfois la Soufrière, mais son souffle ne ment jamais. Dans les jours qui viennent, ce que tu as semé en silence va germer , comme le Gouti qui survit malgré tout.",
+    "conseil": "Écris ton intention du jour sur une feuille de Chadékié, puis laisse-la sécher au soleil. Les mots, comme les esprits, voyagent mieux quand ils sont légers.",
+    "teaser": "Ce matin, ton âme s’agite comme les ailes d’un colibri affamé de nectar nouveau et toi, tu sens que l’amour frappe à ta porte comme le tambourinage du Pic de Gwadloup. Laisse-toi emporter par le rouge de Legba, il sait mieux que quiconque que les portes les plus étroites cachent les jardins les plus luxuriants",
+    "signFr": "Gémeaux",
+    "weather": "25–29°C, légère pluie, vent faible (18 km/h)",
+    "edition": "matin",
+    "source": "mistral-raw",
+    "raw_text": "For Gemini, May 31st is a day to focus on your finances and make some practical decisions about how you're managing your money. Take some time to review your budget and see where you can cut back on unnecessary expenses. You might also consider talking to a financial advisor or doing some research to find ways to save or invest your money more effectively. This is a good opportunity to get your finances in order and set yourself up for long-term stability. By being responsible and proactive, you can reduce stress and feel more secure about your financial future.",
+    "element": "Air",
+    "animal": "Colibri huppé / Foufou",
+    "plante": "Alpinia / Lavande rouge",
+    "arbre": "Gommié blan (Gommier)",
+    "lieu": "Jardin botanique de Deshaies",
+    "planet": "Mercure",
+    "loa": "Legba",
+    "famille_vaudou": "Rada",
+    "energie_vaudou": "Communication, choix, ouverture",
+    "couleurs_sacrees": [
+      "rouge",
+      "noir"
+    ],
+    "edition_energie": "Ouverture des chemins spirituels et des portes entre les mondes",
+    "heure_locale": "09:00",
+    "is_ritual_date": false,
+    "date_rituelle": null,
+    "faune_enrichies": [
+      "Fwou-fwou / Kolibri"
+    ],
+    "flore_enrichies": [
+      "Lavand wouj / Alpinia"
+    ],
+    "lieux_enrichis": [],
+    "kreyol_enrichis": [],
+    "histoire_enrichies": [],
+    "loas_pertinents": [
+      "Papa Legba"
+    ],
+    "animaux_sacres": [
+      "Fwou-fwou"
+    ],
+    "plantes_sacrees": [],
+    "contexte_dynamique": "IDEAL"
+  },
+  "2026-06-01|gemeaux|midi": {
+    "ouverture": "Ce matin, Urakan plane au-dessus des vagues sans jamais toucher terre, comme si Legba lui-même avait ouvert le carrefour du ciel pour toi.",
+    "amour": "Ton cœur bat comme le tambourinage du Pic de Gwadloup sur l’écorce du gommier, un rythme qui ne ment pas. Écoute-le, même si la pluie de midi brouille les mots. Chadékié mûrit en silence, et l’amour aussi a besoin de temps pour devenir sucré.",
+    "travail": "À Petite-Terre, les iguanes ne courent pas après les rêves, ils les attendent, immobiles. Aujourd’hui, ton travail est comme eux : patient, précis, ancré. Pas besoin de forcer, la marée amènera ce qui doit venir.",
+    "argent": "Foufou ne stocke pas le nectar, il le boit au jour le jour, et pourtant, il nourrit toute la forêt. Ton lajan circule de la même façon,dépense-le là où il fait grandir, pas là où il s’évapore.",
+    "amitie": "Un panier tressé en latanier ne se remplit pas seul. Aujourd’hui, c’est à toi de tendre la main, comme on tend une feuille de sitwonèl pour éloigner les mauvaises énergies. Kwèyòl se parle à deux, pas en solitaire.",
+    "prediction": "Les jours prochains porteront l’écho de 2009,une colère sourde, mais aussi une force collective. Écoute les murmures du vent dans les feuilles de gommier, ils annoncent un réveil.",
+    "conseil": "Cueille une feuille de sitwonèl'et froisse-la entre tes doigts. Respire son parfum comme on respire une intention,sans feu, sans bruit, juste la promesse que demain sentira meilleur.",
+    "teaser": "Ce matin, Urakan danse au-dessus de toi sans jamais te frôler vraiment, et tu sens déjà ce frisson qui ne trompe pas Mais aujourd’hui, le carrefour des possibles s’ouvre, alors ose franchir la ligne",
+    "signFr": "Gémeaux",
+    "weather": "25–29°C, légère pluie, vent faible (18 km/h)",
+    "edition": "midi",
+    "source": "mistral-raw",
+    "raw_text": "For Gemini, May 31st is a day to focus on your finances and make some practical decisions about how you're managing your money. Take some time to review your budget and see where you can cut back on unnecessary expenses. You might also consider talking to a financial advisor or doing some research to find ways to save or invest your money more effectively. This is a good opportunity to get your finances in order and set yourself up for long-term stability. By being responsible and proactive, you can reduce stress and feel more secure about your financial future.",
+    "element": "Air",
+    "animal": "Colibri huppé / Foufou",
+    "plante": "Alpinia / Lavande rouge",
+    "arbre": "Gommié blan (Gommier)",
+    "lieu": "Jardin botanique de Deshaies",
+    "planet": "Mercure",
+    "loa": "Legba",
+    "famille_vaudou": "Rada",
+    "energie_vaudou": "Communication, choix, ouverture",
+    "couleurs_sacrees": [
+      "rouge",
+      "noir"
+    ],
+    "edition_energie": "Force, travail et justice pour accomplir vos tâches",
+    "heure_locale": "09:00",
+    "is_ritual_date": false,
+    "date_rituelle": null,
+    "faune_enrichies": [
+      "Fwou-fwou / Kolibri"
+    ],
+    "flore_enrichies": [
+      "Lavand wouj / Alpinia"
+    ],
+    "lieux_enrichis": [],
+    "kreyol_enrichis": [],
+    "histoire_enrichies": [],
+    "loas_pertinents": [
+      "Papa Legba"
+    ],
+    "animaux_sacres": [
+      "Fwou-fwou"
+    ],
+    "plantes_sacrees": [],
+    "contexte_dynamique": "FAVORABLE"
+  },
+  "2026-06-01|gemeaux|soir": {
+    "ouverture": "Ce soir, l'urakan plane au-dessus de Petite-Terre, ses ailes noires frôlant les vagues sans jamais se poser , comme toi, tu as volé toute la journée sans toucher terre, porté par le souffle de Legba aux carrefours.",
+    "amour": "Ton cœur bat comme le tambourinage du pic de Gwadloup sur l'écorce du gommier. Laisse les mots doux s'échapper comme les feuilles de sitwonèl dans la brise du soir, légers et parfumés. Personne ne t'oblige à choisir entre deux amours, comme l'urakan ne choisit pas entre ciel et mer.",
+    "travail": "À Petite-Terre, les iguanes endémiques gardent l'île sans bruit, immobiles sous le soleil couchant. Aujourd'hui, ton travail a été comme eux , silencieux mais puissant, invisible mais essentiel. Demain, d'autres verront les fruits de ta patience.",
+    "argent": "Le foufou ne stocke pas de nectar, il butine chaque fleur avec précision, transformant l'éphémère en énergie. Regarde ton lajan comme il regarde les fleurs , chaque pièce a son rôle, chaque dépense son moment. Rien ne se perd, tout se transforme.",
+    "amitie": "Dans le panier tressé de latanier, chaque brin compte pour tenir la forme. Tes amis sont ces brins , certains soutiennent, d'autres décorent, mais tous sont nécessaires. Kwèyòl n'est pas une langue pour parler seul, c'est une mélodie qui n'existe que partagée.",
+    "prediction": "Attention aux nuits où le soukougnan rôde près des fromagers , quand l'argent semble trop facile, c'est souvent qu'on a oublié de compter les coûts invisibles. La vraie richesse ne se mesure pas en pièces, mais en liberté.",
+    "conseil": "Écrase une feuille de sitwonèl'entre tes doigts avant de dormir, laisse son parfum monter comme une prière à Legba. Ce soir, tu n'as pas besoin de portes ouvertes, juste de savoir qu'elles existent.",
+    "teaser": "Ce soir, tu as dansé sur le fil du vent entre ciel et mer, et Legba lui-même aurait retenu son souffle en te voyant. Une ombre rôde près des fromagers, mais tu sais déjà qu’elle n’est que le miroir de tes désirs les plus secrets.",
+    "signFr": "Gémeaux",
+    "weather": "25–29°C, légère pluie, vent faible (18 km/h)",
+    "edition": "soir",
+    "source": "mistral-raw",
+    "raw_text": "For Gemini, May 31st is a day to focus on your finances and make some practical decisions about how you're managing your money. Take some time to review your budget and see where you can cut back on unnecessary expenses. You might also consider talking to a financial advisor or doing some research to find ways to save or invest your money more effectively. This is a good opportunity to get your finances in order and set yourself up for long-term stability. By being responsible and proactive, you can reduce stress and feel more secure about your financial future.",
+    "element": "Air",
+    "animal": "Colibri huppé / Foufou",
+    "plante": "Alpinia / Lavande rouge",
+    "arbre": "Gommié blan (Gommier)",
+    "lieu": "Jardin botanique de Deshaies",
+    "planet": "Mercure",
+    "loa": "Legba",
+    "famille_vaudou": "Rada",
+    "energie_vaudou": "Communication, choix, ouverture",
+    "couleurs_sacrees": [
+      "rouge",
+      "noir"
+    ],
+    "edition_energie": "Transformation, réflexion et connexion avec les ancêtres",
+    "heure_locale": "09:00",
+    "is_ritual_date": false,
+    "date_rituelle": null,
+    "faune_enrichies": [
+      "Fwou-fwou / Kolibri"
+    ],
+    "flore_enrichies": [
+      "Lavand wouj / Alpinia"
+    ],
+    "lieux_enrichis": [],
+    "kreyol_enrichis": [],
+    "histoire_enrichies": [],
+    "loas_pertinents": [
+      "Papa Legba"
+    ],
+    "animaux_sacres": [
+      "Fwou-fwou"
+    ],
+    "plantes_sacrees": [],
+    "contexte_dynamique": "FAVORABLE"
+  },
+  "2026-06-01|lion|nuit": {
+    "ouverture": "Ce matin, le kolibri madè danse devant ta fenêtre, sa gorge pourpre reflétant la lumière rose d'Ezili Freda comme un présage de douceur à venir.",
+    "amour": "Ton cœur bat au rythme des ailes du frou-fwou, ce petit messager qui ne s’arrête jamais. Laisse-toi porter par cette énergie légère, comme la fleur de manioc qui s’ouvre sans effort sous la pluie. L’amour aujourd’hui est une danse, pas une bataille. Écoute les murmures du vent dans les feuilles de bèlizèl, ils te diront ce que les mots ne peuvent pas.",
+    "travail": "La Route de la Traversée t’attend, sinueuse comme le vol du pic de Gwadloup. Chaque pas dans cette forêt est un pas vers toi-même, chaque obstacle une branche à contourner sans bruit. Le travail aujourd’hui n’est pas une charge, mais une marche vers la lumière. Rappelle-toi, même les fourmis manyok avancent sans se presser, grain par grain.",
+    "argent": "Les pélicans plongent en groupe, synchronisés comme les pêcheurs de Pointe-à-Pitre qui partagent leur prise. Aujourd’hui, lajàn coule comme l’eau entre les doigts, mais c’est dans le partage qu’il se multiplie. Ne compte pas chaque pièce, fais confiance à l’abondance qui vient. Comme le manioc qui nourrit sans compter, laisse-toi surprendre par ce qui arrive.",
+    "amitie": "Sous l’arbre fromager, là où les soukougnans accrochent leur peau, tes amis t’attendent sans même le savoir. Les liens aujourd’hui sont invisibles mais solides, comme les fils de la toile d’araignée après la pluie. Kominion n’est pas qu’un mot du passé, c’est une façon de vivre. Échange sans compter, donne sans attendre, et tu verras comme tout revient.",
+    "prediction": "Les esprits de la forêt chuchotent que les jours à venir porteront la marque d’Ezili Freda, rose et généreuse. Prépare-toi à recevoir plus que tu ne donnes, comme la terre après l’averse.",
+    "conseil": "Ce soir, dépose une feuille d’alowes sous ton oreiller. Son gel apaisant te rappellera que la douceur est une force, pas une faiblesse.",
+    "teaser": "Ce matin, le kolibri madè danse devant ta fenêtre et tu reconnais déjà dans son vol le souffle d'Ezili Freda effleurant ton cœur. Laisse-toi guider par cette énergie rose qui t'appelle à savourer l'instant sans résistance",
+    "signFr": "Lion",
+    "weather": "25–29°C, légère pluie, vent faible (18 km/h)",
+    "edition": "nuit",
+    "source": "mistral-raw",
+    "raw_text": "Leos, today is a good day to focus on your finances and make a plan to manage your money better. Take some time to review your budget and see where you can cut back on unnecessary expenses. You might also want to think about ways to increase your income, whether that's through a side hustle or asking for a raise at work. Be practical and responsible with your finances, and you'll be in a more stable position going forward. By making a few smart decisions now, you can set yourself up for long-term financial success.",
+    "element": "Feu",
+    "animal": "Pélican brun / Gran Pélikan",
+    "plante": "Strelitzia / Balizié",
+    "arbre": "Flanbwayan",
+    "lieu": "Pointe de la Grande Vigie",
+    "planet": "Soleil",
+    "loa": "Ezili Freda",
+    "famille_vaudou": "Rada",
+    "energie_vaudou": "Amour, beauté, passion",
+    "couleurs_sacrees": [
+      "rose",
+      "blanc",
+      "bleu"
+    ],
+    "edition_energie": "Communication avec les esprits et les rêves",
+    "heure_locale": "09:00",
+    "is_ritual_date": false,
+    "date_rituelle": null,
+    "faune_enrichies": [
+      "Pélikan / Gran pélikan"
+    ],
+    "flore_enrichies": [
+      "Bèlizèl / Balisié"
+    ],
+    "lieux_enrichis": [
+      "Pointe de la Grande Vigie"
+    ],
+    "kreyol_enrichis": [],
+    "histoire_enrichies": [],
+    "loas_pertinents": [
+      "Ezili Freda"
+    ],
+    "animaux_sacres": [],
+    "plantes_sacrees": [],
+    "contexte_dynamique": "FAVORABLE"
+  },
+  "2026-06-01|lion|matin": {
+    "ouverture": "Ce matin, le kolibri madè danse dans la pluie fine au-dessus des pié manyòk, ses ailes pourpres traçant des vèvè éphémères dans l'air humide de Basse-Terre.",
+    "amour": "Ton cœur bat au rythme des ka lointains du pic de Gwadloup, ce matin. Laisse Ezili Freda t'envelopper de son rose tendre, comme la fleur de balisier qui s'ouvre sous la caresse du soleil. L'amour aujourd'hui n'est pas une promesse, mais une présence, comme le gès piken qui veille sur son nid sans un bruit. Ose offrir ce que tu gardes au fond de toi, sans attendre en retour.",
+    "travail": "La Route de la Traversée t'appelle aujourd'hui, avec ses virages qui cachent des trésors. Comme l'igwann péyi, reste immobile et observe avant d'agir. Les solutions ne viendront pas des grands gestes, mais des petits pas calculés, comme ceux des foumi manyok qui bâtissent des empires sous les feuilles. Ton labeur portera ses fruits si tu sais attendre le bon moment pour avancer.",
+    "argent": "Les pélicans plongent en masse ce matin, signe que la mer regorge de poissons. Ton lajan circule comme les bancs sous les vagues - invisible un instant, abondant l'instant d'après. Ne gaspille pas cette énergie en dépenses inutiles. Comme les pêcheurs qui savent quand jeter leurs filets, attends le bon moment pour investir. La prospérité viendra de ce que tu sauras attraper au vol.",
+    "amitie": "À la Pointe de la Grande Vigie, le vent porte les rires des anciens qui se racontent des histoires de zandoli. Tes amis sont comme ces lézards - toujours là quand tu as besoin d'eux, même s'ils semblent disparaître un instant. Aujourd'hui, c'est le jour de tendre la main à ceux qui comptent vraiment, sans fard ni calcul. La vraie amitié se mesure à la confiance, pas aux mots.",
+    "prediction": "Le soukougnan rôde ce soir près des fromagers, signe que les prochains jours demanderont de la vigilance. Ce qui semble acquis peut se transformer en illusion si tu ne restes pas ancré dans le réel. Méfie-toi des apparences trompeuses et des promesses trop belles.",
+    "conseil": "Cueille une feuille d'alowes ce matin et applique son gel sur tes poignets. Laisse sa fraîcheur te rappeler que la douceur est une force, pas une faiblesse. Comme Ezili Freda, sois tendre mais inébranlable dans tes convictions.",
+    "teaser": "Ce matin, sous les ailes pourpres du kolibri dansant au-dessus des champs de manioc, sens ton cœur battre au rythme des ka lointains du pic de Gwadloup. Laisse Ezili Freda t’envelopper de son rose tendresse, car l’amour n’est plus une attente mais une caresse qui s’offre sans retour.",
+    "signFr": "Lion",
+    "weather": "25–29°C, légère pluie, vent faible (18 km/h)",
+    "edition": "matin",
+    "source": "mistral-raw",
+    "raw_text": "Leos, today is a good day to focus on your finances and make a plan to manage your money better. Take some time to review your budget and see where you can cut back on unnecessary expenses. You might also want to think about ways to increase your income, whether that's through a side hustle or asking for a raise at work. Be practical and responsible with your finances, and you'll be in a more stable position going forward. By making a few smart decisions now, you can set yourself up for long-term financial success.",
+    "element": "Feu",
+    "animal": "Pélican brun / Gran Pélikan",
+    "plante": "Strelitzia / Balizié",
+    "arbre": "Flanbwayan",
+    "lieu": "Pointe de la Grande Vigie",
+    "planet": "Soleil",
+    "loa": "Ezili Freda",
+    "famille_vaudou": "Rada",
+    "energie_vaudou": "Amour, beauté, passion",
+    "couleurs_sacrees": [
+      "rose",
+      "blanc",
+      "bleu"
+    ],
+    "edition_energie": "Ouverture des chemins spirituels et des portes entre les mondes",
+    "heure_locale": "09:01",
+    "is_ritual_date": false,
+    "date_rituelle": null,
+    "faune_enrichies": [
+      "Pélikan / Gran pélikan"
+    ],
+    "flore_enrichies": [
+      "Bèlizèl / Balisié"
+    ],
+    "lieux_enrichis": [
+      "Pointe de la Grande Vigie"
+    ],
+    "kreyol_enrichis": [],
+    "histoire_enrichies": [],
+    "loas_pertinents": [
+      "Ezili Freda"
+    ],
+    "animaux_sacres": [],
+    "plantes_sacrees": [],
+    "contexte_dynamique": "IDEAL"
+  },
+  "2026-06-01|lion|midi": {
+    "ouverture": "Ce midi, sous l'œil rose d'Ezili Freda, le kolibri madè danse au-dessus des fleurs de pié manyòk, comme s'il écrivait ton nom dans l'air chaud de la Traversée.",
+    "amour": "Ton cœur bat au rythme des ailes du fwou-fwou, ce petit messager qui ne s'arrête jamais. Aujourd'hui, l'amour se glisse dans les détails, comme le parfum de l'alowes après la pluie. Laisse-toi surprendre par une tendresse inattendue, celle qui naît sans mots, comme un sourire échangé au marché. La beauté d'Ezili Freda t'enveloppe, légère et parfumée, comme une brise venue de Basse-Terre.",
+    "travail": "Sur la Route de la Traversée, les arbres chuchotent des secrets de persévérance. Aujourd'hui, ton travail porte la force de l'igwann péyi, ce lézard qui attend patiemment son moment. Concentre-toi sur l'essentiel, comme le pêcheur qui guette le bon coup de filet. Chaque effort compte, même ceux que personne ne voit, comme les fourmis qui bâtissent leur nid grain par grain.",
+    "argent": "Les pélicans plongent en groupe pour attraper leur proie, et toi, aujourd'hui, tu sauras saisir les opportunités qui se présentent. Lajan circule comme l'eau dans les rivières de Basse-Terre, il suffit de savoir où poser ses mains. Observe, écoute, et agis au bon moment, comme le paysan qui connaît le cycle de la canne à sucre. Une petite somme peut se transformer en quelque chose de plus grand si tu la fais fructifier avec intelligence.",
+    "amitie": "Près des gade zafe accrochés aux branches des fromagers, les souvenirs d'amitié se réveillent. Aujourd'hui, tes proches sont comme les zandoli, toujours là, même quand tu ne les vois pas. Un mot, un geste, un regard suffisent à renforcer ces liens invisibles mais solides. La Route de la Traversée t'appelle à marcher aux côtés de ceux qui te comprennent sans que tu aies besoin de tout expliquer.",
+    "prediction": "Dans les jours à venir, les fleurs de flanbwayan s'ouvriront comme des promesses, te rappelant que la beauté naît souvent là où on ne l'attend pas. Méfie-toi des apparences trompeuses, comme le soukougnan qui se cache sous une peau humaine.",
+    "conseil": "Cueille une feuille d'alowes et frotte-la entre tes doigts pour te rappeler que la guérison commence par les petites choses. Laisse son parfum te guider vers ce qui a vraiment besoin de soin aujourd'hui.",
+    "teaser": "Ce midi, sous l'œil rose d'Ezili Freda, le kolibri madè danse au-dessus des fleurs de pié manyòk en traçant ton nom dans l'air lourd de la Traversée tu sens l'amour venir à toi sans crier gare",
+    "signFr": "Lion",
+    "weather": "25–29°C, légère pluie, vent faible (18 km/h)",
+    "edition": "midi",
+    "source": "mistral-raw",
+    "raw_text": "Leos, today is a good day to focus on your finances and make a plan to manage your money better. Take some time to review your budget and see where you can cut back on unnecessary expenses. You might also want to think about ways to increase your income, whether that's through a side hustle or asking for a raise at work. Be practical and responsible with your finances, and you'll be in a more stable position going forward. By making a few smart decisions now, you can set yourself up for long-term financial success.",
+    "element": "Feu",
+    "animal": "Pélican brun / Gran Pélikan",
+    "plante": "Strelitzia / Balizié",
+    "arbre": "Flanbwayan",
+    "lieu": "Pointe de la Grande Vigie",
+    "planet": "Soleil",
+    "loa": "Ezili Freda",
+    "famille_vaudou": "Rada",
+    "energie_vaudou": "Amour, beauté, passion",
+    "couleurs_sacrees": [
+      "rose",
+      "blanc",
+      "bleu"
+    ],
+    "edition_energie": "Force, travail et justice pour accomplir vos tâches",
+    "heure_locale": "09:01",
+    "is_ritual_date": false,
+    "date_rituelle": null,
+    "faune_enrichies": [
+      "Pélikan / Gran pélikan"
+    ],
+    "flore_enrichies": [
+      "Bèlizèl / Balisié"
+    ],
+    "lieux_enrichis": [
+      "Pointe de la Grande Vigie"
+    ],
+    "kreyol_enrichis": [],
+    "histoire_enrichies": [],
+    "loas_pertinents": [
+      "Ezili Freda"
+    ],
+    "animaux_sacres": [],
+    "plantes_sacrees": [],
+    "contexte_dynamique": "FAVORABLE"
+  },
+  "2026-06-01|lion|soir": {
+    "ouverture": "Ce soir, Ezili Freda dépose une rose blanche sur ton oreiller, et dans le jardin, un kolibri madè danse entre les fleurs de pié manyòk comme pour te rappeler que la beauté existe, même après la pluie.",
+    "amour": "Ton cœur bat au rythme des ailes du frou-fwou, ce petit oiseau qui ne s’arrête jamais. Aujourd’hui, laisse-toi toucher par la tendresse, comme la terre gorgée d’eau après l’averse. Les mots doux sont des graines , plante-les sans crainte. L’amour, c’est comme le gel d’alowes : ça apaise les brûlures, même les plus anciennes.",
+    "travail": "Sur la Route de la Traversée, les arbres chuchotent des secrets de patience. Aujourd’hui, ton labeur ressemble à celui du pic de Gwadloup : chaque coup de bec est précis, chaque effort compte. Ne te presse pas. La forêt sait que les plus belles œuvres prennent du temps, comme les nids de gès piken, tissés fil par fil.",
+    "argent": "Les pélicans plongent en groupe, et c’est comme ça que la pêche est bonne. Aujourd’hui, regarde où va ton lajan : est-ce qu’il nourrit seulement toi, ou aussi ceux qui t’entourent ? Parfois, il faut lâcher une pièce pour en attraper dix, comme on lâche un filet dans l’eau trouble.",
+    "amitie": "Entre amis, on est comme les foumi manyok : invisibles, mais solides. Aujourd’hui, rappelle-toi que les liens les plus forts sont ceux qu’on ne voit pas, comme les racines du fromager qui courent sous terre. À la kominion, on échange plus que des biens , on échange des vies.",
+    "prediction": "Demain, les nuages porteront la voix des ancêtres, et tu entendras un message dans le tambourinage du pic de Gwadloup. Écoute bien : ce n’est pas un hasard, c’est un signe.",
+    "conseil": "Ce soir, avant de dormir, pose une feuille d’alowes sous ton oreiller. Pas pour guérir une blessure, mais pour te souvenir que la douceur existe, même dans l’ombre.",
+    "teaser": "Le vent chaud de ton Lion souffle sur ton oreiller ce soir, et quelque chose de délicieusement secret s’y love contre toi… N’est-ce pas le moment de laisser courir tes doigts là où la vie murmure des promesses dorées",
+    "signFr": "Lion",
+    "weather": "25–29°C, légère pluie, vent faible (18 km/h)",
+    "edition": "soir",
+    "source": "mistral-raw",
+    "raw_text": "Leos, today is a good day to focus on your finances and make a plan to manage your money better. Take some time to review your budget and see where you can cut back on unnecessary expenses. You might also want to think about ways to increase your income, whether that's through a side hustle or asking for a raise at work. Be practical and responsible with your finances, and you'll be in a more stable position going forward. By making a few smart decisions now, you can set yourself up for long-term financial success.",
+    "element": "Feu",
+    "animal": "Pélican brun / Gran Pélikan",
+    "plante": "Strelitzia / Balizié",
+    "arbre": "Flanbwayan",
+    "lieu": "Pointe de la Grande Vigie",
+    "planet": "Soleil",
+    "loa": "Ezili Freda",
+    "famille_vaudou": "Rada",
+    "energie_vaudou": "Amour, beauté, passion",
+    "couleurs_sacrees": [
+      "rose",
+      "blanc",
+      "bleu"
+    ],
+    "edition_energie": "Transformation, réflexion et connexion avec les ancêtres",
+    "heure_locale": "09:02",
+    "is_ritual_date": false,
+    "date_rituelle": null,
+    "faune_enrichies": [
+      "Pélikan / Gran pélikan"
+    ],
+    "flore_enrichies": [
+      "Bèlizèl / Balisié"
+    ],
+    "lieux_enrichis": [
+      "Pointe de la Grande Vigie"
+    ],
+    "kreyol_enrichis": [],
+    "histoire_enrichies": [],
+    "loas_pertinents": [
+      "Ezili Freda"
+    ],
+    "animaux_sacres": [],
+    "plantes_sacrees": [],
+    "contexte_dynamique": "IDEAL"
+  }
+}
