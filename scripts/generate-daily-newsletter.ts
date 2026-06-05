@@ -1,14 +1,22 @@
 import { config } from 'dotenv';
 config();
 
-import { generateDailyNewsletter, generatePersonalizedNewsletter } from '@/lib/newsletter-generator';
-import { saveNewsletter, getTodaysNewsletter } from '@/lib/newsletter-storage';
+import {
+  generateDailyNewsletter,
+  generatePersonalizedNewsletter,
+  fetchHoroscopesFromSupabase,
+} from '@/lib/newsletter-generator';
+import { saveNewsletter, getTodaysNewsletter, type StoredNewsletter } from '@/lib/newsletter-storage';
 import { getContactsFromList, sendEmailViaBrevo } from '@/lib/brevo-api';
 import { signs } from '@/lib/signs-data';
+import { todayGuadeloupe } from '@/lib/edition';
 
 const VALID_SIGN_IDS = new Set(signs.map(s => s.id));
 
-async function sendPersonalized(newsletter: { subject: string; html: string; text: string }) {
+async function sendPersonalized(
+  newsletter: { subject: string; htmlContent: string; text: string },
+  date: string,
+) {
   if (!process.env.BREVO_API_KEY) {
     console.log('\n⚠️  BREVO_API_KEY absent — envoi ignoré');
     return;
@@ -33,11 +41,21 @@ async function sendPersonalized(newsletter: { subject: string; html: string; tex
 
   console.log(`   Avec signe : ${contacts.length - noSign.length} | Sans signe : ${noSign.length}`);
 
+  // Récupérer les données Supabase une seule fois pour tous les signes
+  let horoscopeBySign = new Map<string, any>();
+  if (bySign.size > 0) {
+    console.log('\n📥 Chargement des horoscopes Supabase...');
+    const allHoroscopes = await fetchHoroscopesFromSupabase(date, 'matin');
+    horoscopeBySign = new Map(allHoroscopes.map(h => [h.sign.id, h.horoscope]));
+    console.log(`   ${allHoroscopes.length} signe(s) chargé(s) depuis Supabase`);
+  }
+
   // Envoi personnalisé par signe
   for (const [signId, emails] of bySign) {
     console.log(`\n📨 Génération + envoi pour ${signId} (${emails.length} abonné(s))...`);
     try {
-      const personalized = await generatePersonalizedNewsletter(signId);
+      const horoscopeData = horoscopeBySign.get(signId) ?? {};
+      const personalized = await generatePersonalizedNewsletter(signId, date, horoscopeData);
       await sendEmailViaBrevo(emails, personalized.subject, personalized.html, personalized.text);
       console.log(`   ✅ ${signId} envoyé`);
     } catch (err: any) {
@@ -49,7 +67,7 @@ async function sendPersonalized(newsletter: { subject: string; html: string; tex
   if (noSign.length > 0) {
     console.log(`\n📨 Envoi newsletter complète à ${noSign.length} abonné(s) sans signe...`);
     try {
-      await sendEmailViaBrevo(noSign, newsletter.subject, newsletter.html, newsletter.text);
+      await sendEmailViaBrevo(noSign, newsletter.subject, newsletter.htmlContent, newsletter.text);
       console.log('   ✅ Newsletter complète envoyée');
     } catch (err: any) {
       console.error('   ❌ Erreur newsletter complète:', err?.message ?? err);
@@ -61,6 +79,7 @@ async function sendPersonalized(newsletter: { subject: string; html: string; tex
 
 async function main() {
   const forceSend = process.argv.includes('--force-send');
+  const date = todayGuadeloupe();
   console.log('🌅 Génération de la newsletter du jour...\n');
 
   const existingToday = await getTodaysNewsletter();
@@ -72,12 +91,12 @@ async function main() {
     console.log(`   Date: ${new Date(existingToday.date).toLocaleString('fr-FR')}\n`);
     if (forceSend) {
       console.log('🔁 --force-send : renvoi personnalisé...');
-      await sendPersonalized(existingToday);
+      await sendPersonalized(existingToday, date);
     }
     return;
   }
 
-  const newsletter = await generateDailyNewsletter();
+  const newsletter = await generateDailyNewsletter(date);
 
   console.log('✅ Newsletter générée avec succès !\n');
   console.log(`📅 Date: ${new Date().toLocaleString('fr-FR')}`);
@@ -96,7 +115,7 @@ async function main() {
   console.log(`   ID: ${saved.id}`);
   console.log(`   Date: ${new Date(saved.date).toLocaleString('fr-FR')}`);
 
-  await sendPersonalized(newsletter);
+  await sendPersonalized(saved, date);
 
   console.log('\n✨ Newsletter du jour générée et envoyée !');
 }

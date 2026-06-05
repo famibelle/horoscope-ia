@@ -34,7 +34,7 @@ async function fetchPresageFromSupabase(date: string): Promise<PresageData | nul
 }
 
 // Charger les horoscopes depuis Supabase via REST (sans SDK, compatible CI)
-async function fetchHoroscopesFromSupabase(date: string, edition: string): Promise<SignHoroscope[]> {
+export async function fetchHoroscopesFromSupabase(date: string, edition: string): Promise<SignHoroscope[]> {
   const supabaseUrl = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
 
