@@ -1,0 +1,44 @@
+name: 📧 Rapport Qualité Newsletter — 7 jours glissants
+
+on:
+  schedule:
+    - cron: '10 0 * * *'   # 00:10 UTC, après le rapport qualité principal
+  workflow_dispatch:
+
+jobs:
+  quality-newsletter:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Configurer SSH pour le sous-module privé
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SUBMODULE_DEPLOY_KEY }}
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: 📧 Générer le rapport qualité newsletter
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+        run: npx tsx scripts/quality-newsletter.ts
+
+      - name: 📤 Upload rapport markdown
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quality-newsletter-${{ github.run_id }}
+          path: artifacts/quality-newsletter-*.md
+          retention-days: 30
