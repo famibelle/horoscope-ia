@@ -134,25 +134,27 @@ export default function EnergyBanner() {
         ))}
       </div>
 
-      {/* Les esprits de Karukera murmurent */}
-      {signe?.phrase && (
+      {/* Les esprits de Karukera murmurent — espace toujours réservé pour éviter le CLS */}
+      <div className="mt-8 max-w-md mx-auto" style={{ minHeight: '88px' }}>
         <motion.div
-          className="mt-8 max-w-md mx-auto rounded-2xl p-4"
+          className="rounded-2xl p-4"
           style={{
             background: 'linear-gradient(135deg, rgba(139,69,19,0.15), rgba(210,105,30,0.1))',
             border: '1px solid rgba(139,69,19,0.25)',
+            opacity: signe?.phrase ? undefined : 0,
+            pointerEvents: signe?.phrase ? undefined : 'none',
           }}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5, duration: 0.8 }}
+          animate={{ opacity: signe?.phrase ? 1 : 0 }}
+          transition={{ duration: 0.8 }}
         >
           <p className="font-ui text-ancestral-gold/40 text-[12px] uppercase tracking-widest mb-1.5">
             Les esprits de Karukera murmurent
           </p>
-          <p className="font-accent italic text-ancestral-cream/70 text-[15px] leading-relaxed">{signe.phrase}</p>
+          <p className="font-accent italic text-ancestral-cream/70 text-[15px] leading-relaxed">
+            {signe?.phrase ?? ''}
+          </p>
         </motion.div>
-      )}
+      </div>
 
       <motion.div
         className="mt-12 h-px mx-auto max-w-xs"

@@ -69,7 +69,7 @@ export default function HoroscopeCard({ sign, data, loading, error, onRetry }: H
   const date = formatDate();
 
   return (
-    <section className="px-4 pb-8 max-w-2xl mx-auto">
+    <section className="px-4 pb-8 max-w-2xl mx-auto" style={{ minHeight: '420px' }}>
       <AnimatePresence mode="wait">
         <motion.div
           key={sign.id + (loading ? '-loading' : data ? '-data' : '-error')}

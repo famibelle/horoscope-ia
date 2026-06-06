@@ -81,6 +81,9 @@ export const metadata: Metadata = {
       follow: true,
     },
   },
+  verification: {
+    google: 'P9_u-OUCY7E3WbVyDWNC676IxpUvOm0MQmjIIlwPA44',
+  },
 };
 
 export const viewport: Viewport = {
@@ -124,7 +127,7 @@ export default function RootLayout({
           id="website-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
         <AudioPlayerProvider>
           {children}

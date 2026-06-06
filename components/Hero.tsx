@@ -30,7 +30,7 @@ export default function Hero() {
           className="font-display font-bold leading-tight mb-5"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
+          transition={{ duration: 0.5, delay: 0 }}
         >
           <span className="block text-5xl sm:text-6xl" style={{ color: '#D4AF50' }}>
             Maryse CondAI
