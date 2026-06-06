@@ -122,7 +122,7 @@ export default function AProposPage() {
           </h2>
           <div className="space-y-4 text-white/65 text-sm sm:text-base leading-relaxed">
             <p>
-              Au cœur de Zodyak Karukera se trouve un <Link href="/dictionnaire-vaudou" className="underline hover:text-white/90 transition-colors" style={{ color: 'rgba(212,175,80,0.8)' }}>dictionnaire des présages naturels</Link> guadeloupéens — une base de données de la faune et de la flore locale, chaque espèce associée à une signification symbolique héritée des traditions créoles, africaines et kalinago.
+              Au cœur de Zodyak Karukera se trouve un dictionnaire des présages naturels guadeloupéens — une base de données de la faune et de la flore locale, chaque espèce associée à une signification symbolique héritée des traditions créoles, africaines et kalinago.
             </p>
             <p>
               Le zandoli (le petit lézard vert qu'on voit partout) annonce-t-il la chance ou la vigilance ? Le chant du mâle-coq avant l'aube est-il bon ou mauvais présage ? Quand le balisier fleurit hors saison, que dit-il ? Ces questions, les anciens y répondaient. Nous avons collecté et structuré ces savoirs pour les réintégrer dans une lecture astrologique quotidienne.

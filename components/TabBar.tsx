@@ -34,7 +34,7 @@ export default function TabBar() {
   function isActive(tab: (typeof TABS)[number]) {
     if (tab.id === 'accueil') return pathname === '/';
     if (tab.id === 'signe')   return pathname.startsWith('/horoscope');
-    if (tab.id === 'contes')   return pathname.startsWith('/articles') || pathname.startsWith('/dictionnaire-vaudou') || pathname.startsWith('/calendrier-vaudou') || pathname.startsWith('/quiz-vaudou');
+    if (tab.id === 'contes')   return pathname.startsWith('/articles') || pathname.startsWith('/calendrier-vaudou');
     if (tab.id === 'a-propos') return pathname === '/a-propos';
     return false;
   }
