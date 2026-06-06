@@ -269,6 +269,25 @@ export default function HoroscopeSignPage() {
 
         <div className="px-4 py-6">
 
+        {/* ── Bloc statique signe — indexable par Google ─────────────── */}
+        <section className="mb-6 pb-5" style={{ borderBottom: '1px solid rgba(245,245,220,0.06)' }}>
+          <h1
+            className="font-display font-bold text-ancestral-cream mb-1"
+            style={{ fontSize: '20px', lineHeight: 1.2 }}
+          >
+            Horoscope {sign.name} du jour — Karukera
+          </h1>
+          <p
+            className="font-ui text-ancestral-cream/40 text-[12px] mb-3"
+            style={{ letterSpacing: '0.05em' }}
+          >
+            {sign.dateRange} · {sign.element} · {sign.planet}
+          </p>
+          <p className="font-accent italic text-ancestral-cream/50 text-[14px] leading-relaxed">
+            {sign.spirituel}
+          </p>
+        </section>
+
         {/* Edition pills */}
         <div style={{ display: 'flex', gap: '6px', marginBottom: '20px' }}>
           {(['nuit', 'matin', 'midi', 'soir'] as const).map((ed) => {

@@ -27,7 +27,7 @@ export const ARTICLES: ArticleMeta[] = [
       "Le quimbois n'est pas de la superstition. C'est une manière de lire le monde invisible que l'Occident a choisi d'ignorer — et les planètes en font partie.",
     tag: 'Spirituel',
     tagColor: 'from-ancestral-earth to-ancestral-deepBrown',
-    readTime: '6 min',
+    readTime: '12 min',
   },
   {
     slug: 'soufriere-et-saturne',
@@ -67,6 +67,66 @@ export const ARTICLES: ArticleMeta[] = [
       "Mercure gouverne la parole, les mots, les échanges. Le créole guadeloupéen est une langue qui a survécu à l'interdit. Cette résistance-là est mercurienne.",
     tag: 'Langage',
     tagColor: 'from-ancestral-forest to-ancestral-gold',
+    readTime: '6 min',
+  },
+  {
+    slug: 'careme-et-gemeaux',
+    emoji: '🌬️',
+    title: "Le carême et l'énergie des Gémeaux — le vent du changement",
+    excerpt:
+      "En Guadeloupe, le carême n'est pas que la saison sèche. C'est le vent alizé qui nettoie tout sur son passage. Les Gémeaux, eux, le savent depuis toujours.",
+    tag: 'Saisons',
+    tagColor: 'from-ancestral-gold to-ancestral-forest',
+    readTime: '5 min',
+  },
+  {
+    slug: 'fete-cuisinieres-cancer',
+    emoji: '🍲',
+    title: "La fête des cuisinières et les énergies de Cancer",
+    excerpt:
+      "Chaque année en août, les cuisinières de Pointe-à-Pitre défilent en grande pompe. Ce rituel de partage et de soin, c'est Cancer dans toute sa splendeur.",
+    tag: 'Traditions',
+    tagColor: 'from-ancestral-terracotta to-ancestral-gold',
+    readTime: '5 min',
+  },
+  {
+    slug: 'bele-gwoka-mars',
+    emoji: '🥁',
+    title: "Bèlè, gwoka et Mars — rythmes ancestraux et planètes guerrières",
+    excerpt:
+      "Le gwoka n'est pas juste de la musique. C'est une arme. Mars, planète de l'action et de la lutte, résonne dans chaque frappe du ka comme un appel à se tenir debout.",
+    tag: 'Musique',
+    tagColor: 'from-ancestral-earth to-ancestral-terracotta',
+    readTime: '6 min',
+  },
+  {
+    slug: 'igname-et-vierge',
+    emoji: '🌱',
+    title: "L'igname et la Vierge — nourrir son âme avec la terre",
+    excerpt:
+      "L'igname est la reine des tubercules guadeloupéens. Elle demande patience, sol bien travaillé, gestes précis. La Vierge, signe de service et de rigueur, lui ressemble.",
+    tag: 'Terre',
+    tagColor: 'from-ancestral-forest to-ancestral-earth',
+    readTime: '5 min',
+  },
+  {
+    slug: 'kolibri-et-verseau',
+    emoji: '🐦',
+    title: "Kolibri et Verseau — la liberté comme horizon",
+    excerpt:
+      "Le colibri de Guadeloupe pèse trois grammes et bat des ailes deux cents fois par seconde. Le Verseau, lui, ne tient pas en place non plus. Deux êtres faits pour les grands espaces.",
+    tag: 'Nature',
+    tagColor: 'from-ancestral-gold to-ancestral-cream',
+    readTime: '5 min',
+  },
+  {
+    slug: 'canne-a-sucre-capricorne',
+    emoji: '🎋',
+    title: "La canne à sucre et le Capricorne — labeur, patience et récompense",
+    excerpt:
+      "La canne à sucre a façonné la Guadeloupe dans sa chair. Le Capricorne, lui, sait mieux que tout autre signe que rien de durable ne se construit sans travail, sans douleur, et sans le temps long.",
+    tag: 'Terre',
+    tagColor: 'from-ancestral-earth to-ancestral-deepBrown',
     readTime: '6 min',
   },
 ];

@@ -8,7 +8,7 @@ const TABS = [
   { id: 'accueil',   href: '/',          icon: '🌿', label: 'Accueil'   },
   { id: 'signe',     href: '/horoscope', icon: '♊', label: 'Mon signe' },
   { id: 'contes',    href: '/#articles', icon: '📜', label: 'Contes'    },
-  { id: 'partager',  href: '/#partager', icon: '📲', label: 'Partager'  },
+  { id: 'a-propos',  href: '/a-propos',  icon: '✦',  label: 'À propos'  },
 ] as const;
 
 export default function TabBar() {
@@ -34,8 +34,8 @@ export default function TabBar() {
   function isActive(tab: (typeof TABS)[number]) {
     if (tab.id === 'accueil') return pathname === '/';
     if (tab.id === 'signe')   return pathname.startsWith('/horoscope');
-    if (tab.id === 'contes')  return pathname.startsWith('/articles') || pathname.startsWith('/dictionnaire-vaudou') || pathname.startsWith('/calendrier-vaudou') || pathname.startsWith('/quiz-vaudou');
-    if (tab.id === 'partager') return false;
+    if (tab.id === 'contes')   return pathname.startsWith('/articles') || pathname.startsWith('/dictionnaire-vaudou') || pathname.startsWith('/calendrier-vaudou') || pathname.startsWith('/quiz-vaudou');
+    if (tab.id === 'a-propos') return pathname === '/a-propos';
     return false;
   }
 

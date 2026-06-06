@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from 'next';
 import { Cormorant_Garamond, Outfit, IM_Fell_English } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 import TabBar from '@/components/TabBar';
 import MiniPlayer from '@/components/MiniPlayer';
+import Footer from '@/components/Footer';
 import { AudioPlayerProvider } from '@/contexts/AudioPlayerContext';
 
 const cormorant = Cormorant_Garamond({
@@ -86,6 +88,21 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Horoscope Karukera — Zodyak Karukera',
+  url: 'https://zodyak-karukera.com',
+  description:
+    "Horoscopes quotidiens ancrés dans la sagesse ancestrale et la culture guadeloupéenne. Faune, flore et présages naturels de Karukera interprétés pour chaque signe astrologique.",
+  publisher: {
+    '@type': 'Organization',
+    name: 'Zodyak Karukera',
+    url: 'https://zodyak-karukera.com',
+  },
+  inLanguage: 'fr-FR',
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -102,8 +119,15 @@ export default function RootLayout({
         <meta name="google-adsense-account" content="ca-pub-3159683365493434" />
       </head>
       <body className={`${cormorant.variable} ${outfit.variable} ${imFell.variable} antialiased`} style={{ paddingBottom: '80px' }}>
+        <Script
+          id="website-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+          strategy="beforeInteractive"
+        />
         <AudioPlayerProvider>
           {children}
+          <Footer />
           <MiniPlayer />
         </AudioPlayerProvider>
         <TabBar />

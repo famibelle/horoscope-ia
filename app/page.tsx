@@ -9,7 +9,6 @@ import ShareButtons from '@/components/ShareButtons';
 import HoroscopesPreview from '@/components/HoroscopesPreview';
 import AdSpace from '@/components/AdSpace';
 import Articles from '@/components/Articles';
-import Footer from '@/components/Footer';
 import { EditionProvider } from '@/contexts/EditionContext';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
 
@@ -93,6 +92,26 @@ export default async function Home() {
         <div className="relative z-10">
           <EditionToggle />
           <Hero />
+
+          {/* Section éditoriale statique — indexable par Google */}
+          <section
+            className="relative z-10 px-4 py-6 max-w-2xl mx-auto"
+            style={{ borderBottom: '1px solid rgba(245,245,220,0.05)' }}
+          >
+            <p
+              className="font-ui text-[11px] uppercase tracking-[3px] mb-3"
+              style={{ color: 'var(--color-gold)' }}
+            >
+              Horoscope Karukera
+            </p>
+            <p className="font-display text-ancestral-cream/70 text-[15px] leading-relaxed">
+              <strong className="text-ancestral-cream/90">Karukera</strong>, le nom kalinago traditionnel de la Guadeloupe, signifie « l'île aux belles eaux ».{' '}
+              <strong className="text-ancestral-cream/90">Zodyak Karukera</strong> puise dans la sagesse ancestrale guadeloupéenne : faune, flore, présages naturels, et traditions créoles et africaines.
+              Maryse CondAI y interprète chaque horoscope à travers <strong className="text-ancestral-cream/90">sept dimensions</strong> — amour, travail, argent, <em>lyannaj</em>, présage ancestral et conseil personnalisé.
+              Choisissez votre signe pour découvrir votre lecture du jour, imprégnée de l'énergie spirituelle de Karukera.
+            </p>
+          </section>
+
           <InteractiveHoroscope
             prefetchedData={prefetched?.data ?? null}
             prefetchedSign={prefetched?.sign ?? null}
@@ -103,7 +122,6 @@ export default async function Home() {
           <ShareButtons />
           <AdSpace variant="square" />
           <Articles />
-          <Footer />
         </div>
       </EditionProvider>
     </main>

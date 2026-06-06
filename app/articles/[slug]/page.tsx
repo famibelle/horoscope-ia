@@ -44,7 +44,32 @@ export default async function ArticlePage(
 
   if (!meta || !content) notFound();
 
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: meta.title,
+    description: meta.excerpt,
+    datePublished: content.generatedAt ?? '2025-01-01T00:00:00Z',
+    inLanguage: 'fr-FR',
+    publisher: {
+      '@type': 'Organization',
+      name: 'Zodyak Karukera',
+      url: 'https://zodyak-karukera.com',
+    },
+    author: {
+      '@type': 'Organization',
+      name: 'Zodyak Karukera',
+    },
+    url: `https://zodyak-karukera.com/articles/${slug}`,
+    mainEntityOfPage: `https://zodyak-karukera.com/articles/${slug}`,
+  };
+
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
     <main className="relative min-h-screen overflow-x-hidden">
       {/* Ambient glow */}
       <div
@@ -70,8 +95,8 @@ export default async function ArticlePage(
           Retour
         </Link>
 
-        {/* Tag + read time */}
-        <div className="flex items-center gap-3 mb-6">
+        {/* Tag + read time + date */}
+        <div className="flex items-center gap-3 mb-6 flex-wrap">
           <span
             className={`inline-flex items-center px-3 py-1 rounded-full text-white text-[10px] font-semibold uppercase tracking-wider bg-gradient-to-r ${meta.tagColor}`}
           >
@@ -80,6 +105,19 @@ export default async function ArticlePage(
           <span className="text-white/25 text-xs uppercase tracking-wider">
             {meta.readTime}
           </span>
+          {content.generatedAt && (
+            <time
+              dateTime={content.generatedAt}
+              className="text-white/30 text-xs"
+            >
+              Publié le{' '}
+              {new Date(content.generatedAt).toLocaleDateString('fr-FR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })}
+            </time>
+          )}
         </div>
 
         {/* Emoji + Title */}
@@ -162,5 +200,6 @@ export default async function ArticlePage(
         </div>
       </div>
     </main>
+    </>
   );
 }
