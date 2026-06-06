@@ -5,6 +5,7 @@ import './globals.css';
 import TabBar from '@/components/TabBar';
 import MiniPlayer from '@/components/MiniPlayer';
 import Footer from '@/components/Footer';
+import CookieBanner from '@/components/CookieBanner';
 import { AudioPlayerProvider } from '@/contexts/AudioPlayerContext';
 
 const cormorant = Cormorant_Garamond({
@@ -131,6 +132,7 @@ export default function RootLayout({
           <MiniPlayer />
         </AudioPlayerProvider>
         <TabBar />
+        <CookieBanner />
       </body>
     </html>
   );
