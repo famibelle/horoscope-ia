@@ -38,7 +38,11 @@ function lunarPhase(): { emoji: string; label: string } {
 export default function EnergyBanner() {
   const [weather, setWeather]   = useState<WeatherData | null>(null);
   const [signe, setSigne]       = useState<SigneDuJour | null>(null);
-  const moon = lunarPhase();
+  const [moon, setMoon]         = useState<{ emoji: string; label: string }>({ emoji: '🌑', label: '…' });
+
+  useEffect(() => {
+    setMoon(lunarPhase());
+  }, []);
 
   useEffect(() => {
     fetch('/api/weather')

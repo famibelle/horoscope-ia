@@ -18,6 +18,7 @@ export const markdownComponents: Components = {
 
 /** Supprime les marqueurs markdown d'une chaîne (pour les extraits tronqués). */
 export function stripMarkdown(text: string): string {
+  if (!text || typeof text !== 'string') return '';
   return text
     .replace(/\*\*(.+?)\*\*/g, '$1')
     .replace(/\*(.+?)\*/g, '$1')
