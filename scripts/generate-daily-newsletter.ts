@@ -56,7 +56,11 @@ async function sendPersonalized(
     try {
       const horoscopeData = horoscopeBySign.get(signId) ?? {};
       const personalized = await generatePersonalizedNewsletter(signId, date, horoscopeData);
-      await sendEmailViaBrevo(emails, personalized.subject, personalized.html, personalized.text);
+      for (const email of emails) {
+        const unsubUrl = `https://zodyak-karukera.com/api/unsubscribe?email=${encodeURIComponent(email)}`;
+        const html = personalized.html.replace(/\{\{unsubscribe_url\}\}/g, unsubUrl);
+        await sendEmailViaBrevo(email, personalized.subject, html, personalized.text);
+      }
       console.log(`   ✅ ${signId} envoyé`);
     } catch (err: any) {
       console.error(`   ❌ Erreur pour ${signId}:`, err?.message ?? err);
@@ -67,7 +71,11 @@ async function sendPersonalized(
   if (noSign.length > 0) {
     console.log(`\n📨 Envoi newsletter complète à ${noSign.length} abonné(s) sans signe...`);
     try {
-      await sendEmailViaBrevo(noSign, newsletter.subject, newsletter.htmlContent, newsletter.text);
+      for (const email of noSign) {
+        const unsubUrl = `https://zodyak-karukera.com/api/unsubscribe?email=${encodeURIComponent(email)}`;
+        const html = newsletter.htmlContent.replace(/\{\{unsubscribe_url\}\}/g, unsubUrl);
+        await sendEmailViaBrevo(email, newsletter.subject, html, newsletter.text);
+      }
       console.log('   ✅ Newsletter complète envoyée');
     } catch (err: any) {
       console.error('   ❌ Erreur newsletter complète:', err?.message ?? err);

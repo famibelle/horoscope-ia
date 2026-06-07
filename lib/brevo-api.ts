@@ -184,6 +184,25 @@ export async function getContactsFromList(
 }
 
 /**
+ * Retirer un contact d'une liste Brevo (désabonnement)
+ */
+export async function removeContactFromList(
+  email: string,
+  listId: number = getBrevoListId()
+): Promise<void> {
+  const apiKey = getBrevoApiKey();
+  const response = await fetch(`${BREVO_API_URL}/contacts/lists/${listId}/contacts/remove`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'api-key': apiKey },
+    body: JSON.stringify({ emails: [email.toLowerCase().trim()] }),
+  });
+  if (!response.ok) {
+    const err = await response.json();
+    throw new Error(`Brevo unsubscribe error: ${err.message || response.statusText}`);
+  }
+}
+
+/**
  * Créer une campagne email (pour les envois en masse)
  */
 export async function createEmailCampaign(

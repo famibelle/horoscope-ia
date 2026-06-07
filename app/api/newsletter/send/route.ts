@@ -17,9 +17,12 @@ export async function POST(req: Request) {
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://zodyak-karukera.com';
     const webUrl = `${baseUrl}/newsletter/${newsletter.id}`;
-    const emailHtml = generateEmailHtml(newsletter, webUrl);
 
-    await sendEmailViaBrevo(recipients, newsletter.subject, emailHtml, newsletter.text);
+    for (const recipient of recipients) {
+      const unsubUrl = `${baseUrl}/api/unsubscribe?email=${encodeURIComponent(recipient)}`;
+      const emailHtml = generateEmailHtml(newsletter, webUrl, unsubUrl);
+      await sendEmailViaBrevo(recipient, newsletter.subject, emailHtml, newsletter.text);
+    }
 
     return Response.json({ success: true, webUrl, sent: recipients.length });
   } catch (err) {

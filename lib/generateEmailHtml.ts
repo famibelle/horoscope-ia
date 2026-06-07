@@ -1,6 +1,6 @@
 import type { StoredNewsletter } from './newsletter-storage';
 
-const DEFAULT_UNSUBSCRIBE_URL = 'https://app.brevo.com/contact/unsubscription/email/';
+const DEFAULT_UNSUBSCRIBE_URL = 'https://zodyak-karukera.com/api/unsubscribe?email=';
 
 export function generateEmailHtml(
   newsletter: StoredNewsletter,
