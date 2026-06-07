@@ -6,6 +6,7 @@ import InteractiveHoroscope from '@/components/InteractiveHoroscope';
 import EditionToggle from '@/components/EditionToggle';
 import EnergyBanner from '@/components/EnergyBanner';
 import ShareButtons from '@/components/ShareButtons';
+import NewsletterSubscribeForm from '@/components/NewsletterSubscribeForm';
 import HoroscopesPreview from '@/components/HoroscopesPreview';
 import AdSpace from '@/components/AdSpace';
 import Articles from '@/components/Articles';
@@ -122,6 +123,20 @@ export default async function Home() {
           <ShareButtons />
           <AdSpace variant="square" />
           <Articles />
+          <section className="relative z-10 px-4 py-10 max-w-2xl mx-auto">
+            <div className="text-center mb-8">
+              <p className="font-ui text-[12px] uppercase tracking-[0.3em] mb-3" style={{ color: '#D4AF50' }}>
+                Recevoir l&apos;horoscope chaque matin
+              </p>
+              <h2 className="font-display text-2xl font-bold text-ancestral-cream mb-2">
+                🌿 S&apos;abonner à la newsletter
+              </h2>
+              <p className="font-ui text-[14px] leading-relaxed" style={{ color: 'rgba(200,216,192,0.6)' }}>
+                Votre horoscope personnalisé, ancré dans la sagesse de Karukera, livré chaque matin.
+              </p>
+            </div>
+            <NewsletterSubscribeForm />
+          </section>
         </div>
       </EditionProvider>
     </main>

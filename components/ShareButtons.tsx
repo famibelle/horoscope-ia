@@ -75,14 +75,16 @@ const platforms = [
   },
 ];
 
-const SHARE_TEXT =
-  '🌿 Mon horoscope ancestral — Découvrez la sagesse de Karukera et les paroles de Maryse CondAI. Explorez votre totem sur Horoscope Karukera';
+const BASE_SHARE_TEXT = '🌿 Mon horoscope ancestral — Découvrez la sagesse de Karukera et les paroles de Maryse CondAI sur Zodyak Karukera';
 
-export default function ShareButtons() {
+export default function ShareButtons({ signName }: { signName?: string }) {
   const [copied, setCopied] = useState(false);
+  const shareText = signName
+    ? `🌿 Mon horoscope ${signName} du jour — Découvrez la sagesse de Karukera et les paroles de Maryse CondAI sur Zodyak Karukera`
+    : BASE_SHARE_TEXT;
 
   const handleShare = (platform: (typeof platforms)[0]) => {
-    const url = platform.url(SHARE_TEXT);
+    const url = platform.url(shareText);
     if (url) {
       window.open(url, '_blank', 'noopener,noreferrer');
     } else {
@@ -94,7 +96,7 @@ export default function ShareButtons() {
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(SHARE_TEXT).then(() => {
+    navigator.clipboard.writeText(shareText).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import ContactForm from '@/components/ContactForm';
 
 export const metadata: Metadata = {
   title: 'Contact - Horoscope Karukera | Questions, Support et Collaboration',
@@ -28,98 +29,7 @@ export default function ContactPage() {
         </p>
 
         <h2 className="text-2xl font-semibold text-ancestral-cream mb-4">📩 Formulaire de Contact</h2>
-        <form action="#" method="POST" className="space-y-4">
-          <div>
-            <label htmlFor="nom" className="block text-ancestral-cream/80 mb-1">Nom *</label>
-            <input 
-              type="text" 
-              id="nom" 
-              name="nom" 
-              required 
-              placeholder="Votre nom"
-              className="w-full p-3 bg-ancestral-dark/50 border border-ancestral-cream/10 rounded-lg text-ancestral-cream focus:outline-none focus:border-ancestral-gold"
-            />
-          </div>
-          <div>
-            <label htmlFor="email" className="block text-ancestral-cream/80 mb-1">Email *</label>
-            <input 
-              type="email" 
-              id="email" 
-              name="email" 
-              required 
-              placeholder="votre@email.com"
-              className="w-full p-3 bg-ancestral-dark/50 border border-ancestral-cream/10 rounded-lg text-ancestral-cream focus:outline-none focus:border-ancestral-gold"
-            />
-          </div>
-          <div>
-            <label htmlFor="signe" className="block text-ancestral-cream/80 mb-1">Votre signe astrologique (optionnel)</label>
-            <select 
-              id="signe" 
-              name="signe"
-              className="w-full p-3 bg-ancestral-dark/50 border border-ancestral-cream/10 rounded-lg text-ancestral-cream focus:outline-none focus:border-ancestral-gold"
-            >
-              <option value="">-- Sélectionnez votre signe --</option>
-              <option value="bélier">Bélier</option>
-              <option value="taureau">Taureau</option>
-              <option value="gémeaux">Gémeaux</option>
-              <option value="cancer">Cancer</option>
-              <option value="lion">Lion</option>
-              <option value="vierge">Vierge</option>
-              <option value="balance">Balance</option>
-              <option value="scorpion">Scorpion</option>
-              <option value="sagittaire">Sagittaire</option>
-              <option value="capricorne">Capricorne</option>
-              <option value="verseau">Verseau</option>
-              <option value="poissons">Poissons</option>
-            </select>
-          </div>
-          <div>
-            <label htmlFor="sujet" className="block text-ancestral-cream/80 mb-1">Sujet *</label>
-            <select 
-              id="sujet" 
-              name="sujet" 
-              required
-              className="w-full p-3 bg-ancestral-dark/50 border border-ancestral-cream/10 rounded-lg text-ancestral-cream focus:outline-none focus:border-ancestral-gold"
-            >
-              <option value="">-- Sélectionnez un sujet --</option>
-              <option value="question-horoscope">Question sur un horoscope</option>
-              <option value="support-technique">Support technique</option>
-              <option value="partenariat">Demande de partenariat</option>
-              <option value="rgpd">Exercice de vos droits RGPD</option>
-              <option value="autre">Autre</option>
-            </select>
-          </div>
-          <div>
-            <label htmlFor="message" className="block text-ancestral-cream/80 mb-1">Message *</label>
-            <textarea 
-              id="message" 
-              name="message" 
-              required 
-              placeholder="Votre message..."
-              rows={5}
-              className="w-full p-3 bg-ancestral-dark/50 border border-ancestral-cream/10 rounded-lg text-ancestral-cream focus:outline-none focus:border-ancestral-gold resize-none"
-            />
-          </div>
-          <div className="flex items-center">
-            <input 
-              type="checkbox" 
-              id="consentement" 
-              name="consentement" 
-              required
-              className="mr-2 accent-ancestral-gold"
-            />
-            <label htmlFor="consentement" className="text-ancestral-cream/80 text-sm">
-              J&apos;accepte que mes données soient traitées conformément à la
-              <a href="/politique-de-confidentialite" className="text-ancestral-gold hover:underline">Politique de Confidentialité</a>.
-            </label>
-          </div>
-          <button 
-            type="submit" 
-            className="w-full py-3 bg-ancestral-gold text-ancestral-dark font-semibold rounded-lg hover:bg-ancestral-gold/90 transition-colors duration-200"
-          >
-            Envoyer
-          </button>
-        </form>
+        <ContactForm />
       </section>
 
       <section className="mb-8">
