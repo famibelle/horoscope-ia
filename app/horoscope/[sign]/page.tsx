@@ -677,7 +677,7 @@ export default function HoroscopeSignPage() {
                       Totems alliés
                     </p>
                     <div className="flex flex-col gap-2.5">
-                      {(ambiance.compatibilite ?? []).slice(0, 2).map((compId) => {
+                      {(Array.isArray(ambiance.compatibilite) ? ambiance.compatibilite : Object.values(ambiance.compatibilite ?? {})).slice(0, 2).map((compId) => {
                         const compSign = signs.find((s) => s.id === compId);
                         if (!compSign) return null;
                         return (
