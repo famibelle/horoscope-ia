@@ -1,7 +1,6 @@
 import { ImageResponse } from 'next/og';
 import { ARTICLES } from '@/lib/articles-data';
 
-export const runtime = 'edge';
 export const alt = 'Article Zodyak Karukera';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
@@ -29,16 +28,18 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'radial-gradient(circle at 50% 30%, rgba(212,175,80,0.12) 0%, transparent 60%)',
+            background: 'radial-gradient(circle at 50% 30%, rgba(212,175,80,0.10) 0%, transparent 60%)',
           }}
         />
-        <div style={{ fontSize: 72, marginBottom: 32 }}>{article?.emoji ?? '📜'}</div>
+        <div style={{ fontSize: 16, color: 'rgba(212,175,80,0.5)', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 32 }}>
+          Zodyak Karukera — Contes ancestraux
+        </div>
         <div
           style={{
-            fontSize: 40,
+            fontSize: 46,
             fontWeight: 700,
             color: '#C8D8C0',
-            marginBottom: 20,
+            marginBottom: 24,
             textAlign: 'center',
             lineHeight: 1.3,
             maxWidth: 900,
@@ -46,17 +47,21 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         >
           {article?.title ?? 'Article'}
         </div>
+        {article?.tag && (
+          <div style={{ fontSize: 16, color: 'rgba(212,175,80,0.6)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+            {article.tag}
+          </div>
+        )}
         <div
           style={{
-            fontSize: 18,
-            color: 'rgba(212,175,80,0.6)',
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            marginTop: 16,
+            position: 'absolute',
+            bottom: 40,
+            left: 0,
+            right: 0,
+            height: 2,
+            background: 'linear-gradient(90deg, transparent, rgba(212,175,80,0.4), transparent)',
           }}
-        >
-          Zodyak Karukera
-        </div>
+        />
       </div>
     ),
     { ...size },

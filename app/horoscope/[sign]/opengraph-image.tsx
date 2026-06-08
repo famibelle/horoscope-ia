@@ -27,41 +27,31 @@ export default async function Image({ params }: { params: Promise<{ sign: string
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'radial-gradient(circle at 50% 40%, rgba(212,175,80,0.15) 0%, transparent 65%)',
+            background: 'radial-gradient(circle at 50% 40%, rgba(212,175,80,0.12) 0%, transparent 65%)',
           }}
         />
-        <div style={{ fontSize: 100, marginBottom: 24 }}>{sign?.emoji ?? '🌿'}</div>
-        <div
-          style={{
-            fontSize: 52,
-            fontWeight: 700,
-            color: '#D4AF50',
-            marginBottom: 16,
-            textAlign: 'center',
-          }}
-        >
-          Horoscope {sign?.name ?? 'du jour'}
-        </div>
-        <div
-          style={{
-            fontSize: 22,
-            color: 'rgba(200,216,192,0.7)',
-            marginBottom: 32,
-            textAlign: 'center',
-          }}
-        >
-          {sign?.dateRange ?? ''}
-        </div>
-        <div
-          style={{
-            fontSize: 18,
-            color: 'rgba(212,175,80,0.6)',
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-          }}
-        >
+        <div style={{ fontSize: 18, color: 'rgba(212,175,80,0.5)', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 24 }}>
           Zodyak Karukera
         </div>
+        <div style={{ fontSize: 64, fontWeight: 700, color: '#D4AF50', marginBottom: 16, textAlign: 'center' }}>
+          Horoscope {sign?.name ?? 'du jour'}
+        </div>
+        <div style={{ fontSize: 24, color: 'rgba(200,216,192,0.6)', marginBottom: 8, textAlign: 'center' }}>
+          {sign?.dateRange ?? ''}
+        </div>
+        <div style={{ fontSize: 18, color: 'rgba(200,216,192,0.35)', textAlign: 'center' }}>
+          {sign?.element ?? ''} — Karukera
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 40,
+            left: 0,
+            right: 0,
+            height: 2,
+            background: 'linear-gradient(90deg, transparent, rgba(212,175,80,0.4), transparent)',
+          }}
+        />
       </div>
     ),
     { ...size },

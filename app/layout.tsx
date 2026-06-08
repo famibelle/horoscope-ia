@@ -37,6 +37,7 @@ const imFell = IM_Fell_English({
 //   description: "Découvrez votre horoscope du jour avec Maryse CondAI...",
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://zodyak-karukera.com'),
   title: 'La Voix de nos Ancêtres',
   description:
     "Écoutez les conseils de Maryse CondAI, inspirés par la sagesse ancestrale et les esprits de Karukera. Horoscopes ancrés dans la culture guadeloupéenne.",
