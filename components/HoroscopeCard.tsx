@@ -255,9 +255,12 @@ function FilledCard({
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.4 }}
         >
-          <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B8A6E', marginBottom: '4px' }}>
-            Dimension spirituelle
-          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+            <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B8A6E' }}>
+              Dimension spirituelle
+            </p>
+            {data?.spirituelMensuel && <span style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#6B8A6E', opacity: 0.55 }}>· Mensuelle</span>}
+          </div>
           <p className="font-accent" style={{ fontSize: '15px', lineHeight: 1.65, color: '#C8D8C0', opacity: 0.85 }}>{data?.spirituelMensuel ?? sign?.spirituel}</p>
         </motion.div>
 
