@@ -21,6 +21,7 @@ const options = {
   force: args.includes('-f') || args.includes('--force'),
   date: args.find(arg => arg.startsWith('--date='))?.split('=')[1],
   signs: args.find(arg => arg.startsWith('--signs='))?.split('=')[1]?.split(','),
+  editions: args.find(arg => arg.startsWith('--editions='))?.split('=')[1]?.split(','),
 };
 
 // Filtrer les signes si spécifiés
@@ -738,7 +739,10 @@ export async function generateAllHoroscopes() {
   console.log(`🌤️  Météo: ${weather}\n`);
   logVerbose('Météo récupérée avec succès');
 
-  const editions: Edition[] = ['nuit', 'matin', 'midi', 'soir'];
+  const allEditions: Edition[] = ['nuit', 'matin', 'midi', 'soir'];
+  const editions: Edition[] = options.editions
+    ? allEditions.filter(e => options.editions!.includes(e))
+    : allEditions;
   const total = signs.length * editions.length;
   let generated = 0;
   let skipped = 0;

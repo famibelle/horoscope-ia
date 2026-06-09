@@ -714,33 +714,59 @@ export function buildHoroscopeMetadata(
   const animalTokens = splitTokens(sign.animal, sign.nomKreyol);
   const planteTokens = splitTokens(sign.plante);
 
-  const fauneEnrichies = fauneData.filter(f => {
-    const nom = f.nomCreole.toLowerCase();
-    const fr = (f.nomFrancais || '').toLowerCase();
-    return animalTokens.some(t => nom.includes(t) || fr.includes(t));
-  }).slice(0, 8);
+  // isTotem : même logique que dans buildHoroscopeUserPrompt pour cohérence des pools
+  function isTotemMeta(nomCreole: string, nomFrancais: string = ''): boolean {
+    const nom = nomCreole.toLowerCase();
+    const fr  = nomFrancais.toLowerCase();
+    const words = animalTokens.flatMap(t =>
+      [t, ...t.split(/[\s\-]+/).filter(w => w.length >= 3)]
+    ).flatMap(t => [
+      t,
+      t.replace(/\bcolibri\b/, 'kolibri'),
+      t.replace(/\biguane?\b/, 'igwann'),
+    ]);
+    return words.some(t => nom.includes(t) || fr.includes(t)) ||
+           planteTokens.some(t => nom.includes(t) || fr.includes(t));
+  }
 
-  const animauxSacresVaudou  = rotateBySignDate(animauxData,       sign.id, dateToUse, 2);
-  const objetsRituelsVaudou  = rotateBySignDate(objetsData,        sign.id, dateToUse, 2);
-  const plantesSacreesVaudou = rotateBySignDate(plantesVaudouData, sign.id, dateToUse, 2);
-  const lieuxVaudouMeta      = rotateBySignDate(lieuxVaudouData,   sign.id, dateToUse, 2);
+  // FAUNE — pool global sacré hors totem, pré-mélangé + rotation par signe+édition
+  // (aligne avec buildHoroscopeUserPrompt pour que la métadonnée reflète ce qui est injecté)
+  const FAUNE_EXCLUES_META = new Set(['soukougnan-myt', 'rat-nw-rat']);
+  const faunePoolMeta = fauneData.filter(f => {
+    if (FAUNE_EXCLUES_META.has(f.id)) return false;
+    if (isTotemMeta(f.nomCreole, f.nomFrancais)) return false;
+    return (f.sacreSymbolique || '').trim().length > 0;
+  });
+  const fauneEnrichies = shuffleDeterministic(
+    rotateBySignDate(shuffleDeterministic(faunePoolMeta, dateToUse), sign.id, dateToUse + edition, 6),
+    sign.id + dateToUse + edition + 'f'
+  );
 
+  const animauxSacresVaudou  = shuffleDeterministic(rotateBySignDate(shuffleDeterministic(animauxData,       dateToUse), sign.id, dateToUse + edition, 2), sign.id + dateToUse + 'a');
+  const objetsRituelsVaudou  = shuffleDeterministic(rotateBySignDate(shuffleDeterministic(objetsData,        dateToUse), sign.id, dateToUse + edition, 2), sign.id + dateToUse + 'o');
+  const plantesSacreesVaudou = shuffleDeterministic(rotateBySignDate(shuffleDeterministic(plantesVaudouData, dateToUse), sign.id, dateToUse + edition, 2), sign.id + dateToUse + 'p');
+  const lieuxVaudouMeta      = shuffleDeterministic(rotateBySignDate(shuffleDeterministic(lieuxVaudouData,   dateToUse), sign.id, dateToUse + edition, 2), sign.id + dateToUse + 'lv');
+
+  // FLORE — pré-mélange + rotation avec édition dans la clé
   const floreTotemNom2 = (floreData.find(f => {
     const key = (sign.flore?.nom_creole || sign.plante || '').toLowerCase();
     return f.nomCreole.toLowerCase().includes(key) || key.includes(f.nomCreole.toLowerCase());
   })?.nomCreole || '').toLowerCase();
-  const floreEnrichies = rotateBySignDate(
-    floreData.filter(f => f.nomCreole.toLowerCase() !== floreTotemNom2),
-    sign.id, dateToUse, 6
+  const florePoolMeta = floreData.filter(f => f.nomCreole.toLowerCase() !== floreTotemNom2);
+  const floreEnrichies = shuffleDeterministic(
+    rotateBySignDate(shuffleDeterministic(florePoolMeta, dateToUse), sign.id, dateToUse + edition, 6),
+    sign.id + dateToUse + edition + 'fl'
   );
 
+  // LIEUX — pré-mélange + rotation avec édition dans la clé
   const lieuTotemNomMeta = lieuxData.find(l =>
     l.nom.toLowerCase().includes(sign.lieu?.toLowerCase() || '') ||
     (sign.lieu?.toLowerCase() || '').includes(l.nom.toLowerCase())
   )?.nom.toLowerCase() || '';
-  const lieuxEnrichis = rotateBySignDate(
-    lieuxData.filter(l => l.nom.toLowerCase() !== lieuTotemNomMeta),
-    sign.id, dateToUse, 5
+  const lieuxPoolMeta = lieuxData.filter(l => l.nom.toLowerCase() !== lieuTotemNomMeta);
+  const lieuxEnrichis = shuffleDeterministic(
+    rotateBySignDate(shuffleDeterministic(lieuxPoolMeta, dateToUse), sign.id, dateToUse + edition, 5),
+    sign.id + dateToUse + edition + 'l'
   );
 
   const kreyolEnrichis = kreyolData.filter(k => {
@@ -755,13 +781,13 @@ export function buildHoroscopeMetadata(
     );
   }).slice(0, 5);
 
-  const histoireEnrichies = histoireData.filter(h =>
-    !isLongPeriod(h.periode) && (
-      h.periode.includes(year) ||
-      h.periode.includes(moisNom) ||
-      h.periode.includes(month)
-    )
-  ).slice(0, 3);
+  // HISTOIRE — fallback pool complet si aucune entrée ne correspond au mois courant
+  const histoireAllNonLongMeta = histoireData.filter(h => !isLongPeriod(h.periode));
+  const histoireByMonthMeta = histoireAllNonLongMeta.filter(h =>
+    h.periode.includes(year) || h.periode.includes(moisNom) || h.periode.includes(month)
+  );
+  const histoirePoolMeta = histoireByMonthMeta.length > 0 ? histoireByMonthMeta : histoireAllNonLongMeta;
+  const histoireEnrichies = rotateBySignDate(histoirePoolMeta, sign.id, dateToUse + edition, 3);
 
   const relevantLoas = loasData.filter(l =>
     l.nomCreole.toLowerCase().includes(loaName?.toLowerCase() || '')
