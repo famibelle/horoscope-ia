@@ -245,23 +245,28 @@ function FilledCard({
         {/* Dimension spirituelle */}
         <motion.div
           style={{
-            marginTop: '4px',
-            borderRadius: '12px',
-            padding: '10px 12px',
-            background: 'rgba(212,175,80,0.06)',
-            border: '1px solid rgba(212,175,80,0.14)',
+            marginTop: '12px',
+            paddingTop: '14px',
+            borderTop: '1px solid rgba(245,245,220,0.08)',
           }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.4 }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-            <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B8A6E' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+            <span style={{ fontSize: '11px', color: 'rgba(212,175,80,0.6)', lineHeight: 1 }}>✦</span>
+            <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(200,216,192,0.55)' }}>
               Dimension spirituelle
             </p>
-            {data?.spirituelMensuel && <span style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#6B8A6E', opacity: 0.55 }}>· Mensuelle</span>}
+            {data?.spirituelMensuel && (
+              <span style={{
+                fontSize: '9px', letterSpacing: '0.06em', textTransform: 'uppercase',
+                background: 'rgba(212,175,80,0.12)', border: '1px solid rgba(212,175,80,0.22)',
+                borderRadius: '4px', padding: '1px 5px', color: 'rgba(212,175,80,0.7)',
+              }}>Mensuelle</span>
+            )}
           </div>
-          <p className="font-accent" style={{ fontSize: '15px', lineHeight: 1.65, color: '#C8D8C0', opacity: 0.85 }}>{data?.spirituelMensuel ?? sign?.spirituel}</p>
+          <p className="font-accent" style={{ fontSize: '16px', lineHeight: 1.65, color: '#C8D8C0', opacity: 0.75 }}>{data?.spirituelMensuel ?? sign?.spirituel}</p>
         </motion.div>
 
         {/* Contexte Vaudou */}

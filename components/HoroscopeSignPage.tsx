@@ -295,12 +295,6 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
           >
             {sign.dateRange} · {sign.element} · {sign.planet}
           </p>
-          <p className="font-ui text-ancestral-cream/30 text-[10px] uppercase tracking-widest mb-1">
-            Dimension spirituelle
-          </p>
-          <p className="font-accent text-ancestral-cream/65 text-[14px] leading-relaxed">
-            {horoscope?.spirituelMensuel ?? sign.spirituel}
-          </p>
         </section>
 
         {/* Edition pills */}
@@ -401,17 +395,21 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
 
                 {/* Dimension spirituelle */}
                 <div
-                  className="mt-4 rounded-2xl p-4"
-                  style={{
-                    background: `linear-gradient(135deg, rgba(210,105,30,0.10), rgba(255,215,0,0.08))`,
-                    border: `1px solid rgba(210,105,30,0.18)`,
-                  }}
+                  className="mt-3"
+                  style={{ paddingTop: '14px', borderTop: '1px solid rgba(245,245,220,0.08)' }}
                 >
                   <div className="flex items-center gap-2 mb-1.5">
-                    <p className="font-ui text-ancestral-cream/35 text-[12px] uppercase tracking-widest">Dimension spirituelle</p>
-                    {horoscope?.spirituelMensuel && <span className="font-ui text-ancestral-cream/20 text-[10px] uppercase tracking-widest">· Mensuelle</span>}
+                    <span style={{ fontSize: '11px', color: 'rgba(212,175,80,0.6)', lineHeight: 1 }}>✦</span>
+                    <p className="font-ui text-[11px] uppercase tracking-widest" style={{ color: 'rgba(200,216,192,0.55)' }}>Dimension spirituelle</p>
+                    {horoscope?.spirituelMensuel && (
+                      <span style={{
+                        fontSize: '9px', letterSpacing: '0.06em', textTransform: 'uppercase',
+                        background: 'rgba(212,175,80,0.12)', border: '1px solid rgba(212,175,80,0.22)',
+                        borderRadius: '4px', padding: '1px 5px', color: 'rgba(212,175,80,0.7)',
+                      }}>Mensuelle</span>
+                    )}
                   </div>
-                  <p className="font-accent text-ancestral-cream/70 text-[15px] leading-relaxed">{horoscope?.spirituelMensuel ?? sign.spirituel}</p>
+                  <p className="font-accent text-[16px] leading-relaxed" style={{ color: 'rgba(200,216,192,0.75)' }}>{horoscope?.spirituelMensuel ?? sign.spirituel}</p>
                 </div>
               </motion.section>
             )}
