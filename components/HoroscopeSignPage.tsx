@@ -295,8 +295,8 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
           >
             {sign.dateRange} · {sign.element} · {sign.planet}
           </p>
-          <p className="font-accent italic text-ancestral-cream/50 text-[14px] leading-relaxed">
-            {sign.spirituel}
+          <p className="font-accent text-ancestral-cream/65 text-[14px] leading-relaxed">
+            {horoscope?.spirituelMensuel ?? sign.spirituel}
           </p>
         </section>
 
@@ -405,7 +405,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
                   }}
                 >
                   <p className="font-ui text-ancestral-cream/35 text-[12px] uppercase tracking-widest mb-1.5">Dimension spirituelle</p>
-                  <p className="font-accent italic text-ancestral-cream/45 text-[15px] leading-relaxed">{sign.spirituel}</p>
+                  <p className="font-accent text-ancestral-cream/70 text-[15px] leading-relaxed">{horoscope?.spirituelMensuel ?? sign.spirituel}</p>
                 </div>
               </motion.section>
             )}

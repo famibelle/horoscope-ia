@@ -14,7 +14,7 @@
 | Fruit                | Sapotiy                    | Sapotille                  | Manilkara zapota              | Peau brune, chair caramélisée et fondante. Arôme unique.                                    |
 | Fruit                | Karanbol                   | Carambole                  | Averrhoa carambola            | Forme d'étoile à la coupe. Chair rafraîchissante et juteuse.                                |
 | Fruit                | Pomme-kannèl               | Pomme cannelle / Cachiman  | Annona squamosa               | Fruit vert bosselé, chair blanche sucrée autour de pépins noirs.                            |
-| Fruit                | Kenèt                      | Quenette / Chenette        | Melicoccus bijugatus          | Grappes de petites coques vertes, chair jaune tirant sur le litchi. Fruit de saison populaire. |
+| Fruit | Kenèt | Quenette | Melicoccus bijugatus | Grappes de petites coques vertes, chair jaune tirant sur le litchi. Fruit de saison populaire. |
 | Fruit                | Abwiko péyi                | Abricot pays               | Mammea americana              | Fine écorce brune, noyau unique. Confondu parfois avec l'abricot tropical.                  |
 | Fruit                | Sèriz péyi                 | Cerise pays / Acérola      | Malpighia emarginata          | Très riche en vitamine C. Consommée en jus. Petit fruit rouge acidulé.                      |
 | Fruit                | Koko / Kokoye              | Noix de coco               | Cocos nucifera                | Eau de coco vendue sur le bord des routes. Chair râpée en gâteaux créoles (tablette coco).  |

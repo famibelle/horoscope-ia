@@ -77,20 +77,26 @@ Rédige la nouvelle "Dimension spirituelle" pour ce signe.`;
   return data.choices?.[0]?.message?.content?.trim() ?? '';
 }
 
-async function main() {
-  const results: Record<string, { actuel: string; draft: string }> = {};
+function currentMonth(): string {
+  const arg = process.argv.find(a => a.startsWith('--month='));
+  return arg ? arg.slice('--month='.length) : new Date().toISOString().slice(0, 7);
+}
 
-  // Charger le draft existant pour ne pas régénérer les succès
-  let existing: Record<string, any> = {};
+async function main() {
+  const month = currentMonth();
+  const outPath = path.join(process.cwd(), 'public', 'data', 'spirituels', `${month}.json`);
+
+  // Charger le fichier du mois existant pour ne pas régénérer les succès
+  let existing: Record<string, string> = {};
   try {
-    const outPath = path.join(process.cwd(), 'scripts', 'spirituel-draft.json');
     existing = JSON.parse(await fs.readFile(outPath, 'utf-8'));
   } catch {}
 
+  const results: Record<string, string> = { ...existing };
+
   for (const sign of signs) {
-    if (existing[sign.id]?.draft && existing[sign.id].draft !== 'ERREUR') {
+    if (results[sign.id] && results[sign.id] !== 'ERREUR') {
       console.log(`⏭️  ${sign.name} — déjà généré`);
-      results[sign.id] = existing[sign.id];
       continue;
     }
     const animalTokens = splitTokens(sign.animal, sign.nomKreyol);
@@ -122,17 +128,19 @@ async function main() {
 
     try {
       const draft = await generateSpirituel(signData);
-      results[sign.id] = { actuel: sign.spirituel, draft };
+      results[sign.id] = draft;
       console.log(`✅ ${sign.name}: "${draft.substring(0, 80)}..."`);
     } catch (e) {
       console.error(`❌ ${sign.name}:`, e);
-      results[sign.id] = { actuel: sign.spirituel, draft: 'ERREUR' };
+      results[sign.id] = 'ERREUR';
     }
+
+    // Sauvegarder après chaque signe pour ne pas perdre les succès en cas d'erreur
+    await fs.mkdir(path.dirname(outPath), { recursive: true });
+    await fs.writeFile(outPath, JSON.stringify(results, null, 2), 'utf-8');
   }
 
-  const outPath = path.join(process.cwd(), 'scripts', 'spirituel-draft.json');
-  await fs.writeFile(outPath, JSON.stringify(results, null, 2), 'utf-8');
-  console.log(`\n📄 Draft écrit dans scripts/spirituel-draft.json`);
+  console.log(`\n✅ Dimension spirituelle ${month} écrite dans public/data/spirituels/${month}.json`);
 }
 
 main().catch(console.error);

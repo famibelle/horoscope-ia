@@ -173,7 +173,7 @@ export const floreData: FloreEntry[] = [
   categorie: "FRUITS",
   sousCategorie: "fruit",
   nomCreole: "Kenèt",
-  nomFrancais: "Quenette / Chenette",
+  nomFrancais: "Quenette",
   nomScientifique: "Melicoccus bijugatus",
   usage: "Grappes de petites coques vertes, chair jaune tirant sur le litchi. Fruit de saison populaire.",
   isResistanceSymbol: false,

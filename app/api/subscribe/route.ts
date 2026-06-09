@@ -101,7 +101,7 @@ export async function POST(req: Request) {
         'Bienvenue chez Zodyak Karukera 🌿',
         html,
         text,
-        'newsletter@zodyak-karukera.com',
+        process.env.EMAIL_FROM || 'medhi.famibelle@gmail.com',
         'Maryse CondAI — Zodyak Karukera',
       );
     } catch (err) {

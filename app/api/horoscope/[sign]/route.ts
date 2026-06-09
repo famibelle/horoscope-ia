@@ -32,6 +32,15 @@ const SIGN_EN: Record<string, string> = {
 const ENABLE_ON_DEMAND_GENERATION = process.env.ENABLE_ON_DEMAND_GENERATION === 'true';
 const ENABLE_BACKGROUND_GENERATION = process.env.ENABLE_BACKGROUND_GENERATION === 'true';
 
+async function loadMonthlySpirituels(origin: string): Promise<Record<string, string>> {
+  const month = new Date().toISOString().slice(0, 7);
+  try {
+    const res = await fetch(`${origin}/data/spirituels/${month}.json`, { cache: 'no-store' });
+    if (res.ok) return await res.json();
+  } catch {}
+  return {};
+}
+
 /* ── Retry helper with exponential backoff ──────────────────────────────────── */
 
 async function retryWithBackoff<T>(
@@ -470,6 +479,10 @@ export async function GET(
 
   const blobKey = `${date}|${signId}|${edition}`;
 
+  // Chargé une fois, injecté dans chaque réponse
+  const spirituels = await loadMonthlySpirituels(req.nextUrl.origin);
+  const spirituelMensuel = spirituels[signId] || undefined;
+
   // ============================================================
   // LOGGING DÉTAILLÉ
   // ============================================================
@@ -504,6 +517,7 @@ export async function GET(
         argent: row.argent, amitie: row.amitie, prediction: row.prediction,
         conseil: row.conseil, teaser: row.teaser,
         signFr: row.sign_fr, weather: row.weather, edition: row.edition, source: row.source,
+        spirituelMensuel,
       };
       return NextResponse.json(payload, { headers: CACHE_HEADERS });
     }
@@ -522,7 +536,7 @@ export async function GET(
     const localData = await loadHoroscopeData(date, signId, edition, req);
     if (localData) {
       console.log(`[API HOROSCOPE] ✅ CACHE HIT: ${blobKey}`);
-      return NextResponse.json(localData, { headers: CACHE_HEADERS });
+      return NextResponse.json({ ...localData, spirituelMensuel }, { headers: CACHE_HEADERS });
     }
   } catch (err) {
     console.error(`[API HOROSCOPE] ❌ CACHE ERROR:`, err instanceof Error ? err.message : err);
@@ -539,7 +553,7 @@ export async function GET(
     const cached = await getCached(blobKey);
     if (cached) {
       console.log(`[API HOROSCOPE] ✅ BLOBS HIT: ${blobKey}`);
-      return NextResponse.json(cached, { headers: CACHE_HEADERS });
+      return NextResponse.json({ ...cached, spirituelMensuel }, { headers: CACHE_HEADERS });
     }
   } catch (err) {
     console.error(`[API HOROSCOPE] ❌ BLOBS ERROR:`, err instanceof Error ? err.message : err);
@@ -574,8 +588,8 @@ export async function GET(
         
         console.log(`[API HOROSCOPE] ✅ GÉNÉRATION RÉUSSIE: ${blobKey}`);
         console.log(`[API HOROSCOPE] Source: on-demand`);
-        
-        return NextResponse.json(response, { headers: CACHE_HEADERS });
+
+        return NextResponse.json({ ...response, spirituelMensuel }, { headers: CACHE_HEADERS });
       } else {
         console.error(`[API HOROSCOPE] ❌ GÉNÉRATION ÉCHOUÉE: Mistral n'a pas retourné de données valides`);
       }
@@ -616,16 +630,16 @@ export async function GET(
     
     // Retourner une réponse de "génération en cours"
     const generatingResponse = buildGeneratingResponse(sign, date, edition, weather);
-    
+
     console.log(`[API HOROSCOPE] ⏳ RETOUR: Génération en cours`);
-    return NextResponse.json(generatingResponse, { headers: NO_CACHE_HEADERS });
+    return NextResponse.json({ ...generatingResponse, spirituelMensuel }, { headers: NO_CACHE_HEADERS });
   }
 
   // 🔹 Fallback statique (dernier recours)
   console.error(`[API HOROSCOPE] ❌ TOUTES LES ÉTAPES ÉCHOUÉES: ${blobKey}`);
   console.error(`[API HOROSCOPE] → Retour du fallback statique`);
-  
+
   const fallbackResponse = buildFallbackResponse(sign, weather, edition);
-  
-  return NextResponse.json(fallbackResponse, { headers: CACHE_HEADERS });
+
+  return NextResponse.json({ ...fallbackResponse, spirituelMensuel }, { headers: CACHE_HEADERS });
 }

@@ -258,7 +258,7 @@ function FilledCard({
           <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B8A6E', marginBottom: '4px' }}>
             Dimension spirituelle
           </p>
-          <p style={{ fontSize: '15px', lineHeight: 1.65, color: '#C8D8C0', opacity: 0.7, fontStyle: 'italic' }}>{sign.spirituel}</p>
+          <p className="font-accent" style={{ fontSize: '15px', lineHeight: 1.65, color: '#C8D8C0', opacity: 0.85 }}>{data?.spirituelMensuel ?? sign?.spirituel}</p>
         </motion.div>
 
         {/* Contexte Vaudou */}

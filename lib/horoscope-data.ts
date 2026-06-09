@@ -44,6 +44,7 @@ export interface HoroscopeResponse {
   source: 'mistral' | 'raw' | 'fallback';
   culturalData?: CulturalData;
   vaudou?: VaudouContext;
+  spirituelMensuel?: string;
 }
 
 export function formatDate(): string {
