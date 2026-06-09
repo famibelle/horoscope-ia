@@ -250,6 +250,31 @@ function analyzeHoroscopes(rows: HoroscopeRow[]): { alerts: Alert[]; md: string 
   }
 
   // ── Fréquences globales sur 7 jours ──────────────────────────────────────
+  // topFreqByRow : compte le nombre d'horoscopes distincts contenant chaque élément
+  // (évite la surestimation de topFreq(flatMap, total) où n est sur tous les slots d'arrays)
+  function topFreqByRow(
+    rowsArr: HoroscopeRow[],
+    field: 'faune_enrichies' | 'flore_enrichies' | 'lieux_enrichis' | 'histoire_enrichies',
+    total: number,
+    top = 15,
+  ): string[] {
+    const freq = new Map<string, number>();
+    for (const row of rowsArr) {
+      for (const el of new Set(row[field] ?? [])) {
+        freq.set(el, (freq.get(el) ?? 0) + 1);
+      }
+    }
+    return [...freq.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, top)
+      .map(([el, n]) => {
+        const pct = Math.round((n / total) * 100);
+        const flag = pct >= 30 ? '🔴' : pct >= 15 ? '🟠' : '🟡';
+        return `| ${flag} **${el}** | ${n} | ${pct}% |`;
+      });
+  }
+
+  // topFreq reste utilisé pour les champs scalaires (loa : 1 valeur par horoscope)
   function topFreq(items: string[], total: number, top = 15): string[] {
     const freq = new Map<string, number>();
     for (const item of items) freq.set(item, (freq.get(item) ?? 0) + 1);
@@ -264,10 +289,10 @@ function analyzeHoroscopes(rows: HoroscopeRow[]): { alerts: Alert[]; md: string 
   }
 
   const totalRows = rows.length;
-  const allFaune    = rows.flatMap(r => r.faune_enrichies ?? []);
-  const allFlore    = rows.flatMap(r => r.flore_enrichies ?? []);
-  const allLieux    = rows.flatMap(r => r.lieux_enrichis  ?? []);
-  const allHistoire = rows.flatMap(r => r.histoire_enrichies ?? []);
+  const hasFaune    = rows.some(r => (r.faune_enrichies ?? []).length > 0);
+  const hasFlore    = rows.some(r => (r.flore_enrichies ?? []).length > 0);
+  const hasLieux    = rows.some(r => (r.lieux_enrichis  ?? []).length > 0);
+  const hasHistoire = rows.some(r => (r.histoire_enrichies ?? []).length > 0);
   const allLoa      = rows.map(r => r.loa).filter(Boolean) as string[];
 
   const freqHeader = '| Élément | Occurrences | % horoscopes |';
@@ -276,17 +301,17 @@ function analyzeHoroscopes(rows: HoroscopeRow[]): { alerts: Alert[]; md: string 
   md.push('### 📊 Fréquences globales sur la période\n');
   md.push(`> Sur **${totalRows} horoscopes**. 🔴 ≥30% · 🟠 ≥15% · 🟡 <15%\n`);
 
-  if (allFaune.length) {
-    md.push('**🦎 Faune**\n', freqHeader, freqSep, ...topFreq(allFaune, totalRows), '');
+  if (hasFaune) {
+    md.push('**🦎 Faune**\n', freqHeader, freqSep, ...topFreqByRow(rows, 'faune_enrichies', totalRows), '');
   }
-  if (allFlore.length) {
-    md.push('**🌿 Flore**\n', freqHeader, freqSep, ...topFreq(allFlore, totalRows), '');
+  if (hasFlore) {
+    md.push('**🌿 Flore**\n', freqHeader, freqSep, ...topFreqByRow(rows, 'flore_enrichies', totalRows), '');
   }
-  if (allLieux.length) {
-    md.push('**🏔️ Lieux sacrés**\n', freqHeader, freqSep, ...topFreq(allLieux, totalRows), '');
+  if (hasLieux) {
+    md.push('**🏔️ Lieux sacrés**\n', freqHeader, freqSep, ...topFreqByRow(rows, 'lieux_enrichis', totalRows), '');
   }
-  if (allHistoire.length) {
-    md.push('**📜 Histoires**\n', freqHeader, freqSep, ...topFreq(allHistoire, totalRows), '');
+  if (hasHistoire) {
+    md.push('**📜 Histoires**\n', freqHeader, freqSep, ...topFreqByRow(rows, 'histoire_enrichies', totalRows), '');
   }
   if (allLoa.length) {
     md.push('**🌀 Loa**\n', freqHeader, freqSep, ...topFreq(allLoa, totalRows), '');

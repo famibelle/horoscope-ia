@@ -400,14 +400,15 @@ export function buildHoroscopeUserPrompt(
   // ── histoireEntry : rotation parmi les événements du mois ────────────────
   const [year, month, day] = dateToUse.split('-');
   const moisNom = new Date(dateToUse).toLocaleString('fr-FR', { month: 'long' });
-  const histoireByMonth = histoireData.filter(h =>
-    !isLongPeriod(h.periode) && (
-      h.periode.includes(year) ||
-      h.periode.includes(moisNom) ||
-      h.periode.includes(month)
-    )
+  const histoireAllNonLong = histoireData.filter(h => !isLongPeriod(h.periode));
+  const histoireByMonth = histoireAllNonLong.filter(h =>
+    h.periode.includes(year) ||
+    h.periode.includes(moisNom) ||
+    h.periode.includes(month)
   );
-  const histoireEntry  = rotateBySignDate(histoireByMonth, sign.id, rotKey, 1)[0] || null;
+  // Fallback : si aucune entrée ne correspond au mois courant, utiliser tout le pool
+  const histoirePool = histoireByMonth.length > 0 ? histoireByMonth : histoireAllNonLong;
+  const histoireEntry  = rotateBySignDate(histoirePool, sign.id, rotKey, 1)[0] || null;
   const histoireFait   = histoireEntry?.faitHistorique || '';
   const histoirePeriode = histoireEntry?.periode || '';
 
@@ -474,23 +475,26 @@ export function buildHoroscopeUserPrompt(
     const sacre = (f.sacreSymbolique || '').trim().toUpperCase();
     return sacre.length > 0;
   });
+  // Pré-mélange par seed journalière : évite que le stride frappe toujours les mêmes positions
+  const dayFaunePool = shuffleDeterministic(faunePool, dateToUse);
   const fauneEnrichies = shuffleDeterministic(
-    rotateBySignDate(faunePool, sign.id, dateToUse + edition, 6),
+    rotateBySignDate(dayFaunePool, sign.id, dateToUse + edition, 6),
     sign.id + dateToUse + edition + 'f'
   );
 
   // VAUDOU — 6 catégories injectées par rotation + shuffle déterministe
-  const animauxSacres   = shuffleDeterministic(rotateBySignDate(animauxData,      sign.id, dateToUse + edition, 2), sign.id + dateToUse + 'a');
-  const objetsRituels   = shuffleDeterministic(rotateBySignDate(objetsData,       sign.id, dateToUse + edition, 2), sign.id + dateToUse + 'o');
-  const plantesSacrees  = shuffleDeterministic(rotateBySignDate(plantesVaudouData,sign.id, dateToUse + edition, 2), sign.id + dateToUse + 'p');
-  const chantsRituels   = rotateBySignDate(chantsData, sign.id, dateToUse + edition, 1); // 1 seul → pas besoin de shuffle
-  const lieuxVaudou     = shuffleDeterministic(rotateBySignDate(lieuxVaudouData,  sign.id, dateToUse + edition, 2), sign.id + dateToUse + 'lv');
+  const animauxSacres   = shuffleDeterministic(rotateBySignDate(shuffleDeterministic(animauxData,       dateToUse), sign.id, dateToUse + edition, 2), sign.id + dateToUse + 'a');
+  const objetsRituels   = shuffleDeterministic(rotateBySignDate(shuffleDeterministic(objetsData,        dateToUse), sign.id, dateToUse + edition, 2), sign.id + dateToUse + 'o');
+  const plantesSacrees  = shuffleDeterministic(rotateBySignDate(shuffleDeterministic(plantesVaudouData, dateToUse), sign.id, dateToUse + edition, 2), sign.id + dateToUse + 'p');
+  const chantsRituels   = rotateBySignDate(shuffleDeterministic(chantsData, dateToUse), sign.id, dateToUse + edition, 1);
+  const lieuxVaudou     = shuffleDeterministic(rotateBySignDate(shuffleDeterministic(lieuxVaudouData,   dateToUse), sign.id, dateToUse + edition, 2), sign.id + dateToUse + 'lv');
 
   // FLORE-DATA : pool élargi (toutes entrées sauf le totem), rotation + shuffle
   const floreTotemNom = (floreEntry?.nomCreole || '').toLowerCase();
   const florePool = floreData.filter(f => f.nomCreole.toLowerCase() !== floreTotemNom);
+  const dayFlorePool = shuffleDeterministic(florePool, dateToUse);
   const floreEnrichies = shuffleDeterministic(
-    rotateBySignDate(florePool, sign.id, dateToUse + edition, 6),
+    rotateBySignDate(dayFlorePool, sign.id, dateToUse + edition, 6),
     sign.id + dateToUse + edition + 'fl'
   );
 
@@ -498,8 +502,9 @@ export function buildHoroscopeUserPrompt(
   // (anciennement filtré par sign.lieu → 0-2 entrées → 80% du pool jamais utilisé)
   const lieuTotemNom = (lieuEntry?.nom || '').toLowerCase();
   const lieuxPool = lieuxData.filter(l => l.nom.toLowerCase() !== lieuTotemNom);
+  const dayLieuxPool = shuffleDeterministic(lieuxPool, dateToUse);
   const lieuxEnrichis = shuffleDeterministic(
-    rotateBySignDate(lieuxPool, sign.id, dateToUse + edition, 5),
+    rotateBySignDate(dayLieuxPool, sign.id, dateToUse + edition, 5),
     sign.id + dateToUse + edition + 'l'
   );
 
@@ -510,14 +515,8 @@ export function buildHoroscopeUserPrompt(
   const kreyolNonTotem = kreyolData.filter(k => !isTotem(k.nomCreole));
   const kreyolEnrichis = rotateBySignDate(kreyolNonTotem, sign.id, dateToUse + edition, 5);
 
-  // HISTOIRE-DATA : 2-3 entrées pertinentes (filtre par date uniquement)
-  const histoireEnrichies = histoireData.filter(h =>
-    !isLongPeriod(h.periode) && (
-      h.periode.includes(year) ||
-      h.periode.includes(moisNom) ||
-      h.periode.includes(month)
-    )
-  ).slice(0, 3);
+  // HISTOIRE-DATA : 2-3 entrées pertinentes (filtre par date, fallback pool complet)
+  const histoireEnrichies = rotateBySignDate(histoirePool, sign.id, dateToUse + edition, 3);
 
   // Détecter les correspondances météo/édition pour adapter le contexte
   const signConditions = [...(sign.faune?.conditions || []), ...(sign.flore?.conditions || [])];
