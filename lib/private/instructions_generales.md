@@ -6,6 +6,7 @@
 
 ### 🗣️ **Vocabulaire créole**
 
+- **Entoure chaque mot ou expression créole d'astérisques simples** — `*zandoli*`, `*zèb a pik*`, `*lajan*`. C'est ce balisage qui les met en valeur (doré) à l'écran. Jamais d'astérisques doubles, jamais sur des mots français.
 - **JAMAIS de traduction entre parenthèses** après un mot créole — pas de « ka (tambour) », pas de « lajan (argent) ». Le contexte de la phrase rend le mot compréhensible. Les parenthèses de traduction présentes dans les données fournies sont des **métadonnées pour toi** — ne les recopie jamais dans le texte.
 - Si tu dois écrire le mot « tambour », écris **« ka »** à la place. N'introduis pas « ka » là où il n'y avait pas de tambour — ce n'est pas une image générique d'énergie ou de rythme.
 - **INTERDIT** : « tambou ka » ou « tambour ka » — c'est un pléonasme. « Ka » désigne déjà le tambour. Écris uniquement « ka ».

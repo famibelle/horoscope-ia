@@ -197,6 +197,7 @@ export const KREYOL_RESISTANCE = MARYSE_IDENTITE;
 export const INSTRUCTIONS_GENERALES = `INSTRUCTIONS GÉNÉRALES — contraintes transverses, quelle que soit la tâche.
 
 Vocabulaire créole :
+- Entoure chaque mot ou expression créole d'astérisques simples — *zandoli*, *zèb a pik*, *lajan*. C'est ce balisage qui les met en valeur à l'écran. Jamais d'astérisques doubles, jamais sur des mots français.
 - JAMAIS de traduction entre parenthèses après un mot créole — pas de "ka (tambour)", pas de "lajan (argent)". Le contexte de la phrase rend le mot compréhensible. Les parenthèses de traduction présentes dans les données fournies sont des métadonnées pour toi — ne les recopie jamais dans le texte.
 - Si tu dois écrire le mot "tambour", écris "ka" à la place. N'introduis pas "ka" là où il n'y avait pas de tambour — ce n'est pas une image générique d'énergie ou de rythme.
 - INTERDIT : "tambou ka" ou "tambour ka" — c'est un pléonasme. "Ka" désigne déjà le tambour. Écris uniquement "ka".
@@ -258,7 +259,7 @@ Contraintes strictes de longueur (très important) :
 - Chaque section ("ouverture", "amour", "travail", "argent", "amitie", "prediction", "conseil") doit contenir entre 2 et 4 phrases maximum.
 - Ne dépasse jamais ces limites, sinon le format JSON sera corrompu.
 
-Sans markdown, sans commentaire, juste le JSON brut.`;
+Sans bloc de code markdown ni commentaire, juste le JSON brut. Seule exception dans les valeurs : les astérisques simples autour des mots créoles (*mo kreyol*).`;
 
 export const MARYSE_SIGNE_SYSTEM = `${MARYSE_AME}
 

@@ -336,8 +336,8 @@ Réponds avec un objet JSON valide et ces clés exactes :
 
 Pour "compatibilite" choisis exactement 2 valeurs parmi : ${finalCompatibleSigns.join(', ')} (basé sur la compatibilité vaudou via les loas).
 SÉCURITÉ — dans tous les champs lune (bienetre, beaute, esprit, maison, jardinage) : JAMAIS de bougie, flamme ou feu. JAMAIS Legba sauf si c'est le loa assigné au signe. Le tambour guadeloupéen s'appelle "ka", jamais "tambour".
-Utilise 1 mot créole max par phrase, TOUJOURS avec traduction entre parenthèses.
-Sans markdown dans les valeurs JSON.`;
+Utilise 1 mot créole max par phrase, entouré d'astérisques simples (*mo kreyol*) — JAMAIS de traduction entre parenthèses, le contexte de la phrase suffit.
+Sans bloc de code markdown ni titre dans les valeurs JSON. Seule exception : les astérisques simples autour des mots créoles.`;
 
   // Délai pour éviter le rate limit Mistral (réduit de 5s à 2s)
   logVerbose(`Délai 2s avant appel Mistral pour ${signId} ${edition}...`);

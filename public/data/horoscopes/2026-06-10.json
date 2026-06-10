@@ -1,66 +1,66 @@
 {
-  "2026-06-10|vierge|soir": {
-    "ouverture": "Ce soir, le fwèzè tourne autour du karanbol comme s’il cherchait une étoile tombée du ciel, et toi, tu sens que la journée a usé tes ailes sans bruit.",
-    "amour": "Ton cœur est un krab tè qui se cache sous les feuilles après la pluie. Laisse-le respirer, même si les autres ne voient que sa carapace dure. L’amour, parfois, c’est juste un peu d’ombre et de silence partagé.",
-    "travail": "Aujourd’hui, tes dossiers s’empilaient comme des pierres à l’Abri de la Ravine Chaude, et tu as cru que tu n’en viendrais jamais à bout. Mais regarde : la nuit les a couverts de mousse, et demain, ils seront moins lourds.",
-    "argent": "Lajan glisse entre tes doigts comme le pwason zorey dans l’étang. Tu as couru après toute la journée, mais ce soir, il faut accepter qu’il ne se laisse pas attraper comme ça. Demain, tu pêches avec plus de patience.",
-    "amitie": "Tes amis sont comme le jwé ka : ils savent quand il faut jouer et quand il faut se taire. Ce soir, tu n’as pas besoin de mots pour savoir qu’ils sont là, même de l’autre côté de la mer.",
-    "prediction": "Les prochains jours, tu vas sentir le poids des choses inutiles, comme un filet de pêche trop chargé. Simbi te murmure de les lâcher avant qu’elles ne t’entraînent au fond.",
-    "conseil": "Prends une feuille de zeb a pik et frotte-la entre tes doigts jusqu’à ce qu’elle se referme. Laisse ce geste te rappeler que certaines choses se protègent toutes seules.",
-    "teaser": "Ce soir, le fwèzè danse trop près du karanbol et tu sens tes ailes frémir entre tes omoplates, comme si la nuit elle-même te chuchotait à l’oreille ce que tu refuses encore d’entendre",
-    "signFr": "Vierge",
+  "2026-06-10|taureau|soir": {
+    "ouverture": "Ce soir, le *kabribo* chante dans les *bwa* humides, sa mélodie berce les *mornes* comme un *ka* lointain qui rappelle qu’Azaka veille sur les récoltes de la journée.",
+    "amour": "Ton cœur est lourd comme une *bananié* chargée de fruits mûrs, mais souviens-toi que même le *koko dlo* se laisse porter par les courants sans perdre sa route. Laisse tomber ce qui pèse, comme les feuilles mortes du *basilik péyi* sous la pluie. Ce soir, l’amour se mesure en silence, pas en mots.",
+    "travail": "Tu as labouré la terre comme un *bèf a Bos*, les sabots lourds de sueur et de poussière. Maintenant, laisse la *grotte Zimbis* garder tes efforts , les esprits des anciens savent que tu as donné assez. Demain n’existe pas encore, ce soir, repose-toi.",
+    "argent": "Le *lajan* que tu as gagné aujourd’hui ne s’est pas envolé comme un *urakan*, il s’est posé dans tes mains comme un *gupi* dans son bassin. Garde-le près de toi, mais ne compte pas dessus pour demain. Ce soir, il suffit d’avoir assez pour une *pwayo* bouillie et un peu de *sèriz péyi*.",
+    "amitie": "Tes amis sont comme un *jardin* caché dans les *mornes* : ils poussent en silence, résistent aux tempêtes, et te nourrissent sans rien demander. Ce soir, envoie un message à celui qui t’a manqué, comme on dépose une feuille de *dartrier* sur une plaie pour la guérir.",
+    "prediction": "Les prochains jours porteront l’odeur du *bwa kòk* après la pluie , une odeur de protection, mais aussi d’avertissement. Azaka murmure que ce qui doit mûrir le fera, mais pas avant son heure.",
+    "conseil": "Prends une feuille de *basilik péyi*, froisse-la entre tes doigts, et laisse son parfum te rappeler que la guérison commence par les petites choses. Pose-la sous ton oreiller ce soir, sans explication.",
+    "teaser": "Ce soir, le *kabribo* murmure ton nom dans les *bwa* et tu sens déjà son frisson courir le long de tes reins comme une caresse de vent d’est. Lâche prise sur ce qui t’étrangle, même la *bananié* doit savoir ployer pour ne pas rompre.",
+    "signFr": "Taureau",
     "weather": "23–28°C, pluie modérée, alizé léger (14 km/h), Croissant décroissant",
     "edition": "soir",
     "source": "mistral-raw",
-    "raw_text": "For Virgo, today is a good day to tackle tasks you've been putting off, like organizing your workspace or catching up on paperwork. You're in a practical and detail-oriented mindset, which will help you get a lot done. Just be sure to take breaks and not overdo it, as you can be prone to burnout when you're in work mode. A conversation with a friend or family member may also be helpful in getting a new perspective on a problem you're trying to solve. Overall, it's a productive day ahead, so make the most of it.",
+    "raw_text": "Today, Taurus, you might feel a bit overwhelmed with tasks and responsibilities, but try to tackle them one by one. Make a to-do list and prioritize the most important things to get done. You'll likely receive some helpful advice or support from a friend or colleague, so don't be afraid to ask for input. By staying focused and organized, you can make significant progress on your goals. Keep your expectations realistic and take breaks when you need them to avoid burnout.",
     "element": "Terre",
-    "animal": "Mangouste / Mango blan",
-    "plante": "Panache d'officier / Plumet jaune",
-    "arbre": "Manguié (Manguier)",
-    "lieu": "Chutes du Carbet",
-    "planet": "Mercure",
-    "loa": "Simbi",
-    "famille_vaudou": "Petro",
-    "energie_vaudou": "Guérison, analyse, purification",
+    "animal": "Bœuf créole / Bèf a Bos",
+    "plante": "Orchidée / Vanilier",
+    "arbre": "Awokasié (Avocatier)",
+    "lieu": "Fête des Grands-Fonds (Sainte-Anne)",
+    "planet": "Vénus",
+    "loa": "Azaka",
+    "famille_vaudou": "Congo",
+    "energie_vaudou": "Stabilité, prospérité, agriculture",
     "couleurs_sacrees": [
-      "bleu",
-      "vert"
+      "vert",
+      "jaune"
     ],
     "edition_energie": "",
-    "heure_locale": "15:32",
+    "heure_locale": "16:15",
     "is_ritual_date": false,
     "date_rituelle": null,
     "faune_enrichies": [
-      "Fòmi kabrit",
-      "Tòti luth / Grand'luth",
-      "Krab tè / Crabe de terre",
-      "Pwason zorey",
-      "Pwason priyè",
-      "Zachari / Zagalliac"
+      "Mouche à miel / Guêpe péyi",
+      "Gupi",
+      "Tatou",
+      "Koko dlo",
+      "Serpan moun",
+      "Koures / Couresse"
     ],
     "flore_enrichies": [
-      "Gwo tim",
-      "Bananié / Figié",
-      "Zakasié / Jacquier",
-      "Verven",
-      "Citwonn / Citron péyi",
-      "Patàt douce"
+      "Pòm sirèt / Girembèl",
+      "Jenjanm",
+      "Piman (toutes variétés)",
+      "Bred chouk / Chou caraïbe",
+      "Figuiye modi / Figuier maudit",
+      "Tamariné"
     ],
     "lieux_enrichis": [
-      "Carrefour de la Ravine Claire",
-      "Terre-de-Haut (Les Saintes)",
-      "Baobab de la Savane",
-      "Les Mornes de Basse-Terre",
-      "Source de la Forêt de Dubuisson"
+      "Trou a Zémis",
+      "La Désirade",
+      "Fromager de la Case à Peser",
+      "Carrefour de la Source",
+      "Trou a Zotrey"
     ],
     "kreyol_enrichis": [],
     "histoire_enrichies": [
-      "**1635**",
-      "**1802**",
-      "**Mai 1967**"
+      "**27 avril 1848**",
+      "**2017**",
+      "**1789**"
     ],
     "loas_pertinents": [
-      "Simbi"
+      "Azaka"
     ],
     "animaux_sacres": [],
     "animaux_sacres_vaudou": [
@@ -72,108 +72,107 @@
       "Fanm pwen"
     ],
     "plantes_sacrees": [
-      "Lianmò",
-      "Fey siwo"
+      "Bwa kòk",
+      "Mapou wouj"
     ],
     "lieux_vaudou": [
-      "Kawoubouyé",
-      "Trou a Diab"
+      "Kawoubouyé a Mò",
+      "Simityè"
     ],
     "contexte_dynamique": "ADAPTÉ"
   },
-  "2026-06-10|capricorne|soir": {
-    "ouverture": "Ce soir, le zandoli piq trace sa route sur le mur de ta case, ses pattes fines comme des fils d’argent sous la lune , signe que les esprits veillent sur les pas discrets des Capricorne.",
-    "amour": "Ton cœur est lourd comme une cabosse de kakaoye mûre, mais ce soir, laisse tomber les peaux amères. Le geko pi te regarde depuis le plafond, il sait que l’amour vrai ne se force pas, il se pose comme lui, sans bruit. Un mot créole glissé dans l’oreille, et tout devient plus doux.",
-    "travail": "Tu as couru toute la journée comme un tòti vèt sur le sable chaud, mais ce soir, le Trou a Diab’ t’attend en silence. Kafou te rappelle que les carrefours ne sont pas faits pour s’y perdre, mais pour choisir quelle route abandonner avant la nuit.",
-    "argent": "Lajan ne pousse pas comme les feuilles de dartrier, il se gagne grain par grain, comme le raton laveur qui fouille les sous-bois sans se presser. Ce soir, compte tes pièces une à une, mais ne les serre pas trop fort , elles doivent respirer.",
-    "amitie": "Un ami t’a offert un woucou hier, rouge comme le soleil couchant sur les champs de canne. Ce soir, mélange-le à ton rhum, bois-le en pensant à lui , les liens se tissent mieux avec ce qui colore la vie, pas avec les mots.",
-    "prediction": "Les pluies de juin vont laver les chemins, et les pas des Capricorne deviendront plus légers, comme ceux des ancêtres qui marchaient vers Matouba sans regarder en arrière.",
-    "conseil": "Avant de dormir, trace un vèvè de pwa dlo sur le seuil de ta porte avec de la farine , les mauvaises énergies de la journée n’oseront pas te suivre dans tes rêves.",
-    "teaser": "Ce soir, le zandoli piq trace sa route sur le mur de ta case sous la lune argentée, et toi, Capricorne, sens ton destin frémir comme une feuille de kòkoyè sous l’alizé du soir",
-    "signFr": "Capricorne",
+  "2026-06-10|scorpion|soir": {
+    "ouverture": "Ce soir, l’*anguil* glisse entre deux eaux sous la pluie des alizés, emportant avec elle les doutes du jour dans les embouchures sacrées où les esprits murmurent encore les noms des premiers arrivés'en 1635.",
+    "amour": "Ton cœur est comme le *bèf* des cérémonies, lourd de ce qu’il a porté aujourd’hui. Laisse tomber les fardeaux qui ne t’appartiennent pas, comme il se débarrasse de la boue des savanes après l’orage. Ce soir, c’est toi qui choisis ce que tu gardes contre ta peau.",
+    "travail": "La *brizée* a apaisé tes nerfs toute la journée, mais tes mains savent encore où se cachent les nœuds. Va près des *Bains Jaunes*, là où la terre fume, et laisse l’eau chaude délier ce que tes doigts n’ont pas su défaire. Demain n’existe pas encore.",
+    "argent": "Le *mabouya* a attendu la nuit pour sortir, silencieux, sans faire bouger un grain de poussière. Observe comment il avance sans bruit, sans gaspiller son *lajan* en mouvements inutiles. Ce soir, compte ce que tu as sans regretter ce qui manque.",
+    "amitie": "Tu as marché sur des *latanyé* aujourd’hui, ces feuilles qui résistent à tout, même à l’oubli. Tes amis sont comme ça : ils reviennent toujours, même quand tu crois les avoir perdus. Ce soir, rappelle-toi leur nom, un par un, comme on égrène un chapelet de graines.",
+    "prediction": "Baron Samedi danse déjà sur les tombes du cimetière de Petit-Bourg, et son rire secoue les branches des *chadon béni*. Ce qui doit mourir en toi cette nuit ne renaîtra pas demain, mais plus tard, quand tu auras oublié sa forme.",
+    "conseil": "Prends un *miroir rituel* et pose-le face à la lune décroissante. Regarde-toi dedans jusqu’à ce que ton reflet se trouble, puis brise-le d’un coup sec contre le sol. Ramasse les morceaux sans les compter, et enterre-les sous un *bwa kachiman* avant l’aube.",
+    "teaser": "Ce soir, l’anguille qui ondule dans l’ombre tisse entre tes doigts des secrets plus anciens que les alizés tu ignores encore qu’elle emporte dans ses replis le poids de ce qui t’étrangle. Laisse-la glisser, et regarde-toi dans le miroir brisé où ton âme se reflète avant de se perdre dans la nuit des *chadons bénis*.",
+    "signFr": "Scorpion",
     "weather": "23–28°C, pluie modérée, alizé léger (14 km/h), Croissant décroissant",
     "edition": "soir",
     "source": "mistral-raw",
-    "raw_text": "For Capricorn, June 10th looks like a busy day with a lot on your plate. You'll likely be juggling work and personal tasks, so make a to-do list to stay organized and focused. Don't be afraid to ask for help if you need it, whether it's a colleague or a family member. With the right support, you'll be able to tackle everything and feel a sense of accomplishment by the end of the day. Just remember to take a break and rest when you need it, so you can avoid burnout.",
-    "element": "Terre",
-    "animal": "Cabri des mornes / Kabrit",
-    "plante": "Chadon béni / Piman végétarien",
-    "arbre": "Gros Tim (Thym créole)",
-    "lieu": "Matouba / Fort Delgrès",
-    "planet": "Saturne",
-    "loa": "Kafou",
+    "raw_text": "Scorpios, today you might feel a bit stuck or uncertain about how to move forward on a project or goal. Take some time to break it down into smaller, manageable tasks and prioritize what needs to be done first. This will help you regain your focus and make progress. You may also receive some helpful advice or insight from someone you trust, so be open to listening and considering their perspective. By the end of the day, you'll likely feel more in control and motivated to keep pushing forward.",
+    "element": "Eau",
+    "animal": "Scarabée Hercule / Hèrkil",
+    "plante": "Aloès vera / Alowes",
+    "arbre": "Kalbasi (Calebassier)",
+    "lieu": "La Soufrière",
+    "planet": "Pluton",
+    "loa": "Baron Samedi",
     "famille_vaudou": "Petro",
-    "energie_vaudou": "Voyage, carrefour, ambition",
+    "energie_vaudou": "Transformation, mort, résurrection",
     "couleurs_sacrees": [
-      "rouge",
-      "noir"
+      "noir",
+      "violet",
+      "blanc"
     ],
     "edition_energie": "",
-    "heure_locale": "15:32",
+    "heure_locale": "16:15",
     "is_ritual_date": false,
     "date_rituelle": null,
     "faune_enrichies": [
-      "Tòti vèt / Tortue verte",
-      "Klop",
-      "Geko pi",
-      "Jakòt",
-      "Ti chantè",
-      "Raton laveur / Racoon"
+      "Mabouya",
+      "Kwikwi",
+      "Chauv-souris sak",
+      "Mangouste / Mongos",
+      "Milpat",
+      "Rainett ka"
     ],
     "flore_enrichies": [
-      "Pòm sirèt / Girembèl",
-      "Jenjanm",
-      "Flanbwayan",
-      "Figuiye modi / Figuier maudit",
-      "Tamariné",
-      "Piman (toutes variétés)"
+      "Grennadié",
+      "Pwa dangow",
+      "Vaniy",
+      "Brizée",
+      "Awokasié",
+      "Bèlizèl / Balisié"
     ],
     "lieux_enrichis": [
-      "Embouchures de rivières",
-      "Habitat Arawak de l’Anse Galets",
-      "Cimetière d’Esclaves de Sainte-Marguerite",
-      "Forêt de la Ravine Claire",
-      "Carrefour de la Petite Rivière Salée"
+      "Roche à Cupidon",
+      "Grotte de la Pointe Allègre",
+      "Morne de Dubuisson",
+      "Grotte de la Petite Rivière Salée",
+      "Pétroglyphes de la Ravine Claire"
     ],
-    "kreyol_enrichis": [
-      "Kabrit"
-    ],
+    "kreyol_enrichis": [],
     "histoire_enrichies": [
-      "**Mai 1967**",
-      "**1635**",
-      "**1802**"
+      "**1685**",
+      "**1802**",
+      "**Mai 1967**"
     ],
     "loas_pertinents": [
-      "Kafou"
+      "Baron Samedi"
     ],
     "animaux_sacres": [],
     "animaux_sacres_vaudou": [
-      "Pye",
-      "Lapen"
+      "Bèf",
+      "Mouton"
     ],
     "objets_rituels": [
-      "Kòkòy",
-      "Pwen wouj"
+      "Bwa flè",
+      "Pye"
     ],
     "plantes_sacrees": [
-      "Pwa dlo",
-      "Fey chandèl"
+      "Bwa kachiman",
+      "Fey piment"
     ],
     "lieux_vaudou": [
-      "Trou a Diab",
-      "Kawoubouyé"
+      "Kay loa",
+      "Trou a Mò"
     ],
-    "contexte_dynamique": "ADAPTÉ"
+    "contexte_dynamique": "IDEAL"
   },
   "2026-06-10|verseau|soir": {
-    "ouverture": "Ce soir, le ka s’est tu trop tôt, comme si les esprits de Pointe de la Grande Vigie retenaient leur souffle avant la nuit , signe que tu dois déposer ce qui pèse, Verseau, avant de fermer les yeux.",
-    "amour": "Ton cœur bat comme un sucrier dans les branches du sitwonié, discret mais tenace. Laisse tomber les mots qui blessent comme des épines d’ikanié , ce soir, seul compte l’essentiel, ce qui nourrit sans demander de comptes. La Sirène murmure à ton oreille : l’amour vrai ne se possède pas, il se partage comme un fruit mûr.",
-    "travail": "Aujourd’hui, tu as couru comme un pwason priyè , patient, stratégique, mais épuisé. La fatigue colle à ta peau comme la pluie sur les falaises de Pointe de la Grande Vigie. Demain attendra. Ce soir, tu as le droit de poser tes outils et de laisser le vent emporter ce qui ne t’appartient plus.",
-    "argent": "Ton lajan s’est envolé comme un essaim de myèl, sans crier gare. Ne maudis pas l’abeille , elle ne fait que suivre le parfum du nectar. Ce soir, compte ce qui reste, pas ce qui manque. Demain, tu recommenceras, plus léger, avec la sagesse de ceux qui savent que la richesse ne se mesure pas en pièces.",
-    "amitie": "Tes amis sont comme les zandoli , toujours là, même quand tu ne les vois pas. Certains t’ont échappé aujourd’hui, comme l’anoli lâche sa queue pour sauver sa peau. Ne les cherche pas. Ceux qui comptent reviendront, plus vifs, plus vrais. Le chanté mas le dit : la loyauté ne se chante pas, elle se vit.",
-    "prediction": "Les jours à venir porteront l’odeur du basilik péyi après l’averse , âcre et vivifiante. Prépare-toi à ce que les vieilles blessures saignent un peu, mais seulement pour mieux cicatriser. La terre a soif de vérité, et toi aussi.",
-    "conseil": "Écrase une feuille de zerbenn entre tes doigts ce soir, et laisse son parfum monter jusqu’à tes narines. Respire profondément, comme si tu inhalais la force de ceux qui t’ont précédé. Puis, sans un mot, dépose la feuille sur ton oreiller , les esprits sauront.",
-    "teaser": "Ce soir, ton ka murmure comme un écho de conque dans les rochers de Pointe de la Grande Vigie Verseau, écoute-le avant qu’il ne s’éteigne pour de bon. Laisse-toi porter par le parfum âcre du basilik péyi, il te guidera là où tu dois déposer ton fardeau",
+    "ouverture": "Ce soir, l’alizé glisse sur les feuilles des *oranjé* comme un souffle de *La Sirène*, verte et dorée, qui murmure aux branches chargées de fruits mûrs.",
+    "amour": "Ton cœur bat au rythme des *sucrier* qui picorent les graines tombées dans la cour. Laisse-toi surprendre par les petits bonheurs, ceux qui arrivent sans prévenir, comme une brise légère après la pluie. *Pwason priyè* observe, immobile, avant de bondir , et toi, sauras-tu saisir l’instant ?",
+    "travail": "Aujourd’hui, les dossiers se sont empilés comme les rochers de *Pointe de la Grande Vigie*, face à l’océan. Mais ce soir, tu peux poser ton fardeau. Les falaises ont résisté aux vagues, et toi aussi. Demain est un autre jour, et les *ravèt* n’ont pas leur place dans tes pensées.",
+    "argent": "Le *lajan* circule comme les *myèl* autour des ruches , il faut savoir attendre, puis récolter au bon moment. Ne force pas les choses, laisse les opportunités venir à toi, comme le miel qui coule goutte à goutte.",
+    "amitie": "Tes amis sont tes *zandoli*, toujours là, même quand tu crois les avoir perdus. Ils reviennent, plus vifs que jamais, après chaque épreuve. Ce soir, rappelle-toi : *bwa matoutou* protège ceux qui savent se cacher pour mieux renaître.",
+    "prediction": "Les jours à venir porteront l’écho des *chanté mas*, ces chants qui ont traversé les siècles sans jamais se taire. Écoute bien, ils ont quelque chose à te dire.",
+    "conseil": "Avant de dormir, effleure une feuille de *basilik péyi* entre tes doigts et laisse son parfum t’apaiser. C’est un geste simple, mais il éloigne les ombres de la nuit.",
+    "teaser": "Ce soir, l’alizé glisse sur les feuilles des *oranjé* comme un souffle de *La Sirène* qui t’invite à danser sous la lune verte et dorée. Laisse-toi happer par cette énergie qui couve en toi, prête à éclater en étincelles",
     "signFr": "Verseau",
     "weather": "23–28°C, pluie modérée, alizé léger (14 km/h), Croissant décroissant",
     "edition": "soir",
@@ -193,7 +192,7 @@
       "or"
     ],
     "edition_energie": "",
-    "heure_locale": "15:33",
+    "heure_locale": "16:16",
     "is_ritual_date": false,
     "date_rituelle": null,
     "faune_enrichies": [

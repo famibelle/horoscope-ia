@@ -41,6 +41,15 @@ export interface PresageData {
   interpretation: Record<string, string> | string;
 }
 
+// ── Mots créoles : *mo kreyol* → doré (même rendu que markdownComponents) ────
+function kreyolToHtml(text: string): string {
+  return (text || '').replace(/\*([^*]+)\*/g, `<em style="color:${C.gold};">$1</em>`);
+}
+
+function stripKreyolMarks(text: string): string {
+  return (text || '').replace(/\*([^*]+)\*/g, '$1');
+}
+
 // ── Sections du signe (labels du site) ───────────────────────────────────────
 const SECTIONS = [
   { key: 'ouverture',  label: 'Parole des ancêtres', color: C.gold,        emoji: '✦' },
@@ -88,16 +97,16 @@ export function getPresageTemplate(presage: PresageData): string {
     <span style="font-size:14px;color:${C.creamFaint};font-style:italic;"> — ${presage.nom_commun}</span>
   </h2>
   <p style="margin:12px 0 0;font-family:Georgia,serif;font-size:16px;color:${C.cream};line-height:1.6;font-style:italic;">
-    "${presage.presage_naturel}"
+    "${kreyolToHtml(presage.presage_naturel)}"
   </p>
-  ${interpretation ? `<p style="margin:10px 0 0;font-family:Arial,sans-serif;font-size:14px;color:${C.creamFaint};line-height:1.6;">${interpretation}</p>` : ''}
+  ${interpretation ? `<p style="margin:10px 0 0;font-family:Arial,sans-serif;font-size:14px;color:${C.creamFaint};line-height:1.6;">${kreyolToHtml(interpretation)}</p>` : ''}
 </div>`.trim();
 }
 
 // ── Index des 12 signes (liens d'ancrage) ─────────────────────────────────────
 export function getIndexTemplate(allSigns: Array<{ sign: Sign; horoscope: HoroscopeResponse }>): string {
   const rows = allSigns.map(({ sign, horoscope }) => {
-    const snippet = (horoscope.teaser || horoscope.ouverture || '').split('.')[0].trim();
+    const snippet = stripKreyolMarks(horoscope.teaser || horoscope.ouverture || '').split('.')[0].trim();
     return `<tr>
       <td style="padding:5px 10px 5px 0;vertical-align:top;width:130px;">
         <a href="#sign-${sign.id}" style="font-family:Georgia,serif;font-size:14px;color:${C.gold};text-decoration:none;white-space:nowrap;">
@@ -129,7 +138,7 @@ export function getSignHtmlTemplate(data: NewsletterData): string {
 
   const teaser = horoscope.teaser
     ? `<div style="margin:0 0 20px;padding:16px;background:rgba(255,215,0,0.06);border-left:3px solid ${C.gold};">
-         <p style="margin:0;font-family:Georgia,serif;font-size:15px;color:${C.cream};line-height:1.6;font-style:italic;">"${horoscope.teaser}"</p>
+         <p style="margin:0;font-family:Georgia,serif;font-size:15px;color:${C.cream};line-height:1.6;font-style:italic;">"${kreyolToHtml(horoscope.teaser)}"</p>
        </div>`
     : '';
 
@@ -142,7 +151,7 @@ export function getSignHtmlTemplate(data: NewsletterData): string {
     ${emoji} ${label}
   </p>
   <p style="margin:0;font-family:Arial,sans-serif;font-size:14px;color:${C.creamFaint};line-height:1.7;">
-    ${text}
+    ${kreyolToHtml(text)}
   </p>
 </div>`.trim();
   }).join('\n');
@@ -181,7 +190,7 @@ export function getSignTextTemplate(data: NewsletterData): string {
   const lines = [`\n${sign.name} (${sign.nomKreyol ?? ''})\n${'─'.repeat(40)}`];
   for (const { key, label } of SECTIONS) {
     const text = (horoscope as any)[key];
-    if (text) lines.push(`${label} :\n${text}`);
+    if (text) lines.push(`${label} :\n${stripKreyolMarks(text)}`);
   }
   lines.push(`\n${BASE_URL}/horoscope/${sign.id}\n`);
   return lines.join('\n\n');
