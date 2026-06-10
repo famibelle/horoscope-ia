@@ -137,37 +137,41 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
 
   useEffect(() => {
     if (!edition || !signId) return;
-    // Ne refetch pas si on a déjà les données pour cette édition
-    if (horoscope && horoscope.edition === edition) return;
 
-    setLoading(true);
-    setHoroscope(null);
-    setAmbiance(null);
-
+    const controller = new AbortController();
+    const { signal } = controller;
     const date = new Date().toISOString().split('T')[0];
     const hour = new Date().getHours();
 
-    Promise.all([
-      fetch(`/api/horoscope/${signId}?date=${date}&userHour=${hour}&edition=${edition}`).then((r) => r.json()),
-      fetch(`/api/ambiance/${signId}?userDate=${date}&edition=${edition}`).then((r) => r.json()),
-    ])
-      .then(([h, a]) => {
-        setHoroscope(h as HoroscopeResponse);
-        setAmbiance(a as AmbianceData);
-      })
-      .finally(() => setLoading(false));
-  }, [signId, edition]);
+    if (horoscope?.edition === edition) {
+      // Horoscope déjà correct — charger uniquement l'ambiance si absente
+      if (!ambiance) {
+        fetch(`/api/ambiance/${signId}?userDate=${date}&edition=${edition}`, { signal })
+          .then((r) => r.json())
+          .then((a) => { if (!signal.aborted) setAmbiance(a as AmbianceData); })
+          .catch(() => {});
+      }
+    } else {
+      // Édition différente → refetch horoscope + ambiance ensemble
+      setLoading(true);
+      setHoroscope(null);
+      setAmbiance(null);
+      Promise.all([
+        fetch(`/api/horoscope/${signId}?date=${date}&userHour=${hour}&edition=${edition}`, { signal }).then((r) => r.json()),
+        fetch(`/api/ambiance/${signId}?userDate=${date}&edition=${edition}`, { signal }).then((r) => r.json()),
+      ])
+        .then(([h, a]) => {
+          if (signal.aborted) return;
+          setHoroscope(h as HoroscopeResponse);
+          setAmbiance(a as AmbianceData);
+        })
+        .catch((err) => { if (!signal.aborted) console.error(err); })
+        .finally(() => { if (!signal.aborted) setLoading(false); });
+    }
 
-  // Charger l'ambiance séparément si on a les données prefetchées
-  useEffect(() => {
-    if (!prefetchedHoroscope || !signId || ambiance) return;
-    const date = new Date().toISOString().split('T')[0];
-    const ed = prefetchedHoroscope.edition || 'matin';
-    fetch(`/api/ambiance/${signId}?userDate=${date}&edition=${ed}`)
-      .then((r) => r.json())
-      .then((a) => setAmbiance(a as AmbianceData))
-      .catch(() => {});
-  }, [signId, prefetchedHoroscope, ambiance]);
+    return () => controller.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signId, edition]);
 
   if (!sign) {
     return (
