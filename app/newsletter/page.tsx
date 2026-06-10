@@ -1,9 +1,9 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getAllNewsletters, type StoredNewsletter } from '@/lib/newsletter-storage';
 import NewsletterSubscribeForm from '@/components/NewsletterSubscribeForm';
 
-// Fonction pour formater la date en français
 function formatDate(dateString: string): string {
   const date = new Date(dateString);
   return date.toLocaleDateString('fr-FR', {
@@ -14,7 +14,6 @@ function formatDate(dateString: string): string {
   });
 }
 
-// Fonction pour nettoyer le preview (au cas où il contiendrait du HTML)
 function cleanPreview(text: string): string {
   if (text.includes('<') && text.includes('>')) {
     return text
@@ -25,10 +24,9 @@ function cleanPreview(text: string): string {
   return text;
 }
 
-// Composant pour afficher une carte de newsletter avec animation
 function NewsletterCard({ newsletter, index }: { newsletter: StoredNewsletter; index: number }) {
   const cleanPreviewText = cleanPreview(newsletter.preview);
-  
+
   return (
     <article
       className="relative bg-ancestral-dark/40 border border-ancestral-cream/10 rounded-2xl p-6
@@ -36,10 +34,8 @@ function NewsletterCard({ newsletter, index }: { newsletter: StoredNewsletter; i
                 transition-all duration-300 group cursor-pointer"
       style={{ animationDelay: `${index * 100}ms` }}
     >
-      {/* Lien couvrant toute la carte */}
       <Link href={`/newsletter/${newsletter.id}/email-preview`} className="absolute inset-0 z-0 rounded-2xl" aria-label={newsletter.subject} />
 
-      {/* En-tête */}
       <header className="mb-5">
         <div className="flex items-start gap-3">
           <span className="text-3xl">🌿</span>
@@ -54,16 +50,13 @@ function NewsletterCard({ newsletter, index }: { newsletter: StoredNewsletter; i
         </div>
       </header>
 
-      {/* Preview du contenu */}
       <p className="text-ancestral-cream/80 text-sm leading-7 mb-6">
         {cleanPreviewText}
       </p>
-
     </article>
   );
 }
 
-// Composant pour les avantages
 function BenefitsSection() {
   const benefits = [
     { icon: '🌟', title: 'Horoscope personnalisé', desc: 'Basé sur votre signe astrologique' },
@@ -76,8 +69,8 @@ function BenefitsSection() {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {benefits.map((benefit, index) => (
-        <div 
+      {benefits.map((benefit) => (
+        <div
           key={benefit.title}
           className="bg-ancestral-dark/30 border border-ancestral-cream/10 rounded-xl p-5
                     hover:border-ancestral-gold/30 transition-colors duration-200"
@@ -91,7 +84,6 @@ function BenefitsSection() {
   );
 }
 
-// Composant FAQ
 function FAQSection() {
   const faqs = [
     {
@@ -114,8 +106,8 @@ function FAQSection() {
 
   return (
     <div className="space-y-4">
-      {faqs.map((faq, index) => (
-        <div 
+      {faqs.map((faq) => (
+        <div
           key={faq.question}
           className="bg-ancestral-dark/30 border border-ancestral-cream/10 rounded-xl p-5"
         >
@@ -129,6 +121,51 @@ function FAQSection() {
     </div>
   );
 }
+
+/* ── Liste newsletters — composant async isolé pour le streaming ─────────── */
+
+async function NewsletterList() {
+  let newsletters: StoredNewsletter[] = [];
+  try {
+    newsletters = await getAllNewsletters();
+  } catch {
+    newsletters = [];
+  }
+
+  if (newsletters.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <div className="text-6xl mb-4">📭</div>
+        <h3 className="text-2xl font-semibold text-ancestral-cream mb-2">
+          Aucune newsletter disponible
+        </h3>
+        <p className="text-ancestral-cream/70">
+          Revenez bientôt pour découvrir nos prochaines publications !
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {newsletters.slice(0, 4).map((newsletter, index) => (
+        <NewsletterCard key={newsletter.id} newsletter={newsletter} index={index} />
+      ))}
+    </div>
+  );
+}
+
+function NewsletterListSkeleton() {
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div key={i} className="animate-pulse rounded-2xl bg-ancestral-dark/40 border border-ancestral-cream/10 p-6 h-48" />
+      ))}
+    </div>
+  );
+}
+
+/* ── Métadonnées ─────────────────────────────────────────────────────────── */
 
 export const metadata: Metadata = {
   title: 'Newsletter - Horoscope Karukera | Horoscopes Quotidiens avec Sagesse Guadeloupéenne',
@@ -144,18 +181,9 @@ export const metadata: Metadata = {
   },
 };
 
-// Page principale - Rendering côté serveur pour récupérer les newsletters
-export default async function NewsletterPage() {
-  // Récupérer toutes les newsletters depuis le stockage
-  let newsletters: StoredNewsletter[] = [];
-  
-  try {
-    newsletters = await getAllNewsletters();
-  } catch (error) {
-    console.error('Erreur lors de la récupération des newsletters:', error);
-    newsletters = [];
-  }
+/* ── Page — rendu immédiat, liste en streaming via Suspense ──────────────── */
 
+export default function NewsletterPage() {
   return (
     <main className="max-w-6xl mx-auto px-4 py-8">
       {/* ===== EN-TÊTE ===== */}
@@ -182,7 +210,7 @@ export default async function NewsletterPage() {
       </header>
 
       {/* ===== SECTION ABONNEMENT ===== */}
-      <section className="bg-gradient-to-br from-ancestral-dark/60 to-ancestral-dark/30 
+      <section className="bg-gradient-to-br from-ancestral-dark/60 to-ancestral-dark/30
                 border border-ancestral-cream/10 rounded-2xl p-8 mb-12">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-ancestral-cream mb-3">📩 Abonnez-vous</h2>
@@ -190,47 +218,19 @@ export default async function NewsletterPage() {
             Inscrivez-vous pour recevoir gratuitement votre horoscope quotidien
           </p>
         </div>
-        
         <NewsletterSubscribeForm />
       </section>
 
-      {/* ===== SECTION DERNIÈRES NEWSLETTERS ===== */}
+      {/* ===== SECTION DERNIÈRES NEWSLETTERS — streaming ===== */}
       <section className="mb-16">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-3xl font-bold text-ancestral-cream flex items-center gap-3">
             <span>📰</span> Dernières Newsletters
           </h2>
-          {newsletters.length > 3 && (
-            <Link
-              href="#"
-              className="text-ancestral-gold hover:text-ancestral-cream/80 text-sm font-medium"
-            >
-              Voir tout l&apos;historique
-            </Link>
-          )}
         </div>
-        
-        {newsletters.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-6xl mb-4">📭</div>
-            <h3 className="text-2xl font-semibold text-ancestral-cream mb-2">
-              Aucune newsletter disponible
-            </h3>
-            <p className="text-ancestral-cream/70">
-              Revenez bientôt pour découvrir nos prochaines publications !
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {newsletters.slice(0, 4).map((newsletter, index) => (
-              <NewsletterCard 
-                key={newsletter.id} 
-                newsletter={newsletter} 
-                index={index}
-              />
-            ))}
-          </div>
-        )}
+        <Suspense fallback={<NewsletterListSkeleton />}>
+          <NewsletterList />
+        </Suspense>
       </section>
 
       {/* ===== SECTION CE QUE VOUS RECEVREZ ===== */}
@@ -241,7 +241,6 @@ export default async function NewsletterPage() {
             Chaque newsletter contient des éléments uniques pour vous connecter à la culture guadeloupéenne
           </p>
         </div>
-        
         <BenefitsSection />
       </section>
 
@@ -260,7 +259,6 @@ export default async function NewsletterPage() {
         <h2 className="text-3xl font-bold text-ancestral-cream mb-8 text-center">
           💌 Pourquoi s&apos;abonner ?
         </h2>
-        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           <div>
             <div className="text-4xl mb-4">🌅</div>

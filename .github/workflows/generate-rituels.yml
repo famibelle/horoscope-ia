@@ -59,5 +59,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git add lib/private/vaudou-data.ts || true
-          git diff --staged --quiet || git commit -m "chore: régénération données vaudou ($(date +%Y-%m-%d))"
+          git diff --staged --quiet || git commit -m "chore: régénération données vaudou ($(date +%Y-%m-%d)) [skip netlify]"
           git push --force-with-lease origin main || true
