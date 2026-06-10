@@ -20,10 +20,40 @@ function currentEditionGuadeloupe(): string {
   return 'soir';
 }
 
-async function prefetchSignHoroscope(signId: string): Promise<HoroscopeResponse | null> {
+async function prefetchFromSupabase(signId: string, date: string, edition: string): Promise<HoroscopeResponse | null> {
   try {
-    const date = todayGuadeloupe();
-    const edition = currentEditionGuadeloupe();
+    const { supabase } = await import('@/lib/supabase');
+    const { data: row } = await supabase
+      .from('horoscopes')
+      .select('ouverture,amour,travail,argent,amitie,prediction,conseil,teaser,sign_fr,weather,edition,source')
+      .eq('date', date)
+      .eq('sign_id', signId)
+      .eq('edition', edition)
+      .maybeSingle();
+
+    if (!row) return null;
+
+    return {
+      ouverture:  row.ouverture,
+      amour:      row.amour,
+      travail:    row.travail,
+      argent:     row.argent   ?? '',
+      amitie:     row.amitie   ?? '',
+      prediction: row.prediction ?? '',
+      conseil:    row.conseil  ?? '',
+      teaser:     row.teaser   ?? undefined,
+      signFr:     row.sign_fr,
+      weather:    row.weather  ?? '',
+      edition:    row.edition,
+      source:     row.source,
+    } as HoroscopeResponse;
+  } catch {
+    return null;
+  }
+}
+
+function prefetchFromStaticFile(signId: string, date: string, edition: string): HoroscopeResponse | null {
+  try {
     const filePath = join(process.cwd(), 'public', 'data', 'horoscopes', `${date}.json`);
     const raw = readFileSync(filePath, 'utf-8');
     const all = JSON.parse(raw) as Record<string, HoroscopeResponse>;
@@ -31,6 +61,18 @@ async function prefetchSignHoroscope(signId: string): Promise<HoroscopeResponse 
   } catch {
     return null;
   }
+}
+
+async function prefetchSignHoroscope(signId: string): Promise<HoroscopeResponse | null> {
+  const date    = todayGuadeloupe();
+  const edition = currentEditionGuadeloupe();
+
+  // 1. Supabase (source principale)
+  const fromSupabase = await prefetchFromSupabase(signId, date, edition);
+  if (fromSupabase) return fromSupabase;
+
+  // 2. Fichier statique (fallback si Supabase vide ou indisponible)
+  return prefetchFromStaticFile(signId, date, edition);
 }
 
 export default async function Page({ params }: { params: Promise<{ sign: string }> }) {
