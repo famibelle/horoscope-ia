@@ -521,46 +521,6 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
               </motion.section>
             )}
 
-            {/* Newsletter */}
-            <motion.section
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.25 }}
-              className="mb-14"
-            >
-              <div
-                className="rounded-2xl p-6 text-center"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(210,105,30,0.12), rgba(255,215,0,0.08))',
-                  border: '1px solid rgba(210,105,30,0.25)',
-                }}
-              >
-                <h3 className="font-display text-lg font-bold text-ancestral-cream mb-3 flex items-center justify-center gap-3">
-                  <div className="flex gap-0.5 overflow-hidden relative w-7 h-7 rounded-full" style={{ background: 'rgba(245,245,220,0.08)' }}>
-                    <motion.div
-                      className="flex gap-0.5 whitespace-nowrap items-center"
-                      animate={{ x: ['0%', '-100%'] }}
-                      transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                    >
-                      <span className="text-base">{sign.emoji}</span>
-                      <span className="text-base">❤️</span>
-                      <span className="text-base">💰</span>
-                      <span className="text-base">💪</span>
-                      <span className="text-base">🤝</span>
-                      <span className="text-base">💼</span>
-                      <span className="text-base">{sign.emoji}</span>
-                      <span className="text-base">❤️</span>
-                      <span className="text-base">💰</span>
-                    </motion.div>
-                  </div>
-                  Recevez votre horoscope du {sign.name} tous les matins
-                </h3>
-                <p className="text-ancestral-cream/40 text-[15px] mb-5">Les prédictions de Maryse CondAI directement dans votre boîte mail.</p>
-                <HoroscopeSubscribeForm defaultSignId={sign.id} />
-                <p className="text-ancestral-cream/30 text-[12px] mt-3">Désabonnement en un clic. Vos données restent privées.</p>
-              </div>
-            </motion.section>
-
             {/* ══ Ambiance Astrale ══════════════════════════════════════════ */}
             {ambiance && (
               <motion.section
@@ -664,6 +624,46 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
                 </div>
               </motion.section>
             )}
+
+            {/* Newsletter */}
+            <motion.section
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.25 }}
+              className="mt-12 mb-14"
+            >
+              <div
+                className="rounded-2xl p-6 text-center"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(210,105,30,0.12), rgba(255,215,0,0.08))',
+                  border: '1px solid rgba(210,105,30,0.25)',
+                }}
+              >
+                <h3 className="font-display text-lg font-bold text-ancestral-cream mb-3 flex items-center justify-center gap-3">
+                  <div className="flex gap-0.5 overflow-hidden relative w-7 h-7 rounded-full" style={{ background: 'rgba(245,245,220,0.08)' }}>
+                    <motion.div
+                      className="flex gap-0.5 whitespace-nowrap items-center"
+                      animate={{ x: ['0%', '-100%'] }}
+                      transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+                    >
+                      <span className="text-base">{sign.emoji}</span>
+                      <span className="text-base">❤️</span>
+                      <span className="text-base">💰</span>
+                      <span className="text-base">💪</span>
+                      <span className="text-base">🤝</span>
+                      <span className="text-base">💼</span>
+                      <span className="text-base">{sign.emoji}</span>
+                      <span className="text-base">❤️</span>
+                      <span className="text-base">💰</span>
+                    </motion.div>
+                  </div>
+                  Recevez votre horoscope du {sign.name} tous les matins
+                </h3>
+                <p className="text-ancestral-cream/40 text-[15px] mb-5">Les prédictions de Maryse CondAI directement dans votre boîte mail.</p>
+                <HoroscopeSubscribeForm defaultSignId={sign.id} />
+                <p className="text-ancestral-cream/30 text-[12px] mt-3">Désabonnement en un clic. Vos données restent privées.</p>
+              </div>
+            </motion.section>
 
             {horoscope && (
               <div className="mt-16">

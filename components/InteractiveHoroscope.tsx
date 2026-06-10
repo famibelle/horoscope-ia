@@ -123,6 +123,7 @@ export default function InteractiveHoroscope({
         loading={loading}
         error={error}
         onRetry={() => fetchHoroscope(selectedSignId, edition)}
+        preview
       />
 
       <AudioPlayer

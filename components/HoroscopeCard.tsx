@@ -14,6 +14,7 @@ interface HoroscopeCardProps {
   loading: boolean;
   error: string | null;
   onRetry: () => void;
+  preview?: boolean;
 }
 
 /* ── Sections config ───────────────────────────────────────────────────────── */
@@ -63,13 +64,13 @@ function CardSkeleton({ sign }: { sign: ReturnType<typeof signs.find> }) {
 
 /* ── Main card ─────────────────────────────────────────────────────────────── */
 
-export default function HoroscopeCard({ sign, data, loading, error, onRetry }: HoroscopeCardProps) {
+export default function HoroscopeCard({ sign, data, loading, error, onRetry, preview = false }: HoroscopeCardProps) {
   if (!sign) return null;
 
   const date = formatDate();
 
   return (
-    <section className="px-4 pb-8 max-w-2xl mx-auto" style={{ minHeight: '420px' }}>
+    <section className="px-4 pb-8 max-w-2xl mx-auto" style={{ minHeight: preview ? 'auto' : '420px' }}>
       <AnimatePresence mode="wait">
         <motion.div
           key={sign.id + (loading ? '-loading' : data ? '-data' : '-error')}
@@ -83,7 +84,7 @@ export default function HoroscopeCard({ sign, data, loading, error, onRetry }: H
           ) : error ? (
             <ErrorCard sign={sign} error={error} onRetry={onRetry} />
           ) : data ? (
-            <FilledCard sign={sign} data={data} date={date} />
+            <FilledCard sign={sign} data={data} date={date} preview={preview} />
           ) : null}
         </motion.div>
       </AnimatePresence>
@@ -130,10 +131,12 @@ function FilledCard({
   sign,
   data,
   date,
+  preview,
 }: {
   sign: NonNullable<ReturnType<typeof signs.find>>;
   data: HoroscopeResponse;
   date: string;
+  preview?: boolean;
 }) {
   const editionLabel: Record<string, string> = {
     nuit: 'Cette nuit', matin: 'Ce matin', midi: 'Ce midi', soir: 'Ce soir',
@@ -199,8 +202,8 @@ function FilledCard({
       </div>
 
       {/* Sections horoscope */}
-      <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-        {SECTIONS.map(({ key, label, Icon, colorClass }) => {
+      <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '14px', position: 'relative' }}>
+        {(preview ? SECTIONS.slice(0, 3) : SECTIONS).map(({ key, label, Icon, colorClass }) => {
           const text = data[key as keyof HoroscopeResponse] as string;
           if (!text) return null;
           const isPrediction = key === 'prediction';
@@ -242,35 +245,51 @@ function FilledCard({
           );
         })}
 
-        {/* Dimension spirituelle */}
-        <motion.div
-          style={{
-            marginTop: '12px',
-            paddingTop: '14px',
-            borderTop: '1px solid rgba(245,245,220,0.08)',
-          }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.4 }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-            <span style={{ fontSize: '11px', color: 'rgba(212,175,80,0.6)', lineHeight: 1 }}>✦</span>
-            <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(200,216,192,0.55)' }}>
-              Dimension spirituelle
+        {/* Gradient fade + lien en mode preview */}
+        {preview && (
+          <>
+            <div style={{
+              position: 'absolute', bottom: 0, left: 0, right: 0, height: '80px',
+              background: 'linear-gradient(to bottom, transparent, #111e14)',
+              pointerEvents: 'none',
+            }} />
+            <p style={{ fontSize: '14px', color: '#D4AF50', opacity: 0.75, textAlign: 'right', marginTop: '4px' }}>
+              horoscope complet →
             </p>
-            {data?.spirituelMensuel && (
-              <span style={{
-                fontSize: '9px', letterSpacing: '0.06em', textTransform: 'uppercase',
-                background: 'rgba(212,175,80,0.12)', border: '1px solid rgba(212,175,80,0.22)',
-                borderRadius: '4px', padding: '1px 5px', color: 'rgba(212,175,80,0.7)',
-              }}>Mensuelle</span>
-            )}
-          </div>
-          <p className="font-accent" style={{ fontSize: '16px', lineHeight: 1.65, color: '#C8D8C0', opacity: 0.75 }}>{data?.spirituelMensuel ?? sign?.spirituel}</p>
-        </motion.div>
+          </>
+        )}
+
+        {/* Dimension spirituelle */}
+        {!preview && (
+          <motion.div
+            style={{
+              marginTop: '12px',
+              paddingTop: '14px',
+              borderTop: '1px solid rgba(245,245,220,0.08)',
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.4 }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+              <span style={{ fontSize: '11px', color: 'rgba(212,175,80,0.6)', lineHeight: 1 }}>✦</span>
+              <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(200,216,192,0.55)' }}>
+                Dimension spirituelle
+              </p>
+              {data?.spirituelMensuel && (
+                <span style={{
+                  fontSize: '9px', letterSpacing: '0.06em', textTransform: 'uppercase',
+                  background: 'rgba(212,175,80,0.12)', border: '1px solid rgba(212,175,80,0.22)',
+                  borderRadius: '4px', padding: '1px 5px', color: 'rgba(212,175,80,0.7)',
+                }}>Mensuelle</span>
+              )}
+            </div>
+            <p className="font-accent" style={{ fontSize: '16px', lineHeight: 1.65, color: '#C8D8C0', opacity: 0.75 }}>{data?.spirituelMensuel ?? sign?.spirituel}</p>
+          </motion.div>
+        )}
 
         {/* Contexte Vaudou */}
-        {data.vaudou && (
+        {!preview && data.vaudou && (
           <motion.div
             style={{
               borderRadius: '12px',
@@ -284,7 +303,7 @@ function FilledCard({
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
               <span style={{ fontSize: '14px' }}>{data.vaudou.emoji}</span>
-              <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B8A6E' }}>Protection Vaudou</p>
+              <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(200,216,192,0.65)' }}>Protection Vaudou</p>
             </div>
             <p style={{ fontSize: '15px', lineHeight: 1.65, color: '#C8D8C0', opacity: 0.8 }}>
               <span style={{ fontWeight: 600, color: '#D4AF50' }}>{data.vaudou.loa}</span> ({data.vaudou.famille}) vous accompagne.
@@ -294,16 +313,12 @@ function FilledCard({
         )}
 
         {/* Météo */}
-        {data.weather && (
+        {!preview && data.weather && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingTop: '4px' }}>
             <Cloud size={11} style={{ color: '#6B8A6E', flexShrink: 0 }} />
             <span style={{ fontSize: '15px', color: '#6B8A6E' }}>Pointe-à-Pitre · {data.weather}</span>
           </div>
         )}
-
-        <p style={{ fontSize: '15px', color: '#D4AF50', opacity: 0.7, textAlign: 'right', marginTop: '4px' }}>
-          lire la suite →
-        </p>
       </div>
     </Link>
   );
