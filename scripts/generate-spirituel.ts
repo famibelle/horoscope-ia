@@ -7,7 +7,7 @@ import { floreData } from '@/lib/private/flore-data';
 import { lieuxData } from '@/lib/private/lieux-data';
 import { kreyolData } from '@/lib/private/kreyol-data';
 import { histoireData } from '@/lib/private/histoire-data';
-import { MARYSE_AME, MARYSE_IDENTITE } from '@/lib/private/maryse-prompt';
+import { MARYSE_AME, MARYSE_IDENTITE, INSTRUCTIONS_GENERALES } from '@/lib/private/maryse-prompt';
 import { SIGN_TO_LOA, SIGN_TO_VAUDOU_CONTEXT, getVaudouContextForSign } from '@/lib/private/vaudou-mappings';
 import { loasData } from '@/lib/private/vaudou-data';
 import * as fs from 'fs/promises';
@@ -18,6 +18,8 @@ const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 const SYSTEM = `${MARYSE_AME}
 
 ${MARYSE_IDENTITE}
+
+${INSTRUCTIONS_GENERALES}
 
 Tu rédiges la "Dimension spirituelle" d'un signe zodiacal pour Horoscope Karukera.
 
@@ -33,8 +35,6 @@ RÈGLES ABSOLUES :
 - INTERDIT comme métaphores génériques : mer, vent, chemin, racines, danse, vague
 - Pas d'astrologie occidentale
 - Ton oral direct, phrases courtes, parle à l'auditeur avec "tu"
-- NE JAMAIS utiliser : tiret cadratin (—), point-virgule (;), deux-points (:)
-- OBLIGATOIRE : apostrophes pour les élisions (l'arbre, d'Ogoun, j'ai, c'est)
 - Réponds UNIQUEMENT avec le texte final`;
 
 function splitTokens(...parts: (string | undefined)[]): string[] {

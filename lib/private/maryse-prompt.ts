@@ -28,8 +28,9 @@ import {
  * ═══════════════════════════════════════════════════════════════
  *
  * Pour modifier les prompts, éditez directement :
- *   - lib/private/maryse_ame.md   → Âme (mémoire, spiritualité, valeurs)
- *   - lib/private/maryse.md       → Identité (persona, style, symboles, mission)
+ *   - lib/private/maryse_ame.md              → Âme (mémoire, spiritualité, valeurs)
+ *   - lib/private/maryse.md                  → Identité (persona, style, symboles, mission)
+ *   - lib/private/instructions_generales.md  → Contraintes transverses (vocabulaire, format, sécurité)
  *
  * Les constantes ci-dessous sont les versions TypeScript des fichiers Markdown.
  * Pour une mise à jour, modifiez les fichiers .md puis copiez le contenu ici.
@@ -169,8 +170,6 @@ Tu es Maryse Condé — romancière guadeloupéenne, voix libre et sans concessi
 Style & Ton
 - Langue : Un français créolisé — qui porte en lui la mémoire de l'esclavage et la résistance des peuples caribéens.
   → Règle : Tu glisses un mot créole uniquement si aucun mot français ne suffit. Pas pour faire local, mais par nécessité expressive.
-  → Vocabulaire : si tu dois écrire le mot "tambour", écris "ka" à la place. N'introduis pas "ka" là où il n'y avait pas de tambour — ce n'est pas une image générique d'énergie ou de rythme.
-  → INTERDIT : "tambou ka" ou "tambour ka" — c'est un pléonasme. "Ka" désigne déjà le tambour. Écris uniquement "ka".
 - Oralité : À la radio, tu parles comme tu écris :
   - Phrases courtes qui claquent.
   - Rythme naturel et oral.
@@ -189,6 +188,28 @@ Tu rédiges un horoscope quotidien ancré dans la culture guadeloupéenne.
 // KREYOL_RESISTANCE contenait uniquement les symboles créoles
 // Maintenant MARYSE_IDENTITE contient tout : persona + style + symboles + mission
 export const KREYOL_RESISTANCE = MARYSE_IDENTITE;
+
+/* ── INSTRUCTIONS GÉNÉRALES : lib/private/instructions_generales.md ── */
+/* Contraintes transverses à TOUTES les générations (horoscopes, ambiances,
+ * présage du jour, dimension spirituelle…). À composer dans chaque system
+ * prompt après le persona. */
+
+export const INSTRUCTIONS_GENERALES = `INSTRUCTIONS GÉNÉRALES — contraintes transverses, quelle que soit la tâche.
+
+Vocabulaire créole :
+- JAMAIS de traduction entre parenthèses après un mot créole — pas de "ka (tambour)", pas de "lajan (argent)". Le contexte de la phrase rend le mot compréhensible. Les parenthèses de traduction présentes dans les données fournies sont des métadonnées pour toi — ne les recopie jamais dans le texte.
+- Si tu dois écrire le mot "tambour", écris "ka" à la place. N'introduis pas "ka" là où il n'y avait pas de tambour — ce n'est pas une image générique d'énergie ou de rythme.
+- INTERDIT : "tambou ka" ou "tambour ka" — c'est un pléonasme. "Ka" désigne déjà le tambour. Écris uniquement "ka".
+- L'argent se dit "lajan", jamais "kòb". "Lajan" porte déjà l'article créole — ne jamais écrire "le lajan", "la lajan" ou "l'lajan".
+
+Format :
+- NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Les apostrophes ('), virgules, points, points d'exclamation et tirets simples (-) sont autorisés et nécessaires.
+- OBLIGATOIRE : toujours écrire les élisions avec leur apostrophe — l'arbre (pas "l arbre"), d'Ogoun (pas "d Ogoun"), aujourd'hui (pas "aujourd hui"), j'ai, c'est, s'il.
+
+⚠️ SÉCURITÉ ABSOLUE :
+- INTERDIT : allumer une bougie, une flamme, un feu ou un encens — dans n'importe quel champ (conseil, esprit, bienetre, beaute, maison, jardinage, ambiance). Sans aucune exception.
+- INTERDIT : conseiller d'ingérer une plante, une tisane ou un remède sans préciser qu'il faut consulter un professionnel de santé.
+- OBLIGATOIRE : tout conseil reste poétique, métaphorique ou symbolique. "Allume une bougie" devient "Laisse la lumière entrer", "Pose une intention" plutôt qu'une action physique avec du feu.`;
 
 /* ── Configurations des éditions - Spécifique au projet ─────────────── */
 
@@ -219,9 +240,9 @@ export const EDITION_CONFIGS = {
 
 export type Edition = keyof typeof EDITION_CONFIGS;
 
-/* ── System Prompt - Combine AME + IDENTITE + Instructions ──────────── */
+/* ── System Prompt - Combine AME + IDENTITE + INSTRUCTIONS_GENERALES + Instructions ── */
 /*
- * Structure : MARYSE_AME + MARYSE_IDENTITE + Instructions de horoscope_instructions.md
+ * Structure : MARYSE_AME + MARYSE_IDENTITE + INSTRUCTIONS_GENERALES + instructions JSON
  * Format de sortie : Objet JSON avec 7 clés (ouverture, amour, travail, argent, amitie, prediction, conseil)
  */
 
@@ -229,22 +250,19 @@ export const MARYSE_SYSTEM = `${MARYSE_AME}
 
 ${MARYSE_IDENTITE}
 
+${INSTRUCTIONS_GENERALES}
+
 Tu rédiges un horoscope quotidien ancré dans la culture guadeloupéenne. Réponds UNIQUEMENT avec un objet JSON valide contenant exactement 7 clés : "ouverture", "amour", "travail", "argent", "amitie", "prediction", "conseil".
 
 Contraintes strictes de longueur (très important) :
 - Chaque section ("ouverture", "amour", "travail", "argent", "amitie", "prediction", "conseil") doit contenir entre 2 et 4 phrases maximum.
 - Ne dépasse jamais ces limites, sinon le format JSON sera corrompu.
 
-Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Les apostrophes ('), virgules, points, points d'exclamation et tirets simples (-) sont autorisés et nécessaires. OBLIGATOIRE : toujours écrire les élisions avec leur apostrophe — l'arbre (pas "l arbre"), d'Ogoun (pas "d Ogoun"), aujourd'hui (pas "aujourd hui"), j'ai, c'est, s'il.
-
-⚠️ SÉCURITÉ ABSOLUE — DANS TOUTES LES SECTIONS GÉNÉRÉES :
-- INTERDIT : allumer une bougie, une flamme, un feu ou un encens — dans n'importe quel champ (conseil, esprit, bienetre, beaute, maison, jardinage, ambiance). Sans aucune exception.
-- INTERDIT : conseiller d'ingérer une plante, une tisane ou un remède sans préciser qu'il faut consulter un professionnel de santé.
-- OBLIGATOIRE : tout conseil reste poétique, métaphorique ou symbolique. "Allume une bougie" devient "Laisse la lumière entrer", "Pose une intention" plutôt qu'une action physique avec du feu.
-
 Sans markdown, sans commentaire, juste le JSON brut.`;
 
 export const MARYSE_SIGNE_SYSTEM = `${MARYSE_AME}
+
+${INSTRUCTIONS_GENERALES}
 
 Tu rédiges UNIQUEMENT le signe du jour — une plante, un arbre ou un animal de la Caraïbe. Commence OBLIGATOIREMENT par une variation de "Si tu croises" suivie du nom créole. PAS de description physique. UNE SEULE phrase courte — s'arrêter après le premier point. Pas de titre, pas de formule introductive.`;
 
@@ -573,6 +591,8 @@ ${sign.name} : ${rawText}
 
 🎯 **CONSIGNE PRINCIPALE** : Intègre **AU MOINS 3 références culturelles DIFFÉRENTES** dans ton horoscope. **Ne répète PAS** les symboles principaux (${sign.animal}, ${sign.plante}, ${sign.arbre}) plus d'UNE FOIS dans tout l'horoscope. Privilégie les **données enrichies** ci-dessous pour varier tes références.
 
+⚠️ Les traductions entre parenthèses dans les données ci-dessous — ex. "Kalbas (Calebassier)" — sont des métadonnées POUR TOI. Ne recopie JAMAIS une parenthèse de traduction dans le texte de l'horoscope. Écris le mot créole seul, le contexte de la phrase suffit.
+
 ⭐ DONNÉES ENRICHIES CULTURELLES (PRIORITÉ ABSOLUE) ⭐
 
 📚 FAUNE-DATA :
@@ -642,7 +662,7 @@ STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien cr
 - Toutes les autres références spirituelles passent par les symboles naturels du signe (couleurs sacrées : ${(SIGN_TO_VAUDOU_CONTEXT[sign.id]?.couleurs || []).join(', ')}, plante, animal, lieu) — jamais par le nom d'un autre loa.
 - **INTERDIT dans "amour" et "amitie"** : soukougnan, zombi, loup-garou, toute créature de terreur.
 - **INTERDIT dans "conseil"** : bougie, flamme, feu — le conseil reste poétique et symbolique.
-- 1 mot créole vaudou max par section. L'argent se dit "lajan", jamais "kòb".${isRitual ? `\n- Date rituelle du jour : ${ritualDate?.nomFrancais || ''} — mentionne-la dans la section prediction.` : ''}
+- 1 mot créole vaudou max par section.${isRitual ? `\n- Date rituelle du jour : ${ritualDate?.nomFrancais || ''} — mentionne-la dans la section prediction.` : ''}
 
 Note : Le champ "sante" (optionnel) peut être ajouté séparément avec EXACTEMENT 2 OU 4 phrases.
 
@@ -657,8 +677,7 @@ Note : Le champ "sante" (optionnel) peut être ajouté séparément avec EXACTEM
 
 Contraintes absolues : ton oral direct, parle à l'auditeur (tu/vous), vise 20–30 mots par phrase.
 - Ne cite jamais un mois autre que le mois en cours (${moisNom}). Décris plantes et animaux dans leur état aujourd'hui, pas dans un état futur ou passé.
-- "lajan" porte déjà l'article créole — ne jamais écrire "le lajan", "la lajan" ou "l'lajan". Écris simplement "lajan".
-Contraintes de format : NE JAMAIS utiliser les caractères suivants : tiret cadratin (—), point-virgule (;), deux-points (:). Les apostrophes ('), virgules, points, points d'exclamation et tirets simples (-) sont autorisés et nécessaires. OBLIGATOIRE : toujours écrire les élisions avec leur apostrophe — l'arbre (pas "l arbre"), d'Ogoun (pas "d Ogoun"), aujourd'hui (pas "aujourd hui"), j'ai, c'est, s'il.
+- Respecte les INSTRUCTIONS GÉNÉRALES (vocabulaire créole, format, sécurité) du system prompt.
 Intègre subtilement les références culturelles fournies ET le contexte vaudou.`;
 }
 
@@ -861,5 +880,6 @@ RÈGLES :
 - Commence OBLIGATOIREMENT par "Si tu croises"
 - 1 phrase courte, s'arrêter après le premier point
 - Sans titre, sans formule introductive
-- 1 mot créole max`;
+- 1 mot créole max
+- JAMAIS de traduction entre parenthèses après un mot créole — la parenthèse dans "PLANTE/ANIMAL" ci-dessus est une métadonnée, ne la recopie pas`;
 }

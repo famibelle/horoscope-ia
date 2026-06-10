@@ -1,5 +1,7 @@
-import { config } from 'dotenv';
-config(); // Charger les variables d'environnement depuis .env
+// Charger les variables d'environnement depuis .env — DOIT rester le premier
+// import : les modules importés ensuite lisent process.env à leur chargement
+// (ex. glossaire.ts), avant l'exécution de tout autre code de ce fichier.
+import 'dotenv/config';
 
 // Importer les bases de données culturelles pour le mode verbose
 import { floreData } from '@/lib/private/flore-data';
