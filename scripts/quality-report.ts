@@ -316,7 +316,7 @@ function analyzeHoroscopes(rows: HoroscopeRow[]): { alerts: Alert[]; md: string 
   if (allLoa.length) {
     md.push('**🌀 Loa**\n', freqHeader, freqSep, ...topFreq(allLoa, totalRows), '');
   }
-  if (!allFaune.length && !allFlore.length && !allLieux.length) {
+  if (!hasFaune && !hasFlore && !hasLieux) {
     md.push('> ℹ️ Colonnes enrichies vides — ces données se rempliront au fil des prochaines générations.\n');
   }
   md.push('');
