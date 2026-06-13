@@ -5,6 +5,9 @@ on:
     - cron: '0 5 1 * *'   # 1er du mois à 5h UTC (1h Guadeloupe)
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   generate:
     runs-on: ubuntu-latest

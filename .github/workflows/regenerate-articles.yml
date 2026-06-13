@@ -16,6 +16,9 @@ on:
         - force
         - force-verbose
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   regenerate:
     runs-on: ubuntu-latest

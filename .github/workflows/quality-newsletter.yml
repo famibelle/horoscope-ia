@@ -5,6 +5,9 @@ on:
     - cron: '10 0 * * *'   # 00:10 UTC, après le rapport qualité principal
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   quality-newsletter:
     runs-on: ubuntu-latest

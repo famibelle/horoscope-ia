@@ -5,6 +5,9 @@ on:
     - cron: '0 0 * * *'   # Minuit UTC, après les générations
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   quality-report:
     runs-on: ubuntu-latest
