@@ -7,6 +7,8 @@
 
 import * as fs from 'fs/promises';
 import * as path from 'path';
+import { marked } from 'marked';
+import { sendEmailViaBrevo } from '../lib/brevo-api';
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 
@@ -793,7 +795,33 @@ async function main() {
     console.error('⚠️  Sauvegarde Supabase échouée :', e);
   }
 
+  // Envoi email à UN SEUL destinataire (sauté en local si non configuré).
+  // .split(',')[0] garantit une adresse unique même si la variable en contenait plusieurs.
+  const emailTo = process.env.QUALITY_REPORT_EMAIL?.split(',')[0].trim();
+  if (emailTo) {
+    try {
+      await sendReportEmail(emailTo, report, statusIcon, periodEnd, warnings);
+      console.log(`📧 Rapport envoyé par email à ${emailTo}`);
+    } catch (e) {
+      console.error('⚠️  Envoi email échoué :', e);
+    }
+  }
+
   console.log(`\n✅ Rapport terminé — ${warnings} alerte(s), ${infos} info(s)`);
+}
+
+// Convertit le rapport markdown en HTML stylé (styles inline pour compat Gmail) et l'envoie via Brevo
+async function sendReportEmail(
+  to: string, report: string, statusIcon: string, periodEnd: string, warnings: number,
+): Promise<void> {
+  const body = (marked.parse(report) as string)
+    .replace(/<table>/g, '<table style="border-collapse:collapse;width:100%;margin:12px 0;font-size:14px">')
+    .replace(/<th>/g, '<th style="border:1px solid #ddd;padding:6px 10px;background:#f5f5f5;text-align:left">')
+    .replace(/<td>/g, '<td style="border:1px solid #ddd;padding:6px 10px">')
+    .replace(/<blockquote>/g, '<blockquote style="border-left:3px solid #ccc;margin:8px 0;padding:4px 12px;color:#555">');
+  const html = `<div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,sans-serif;max-width:820px;margin:0 auto;color:#222;line-height:1.5">${body}</div>`;
+  const subject = `${statusIcon} Rapport Qualité Horoscopes — ${periodEnd} (${warnings} alerte${warnings > 1 ? 's' : ''})`;
+  await sendEmailViaBrevo(to, subject, html, report);
 }
 
 main().catch(e => { console.error(e); process.exit(1); });

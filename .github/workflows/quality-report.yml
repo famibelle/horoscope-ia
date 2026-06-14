@@ -36,6 +36,9 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          QUALITY_REPORT_EMAIL: medhi.famibelle@gmail.com
         run: npx tsx scripts/quality-report.ts
 
       - name: 📤 Upload rapport markdown

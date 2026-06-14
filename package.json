@@ -34,6 +34,7 @@
     "dotenv": "^17.4.2",
     "framer-motion": "^11.0.0",
     "lucide-react": "^0.400.0",
+    "marked": "^18.0.5",
     "next": "^15.0.0",
     "postcss": "^8",
     "react": "^19.0.0",
