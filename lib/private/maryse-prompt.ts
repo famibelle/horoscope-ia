@@ -345,6 +345,24 @@ function shuffleDeterministic<T>(arr: T[], seed: string): T[] {
   return result;
 }
 
+// Pool histoire : une entrée par période unique (rotation équilibrée), le fait affiché
+// variant par signe/date/édition pour préserver la richesse quand une même période revient.
+// Le filtre par mois/année a été retiré : les périodes sont des années ("1685", "27 avril 1848"),
+// jamais le mois/année courant → il ne matchait jamais (fallback systématique) et laissait les
+// doublons de période ("27 avril 1848" ×5 entrées) sur-représenter certains thèmes (38% → ~18%).
+function buildHistoirePool(signId: string, factKey: string) {
+  const nonLong = histoireData.filter(h => !isLongPeriod(h.periode));
+  const byPeriode = new Map<string, typeof nonLong>();
+  for (const h of nonLong) {
+    const arr = byPeriode.get(h.periode) ?? [];
+    arr.push(h);
+    byPeriode.set(h.periode, arr);
+  }
+  return [...byPeriode.values()].map(facts =>
+    facts.length === 1 ? facts[0] : rotateBySignDate(facts, signId, factKey, 1)[0]
+  );
+}
+
 export function buildHoroscopeUserPrompt(
   sign: Sign,
   rawText: string,
@@ -416,17 +434,9 @@ export function buildHoroscopeUserPrompt(
   const lieuEntry   = rotateBySignDate(lieuPool2, sign.id, rotKey, 1)[0] || null;
   const lieuDimension = lieuEntry?.dimensionCulturelle || '';
 
-  // ── histoireEntry : rotation parmi les événements du mois ────────────────
-  const [year, month, day] = dateToUse.split('-');
+  // ── histoireEntry : période primaire (pool dédupliqué par période) ───────
   const moisNom = new Date(dateToUse).toLocaleString('fr-FR', { month: 'long' });
-  const histoireAllNonLong = histoireData.filter(h => !isLongPeriod(h.periode));
-  const histoireByMonth = histoireAllNonLong.filter(h =>
-    h.periode.includes(year) ||
-    h.periode.includes(moisNom) ||
-    h.periode.includes(month)
-  );
-  // Fallback : si aucune entrée ne correspond au mois courant, utiliser tout le pool
-  const histoirePool = histoireByMonth.length > 0 ? histoireByMonth : histoireAllNonLong;
+  const histoirePool = buildHistoirePool(sign.id, dateToUse + edition);
   const histoireEntry  = rotateBySignDate(histoirePool, sign.id, rotKey, 1)[0] || null;
   const histoireFait   = histoireEntry?.faitHistorique || '';
   const histoirePeriode = histoireEntry?.periode || '';
@@ -534,8 +544,12 @@ export function buildHoroscopeUserPrompt(
   const kreyolNonTotem = kreyolData.filter(k => !isTotem(k.nomCreole));
   const kreyolEnrichis = rotateBySignDate(kreyolNonTotem, sign.id, dateToUse + edition, 5);
 
-  // HISTOIRE-DATA : 2-3 entrées pertinentes (filtre par date, fallback pool complet)
-  const histoireEnrichies = rotateBySignDate(histoirePool, sign.id, dateToUse + edition, 3);
+  // HISTOIRE-DATA : 3 périodes, pré-shuffle journalier + post-shuffle comme faune/flore/lieux
+  const dayHistoirePool = shuffleDeterministic(histoirePool, dateToUse);
+  const histoireEnrichies = shuffleDeterministic(
+    rotateBySignDate(dayHistoirePool, sign.id, dateToUse + edition, 3),
+    sign.id + dateToUse + edition + 'h'
+  );
 
   // Détecter les correspondances météo/édition pour adapter le contexte
   const signConditions = [...(sign.faune?.conditions || []), ...(sign.flore?.conditions || [])];
@@ -723,8 +737,6 @@ export function buildHoroscopeMetadata(
   date?: string,
 ): HoroscopeMetadata {
   const dateToUse = date || todayGuadeloupe();
-  const [year, month] = dateToUse.split('-');
-  const moisNom = new Date(dateToUse).toLocaleString('fr-FR', { month: 'long' });
 
   const vaudouContext = getVaudouContextForSign(sign.id);
   const ritualDate = getRitualDateContext(dateToUse);
@@ -801,13 +813,13 @@ export function buildHoroscopeMetadata(
     );
   }).slice(0, 5);
 
-  // HISTOIRE — fallback pool complet si aucune entrée ne correspond au mois courant
-  const histoireAllNonLongMeta = histoireData.filter(h => !isLongPeriod(h.periode));
-  const histoireByMonthMeta = histoireAllNonLongMeta.filter(h =>
-    h.periode.includes(year) || h.periode.includes(moisNom) || h.periode.includes(month)
+  // HISTOIRE — pool dédupliqué par période + shuffle journalier (cf. buildHistoirePool)
+  const histoirePoolMeta = buildHistoirePool(sign.id, dateToUse + edition);
+  const dayHistoirePoolMeta = shuffleDeterministic(histoirePoolMeta, dateToUse);
+  const histoireEnrichies = shuffleDeterministic(
+    rotateBySignDate(dayHistoirePoolMeta, sign.id, dateToUse + edition, 3),
+    sign.id + dateToUse + edition + 'h'
   );
-  const histoirePoolMeta = histoireByMonthMeta.length > 0 ? histoireByMonthMeta : histoireAllNonLongMeta;
-  const histoireEnrichies = rotateBySignDate(histoirePoolMeta, sign.id, dateToUse + edition, 3);
 
   const relevantLoas = loasData.filter(l =>
     l.nomCreole.toLowerCase().includes(loaName?.toLowerCase() || '')
