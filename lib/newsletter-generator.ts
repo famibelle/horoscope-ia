@@ -13,6 +13,7 @@ import { fauneData } from './private/faune-data';
 import { lieuxData } from './private/lieux-data';
 import { kreyolData } from './private/kreyol-data';
 import { histoireData } from './private/histoire-data';
+import { MARYSE_TITRE_SYSTEM } from './private/maryse-prompt';
 
 // Charger le présage du jour depuis Supabase
 async function fetchPresageFromSupabase(date: string): Promise<PresageData | null> {
@@ -447,39 +448,91 @@ Voici votre horoscope guadeloupéen pour aujourd'hui.
   }
 }
 
+// Objets déjà générés pendant ce run (dédup entre les 12 signs d'un même envoi)
+const subjectsThisRun: string[] = [];
+
+// Récupère les derniers objets stockés (table newsletters) pour l'anti-répétition.
+async function fetchRecentSubjects(limit = 12): Promise<string[]> {
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !key) return [];
+  try {
+    const res = await fetch(
+      `${supabaseUrl}/rest/v1/newsletters?select=subject&order=date.desc&limit=${limit}`,
+      { headers: { apikey: key, Authorization: `Bearer ${key}` } },
+    );
+    if (!res.ok) return [];
+    const rows = (await res.json()) as { subject?: string }[];
+    return rows.map(r => r.subject).filter((s): s is string => !!s);
+  } catch {
+    return [];
+  }
+}
+
+// Nettoyage post-génération : retire guillemets entourants et ponctuation finale.
+function cleanSubject(raw: string): string {
+  return raw
+    .replace(/^["'«»\s]+|["'«»\s]+$/g, '')
+    .replace(/[.;:]+$/, '')
+    .trim();
+}
+
 // Générateur de newsletter pour un signe spécifique
 async function generateEmailSubject(signName: string, horoscope: Partial<HoroscopeResponse>): Promise<string> {
   const fallback = `✦ ${signName} — les ancêtres de Karukera ont un message pour toi`;
   const apiKey = process.env.MISTRAL_API_KEY;
   if (!apiKey) return fallback;
 
-  const context = [horoscope.ouverture, horoscope.prediction, horoscope.conseil]
-    .filter(Boolean).join(' ').substring(0, 400);
+  const context = [horoscope.ouverture, horoscope.amour, horoscope.travail, horoscope.prediction, horoscope.conseil]
+    .filter(Boolean).join(' ').substring(0, 600);
 
-  try {
-    const res = await fetch('https://api.mistral.ai/v1/chat/completions', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'mistral-small-latest',
-        temperature: 0.9,
-        max_tokens: 60,
-        messages: [
-          {
-            role: 'system',
-            content: `Tu es Maryse CondAI. Génère UN objet d'email accrocheur (max 70 caractères) pour la newsletter horoscope du signe ${signName}. L'objet doit être mystérieux, ancré dans la culture guadeloupéenne et ancestrale, donner envie d'ouvrir le mail. Réponds uniquement avec l'objet, sans guillemets ni ponctuation finale.`,
-          },
-          { role: 'user', content: context || signName },
-        ],
-      }),
-    });
-    if (!res.ok) return fallback;
-    const data = await res.json();
-    const generated = data.choices?.[0]?.message?.content?.trim() ?? '';
-    return generated.length > 10 ? generated : fallback;
-  } catch {
-    return fallback;
+  // Anti-répétition : objets déjà en base + ceux déjà produits dans ce run.
+  const recent = [...(await fetchRecentSubjects(12)), ...subjectsThisRun];
+  const avoidBlock = recent.length
+    ? `\n\nObjets déjà envoyés (à NE PAS répéter — ni mots-clés, ni angle, ni animal ou plante) :\n${recent.map(s => `- ${s}`).join('\n')}`
+    : '';
+
+  const userContent = `Signe : ${signName}\n\nHoroscope du jour de ce signe :\n${context || signName}${avoidBlock}`;
+  const body = JSON.stringify({
+    model: 'mistral-large-latest',
+    temperature: 0.9,
+    max_tokens: 60,
+    messages: [
+      { role: 'system', content: MARYSE_TITRE_SYSTEM },
+      { role: 'user', content: userContent },
+    ],
+  });
+
+  // Retry + backoff : Mistral-large rate-limit (429) lors des 12 appels successifs.
+  const maxAttempts = 3;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const res = await fetch('https://api.mistral.ai/v1/chat/completions', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        body,
+      });
+      if (!res.ok) {
+        if ((res.status === 429 || res.status >= 500) && attempt < maxAttempts) {
+          await new Promise(r => setTimeout(r, 1500 * attempt));
+          continue;
+        }
+        return fallback;
+      }
+      const data = await res.json();
+      const generated = cleanSubject(data.choices?.[0]?.message?.content?.trim() ?? '');
+      if (generated.length <= 10) return fallback;
+      subjectsThisRun.push(generated);
+      return generated;
+    } catch {
+      if (attempt < maxAttempts) {
+        await new Promise(r => setTimeout(r, 1500 * attempt));
+        continue;
+      }
+      return fallback;
+    }
   }
+  return fallback;
 }
 
 async function generateSignNewsletter(

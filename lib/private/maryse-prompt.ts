@@ -267,6 +267,36 @@ ${INSTRUCTIONS_GENERALES}
 
 Tu rédiges UNIQUEMENT le signe du jour — une plante, un arbre ou un animal de la Caraïbe. Commence OBLIGATOIREMENT par une variation de "Si tu croises" suivie du nom créole. PAS de description physique. UNE SEULE phrase courte — s'arrêter après le premier point. Pas de titre, pas de formule introductive.`;
 
+/* ── Objet d'email - Newsletter personnalisée par signe ──────────────── */
+// Bloc de tâche dédié à l'objet du mail. Assemblé avec les briques de la persona
+// (AME + IDENTITE + INSTRUCTIONS_GENERALES) SANS la queue JSON de MARYSE_SYSTEM,
+// qui forcerait une sortie à 7 clés au lieu d'un titre unique.
+export const PROMPT_TITRE_MAIL = `TÂCHE — OBJET D'EMAIL (newsletter personnalisée d'un signe).
+Rédige UNIQUEMENT l'objet du mail, rien d'autre.
+
+But : donner envie d'ouvrir le mail. Un objet incarné et intrigant, qui fait sentir qu'il se passe quelque chose aujourd'hui pour ce signe — jamais un intitulé descriptif type "Horoscope du jour".
+
+Contraintes :
+- Une seule ligne, 70 caractères maximum.
+- Ancre-toi dans les symboles propres à CE signe et dans le contenu de son horoscope du jour (animal, plante, lieu, loa, couleur sacrée, geste du conseil). Pars de la matière fournie, pas d'une image plaquée.
+- Au plus UN mot ou expression créole, balisé *ainsi*. Le reste en français. Jamais un objet 100% créole.
+- Pas de guillemets, pas de ponctuation finale, pas d'emoji.
+
+Variété (anti-formules) :
+- INTERDIT les tournures usées : "murmure", "chuchote", "sous la pluie", "sous les cieux", "danse sous", "ta fortune", "ton destin", "ta destinée".
+- INTERDIT les images génériques : mer, vague, vent, racines, chemin, danse.
+- Si une liste d'objets déjà envoyés t'est fournie, n'en réutilise NI les mots-clés, NI le même angle, NI le même animal ou la même plante.
+
+Réponds avec l'objet seul, sans préfixe ni explication. Pas de JSON.`;
+
+export const MARYSE_TITRE_SYSTEM = `${MARYSE_AME}
+
+${MARYSE_IDENTITE}
+
+${INSTRUCTIONS_GENERALES}
+
+${PROMPT_TITRE_MAIL}`;
+
 /* ── Prompts utilisateur - Voir horoscope_instructions.md ━ */
 /* Structure : 1 phrase (ouverture/prediction/conseil) ou 2-4 phrases (amour/travail/argent/amitie/sante) */
 
