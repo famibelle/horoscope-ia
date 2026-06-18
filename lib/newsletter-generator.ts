@@ -13,7 +13,7 @@ import { fauneData } from './private/faune-data';
 import { lieuxData } from './private/lieux-data';
 import { kreyolData } from './private/kreyol-data';
 import { histoireData } from './private/histoire-data';
-import { MARYSE_TITRE_SYSTEM } from './private/maryse-prompt';
+import { MARYSE_TITRE_SYSTEM, MARYSE_TITRE_QUOTIDIEN_SYSTEM } from './private/maryse-prompt';
 
 // Charger le présage du jour depuis Supabase
 async function fetchPresageFromSupabase(date: string): Promise<PresageData | null> {
@@ -477,33 +477,29 @@ function cleanSubject(raw: string): string {
     .trim();
 }
 
-// Générateur de newsletter pour un signe spécifique
-async function generateEmailSubject(signName: string, horoscope: Partial<HoroscopeResponse>): Promise<string> {
-  const fallback = `✦ ${signName} — les ancêtres de Karukera ont un message pour toi`;
-  const apiKey = process.env.MISTRAL_API_KEY;
-  if (!apiKey) return fallback;
-
-  const context = [horoscope.ouverture, horoscope.amour, horoscope.travail, horoscope.prediction, horoscope.conseil]
-    .filter(Boolean).join(' ').substring(0, 600);
-
-  // Anti-répétition : objets déjà en base + ceux déjà produits dans ce run.
-  const recent = [...(await fetchRecentSubjects(12)), ...subjectsThisRun];
-  const avoidBlock = recent.length
+// Construit le bloc anti-répétition à partir des objets à éviter.
+function avoidBlock(recent: string[]): string {
+  return recent.length
     ? `\n\nObjets déjà envoyés (à NE PAS répéter — ni mots-clés, ni angle, ni animal ou plante) :\n${recent.map(s => `- ${s}`).join('\n')}`
     : '';
+}
 
-  const userContent = `Signe : ${signName}\n\nHoroscope du jour de ce signe :\n${context || signName}${avoidBlock}`;
+// Appel Mistral-large pour un objet d'email, avec retry/backoff (429/5xx) et nettoyage.
+// Retourne null en cas d'échec (l'appelant applique son propre fallback).
+async function callMistralSubject(systemPrompt: string, userContent: string): Promise<string | null> {
+  const apiKey = process.env.MISTRAL_API_KEY;
+  if (!apiKey) return null;
+
   const body = JSON.stringify({
     model: 'mistral-large-latest',
     temperature: 0.9,
     max_tokens: 60,
     messages: [
-      { role: 'system', content: MARYSE_TITRE_SYSTEM },
+      { role: 'system', content: systemPrompt },
       { role: 'user', content: userContent },
     ],
   });
 
-  // Retry + backoff : Mistral-large rate-limit (429) lors des 12 appels successifs.
   const maxAttempts = 3;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
@@ -517,22 +513,37 @@ async function generateEmailSubject(signName: string, horoscope: Partial<Horosco
           await new Promise(r => setTimeout(r, 1500 * attempt));
           continue;
         }
-        return fallback;
+        return null;
       }
       const data = await res.json();
       const generated = cleanSubject(data.choices?.[0]?.message?.content?.trim() ?? '');
-      if (generated.length <= 10) return fallback;
-      subjectsThisRun.push(generated);
-      return generated;
+      return generated.length > 10 ? generated : null;
     } catch {
       if (attempt < maxAttempts) {
         await new Promise(r => setTimeout(r, 1500 * attempt));
         continue;
       }
-      return fallback;
+      return null;
     }
   }
-  return fallback;
+  return null;
+}
+
+// Générateur de newsletter pour un signe spécifique
+async function generateEmailSubject(signName: string, horoscope: Partial<HoroscopeResponse>): Promise<string> {
+  const fallback = `✦ ${signName} — les ancêtres de Karukera ont un message pour toi`;
+
+  const context = [horoscope.ouverture, horoscope.amour, horoscope.travail, horoscope.prediction, horoscope.conseil]
+    .filter(Boolean).join(' ').substring(0, 600);
+
+  // Anti-répétition : objets déjà en base + ceux déjà produits dans ce run.
+  const recent = [...(await fetchRecentSubjects(12)), ...subjectsThisRun];
+  const userContent = `Signe : ${signName}\n\nHoroscope du jour de ce signe :\n${context || signName}${avoidBlock(recent)}`;
+
+  const generated = await callMistralSubject(MARYSE_TITRE_SYSTEM, userContent);
+  if (!generated) return fallback;
+  subjectsThisRun.push(generated);
+  return generated;
 }
 
 async function generateSignNewsletter(
@@ -583,37 +594,17 @@ async function generateSignNewsletter(
 async function generateDailyEmailSubject(presage: PresageData | null, date: string): Promise<string> {
   const day = new Date(date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
   const fallback = `✦ Horoscope Karukera — ${day}`;
-  const apiKey = process.env.MISTRAL_API_KEY;
-  if (!apiKey) return fallback;
 
   const context = presage
     ? `Signe du jour : ${presage.nom_creole} (${presage.nom_commun}). "${presage.presage_naturel}"`
     : `Horoscope du ${day}`;
 
-  try {
-    const res = await fetch('https://api.mistral.ai/v1/chat/completions', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'mistral-small-latest',
-        temperature: 0.9,
-        max_tokens: 60,
-        messages: [
-          {
-            role: 'system',
-            content: `Tu es Maryse CondAI. Génère UN objet d'email accrocheur (max 70 caractères) pour la newsletter horoscope quotidienne des 12 signes. L'objet doit être mystérieux, ancré dans la culture ancestrale guadeloupéenne, s'inspirer du signe du jour si disponible, donner envie d'ouvrir le mail. Réponds uniquement avec l'objet, sans guillemets ni ponctuation finale.`,
-          },
-          { role: 'user', content: context },
-        ],
-      }),
-    });
-    if (!res.ok) return fallback;
-    const data = await res.json();
-    const generated = data.choices?.[0]?.message?.content?.trim() ?? '';
-    return generated.length > 10 ? generated : fallback;
-  } catch {
-    return fallback;
-  }
+  // Anti-répétition : les derniers objets quotidiens stockés (table newsletters).
+  const recent = await fetchRecentSubjects(12);
+  const userContent = `${context}${avoidBlock(recent)}`;
+
+  const generated = await callMistralSubject(MARYSE_TITRE_QUOTIDIEN_SYSTEM, userContent);
+  return generated ?? fallback;
 }
 
 // Générateur de newsletter quotidienne complète

@@ -267,18 +267,14 @@ ${INSTRUCTIONS_GENERALES}
 
 Tu rédiges UNIQUEMENT le signe du jour — une plante, un arbre ou un animal de la Caraïbe. Commence OBLIGATOIREMENT par une variation de "Si tu croises" suivie du nom créole. PAS de description physique. UNE SEULE phrase courte — s'arrêter après le premier point. Pas de titre, pas de formule introductive.`;
 
-/* ── Objet d'email - Newsletter personnalisée par signe ──────────────── */
-// Bloc de tâche dédié à l'objet du mail. Assemblé avec les briques de la persona
-// (AME + IDENTITE + INSTRUCTIONS_GENERALES) SANS la queue JSON de MARYSE_SYSTEM,
-// qui forcerait une sortie à 7 clés au lieu d'un titre unique.
-export const PROMPT_TITRE_MAIL = `TÂCHE — OBJET D'EMAIL (newsletter personnalisée d'un signe).
-Rédige UNIQUEMENT l'objet du mail, rien d'autre.
+/* ── Objet d'email - Newsletter ──────────────────────────────────────── */
+// Blocs de tâche dédiés à l'objet du mail. Assemblés avec les briques de la
+// persona (AME + IDENTITE + INSTRUCTIONS_GENERALES) SANS la queue JSON de
+// MARYSE_SYSTEM, qui forcerait une sortie à 7 clés au lieu d'un titre unique.
 
-But : donner envie d'ouvrir le mail. Un objet incarné et intrigant, qui fait sentir qu'il se passe quelque chose aujourd'hui pour ce signe — jamais un intitulé descriptif type "Horoscope du jour".
-
-Contraintes :
+// Règles communes aux deux variantes (format + variété + anti-répétition).
+const TITRE_MAIL_REGLES = `Contraintes :
 - Une seule ligne, 70 caractères maximum.
-- Ancre-toi dans les symboles propres à CE signe et dans le contenu de son horoscope du jour (animal, plante, lieu, loa, couleur sacrée, geste du conseil). Pars de la matière fournie, pas d'une image plaquée.
 - Au plus UN mot ou expression créole, balisé *ainsi*. Le reste en français. Jamais un objet 100% créole.
 - Pas de guillemets, pas de ponctuation finale, pas d'emoji.
 
@@ -289,6 +285,26 @@ Variété (anti-formules) :
 
 Réponds avec l'objet seul, sans préfixe ni explication. Pas de JSON.`;
 
+// Variante 1 : newsletter personnalisée d'un signe (ancrée sur le signe + son horoscope).
+export const PROMPT_TITRE_MAIL = `TÂCHE — OBJET D'EMAIL (newsletter personnalisée d'un signe).
+Rédige UNIQUEMENT l'objet du mail, rien d'autre.
+
+But : donner envie d'ouvrir le mail. Un objet incarné et intrigant, qui fait sentir qu'il se passe quelque chose aujourd'hui pour ce signe — jamais un intitulé descriptif type "Horoscope du jour".
+
+Ancre-toi dans les symboles propres à CE signe et dans le contenu de son horoscope du jour (animal, plante, lieu, loa, couleur sacrée, geste du conseil). Pars de la matière fournie, pas d'une image plaquée.
+
+${TITRE_MAIL_REGLES}`;
+
+// Variante 2 : newsletter quotidienne commune aux 12 signes (ancrée sur le signe du jour / présage).
+export const PROMPT_TITRE_MAIL_QUOTIDIEN = `TÂCHE — OBJET D'EMAIL (newsletter quotidienne, commune aux 12 signes).
+Rédige UNIQUEMENT l'objet du mail, rien d'autre.
+
+But : donner envie d'ouvrir le mail à toute la communauté. Un objet incarné et intrigant, porté par le SIGNE DU JOUR (la plante ou l'animal du jour) — jamais un intitulé descriptif type "Horoscope du jour".
+
+Ancre-toi dans le signe du jour fourni et ce qu'il évoque. Ne t'adresse PAS à un signe du zodiaque en particulier — l'objet vaut pour tout le monde. Pars de cette matière, pas d'une image plaquée.
+
+${TITRE_MAIL_REGLES}`;
+
 export const MARYSE_TITRE_SYSTEM = `${MARYSE_AME}
 
 ${MARYSE_IDENTITE}
@@ -296,6 +312,14 @@ ${MARYSE_IDENTITE}
 ${INSTRUCTIONS_GENERALES}
 
 ${PROMPT_TITRE_MAIL}`;
+
+export const MARYSE_TITRE_QUOTIDIEN_SYSTEM = `${MARYSE_AME}
+
+${MARYSE_IDENTITE}
+
+${INSTRUCTIONS_GENERALES}
+
+${PROMPT_TITRE_MAIL_QUOTIDIEN}`;
 
 /* ── Prompts utilisateur - Voir horoscope_instructions.md ━ */
 /* Structure : 1 phrase (ouverture/prediction/conseil) ou 2-4 phrases (amour/travail/argent/amitie/sante) */
