@@ -13,6 +13,11 @@ import { todayGuadeloupe } from '@/lib/edition';
 
 const VALID_SIGN_IDS = new Set(signs.map(s => s.id));
 
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Espace les appels Mistral-large (objet d'email) entre signes pour éviter le rate-limit (429).
+const SIGN_THROTTLE_MS = 1500;
+
 async function sendPersonalized(
   newsletter: { subject: string; htmlContent: string; text: string },
   date: string,
@@ -51,7 +56,9 @@ async function sendPersonalized(
   }
 
   // Envoi personnalisé par signe
-  for (const [signId, emails] of bySign) {
+  const signEntries = [...bySign];
+  for (let i = 0; i < signEntries.length; i++) {
+    const [signId, emails] = signEntries[i];
     console.log(`\n📨 Génération + envoi pour ${signId} (${emails.length} abonné(s))...`);
     try {
       const horoscopeData = horoscopeBySign.get(signId) ?? {};
@@ -65,6 +72,8 @@ async function sendPersonalized(
     } catch (err: any) {
       console.error(`   ❌ Erreur pour ${signId}:`, err?.message ?? err);
     }
+    // Throttle entre signes (sauf le dernier) — évite le rate-limit Mistral-large
+    if (i < signEntries.length - 1) await delay(SIGN_THROTTLE_MS);
   }
 
   // Abonnés sans signe → newsletter complète
