@@ -36,6 +36,16 @@ interface Alert {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
+// Retire les balises HTML et normalise les espaces, pour évaluer le texte réel
+// du preview (le wrapper d'aperçu <div display:none> est légitime, pas une erreur).
+function stripHtml(html: string): string {
+  return html
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function last7Days(): string[] {
   const days: string[] = [];
   for (let i = 6; i >= 0; i--) {
@@ -150,19 +160,24 @@ function analyzeStructure(rows: NewsletterRow[]): { alerts: Alert[]; md: string 
   }
   if (!hasDuplicate) md.push('✅ Aucune répétition détectée sur 7 jours.');
 
-  // Qualité du preview
+  // Qualité du preview — on évalue le TEXTE réel (le wrapper <div display:none>
+  // d'aperçu pour Gmail/Apple Mail est une technique légitime, pas une erreur).
   md.push('\n### Qualité du preview\n');
   md.push('| Date | Longueur | Problème |');
   md.push('|------|----------|----------|');
   for (const row of rows) {
     const date = row.date.split('T')[0];
-    const len = (row.preview || '').length;
-    if (!row.preview || row.preview.includes('<') || row.preview.includes('>')) {
-      md.push(`| ${date} | ${len} | 🔴 contient du HTML |`);
-      alerts.push({ level: 'error', message: `Preview HTML brut le ${date}` });
+    const text = stripHtml(row.preview || '');
+    const len = text.length;
+    const hadTags = /<[^>]+>/.test(row.preview || '');
+    if (!text) {
+      md.push(`| ${date} | ${len} | 🔴 preview vide |`);
+      alerts.push({ level: 'error', message: `Preview vide le ${date}` });
     } else if (len < 80) {
       md.push(`| ${date} | ${len} | 🟠 trop court (<80) |`);
       alerts.push({ level: 'warning', message: `Preview trop court (${len} chars) le ${date}` });
+    } else if (hadTags) {
+      md.push(`| ${date} | ${len} | 🟡 contient des balises (format, non bloquant) |`);
     } else {
       md.push(`| ${date} | ${len} | ✅ |`);
     }
@@ -179,7 +194,7 @@ async function analyzeSemantic(rows: NewsletterRow[]): Promise<string> {
   const lines: string[] = [];
   for (const row of rows) {
     const date = row.date.split('T')[0];
-    lines.push(`📅 ${date}\nObjet : ${row.subject}\nPreview : ${(row.preview || '').substring(0, 150)}`);
+    lines.push(`📅 ${date}\nObjet : ${row.subject}\nPreview : ${stripHtml(row.preview || '').substring(0, 150)}`);
   }
   const excerpt = lines.join('\n\n');
 

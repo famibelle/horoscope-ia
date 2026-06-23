@@ -220,22 +220,22 @@ export const EDITION_CONFIGS = {
   nuit: {
     moment: 'cette nuit',
     instruction:
-      "C'est l'ÉDITION DE LA NUIT. Oriente chaque phrase vers le calme, les rêves, ce qui se prépare pendant la nuit. Formules de repos, de reconnexion aux esprits, de préparation au lendemain. Évocation des ancêtres et des forces invisibles.",
+      "C'est l'ÉDITION DE LA NUIT. Oriente chaque phrase vers le calme, les rêves, ce qui se prépare pendant la nuit. Formules de repos, de reconnexion aux esprits, de préparation au lendemain. Évocation des ancêtres et des forces invisibles. INTERDIT toute formule d'un autre moment de la journée : \"ce matin\", \"au lever\", \"à l'aube\", \"ce midi\", \"cet après-midi\", \"ce soir\" — le moment est CETTE NUIT.",
   },
   matin: {
     moment: 'ce matin',
     instruction:
-      "C'est l'ÉDITION DU MATIN. Oriente chaque phrase vers l'intention, l'élan du jour, ce qu'on peut initier au lever. Formules d'éveil, d'ouverture, de commencement. Jamais de bilan ou de regard en arrière.",
+      "C'est l'ÉDITION DU MATIN. Oriente chaque phrase vers l'intention, l'élan du jour, ce qu'on peut initier au lever. Formules d'éveil, d'ouverture, de commencement. Jamais de bilan ou de regard en arrière. INTERDIT toute formule d'un autre moment : \"ce midi\", \"cet après-midi\", \"ce soir\", \"cette nuit\", \"avant de dormir\" — le moment est CE MATIN.",
   },
   midi: {
     moment: 'ce midi',
     instruction:
-      "C'est l'ÉDITION DU MIDI. Oriente chaque phrase vers l'énergie du moment présent, l'action en cours, ce qu'on peut accomplir maintenant. Formules de dynamisme, de clarté, de décision. Ni regard en arrière ni anticipation du soir.",
+      "C'est l'ÉDITION DU MIDI. Oriente chaque phrase vers l'énergie du moment présent, l'action en cours, ce qu'on peut accomplir maintenant. Formules de dynamisme, de clarté, de décision. Ni regard en arrière ni anticipation du soir. INTERDIT toute formule d'un autre moment : \"ce matin\", \"au lever\", \"à l'aube\", \"ce soir\", \"cette nuit\", \"avant de dormir\" — le moment est CE MIDI.",
   },
   soir: {
     moment: 'ce soir',
     instruction:
-      "C'est l'ÉDITION DU SOIR. Oriente chaque phrase vers le bilan de la journée, ce qu'on peut lâcher avant de dormir. Formules de clôture, de nuit, de repos bien mérité. Jamais d'élan vers demain.",
+      "C'est l'ÉDITION DU SOIR. Oriente chaque phrase vers le bilan de la journée, ce qu'on peut lâcher avant de dormir. Formules de clôture, de nuit, de repos bien mérité. Jamais d'élan vers demain. INTERDIT toute formule d'un autre moment : \"ce matin\", \"au lever\", \"à l'aube\", \"ce midi\", \"cet après-midi\" — le moment est CE SOIR.",
   },
 } as const;
 
@@ -274,7 +274,7 @@ Tu rédiges UNIQUEMENT le signe du jour — une plante, un arbre ou un animal de
 
 // Règles communes aux deux variantes (format + variété + anti-répétition).
 const TITRE_MAIL_REGLES = `Contraintes :
-- Une seule ligne, 70 caractères maximum.
+- Une seule ligne, entre 50 et 70 caractères (cible idéale pour l'aperçu mail). Évite les objets trop courts qui passent inaperçus.
 - Au plus UN mot ou expression créole, balisé *ainsi*. Le reste en français. Jamais un objet 100% créole.
 - Pas de guillemets, pas de ponctuation finale, pas d'emoji.
 
@@ -718,7 +718,7 @@ ${isRitual ? `  ⭐ Date rituelle : ${ritualDate?.nomFrancais || ritualDate?.nom
 ÉDITION : ${cfg.instruction}
 
 STRUCTURE — dans ta voix, dans cet ordre strict, ancrées dans le quotidien créole guadeloupéen :
-1. "ouverture" : UNE phrase - image caribéenne qui pose le ton du jour. Ancre dans l'animal, la plante ou le lieu du signe, ou dans une couleur sacrée du loa — pas une formule générique. INTERDIT : toute phrase avec "vèvè" dans cette section.
+1. "ouverture" : UNE phrase - image caribéenne qui pose le ton du jour. Ancre de PRÉFÉRENCE dans un élément DIVERSIFIÉ (faune ou flore enrichie du jour) ou dans une couleur sacrée du loa, plutôt que dans le totem du signe. N'utilise le totem (${sign.animal}, ${sign.plante}, ${sign.arbre}, ${sign.lieu}) ici QUE si tu ne le cites dans aucune autre section. Pas une formule générique. INTERDIT : toute phrase avec "vèvè" dans cette section.
 2. "amour" : 2 à 4 phrases. **OBLIGATOIRE : le nom créole d'un élément de FAUNE-DATA ou FLORE-DATA doit apparaître dans le texte.** INTERDIT comme images de remplacement : "mer", "vague", "vent", "racines", "danse".
 3. "travail" : 2 à 4 phrases. **OBLIGATOIRE : le nom créole d'un élément de FAUNE-DATA ou LIEUX-DATA doit apparaître dans le texte.** INTERDIT : "chemin", "vent", "racines" comme métaphores génériques.
 4. "argent" : 2 à 4 phrases. **OBLIGATOIRE : une image tirée du comportement d'un animal de FAUNE-DATA (diversification) ou d'une pratique économique créole (marché, pêche, récolte, troc) — pas le totem du signe.** INTERDIT : HISTOIRE-DATA, "sève", "racines", "mer", "vent".
@@ -737,12 +737,14 @@ Note : Le champ "sante" (optionnel) peut être ajouté séparément avec EXACTEM
 
 🎯 **RÈGLES DE VARIÉTÉ ABSOLUES** :
 - Chaque section doit citer un élément DIFFÉRENT des autres sections — pas le même animal, plante ou lieu deux fois
+- **Le totem du signe (${sign.animal}, ${sign.plante}, ${sign.arbre}, ${sign.lieu}) ne doit apparaître que dans UNE SEULE section au total** — partout ailleurs, privilégie les éléments enrichis rotés du jour (faune/flore/lieux), pas le totem. C'est ce qui distingue ton texte de celui des autres signes.
 - Ne répète PAS ${sign.animal} ou ${sign.nomKreyol} plus d'UNE FOIS dans tout l'horoscope
 - Ne répète PAS ${sign.plante} ou ${sign.arbre} plus d'UNE FOIS
 - Ne répète PAS ${sign.lieu} plus d'UNE FOIS
 - Ne répète PAS un mot créole vaudou dans plusieurs sections
 - **"ka" : maximum 2 occurrences dans tout l'horoscope** — pas une image générique de rythme ou d'énergie, uniquement quand le contexte musical est justifié
-- **INTERDIT comme images de remplacement génériques** (utilisées par tous les signes) : "comme les racines", "laisse-toi porter", "les jours à venir réservent", "mer", "vent", "chemin", "danse", "vague" — remplace par des images tirées des données injectées
+- **"Urakan" et "luciole(s)" : maximum 2 occurrences chacun** — varie avec les autres oiseaux et insectes des données enrichies (frégate, kolibri, zandoli, papiyon…)
+- **INTERDIT comme images de remplacement génériques** (utilisées par tous les signes) : "comme les racines", "laisse-toi porter", "les jours à venir réservent", "souffle d'ancêtre", "murmure des ancêtres", "nettoie les champs", "mer", "vent", "chemin", "danse", "vague" — remplace par des images tirées des données injectées
 
 Contraintes absolues : ton oral direct, parle à l'auditeur (tu/vous), vise 20–30 mots par phrase.
 - Ne cite jamais un mois autre que le mois en cours (${moisNom}). Décris plantes et animaux dans leur état aujourd'hui, pas dans un état futur ou passé.

@@ -131,6 +131,28 @@ function fixKaKa(text: string): string {
   return text.replace(/\bka\s+ka\b/gi, 'ka');
 }
 
+// Marqueurs temporels incohérents avec l'édition (ex. "ce matin" dans l'édition du soir).
+// Log-only : on ne réécrit pas silencieusement, on signale pour audit qualité.
+const FORBIDDEN_TIME_MARKERS: Record<string, RegExp[]> = {
+  nuit:  [/\bce matin\b/gi, /\bau lever\b/gi, /\bà l'aube\b/gi, /\bce midi\b/gi, /\bcet après-midi\b/gi, /\bce soir\b/gi],
+  matin: [/\bce midi\b/gi, /\bcet après-midi\b/gi, /\bce soir\b/gi, /\bcette nuit\b/gi, /\bavant de dormir\b/gi],
+  midi:  [/\bce matin\b/gi, /\bau lever\b/gi, /\bà l'aube\b/gi, /\bce soir\b/gi, /\bcette nuit\b/gi, /\bavant de dormir\b/gi],
+  soir:  [/\bce matin\b/gi, /\bau lever\b/gi, /\bà l'aube\b/gi, /\bce midi\b/gi, /\bcet après-midi\b/gi],
+};
+
+function checkTemporalCoherence(text: string, edition: string, signId: string): void {
+  const patterns = FORBIDDEN_TIME_MARKERS[edition];
+  if (!patterns) return;
+  const hits = patterns
+    .map(re => (text.match(re) || []))
+    .flat();
+  if (hits.length > 0) {
+    console.warn(
+      `   ⏰ Incohérence temporelle ${signId} (${edition}) : ${[...new Set(hits.map(h => h.toLowerCase()))].join(', ')} — à surveiller dans le rapport qualité.`
+    );
+  }
+}
+
 // Remplace "lajan circule/coule comme la sève de/du/dans [plante]"
 // par une métaphore neutre mais ancrée dans le quotidien créole.
 // La prohibition prompt seule ne suffit pas — le modèle ignore la règle.
@@ -812,6 +834,9 @@ export async function generateAllHoroscopes() {
             .replace(/—/g, ',')
             .replace(/\b[Ll][ae]s?\s+[Ll]ajan\b/g, 'Lajan'))), sign)
         );
+
+        // Audit log-only : signale les marqueurs temporels incohérents avec l'édition
+        checkTemporalCoherence(cleanedContent, edition, sign.id);
 
         // Générer le teaser
         console.log(`   🤖 Appel Mistral (small) pour teaser...`);

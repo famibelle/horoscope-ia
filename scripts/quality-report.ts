@@ -9,6 +9,17 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import { marked } from 'marked';
 import { sendEmailViaBrevo } from '../lib/brevo-api';
+import { signs } from '../lib/signs-data';
+
+// Lexique créole canonique (noms officiels du projet) — fourni à l'analyseur
+// sémantique pour qu'il ne les signale PAS comme fautes d'orthographe (ex. "Bèf a Bos").
+const CREOLE_LEXIQUE = Array.from(
+  new Set(
+    signs.flatMap(s => [s.nomKreyol, s.animal, s.plante, s.arbre, s.lieu]
+      .filter(Boolean)
+      .flatMap(v => String(v).split('/').map(t => t.trim())))
+  )
+).filter(Boolean).join(', ');
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 
@@ -641,6 +652,9 @@ Porte une attention particulière aux :
 - Métaphores trop génériques (pas assez caribéennes)
 - Fautes d'orthographe et de grammaire française
 - Qualité et authenticité du créole guadeloupéen
+
+⚠️ LEXIQUE CRÉOLE CANONIQUE (orthographe officielle du projet — NE PAS signaler ces termes comme fautes) :
+${CREOLE_LEXIQUE}
 
 ${excerpts}
 
