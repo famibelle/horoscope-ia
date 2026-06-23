@@ -9,7 +9,8 @@ import { detectEditionWithNight, getLocalDynamicEditionLabels } from '@/lib/edit
 import AudioPlayer from '@/components/AudioPlayer';
 import type { Edition } from '@/lib/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
-import { Markdown as ReactMarkdown, markdownComponents } from '@/lib/markdown-components';
+import { Markdown as ReactMarkdown, markdownComponents, creoleComponents } from '@/lib/markdown-components';
+import { useDictionnaire } from '@/lib/use-dictionnaire';
 import HoroscopeSubscribeForm from '@/components/HoroscopeSubscribeForm';
 
 /* ── Types ─────────────────────────────────────────────────────────────────── */
@@ -172,6 +173,9 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
     return () => controller.abort();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signId, edition]);
+
+  const dict = useDictionnaire();
+  const mdComponents = Object.keys(dict).length > 0 ? creoleComponents(dict) : markdownComponents;
 
   if (!sign) {
     return (
@@ -380,7 +384,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
                           </div>
                           <ReactMarkdown
                             components={{
-                              ...markdownComponents,
+                              ...mdComponents,
                               p: ({ children }) => (
                                 <p className={`text-[16px] leading-relaxed pl-5 ${isPrediction ? 'italic text-ancestral-cream/60' : 'text-ancestral-cream/70'}`}>
                                   {children}
@@ -540,7 +544,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
                 >
                   <ReactMarkdown
                     components={{
-                      ...markdownComponents,
+                      ...mdComponents,
                       p: ({ children }) => (
                         <p className="text-ancestral-cream/65 text-[16px] leading-relaxed italic">{children}</p>
                       ),
@@ -613,7 +617,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
                           <p className="text-ancestral-cream/50 text-[12px] font-semibold uppercase tracking-wider mb-2">{luneEmoji} {label}</p>
                           <ReactMarkdown
                             components={{
-                              ...markdownComponents,
+                              ...mdComponents,
                               p: ({ children }) => (
                                 <p className="text-ancestral-cream/45 text-[15px] leading-relaxed">{children}</p>
                               ),

@@ -28,7 +28,7 @@ function CreoleWord({ word, def }: { word: string; def: DictDef }) {
   return (
     <span className="relative inline-block">
       <em
-        className="italic text-ancestral-gold cursor-help underline decoration-dotted decoration-ancestral-gold/50 underline-offset-2"
+        className="italic text-ancestral-gold cursor-help"
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
         onFocus={() => setOpen(true)}
@@ -41,8 +41,8 @@ function CreoleWord({ word, def }: { word: string; def: DictDef }) {
       {open && (
         <span
           role="tooltip"
-          className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 w-56 rounded-lg border border-ancestral-gold/20 bg-[#0d1a0f]/95 px-3 py-2 text-left shadow-xl backdrop-blur-sm"
-          style={{ fontSize: '12px', lineHeight: 1.5 }}
+          className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 w-56 rounded-lg border border-ancestral-gold/20 px-3 py-2 text-left shadow-xl"
+          style={{ backgroundColor: '#0d1a0f', fontSize: '12px', lineHeight: 1.5 }}
         >
           <span className="block font-semibold text-ancestral-gold" style={{ fontSize: '11px', letterSpacing: '0.05em' }}>
             {label}
@@ -71,10 +71,19 @@ function CreoleWord({ word, def }: { word: string; def: DictDef }) {
  * Utiliser à la place de markdownComponents quand le dictionnaire est chargé.
  */
 export function creoleComponents(dict: Record<string, DictDef>): Components {
+  const lower: Record<string, DictDef> = {};
+  for (const [k, v] of Object.entries(dict)) {
+    lower[k.toLowerCase()] = v;
+  }
   return {
     em: ({ children }) => {
       const word = typeof children === 'string' ? children : String(children ?? '');
-      const def = dict[word] ?? dict[word.split('/')[0]?.trim()] ?? null;
+      const wl = word.toLowerCase();
+      const def = dict[word]
+        ?? dict[word.split('/')[0]?.trim()]
+        ?? lower[wl]
+        ?? lower[wl.split('/')[0]?.trim()]
+        ?? null;
       if (!def || !def.definition) {
         return <em className="italic text-ancestral-gold">{children}</em>;
       }
