@@ -3,7 +3,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Briefcase, Coins, Users, Sparkles, Eye, Leaf, Cloud, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
-import { Markdown as ReactMarkdown, markdownComponents } from '@/lib/markdown-components';
+import { Markdown as ReactMarkdown, markdownComponents, creoleComponents } from '@/lib/markdown-components';
+import { useDictionnaire } from '@/lib/use-dictionnaire';
 import { signs } from '@/lib/signs-data';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
 import { formatDate } from '@/lib/horoscope-data';
@@ -138,6 +139,9 @@ function FilledCard({
   date: string;
   preview?: boolean;
 }) {
+  const dict = useDictionnaire();
+  const mdComponents = Object.keys(dict).length > 0 ? creoleComponents(dict) : markdownComponents;
+
   const editionLabel: Record<string, string> = {
     nuit: 'Cette nuit', matin: 'Ce matin', midi: 'Ce midi', soir: 'Ce soir',
   };
@@ -222,7 +226,7 @@ function FilledCard({
               </div>
               <ReactMarkdown
                 components={{
-                  ...markdownComponents,
+                  ...mdComponents,
                   p: ({ children }) => (
                     <p
                       className={`font-ui ${isPrediction ? 'italic' : ''}`}

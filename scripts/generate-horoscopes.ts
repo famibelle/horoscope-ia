@@ -16,6 +16,9 @@ import { applySafetyFiltersToObject } from '@/lib/private/safety-filter';
 // Importer le système de glossaire
 import { extractGlossaryTerms, updateGlossary, removeRedundantParentheses, loadGlossary, initGlossaryCache, flushGlossaryToSupabase } from '@/lib/private/glossaire';
 
+// Importer le dictionnaire faune/flore vivant
+import { initDictionnaireCache, recordUsage, flushDictionnaireToSupabase } from '@/lib/private/dictionnaire';
+
 // Parser les arguments en ligne de commande
 const args = process.argv.slice(2);
 const options = {
@@ -729,6 +732,7 @@ async function saveToLocalFile(today: string, data: Record<string, any>): Promis
 
 export async function generateAllHoroscopes() {
   await initGlossaryCache();
+  await initDictionnaireCache();
   const today = options.date || todayGuadeloupe();
   const filePath = `data/horoscopes/${today}.json`;
   
@@ -870,6 +874,9 @@ export async function generateAllHoroscopes() {
         await store.set(blobKey, JSON.stringify(response));
         logVerbose(`Sauvegarde dans Netlify Blobs: ${blobKey}`);
 
+        // Enregistrer l'usage des éléments faune/flore dans le dictionnaire vivant
+        recordUsage([...metadata.faune_enrichies, ...metadata.flore_enrichies], sign.id, today);
+
         // Sauvegarder au fil de l'eau dans le fichier local + Supabase
         await saveToLocalFile(today, results);
         await saveToSupabase({ [blobKey]: response });
@@ -996,6 +1003,10 @@ export async function generateAllHoroscopes() {
           ...metadata,
         };
         results[blobKey] = response;
+
+        // Enregistrer l'usage des éléments faune/flore dans le dictionnaire vivant
+        recordUsage([...metadata.faune_enrichies, ...metadata.flore_enrichies], sign.id, today);
+
         await saveToLocalFile(today, results);
         await saveToSupabase({ [blobKey]: response });
         logVerbose(`Sauvegarde locale + Supabase: ${blobKey}`);
@@ -1022,6 +1033,7 @@ export async function generateAllHoroscopes() {
     }
   }
   await flushGlossaryToSupabase();
+  await flushDictionnaireToSupabase();
 }
 
 // Exécuter
