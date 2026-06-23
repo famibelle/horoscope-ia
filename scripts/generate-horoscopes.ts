@@ -19,6 +19,9 @@ import { extractGlossaryTerms, updateGlossary, removeRedundantParentheses, loadG
 // Importer le dictionnaire faune/flore vivant
 import { initDictionnaireCache, recordUsage, flushDictionnaireToSupabase } from '@/lib/private/dictionnaire';
 
+// Importer le garde-contenu (tournures involontairement suggestives)
+import { applyContentGuard } from '@/lib/private/content-guard';
+
 // Parser les arguments en ligne de commande
 const args = process.argv.slice(2);
 const options = {
@@ -850,11 +853,19 @@ export async function generateAllHoroscopes() {
         logVerbose(`Teaser: "${teaser}"`);
 
         // Parser le JSON pour extraire les champs pour le frontend
-        let parsed = {};
+        let parsed: Record<string, unknown> = {};
         try {
           parsed = JSON.parse(cleanedContent);
         } catch (e) {
           logVerboseError(`Erreur parsing JSON final pour ${sign.id}`, e);
+        }
+
+        // Content guard — détecte et corrige les tournures involontairement suggestives
+        const guardResult = await applyContentGuard(parsed, process.env.MISTRAL_API_KEY!);
+        if (guardResult.modified) {
+          console.log(`   🛡️ Content guard: ${guardResult.issues.length} tournure(s) corrigée(s)`);
+          guardResult.issues.forEach(i => console.log(`      - ${i}`));
+          Object.assign(parsed, guardResult.fields);
         }
 
         // Sauvegarder
@@ -984,11 +995,19 @@ export async function generateAllHoroscopes() {
         logVerbose(`Teaser généré en mode local: "${teaser}"`);
 
         // Parser le JSON pour extraire les champs pour le frontend
-        let parsed = {};
+        let parsed: Record<string, unknown> = {};
         try {
           parsed = JSON.parse(cleanedContent);
         } catch (e) {
           logVerboseError(`Erreur parsing JSON final local pour ${sign.id}`, e);
+        }
+
+        // Content guard — détecte et corrige les tournures involontairement suggestives
+        const guardResult = await applyContentGuard(parsed, process.env.MISTRAL_API_KEY!);
+        if (guardResult.modified) {
+          console.log(`   🛡️ Content guard: ${guardResult.issues.length} tournure(s) corrigée(s)`);
+          guardResult.issues.forEach(i => console.log(`      - ${i}`));
+          Object.assign(parsed, guardResult.fields);
         }
 
         const metadata = buildHoroscopeMetadata(sign, edition, weather, today);
