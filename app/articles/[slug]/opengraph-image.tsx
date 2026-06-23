@@ -32,7 +32,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           }}
         />
         <div style={{ fontSize: 16, color: 'rgba(212,175,80,0.5)', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 32 }}>
-          Zodyak Karukera — Contes ancestraux
+          Zodyak Karukera, Contes ancestraux
         </div>
         <div
           style={{

@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Zodyak Karukera — Horoscope ancestral',
+    name: 'Zodyak Karukera, Horoscope ancestral',
     short_name: 'Zodyak',
     description: 'Horoscopes quotidiens ancrés dans la sagesse guadeloupéenne par Maryse CondAI',
     start_url: '/',

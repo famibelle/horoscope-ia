@@ -10,10 +10,10 @@ export async function generateMetadata({
   const sign = signs.find((s) => s.id === signId);
 
   if (!sign) {
-    return { title: 'Horoscope — Zodyak Karukera' };
+    return { title: 'Horoscope, Zodyak Karukera' };
   }
 
-  const title = `Horoscope ${sign.name} du jour — Zodyak Karukera`;
+  const title = `Horoscope ${sign.name} du jour, Zodyak Karukera`;
   const description = `${sign.spirituel} Horoscope ${sign.name} (${sign.dateRange}) ancré dans la sagesse guadeloupéenne par Maryse CondAI.`;
 
   return {

@@ -30,7 +30,7 @@ export async function generateMetadata(
   const article = getArticle(slug);
   if (!article) return {};
   return {
-    title: `${article.title} — Horoscope Karukera`,
+    title: `${article.title}, Horoscope Karukera`,
     description: article.excerpt,
   };
 }
@@ -174,7 +174,7 @@ export default async function ArticlePage(
             &ldquo;{content.conclusion}&rdquo;
           </p>
           <p className="text-white/20 text-xs mt-3 text-right">
-            — Maryse CondAI
+           , Maryse CondAI
             {content.generatedAt && (
               <span className="block mt-0.5">
                 Généré le{' '}

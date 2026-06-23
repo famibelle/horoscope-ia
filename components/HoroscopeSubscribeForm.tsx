@@ -47,7 +47,7 @@ export default function HoroscopeSubscribeForm({ defaultSignId }: { defaultSignI
     return (
       <div className="flex items-center justify-center gap-2 py-2 text-ancestral-gold">
         <CheckCircle size={18} />
-        <span className="text-sm font-medium">Inscription réussie — à demain matin !</span>
+        <span className="text-sm font-medium">Inscription réussie, à demain matin !</span>
       </div>
     );
   }
@@ -81,7 +81,7 @@ export default function HoroscopeSubscribeForm({ defaultSignId }: { defaultSignI
         {status === 'loading' ? '…' : "S'abonner"}
       </button>
       {status === 'error' && (
-        <p className="w-full text-center text-red-400 text-xs mt-1">Erreur — réessaie dans un instant.</p>
+        <p className="w-full text-center text-red-400 text-xs mt-1">Erreur, réessaie dans un instant.</p>
       )}
     </form>
   );

@@ -40,7 +40,7 @@ export default async function Image({ params }: { params: Promise<{ sign: string
           {sign?.dateRange ?? ''}
         </div>
         <div style={{ fontSize: 18, color: 'rgba(200,216,192,0.35)', textAlign: 'center' }}>
-          {sign?.element ?? ''} — Karukera
+          {sign?.element ?? ''}, Karukera
         </div>
         <div
           style={{
