@@ -12,6 +12,7 @@ import type { HoroscopeResponse } from '@/lib/horoscope-data';
 import { Markdown as ReactMarkdown, markdownComponents, creoleComponents } from '@/lib/markdown-components';
 import { useDictionnaire } from '@/lib/use-dictionnaire';
 import HoroscopeSubscribeForm from '@/components/HoroscopeSubscribeForm';
+import fichesData from '@/lib/fiches-culturelles.json';
 
 /* ── Types ─────────────────────────────────────────────────────────────────── */
 
@@ -678,11 +679,69 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
                 <AudioPlayer signName={sign.name} horoscope={horoscope} edition={horoscope.edition || edition || 'matin'} />
               </div>
             )}
+
+            {/* Fiche culturelle statique — indexée par Google */}
+            <FicheCulturelle signId={sign.id} signName={sign.name} signEmoji={sign.emoji} faune={sign.faune} flore={sign.flore} lieu={sign.lieu} />
           </>
         )}
 
         </div>
       </div>
     </main>
+  );
+}
+
+/* ── Fiche culturelle statique ─────────────────────────────────────────────── */
+
+type FicheData = { symbolique: string; animal_totem: string; plante_sacree: string; lieu_ancestral: string };
+
+function FicheCulturelle({
+  signId, signName, signEmoji, faune, flore, lieu,
+}: {
+  signId: string;
+  signName: string;
+  signEmoji: string;
+  faune: { nom_creole: string; nom_commun: string };
+  flore: { nom_creole: string; nom_commun: string };
+  lieu: string;
+}) {
+  const fiche = (fichesData as Record<string, FicheData>)[signId];
+  if (!fiche) return null;
+
+  const sections = [
+    { titre: `${signEmoji} ${signName} dans la culture créole`, corps: fiche.symbolique },
+    { titre: `🦎 L'animal totem : ${faune.nom_creole}`, corps: fiche.animal_totem },
+    { titre: `🌿 La plante sacrée : ${flore.nom_creole}`, corps: fiche.plante_sacree },
+    { titre: `📍 Le lieu ancestral : ${lieu}`, corps: fiche.lieu_ancestral },
+  ];
+
+  return (
+    <section className="mt-16 mb-8" aria-label={`Culture et traditions ${signName}`}>
+      <div style={{ borderTop: '1px solid rgba(245,245,220,0.07)', paddingTop: '32px' }}>
+        <p className="text-ancestral-gold/45 text-[12px] uppercase tracking-[0.35em] mb-1">Karukera ancestrale</p>
+        <h2 className="font-display text-xl font-bold text-ancestral-cream mb-2">
+          Traditions & culture — {signName}
+        </h2>
+        <p className="text-ancestral-cream/40 text-[14px] mb-8 italic">
+          L&apos;astrologie créole de Karukera puise dans la faune, la flore et les lieux sacrés de Guadeloupe pour donner à chaque signe une identité profondément ancrée dans la terre ancestrale.
+        </p>
+
+        <div className="space-y-8">
+          {sections.map(({ titre, corps }) => (
+            <div key={titre}>
+              <h3
+                className="font-ui font-semibold text-ancestral-gold text-[13px] uppercase tracking-wider mb-3"
+                style={{ letterSpacing: '0.08em' }}
+              >
+                {titre}
+              </h3>
+              <p className="text-ancestral-cream/65 text-[15px] leading-relaxed">
+                {corps}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
