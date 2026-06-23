@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: '404 — Page introuvable · Zodyak Karukera',
+  title: '404, Page introuvable · Zodyak Karukera',
   robots: { index: false, follow: false },
 };
 

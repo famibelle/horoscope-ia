@@ -146,7 +146,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
     const hour = new Date().getHours();
 
     if (horoscope?.edition === edition) {
-      // Horoscope déjà correct — charger uniquement l'ambiance si absente
+      // Horoscope déjà correct, charger uniquement l'ambiance si absente
       if (!ambiance) {
         fetch(`/api/ambiance/${signId}?userDate=${date}&edition=${edition}`, { signal })
           .then((r) => r.json())
@@ -290,13 +290,13 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
 
         <div className="px-4 py-6">
 
-        {/* ── Bloc statique signe — indexable par Google ─────────────── */}
+        {/* ── Bloc statique signe, indexable par Google ─────────────── */}
         <section className="mb-6 pb-5" style={{ borderBottom: '1px solid rgba(245,245,220,0.06)' }}>
           <h1
             className="font-display font-bold text-ancestral-cream mb-1"
             style={{ fontSize: '20px', lineHeight: 1.2 }}
           >
-            Horoscope {sign.name} du jour — Karukera
+            Horoscope {sign.name} du jour, Karukera
           </h1>
           <p
             className="font-ui text-ancestral-cream/40 text-[12px] mb-3"
@@ -680,7 +680,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
               </div>
             )}
 
-            {/* Fiche culturelle statique — indexée par Google */}
+            {/* Fiche culturelle statique, indexée par Google */}
             <FicheCulturelle signId={sign.id} signName={sign.name} signEmoji={sign.emoji} faune={sign.faune} flore={sign.flore} lieu={sign.lieu} />
           </>
         )}
@@ -720,7 +720,7 @@ function FicheCulturelle({
       <div style={{ borderTop: '1px solid rgba(245,245,220,0.07)', paddingTop: '32px' }}>
         <p className="text-ancestral-gold/45 text-[12px] uppercase tracking-[0.35em] mb-1">Karukera ancestrale</p>
         <h2 className="font-display text-xl font-bold text-ancestral-cream mb-2">
-          Traditions & culture — {signName}
+          Traditions & culture, {signName}
         </h2>
         <p className="text-ancestral-cream/40 text-[14px] mb-8 italic">
           L&apos;astrologie créole de Karukera puise dans la faune, la flore et les lieux sacrés de Guadeloupe pour donner à chaque signe une identité profondément ancrée dans la terre ancestrale.

@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'À propos — Horoscope Karukera | Zodyak Karukera',
+  title: 'À propos, Horoscope Karukera | Zodyak Karukera',
   description:
-    "Découvrez la mission de Zodyak Karukera : croiser l'astrologie occidentale avec la sagesse ancestrale guadeloupéenne. Karukera, Maryse CondAI, présages naturels — notre démarche éditoriale.",
+    "Découvrez la mission de Zodyak Karukera : croiser l'astrologie occidentale avec la sagesse ancestrale guadeloupéenne. Karukera, Maryse CondAI, présages naturels, notre démarche éditoriale.",
 };
 
 export default function AProposPage() {
@@ -52,25 +52,25 @@ export default function AProposPage() {
           />
         </div>
 
-        {/* Section 1 — Karukera */}
+        {/* Section 1, Karukera */}
         <section className="mb-12">
           <h2
             className="font-display text-xl font-bold mb-4"
             style={{ color: 'var(--color-gold, #D4AF50)' }}
           >
-            Karukera — l'île aux belles eaux
+            Karukera, l'île aux belles eaux
           </h2>
           <div className="space-y-4 text-white/65 text-sm sm:text-base leading-relaxed">
             <p>
               Karukera est le nom donné à la Guadeloupe par les peuples Kalinago, ses premiers habitants. En langue kalinago, <em>karukera</em> signifie « l'île aux belles eaux ». Avant que les cartes européennes ne la rebaptisent, cette île portait déjà en elle une identité cosmique : entre Atlantique et mer des Caraïbes, baignée de deux océans, elle a toujours été un lieu de passage, de rencontre et de mémoire.
             </p>
             <p>
-              C'est dans cet héritage que s'ancre Zodyak Karukera. Pas l'astrologie des magazines parisiens, générique et déracinée, mais une lecture du ciel enracinée dans la terre guadeloupéenne — dans ses plantes, ses animaux, ses saisons, ses croyances héritées des Kalinago, des Africains déportés, et de toutes les cultures qui ont façonné la Guadeloupe d'aujourd'hui.
+              C'est dans cet héritage que s'ancre Zodyak Karukera. Pas l'astrologie des magazines parisiens, générique et déracinée, mais une lecture du ciel enracinée dans la terre guadeloupéenne, dans ses plantes, ses animaux, ses saisons, ses croyances héritées des Kalinago, des Africains déportés, et de toutes les cultures qui ont façonné la Guadeloupe d'aujourd'hui.
             </p>
           </div>
         </section>
 
-        {/* Section 2 — Mission */}
+        {/* Section 2, Mission */}
         <section className="mb-12">
           <h2
             className="font-display text-xl font-bold mb-4"
@@ -80,10 +80,10 @@ export default function AProposPage() {
           </h2>
           <div className="space-y-4 text-white/65 text-sm sm:text-base leading-relaxed">
             <p>
-              L'astrologie occidentale offre un cadre universel — les 12 signes, les planètes, les maisons. Mais un horoscope qui ignore où tu vis, dans quelle lumière tu te lèves, quels arbres te regardent, quelle mer tu entends — cet horoscope ne te parle qu'à moitié.
+              L'astrologie occidentale offre un cadre universel, les 12 signes, les planètes, les maisons. Mais un horoscope qui ignore où tu vis, dans quelle lumière tu te lèves, quels arbres te regardent, quelle mer tu entends, cet horoscope ne te parle qu'à moitié.
             </p>
             <p>
-              Zodyak Karukera relie ces deux lectures. Chaque horoscope intègre un <strong style={{ color: 'rgba(255,255,255,0.85)' }}>signe du jour</strong> tiré du monde naturel guadeloupéen : un animal (le colibri, le zandoli, la mangouste), une plante (le balisier, le flamboyant, la canne à sucre), un lieu (la Soufrière, la mangrove, la Désirade). Ce signe n'est pas décoratif. Il est une grille de lecture — un présage naturel que les ancêtres décodaient pour comprendre l'énergie du jour.
+              Zodyak Karukera relie ces deux lectures. Chaque horoscope intègre un <strong style={{ color: 'rgba(255,255,255,0.85)' }}>signe du jour</strong> tiré du monde naturel guadeloupéen : un animal (le colibri, le zandoli, la mangouste), une plante (le balisier, le flamboyant, la canne à sucre), un lieu (la Soufrière, la mangrove, la Désirade). Ce signe n'est pas décoratif. Il est une grille de lecture, un présage naturel que les ancêtres décodaient pour comprendre l'énergie du jour.
             </p>
             <p>
               Chaque horoscope explore sept dimensions de l'existence : la parole des ancêtres, l'amour, le travail, l'argent, le lyannaj (le lien aux autres), le présage ancestral, et le conseil de Maryse. C'est une lecture complète, ancrée dans la réalité quotidienne.
@@ -91,38 +91,38 @@ export default function AProposPage() {
           </div>
         </section>
 
-        {/* Section 3 — Maryse */}
+        {/* Section 3, Maryse */}
         <section className="mb-12">
           <h2
             className="font-display text-xl font-bold mb-4"
             style={{ color: 'var(--color-gold, #D4AF50)' }}
           >
-            Maryse CondAI — une voix éditoriale
+            Maryse CondAI, une voix éditoriale
           </h2>
           <div className="space-y-4 text-white/65 text-sm sm:text-base leading-relaxed">
             <p>
-              Maryse CondAI est le nom éditorial de notre voix narrative — un personnage inspiré de la tradition orale créole, de la figure de la <em>dite-bonne-aventure</em> qui, dans les marchés et les cases de Guadeloupe, lisait les signes pour guider ceux qui l'écoutaient.
+              Maryse CondAI est le nom éditorial de notre voix narrative, un personnage inspiré de la tradition orale créole, de la figure de la <em>dite-bonne-aventure</em> qui, dans les marchés et les cases de Guadeloupe, lisait les signes pour guider ceux qui l'écoutaient.
             </p>
             <p>
-              Ce personnage éditorial est assisté par l'intelligence artificielle — une technologie que nous utilisons de façon transparente et responsable pour générer des horoscopes quotidiens en volume, tout en maintenant une cohérence culturelle et stylistique forte. Les horoscopes sont produits avec des modèles de langage de dernière génération, guidés par un ensemble de règles éditoriales précises : langue, références culturelles, interdits de formulation (nous bannissons par exemple les pléonasmes créoles comme « tambou ka »), et ancrage dans le calendrier naturel guadeloupéen.
+              Ce personnage éditorial est assisté par l'intelligence artificielle, une technologie que nous utilisons de façon transparente et responsable pour générer des horoscopes quotidiens en volume, tout en maintenant une cohérence culturelle et stylistique forte. Les horoscopes sont produits avec des modèles de langage de dernière génération, guidés par un ensemble de règles éditoriales précises : langue, références culturelles, interdits de formulation (nous bannissons par exemple les pléonasmes créoles comme « tambou ka »), et ancrage dans le calendrier naturel guadeloupéen.
             </p>
             <p>
-              Nous croyons que l'IA peut être un outil de valorisation culturelle — à condition d'être utilisée avec rigueur, respect, et une vraie connaissance du terrain.
+              Nous croyons que l'IA peut être un outil de valorisation culturelle, à condition d'être utilisée avec rigueur, respect, et une vraie connaissance du terrain.
             </p>
           </div>
         </section>
 
-        {/* Section 4 — Les présages */}
+        {/* Section 4, Les présages */}
         <section className="mb-12">
           <h2
             className="font-display text-xl font-bold mb-4"
             style={{ color: 'var(--color-gold, #D4AF50)' }}
           >
-            Les présages naturels — un dictionnaire vivant
+            Les présages naturels, un dictionnaire vivant
           </h2>
           <div className="space-y-4 text-white/65 text-sm sm:text-base leading-relaxed">
             <p>
-              Au cœur de Zodyak Karukera se trouve un dictionnaire des présages naturels guadeloupéens — une base de données de la faune et de la flore locale, chaque espèce associée à une signification symbolique héritée des traditions créoles, africaines et kalinago.
+              Au cœur de Zodyak Karukera se trouve un dictionnaire des présages naturels guadeloupéens, une base de données de la faune et de la flore locale, chaque espèce associée à une signification symbolique héritée des traditions créoles, africaines et kalinago.
             </p>
             <p>
               Le zandoli (le petit lézard vert qu'on voit partout) annonce-t-il la chance ou la vigilance ? Le chant du mâle-coq avant l'aube est-il bon ou mauvais présage ? Quand le balisier fleurit hors saison, que dit-il ? Ces questions, les anciens y répondaient. Nous avons collecté et structuré ces savoirs pour les réintégrer dans une lecture astrologique quotidienne.
@@ -133,7 +133,7 @@ export default function AProposPage() {
           </div>
         </section>
 
-        {/* Section 5 — Rejoindre */}
+        {/* Section 5, Rejoindre */}
         <section
           className="rounded-2xl p-6 mb-12"
           style={{
@@ -145,7 +145,7 @@ export default function AProposPage() {
             Rejoindre la communauté
           </h2>
           <p className="text-white/60 text-sm leading-relaxed mb-5">
-            Zodyak Karukera s'adresse à toutes celles et tous ceux qui portent en eux un lien avec la Guadeloupe — qu'ils y vivent, qu'ils en soient originaires, ou qu'ils soient simplement attirés par une astrologie plus proche de la terre et des racines. Abonnez-vous à notre newsletter pour recevoir chaque matin votre horoscope personnalisé selon votre signe, ancré dans l'énergie du jour.
+            Zodyak Karukera s'adresse à toutes celles et tous ceux qui portent en eux un lien avec la Guadeloupe, qu'ils y vivent, qu'ils en soient originaires, ou qu'ils soient simplement attirés par une astrologie plus proche de la terre et des racines. Abonnez-vous à notre newsletter pour recevoir chaque matin votre horoscope personnalisé selon votre signe, ancré dans l'énergie du jour.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link

@@ -33,7 +33,7 @@ const imFell = IM_Fell_English({
 
 // Pour revenir au thème cosmique, décommentez les titres ci-dessous et commentez ceux ci-dessus
 // export const metadata: Metadata = {
-//   title: 'Horoscope Karukera — Votre énergie cosmique personnalisée',
+//   title: 'Horoscope Karukera, Votre énergie cosmique personnalisée',
 //   description: "Découvrez votre horoscope du jour avec Maryse CondAI...",
 
 export const metadata: Metadata = {
@@ -96,7 +96,7 @@ export const viewport: Viewport = {
 const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'Horoscope Karukera — Zodyak Karukera',
+  name: 'Horoscope Karukera, Zodyak Karukera',
   url: 'https://zodyak-karukera.com',
   description:
     "Horoscopes quotidiens ancrés dans la sagesse ancestrale et la culture guadeloupéenne. Faune, flore et présages naturels de Karukera interprétés pour chaque signe astrologique.",

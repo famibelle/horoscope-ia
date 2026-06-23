@@ -5,7 +5,7 @@ import { Play, Pause, X } from 'lucide-react';
 import { useAudioPlayer } from '@/contexts/AudioPlayerContext';
 
 function formatTime(sec: number) {
-  if (!sec || !isFinite(sec)) return '—';
+  if (!sec || !isFinite(sec)) return '-';
   const m = Math.floor(sec / 60);
   const s = Math.floor(sec % 60);
   return `${m}:${s.toString().padStart(2, '0')}`;

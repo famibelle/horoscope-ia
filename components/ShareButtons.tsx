@@ -75,12 +75,12 @@ const platforms = [
   },
 ];
 
-const BASE_SHARE_TEXT = '🌿 Mon horoscope ancestral — Découvrez la sagesse de Karukera et les paroles de Maryse CondAI sur Zodyak Karukera';
+const BASE_SHARE_TEXT = '🌿 Mon horoscope ancestral, Découvrez la sagesse de Karukera et les paroles de Maryse CondAI sur Zodyak Karukera';
 
 export default function ShareButtons({ signName }: { signName?: string }) {
   const [copied, setCopied] = useState(false);
   const shareText = signName
-    ? `🌿 Mon horoscope ${signName} du jour — Découvrez la sagesse de Karukera et les paroles de Maryse CondAI sur Zodyak Karukera`
+    ? `🌿 Mon horoscope ${signName} du jour, Découvrez la sagesse de Karukera et les paroles de Maryse CondAI sur Zodyak Karukera`
     : BASE_SHARE_TEXT;
 
   const handleShare = (platform: (typeof platforms)[0]) => {

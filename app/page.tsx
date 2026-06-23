@@ -46,7 +46,7 @@ async function prefetchHoroscope(): Promise<{ data: HoroscopeResponse; sign: str
     const data = all[`${dateStr}|${sign}|matin`];
     if (data) return { data, sign };
   } catch {
-    // fichier statique absent — le client fera le fetch normalement
+    // fichier statique absent, le client fera le fetch normalement
   }
   return null;
 }
@@ -94,7 +94,7 @@ export default async function Home() {
           <EditionToggle />
           <Hero />
 
-          {/* Section éditoriale statique — indexable par Google */}
+          {/* Section éditoriale statique, indexable par Google */}
           <section
             className="relative z-10 px-4 py-6 max-w-2xl mx-auto"
             style={{ borderBottom: '1px solid rgba(245,245,220,0.05)' }}
@@ -108,7 +108,7 @@ export default async function Home() {
             <p className="font-display text-ancestral-cream/70 text-[15px] leading-relaxed">
               <strong className="text-ancestral-cream/90">Karukera</strong>, le nom kalinago traditionnel de la Guadeloupe, signifie « l'île aux belles eaux ».{' '}
               <strong className="text-ancestral-cream/90">Zodyak Karukera</strong> puise dans la sagesse ancestrale guadeloupéenne : faune, flore, présages naturels, et traditions créoles et africaines.
-              Maryse CondAI y interprète chaque horoscope à travers <strong className="text-ancestral-cream/90">sept dimensions</strong> — amour, travail, argent, <em>lyannaj</em>, présage ancestral et conseil personnalisé.
+              Maryse CondAI y interprète chaque horoscope à travers <strong className="text-ancestral-cream/90">sept dimensions</strong>, amour, travail, argent, <em>lyannaj</em>, présage ancestral et conseil personnalisé.
               Choisissez votre signe pour découvrir votre lecture du jour, imprégnée de l'énergie spirituelle de Karukera.
             </p>
           </section>
