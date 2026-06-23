@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 /**
  * Peuple la table `dictionnaire` depuis faune-data.ts et flore-data.ts.
  * À lancer une seule fois après création de la table SQL.
