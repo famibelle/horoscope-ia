@@ -1,6 +1,6 @@
 import { MarkdownHooks } from 'react-markdown';
 import type { Components } from 'react-markdown';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { DictDef } from './use-dictionnaire';
 
 export { MarkdownHooks as Markdown };
@@ -21,16 +21,39 @@ export const markdownComponents: Components = {
   ),
 };
 
-/** Tooltip hover pour un mot créole */
+/** Tooltip hover (desktop) / tap (mobile) pour un mot créole */
 function CreoleWord({ word, def }: { word: string; def: DictDef }) {
   const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLSpanElement>(null);
+  const isTouchRef = useRef(false);
+
+  useEffect(() => {
+    isTouchRef.current = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+  }, []);
+
+  // Ferme au tap en dehors (mobile)
+  useEffect(() => {
+    if (!open) return;
+    function handleOutside(e: TouchEvent | MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener('touchstart', handleOutside, { passive: true });
+    document.addEventListener('mousedown', handleOutside);
+    return () => {
+      document.removeEventListener('touchstart', handleOutside);
+      document.removeEventListener('mousedown', handleOutside);
+    };
+  }, [open]);
+
   const ariaLabel = `${word}${def.nomFrancais ? ` (${def.nomFrancais})` : ''}${def.definition ? ' : ' + def.definition : ''}`;
+
   return (
-    <span className="relative inline-block">
+    <span ref={ref} className="relative inline-block">
       <em
         className="italic text-ancestral-gold cursor-help"
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
+        onMouseEnter={() => { if (!isTouchRef.current) setOpen(true); }}
+        onMouseLeave={() => { if (!isTouchRef.current) setOpen(false); }}
+        onClick={(e) => { e.stopPropagation(); if (isTouchRef.current) setOpen(v => !v); }}
         onFocus={() => setOpen(true)}
         onBlur={() => setOpen(false)}
         tabIndex={0}
