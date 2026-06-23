@@ -1,0 +1,85 @@
+{
+  "2026-06-23|lion|matin": {
+    "ouverture": "Ce matin, les *lucioles* dansent au-dessus des *gwo tim* mouillés, comme si les ancêtres allumaient des lanternes pour éclairer tes pas dans la pluie douce de juin.",
+    "amour": "Ton cœur bat au rythme des *bwa fouyé* qui planent sur les mornes, leurs ailes larges comme des promesses. *Ezili Freda* t’enveloppe de son rose sacré, et ce matin, tu sens que l’amour n’est pas une quête, mais une présence qui t’attend au détour d’un *gade zafe* posé sur ton rebord de fenêtre. Laisse-toi surprendre par ce qui vient sans prévenir, comme la *tarente* qui glisse sur ton mur au crépuscule.",
+    "travail": "À *Pointe des Châteaux*, le vent porte tes idées plus loin que l’horizon. Ce matin, tu es comme le *matoutou fèy*, patient et stratégique, attendant le bon moment pour tisser ta toile. Les tâches s’alignent comme les vagues sur les rochers, et tu sais que chaque effort compte, même si personne ne le voit encore. Concentre-toi sur l’essentiel, comme le *pwason priyè* qui ne bouge pas avant d’avoir sa proie.",
+    "argent": "Les *foumi manyok* ne s’arrêtent jamais, et toi non plus. Ce matin, ton *lajan* circule comme un flux invisible, comme l’eau de pluie qui s’infiltre dans la terre pour nourrir les *figuiye modi*. Observe où va ton énergie : est-ce qu’elle construit, ou est-ce qu’elle s’échappe comme un *zandoli* qui fuit devant l’ombre ? Une petite *kominion* avec toi-même pourrait tout changer.",
+    "amitie": "Ce matin, tes amis sont comme les *coqs* qui chantent en chœur au lever du soleil. Leurs voix se répondent, et la tienne aussi doit trouver sa place dans ce concert. Un *peristil* n’est rien sans ceux qui y dansent, alors laisse-toi porter par les rires et les silences complices. Les vraies connexions se reconnaissent à leur chaleur, comme un *gwo tim* infusé qui réchauffe les mains et le cœur.",
+    "prediction": "Les jours à venir te réservent une reconnaissance inattendue, comme un *dorad* qui saute dans ton filet alors que tu ne t’y attendais plus. La lumière d’aujourd’hui prépare celle de demain, et ton travail portera ses fruits au moment où tu auras presque oublié que tu l’as semé.",
+    "conseil": "Ce matin, cueille une feuille de *bwa bandé* et glisse-la dans ta poche comme un talisman. Qu’elle te rappelle que la force ne se montre pas, elle se vit, comme les racines des *figuiye modi* qui résistent aux tempêtes sans jamais se plaindre.",
+    "teaser": "Ce matin, les *lucioles* dansent au-dessus des *gwo tim* mouillés et te murmurent que ton cœur sait déjà où le guider sous la pluie de juin. Laisse-toi envelopper par le rose sacré d’Ezili Freda, ton amour t’attend là où tu ne l’attends pas, comme un souffle sur ta nuque.",
+    "signFr": "Lion",
+    "weather": "23–28°C, pluie modérée, alizé modéré (20 km/h), Premier quartier",
+    "edition": "matin",
+    "source": "mistral-raw",
+    "raw_text": "For Leos, today is a good day to focus on your work and career goals. You might receive some recognition or praise from a boss or colleague, which could be a nice boost to your confidence. Try to stay organized and on top of your tasks, as things might get busy later in the day. It's also a good idea to take some time to review your finances and make sure you're on track with your budget. Overall, it's a productive day with plenty of opportunities to get things done.",
+    "element": "Feu",
+    "animal": "Pélican brun / Gran Pélikan",
+    "plante": "Strelitzia / Balizié",
+    "arbre": "Flanbwayan",
+    "lieu": "Pointe de la Grande Vigie",
+    "planet": "Soleil",
+    "loa": "Ezili Freda",
+    "famille_vaudou": "Rada",
+    "energie_vaudou": "Amour, beauté, passion",
+    "couleurs_sacrees": [
+      "rose",
+      "blanc",
+      "bleu"
+    ],
+    "edition_energie": "",
+    "heure_locale": "11:36",
+    "is_ritual_date": false,
+    "date_rituelle": null,
+    "faune_enrichies": [
+      "Tarente",
+      "Luciole / Ti flambeau",
+      "Fwèzè",
+      "Bwa fouyé (buse)",
+      "Raton laveur / Racoon",
+      "Pwason priyè"
+    ],
+    "flore_enrichies": [
+      "Kalbasi",
+      "Bred chouk / Chou caraïbe",
+      "Sitwèl / Prune sitwèl",
+      "Érytrin / Bwa flotant",
+      "Kòlòmbò",
+      "Piman bouk"
+    ],
+    "lieux_enrichis": [
+      "Chutes du Carbet",
+      "Carrefour de la Ravine à Malice",
+      "Grand Étang",
+      "Pointe des Châteaux",
+      "Carrefour de la Croix-Mission"
+    ],
+    "kreyol_enrichis": [],
+    "histoire_enrichies": [
+      "**1789**",
+      "**1794**",
+      "**600–1500 ap. J.-C.**"
+    ],
+    "loas_pertinents": [
+      "Ezili Freda"
+    ],
+    "animaux_sacres": [],
+    "animaux_sacres_vaudou": [
+      "Zandolit",
+      "Dorad"
+    ],
+    "objets_rituels": [
+      "Fey",
+      "Fanm"
+    ],
+    "plantes_sacrees": [
+      "Bwa bandé",
+      "Bwa lafòrè"
+    ],
+    "lieux_vaudou": [
+      "Peristil",
+      "Trou a Diab"
+    ],
+    "contexte_dynamique": "ADAPTÉ"
+  }
+}
