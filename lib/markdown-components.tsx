@@ -24,7 +24,7 @@ export const markdownComponents: Components = {
 /** Tooltip hover pour un mot créole */
 function CreoleWord({ word, def }: { word: string; def: DictDef }) {
   const [open, setOpen] = useState(false);
-  const label = def.nomFrancais ? `${word} — ${def.nomFrancais}` : word;
+  const ariaLabel = `${word}${def.nomFrancais ? ` (${def.nomFrancais})` : ''}${def.definition ? ' : ' + def.definition : ''}`;
   return (
     <span className="relative inline-block">
       <em
@@ -34,7 +34,7 @@ function CreoleWord({ word, def }: { word: string; def: DictDef }) {
         onFocus={() => setOpen(true)}
         onBlur={() => setOpen(false)}
         tabIndex={0}
-        aria-label={`${label}${def.definition ? ' : ' + def.definition : ''}`}
+        aria-label={ariaLabel}
       >
         {word}
       </em>
@@ -44,11 +44,13 @@ function CreoleWord({ word, def }: { word: string; def: DictDef }) {
           className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 w-56 rounded-lg border border-ancestral-gold/20 px-3 py-2 text-left shadow-xl"
           style={{ backgroundColor: '#0d1a0f', fontSize: '12px', lineHeight: 1.5 }}
         >
-          <span className="block font-semibold text-ancestral-gold" style={{ fontSize: '11px', letterSpacing: '0.05em' }}>
-            {label}
-          </span>
+          {def.nomFrancais && (
+            <span className="block font-semibold text-ancestral-gold" style={{ fontSize: '11px', letterSpacing: '0.05em' }}>
+              {def.nomFrancais}
+            </span>
+          )}
           {def.nomScientifique && (
-            <span className="block italic opacity-50" style={{ fontSize: '10px' }}>
+            <span className={`block italic opacity-50 ${def.nomFrancais ? '' : 'mt-0'}`} style={{ fontSize: '10px' }}>
               {def.nomScientifique}
             </span>
           )}
