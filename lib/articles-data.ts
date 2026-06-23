@@ -129,6 +129,66 @@ export const ARTICLES: ArticleMeta[] = [
     tagColor: 'from-ancestral-earth to-ancestral-deepBrown',
     readTime: '6 min',
   },
+  {
+    slug: 'legba-les-chemins',
+    emoji: '🚪',
+    title: 'Papa Legba, gardien des chemins et des seuils',
+    excerpt:
+      "Avant de parler aux loas, on parle à Legba. Avant de prendre la route, on pense à Legba. En Guadeloupe, les carrefours ne sont pas des endroits neutres — ce sont des portes, et quelqu'un les garde.",
+    tag: 'Vaudou',
+    tagColor: 'from-ancestral-earth to-ancestral-deepBrown',
+    readTime: '7 min',
+  },
+  {
+    slug: 'ezili-freda-amour',
+    emoji: '💜',
+    title: "Ezili Freda — la déesse de l'amour qui n'appartient à personne",
+    excerpt:
+      "Ezili Freda est belle, elle est riche, elle sent le parfum et le champagne. Mais attention : elle n'est à personne. Elle aime comme elle veut, quand elle veut. Et gare à qui l'oublie.",
+    tag: 'Vaudou',
+    tagColor: 'from-ancestral-gold to-ancestral-terracotta',
+    readTime: '7 min',
+  },
+  {
+    slug: 'baron-samedi-mort-renaissance',
+    emoji: '💀',
+    title: 'Baron Samedi, maître de la mort et du rire',
+    excerpt:
+      "Le Baron fume, il boit du rhum pimenté, il dit des obscénités aux funérailles. Mais si tu tombes gravement malade et qu'il refuse de creuser ta tombe — tu vivras. C'est lui qui décide.",
+    tag: 'Vaudou',
+    tagColor: 'from-ancestral-deepBrown to-ancestral-earth',
+    readTime: '7 min',
+  },
+  {
+    slug: 'damballa-serpent-sagesse',
+    emoji: '🐍',
+    title: 'Damballa, le grand serpent arc-en-ciel',
+    excerpt:
+      "Damballa ne parle pas. Il siffle. Il glisse entre les arbres et les nuages comme un arc-en-ciel vivant. C'est le plus ancien des loas, celui d'avant les mots. Et c'est lui qui tient le monde.",
+    tag: 'Vaudou',
+    tagColor: 'from-ancestral-forest to-ancestral-gold',
+    readTime: '7 min',
+  },
+  {
+    slug: 'trois-familles-vaudou',
+    emoji: '🌀',
+    title: 'Rada, Pétro, Congo — les trois familles du vaudou guadeloupéen',
+    excerpt:
+      "Le vaudou guadeloupéen n'est pas un bloc monolithe. Il y a les doux et les forts, les africains et ceux nés ici, les esprits de la terre et ceux de la mer. Trois familles, trois façons d'être au monde.",
+    tag: 'Vaudou',
+    tagColor: 'from-ancestral-terracotta to-ancestral-earth',
+    readTime: '8 min',
+  },
+  {
+    slug: 'ogoun-mars-guerrier',
+    emoji: '⚔️',
+    title: "Ogoun et Mars — l'énergie du guerrier qui protège",
+    excerpt:
+      "Ogoun n'est pas là pour faire la guerre. Il est là pour la finir. En Guadeloupe, son énergie rouge et fer a traversé les révoltes d'esclaves, les grèves des coupeurs de canne, les barrages sur les routes. La justice a toujours besoin d'un bras.",
+    tag: 'Vaudou',
+    tagColor: 'from-ancestral-earth to-ancestral-terracotta',
+    readTime: '7 min',
+  },
 ];
 
 export function getArticle(slug: string): ArticleMeta | undefined {

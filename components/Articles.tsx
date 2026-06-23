@@ -70,14 +70,14 @@ export default function Articles() {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <span
                   className="font-ui"
-                  style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#D4AF50', fontWeight: 600 }}
+                  style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#A88A3A', fontWeight: 600 }}
                 >
                   {article.tag}
                 </span>
                 <p
                   className="font-display"
                   style={{
-                    fontSize: '16px', fontWeight: 700, color: '#C8D8C0', lineHeight: 1.35,
+                    fontSize: '16px', fontWeight: 700, color: 'rgba(255,255,255,0.88)', lineHeight: 1.35,
                     overflow: 'hidden', display: '-webkit-box',
                     WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', marginTop: '2px',
                   }}
