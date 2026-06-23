@@ -17,7 +17,7 @@ interface LexiqueEntry {
 export interface GuardResult {
   modified: boolean;
   fields: Record<string, string>;
-  issues: string[];
+  issues: unknown[];
 }
 
 function parseLexique(): LexiqueEntry[] {

@@ -864,7 +864,7 @@ export async function generateAllHoroscopes() {
         const guardResult = await applyContentGuard(parsed, process.env.MISTRAL_API_KEY!);
         if (guardResult.modified) {
           console.log(`   🛡️ Content guard: ${guardResult.issues.length} tournure(s) corrigée(s)`);
-          guardResult.issues.forEach(i => console.log(`      - ${i}`));
+          guardResult.issues.forEach(i => console.log(`      - ${typeof i === 'string' ? i : JSON.stringify(i)}`));
           Object.assign(parsed, guardResult.fields);
         }
 
@@ -1006,7 +1006,7 @@ export async function generateAllHoroscopes() {
         const guardResult = await applyContentGuard(parsed, process.env.MISTRAL_API_KEY!);
         if (guardResult.modified) {
           console.log(`   🛡️ Content guard: ${guardResult.issues.length} tournure(s) corrigée(s)`);
-          guardResult.issues.forEach(i => console.log(`      - ${i}`));
+          guardResult.issues.forEach(i => console.log(`      - ${typeof i === 'string' ? i : JSON.stringify(i)}`));
           Object.assign(parsed, guardResult.fields);
         }
 
