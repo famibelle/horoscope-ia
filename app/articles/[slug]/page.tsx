@@ -136,7 +136,7 @@ export default async function ArticlePage(
         />
 
         {/* Introduction */}
-        <p className="text-white/70 text-base sm:text-lg leading-relaxed mb-12 font-display italic">
+        <p className="text-white/75 text-lg sm:text-xl leading-[1.75] mb-12 font-display italic">
           {content.introduction}
         </p>
 
@@ -145,7 +145,7 @@ export default async function ArticlePage(
           {content.sections.map((section, i) => (
             <section key={i}>
               <h2
-                className="text-lg sm:text-xl font-display font-bold mb-4"
+                className="text-xl sm:text-2xl font-display font-bold mb-5"
                 style={{
                   background: 'linear-gradient(90deg, #a78bfa, #60a5fa)',
                   WebkitBackgroundClip: 'text',
@@ -154,7 +154,7 @@ export default async function ArticlePage(
               >
                 {section.titre}
               </h2>
-              <p className="text-white/60 text-sm sm:text-base leading-relaxed whitespace-pre-line">
+              <p className="text-white/65 text-base sm:text-lg leading-[1.75] whitespace-pre-line">
                 {section.corps}
               </p>
             </section>
@@ -170,7 +170,7 @@ export default async function ArticlePage(
             border: '1px solid rgba(124,58,237,0.2)',
           }}
         >
-          <p className="text-violet-300/80 text-sm sm:text-base leading-relaxed italic font-display">
+          <p className="text-violet-300/80 text-base sm:text-lg leading-[1.75] italic font-display">
             &ldquo;{content.conclusion}&rdquo;
           </p>
           <p className="text-white/20 text-xs mt-3 text-right">
