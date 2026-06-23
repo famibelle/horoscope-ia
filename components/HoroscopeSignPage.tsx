@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Heart, Briefcase, Coins, Users, Sparkles, Eye, Activity } from 'lucide-react';
 import { signs } from '@/lib/signs-data';
-import { detectEditionWithNight, getLocalDynamicEditionLabels } from '@/lib/edition';
+import { detectLocalEditionWithNight, getLocalDynamicEditionLabels } from '@/lib/edition';
 import AudioPlayer from '@/components/AudioPlayer';
 import type { Edition } from '@/lib/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
@@ -134,7 +134,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
   }, []);
 
   useEffect(() => {
-    setEdition(detectEditionWithNight());
+    setEdition(detectLocalEditionWithNight());
   }, []);
 
   useEffect(() => {
