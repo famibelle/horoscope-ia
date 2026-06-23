@@ -50,7 +50,7 @@ function NewsletterCard({ newsletter, index }: { newsletter: StoredNewsletter; i
         </div>
       </header>
 
-      <p className="text-ancestral-cream/80 text-sm leading-7 mb-6">
+      <p className="text-ancestral-cream/80 text-base sm:text-lg leading-[1.75] mb-6">
         {cleanPreviewText}
       </p>
     </article>
@@ -77,7 +77,7 @@ function BenefitsSection() {
         >
           <div className="text-3xl mb-3">{benefit.icon}</div>
           <h4 className="text-lg font-semibold text-ancestral-cream mb-2">{benefit.title}</h4>
-          <p className="text-ancestral-cream/70 text-sm">{benefit.desc}</p>
+          <p className="text-ancestral-cream/70 text-base">{benefit.desc}</p>
         </div>
       ))}
     </div>
@@ -263,21 +263,21 @@ export default function NewsletterPage() {
           <div>
             <div className="text-4xl mb-4">🌅</div>
             <h3 className="text-xl font-semibold text-ancestral-cream mb-3">Tous les matins</h3>
-            <p className="text-ancestral-cream/80 text-sm">
+            <p className="text-ancestral-cream/80 text-base">
               Livraison à 8h pile, heure de Guadeloupe, pour commencer votre journée du bon pied.
             </p>
           </div>
           <div>
             <div className="text-4xl mb-4">🔒</div>
             <h3 className="text-xl font-semibold text-ancestral-cream mb-3">100% sécurisé</h3>
-            <p className="text-ancestral-cream/80 text-sm">
+            <p className="text-ancestral-cream/80 text-base">
               Vos données sont protégées et jamais partagées. Désabonnement en un clic.
             </p>
           </div>
           <div>
             <div className="text-4xl mb-4">🌿</div>
             <h3 className="text-xl font-semibold text-ancestral-cream mb-3">Authentique</h3>
-            <p className="text-ancestral-cream/80 text-sm">
+            <p className="text-ancestral-cream/80 text-base">
               Contenu inspiré des traditions guadeloupéennes et de la sagesse de Maryse CondAI.
             </p>
           </div>

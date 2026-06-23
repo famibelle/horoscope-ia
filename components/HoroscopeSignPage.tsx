@@ -387,7 +387,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
                             components={{
                               ...mdComponents,
                               p: ({ children }) => (
-                                <p className={`text-[16px] leading-relaxed pl-5 ${isPrediction ? 'italic text-ancestral-cream/60' : 'text-ancestral-cream/70'}`}>
+                                <p className={`text-[18px] leading-[1.75] pl-5 ${isPrediction ? 'italic text-ancestral-cream/60' : 'text-ancestral-cream/70'}`}>
                                   {children}
                                 </p>
                               ),
@@ -418,7 +418,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
                       }}>Mensuelle</span>
                     )}
                   </div>
-                  <p className="font-accent text-[16px] leading-relaxed" style={{ color: 'rgba(200,216,192,0.75)' }}>{horoscope?.spirituelMensuel ?? sign.spirituel}</p>
+                  <p className="font-accent text-[18px] leading-[1.75]" style={{ color: 'rgba(200,216,192,0.75)' }}>{horoscope?.spirituelMensuel ?? sign.spirituel}</p>
                 </div>
               </motion.section>
             )}
@@ -433,7 +433,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
               >
                 <p className="text-ancestral-gold/45 text-[12px] uppercase tracking-[0.35em] mb-1">Savoirs de Karukera</p>
                 <h2 className="font-display text-xl font-bold text-ancestral-cream mb-2">🌿 Totems et symboles</h2>
-                <p className="text-ancestral-cream/60 text-[15px] mb-6 italic">
+                <p className="text-ancestral-cream/65 text-[17px] mb-6 italic">
                   {(!edition && "Les esprits de Karukera vous attendent...") ||
                    (edition === 'nuit' && "Cette nuit, les esprits de Karukera dansent sous la lune, écoutez leurs murmures dans le vent.") ||
                    (edition === 'matin' && "Ce matin, le soleil se lève sur les mornes de Guadeloupe, éveillant les forces ancestrales.") ||
@@ -463,7 +463,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
                             {horoscope.culturalData.faune.nom_commun}
                             <span className="text-ancestral-cream/40 text-[12px]">({horoscope.culturalData.faune.nom_creole})</span>
                           </h3>
-                          <p className="text-ancestral-cream/50 text-[15px] mt-2 leading-relaxed italic">{horoscope.culturalData.faune.savoir}</p>
+                          <p className="text-ancestral-cream/60 text-[17px] mt-2 leading-[1.75] italic">{horoscope.culturalData.faune.savoir}</p>
                           {horoscope.culturalData.faune.conditions.length > 0 && (
                             <div className="mt-3 flex gap-2">
                               {horoscope.culturalData.faune.conditions.map((c) => (
@@ -492,7 +492,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
                             {horoscope.culturalData.flore.nom_commun}
                             <span className="text-ancestral-cream/40 text-[12px]">({horoscope.culturalData.flore.nom_creole})</span>
                           </h3>
-                          <p className="text-ancestral-cream/50 text-[15px] mt-2 leading-relaxed italic">{horoscope.culturalData.flore.savoir}</p>
+                          <p className="text-ancestral-cream/60 text-[17px] mt-2 leading-[1.75] italic">{horoscope.culturalData.flore.savoir}</p>
                           {horoscope.culturalData.flore.conditions.length > 0 && (
                             <div className="mt-3 flex gap-2">
                               {horoscope.culturalData.flore.conditions.map((c) => (
@@ -518,8 +518,8 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="font-semibold text-ancestral-cream text-[15px]">{horoscope.culturalData.lieu}</h3>
-                          <p className="text-ancestral-cream/50 text-[15px] mt-2 leading-relaxed">{horoscope.culturalData.lieuDetails.description}</p>
-                          <p className="text-ancestral-cream/40 text-[15px] mt-2 italic">"{horoscope.culturalData.lieuDetails.symbolique}"</p>
+                          <p className="text-ancestral-cream/60 text-[17px] mt-2 leading-[1.75]">{horoscope.culturalData.lieuDetails.description}</p>
+                          <p className="text-ancestral-cream/45 text-[17px] mt-2 italic">"{horoscope.culturalData.lieuDetails.symbolique}"</p>
                         </div>
                       </div>
                     </div>
@@ -547,7 +547,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
                     components={{
                       ...mdComponents,
                       p: ({ children }) => (
-                        <p className="text-ancestral-cream/65 text-[16px] leading-relaxed italic">{children}</p>
+                        <p className="text-ancestral-cream/70 text-[18px] leading-[1.75] italic">{children}</p>
                       ),
                     }}
                   >
@@ -605,7 +605,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
 
                 <div>
                   <p className="text-ancestral-cream/30 text-[12px] uppercase tracking-widest mb-0.5">Phase lunaire</p>
-                  <p className="text-ancestral-cream/50 text-[15px] mb-5">🌕 {moonLabel}</p>
+                  <p className="text-ancestral-cream/55 text-[17px] mb-5">🌕 {moonLabel}</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {LUNE_ITEMS.map(({ key, label, emoji: luneEmoji }) => {
                       const text = ambiance.lune?.[key as keyof AmbianceLune];
@@ -620,7 +620,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
                             components={{
                               ...mdComponents,
                               p: ({ children }) => (
-                                <p className="text-ancestral-cream/45 text-[15px] leading-relaxed">{children}</p>
+                                <p className="text-ancestral-cream/55 text-[17px] leading-[1.75]">{children}</p>
                               ),
                             }}
                           >
@@ -668,7 +668,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
                   </div>
                   Recevez votre horoscope du {sign.name} tous les matins
                 </h3>
-                <p className="text-ancestral-cream/40 text-[15px] mb-5">Les prédictions de Maryse CondAI directement dans votre boîte mail.</p>
+                <p className="text-ancestral-cream/45 text-[17px] mb-5">Les prédictions de Maryse CondAI directement dans votre boîte mail.</p>
                 <HoroscopeSubscribeForm defaultSignId={sign.id} />
                 <p className="text-ancestral-cream/30 text-[12px] mt-3">Désabonnement en un clic. Vos données restent privées.</p>
               </div>
@@ -735,7 +735,7 @@ function FicheCulturelle({
               >
                 {titre}
               </h3>
-              <p className="text-ancestral-cream/65 text-[15px] leading-relaxed">
+              <p className="text-ancestral-cream/70 text-[17px] leading-[1.75]">
                 {corps}
               </p>
             </div>

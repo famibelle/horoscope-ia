@@ -60,7 +60,7 @@ export default function AProposPage() {
           >
             Karukera, l'île aux belles eaux
           </h2>
-          <div className="space-y-4 text-white/65 text-sm sm:text-base leading-relaxed">
+          <div className="space-y-4 text-white/65 text-base sm:text-lg leading-[1.75]">
             <p>
               Karukera est le nom donné à la Guadeloupe par les peuples Kalinago, ses premiers habitants. En langue kalinago, <em>karukera</em> signifie « l'île aux belles eaux ». Avant que les cartes européennes ne la rebaptisent, cette île portait déjà en elle une identité cosmique : entre Atlantique et mer des Caraïbes, baignée de deux océans, elle a toujours été un lieu de passage, de rencontre et de mémoire.
             </p>
@@ -78,7 +78,7 @@ export default function AProposPage() {
           >
             Une astrologie ancrée dans la culture créole
           </h2>
-          <div className="space-y-4 text-white/65 text-sm sm:text-base leading-relaxed">
+          <div className="space-y-4 text-white/65 text-base sm:text-lg leading-[1.75]">
             <p>
               L'astrologie occidentale offre un cadre universel, les 12 signes, les planètes, les maisons. Mais un horoscope qui ignore où tu vis, dans quelle lumière tu te lèves, quels arbres te regardent, quelle mer tu entends, cet horoscope ne te parle qu'à moitié.
             </p>
@@ -99,7 +99,7 @@ export default function AProposPage() {
           >
             Maryse CondAI, une voix éditoriale
           </h2>
-          <div className="space-y-4 text-white/65 text-sm sm:text-base leading-relaxed">
+          <div className="space-y-4 text-white/65 text-base sm:text-lg leading-[1.75]">
             <p>
               Maryse CondAI est le nom éditorial de notre voix narrative, un personnage inspiré de la tradition orale créole, de la figure de la <em>dite-bonne-aventure</em> qui, dans les marchés et les cases de Guadeloupe, lisait les signes pour guider ceux qui l'écoutaient.
             </p>
@@ -120,7 +120,7 @@ export default function AProposPage() {
           >
             Les présages naturels, un dictionnaire vivant
           </h2>
-          <div className="space-y-4 text-white/65 text-sm sm:text-base leading-relaxed">
+          <div className="space-y-4 text-white/65 text-base sm:text-lg leading-[1.75]">
             <p>
               Au cœur de Zodyak Karukera se trouve un dictionnaire des présages naturels guadeloupéens, une base de données de la faune et de la flore locale, chaque espèce associée à une signification symbolique héritée des traditions créoles, africaines et kalinago.
             </p>
@@ -144,7 +144,7 @@ export default function AProposPage() {
           <h2 className="font-display text-xl font-bold mb-3 text-white">
             Rejoindre la communauté
           </h2>
-          <p className="text-white/60 text-sm leading-relaxed mb-5">
+          <p className="text-white/65 text-base sm:text-lg leading-[1.75] mb-5">
             Zodyak Karukera s'adresse à toutes celles et tous ceux qui portent en eux un lien avec la Guadeloupe, qu'ils y vivent, qu'ils en soient originaires, ou qu'ils soient simplement attirés par une astrologie plus proche de la terre et des racines. Abonnez-vous à notre newsletter pour recevoir chaque matin votre horoscope personnalisé selon votre signe, ancré dans l'énergie du jour.
           </p>
           <div className="flex flex-wrap gap-3">

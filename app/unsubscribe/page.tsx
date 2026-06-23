@@ -27,7 +27,7 @@ export default async function UnsubscribePage({
             <h1 className="font-display text-2xl font-bold mb-4" style={{ color: '#D4AF50' }}>
               Désabonnement confirmé
             </h1>
-            <p className="font-ui text-[15px] leading-relaxed mb-8" style={{ color: 'rgba(200,216,192,0.7)' }}>
+            <p className="font-ui text-[18px] leading-[1.75] mb-8" style={{ color: 'rgba(200,216,192,0.7)' }}>
               Vous ne recevrez plus notre newsletter. Nous respectons votre choix.
             </p>
           </>
@@ -37,7 +37,7 @@ export default async function UnsubscribePage({
             <h1 className="font-display text-2xl font-bold mb-4" style={{ color: '#D4AF50' }}>
               Une erreur est survenue
             </h1>
-            <p className="font-ui text-[15px] leading-relaxed mb-8" style={{ color: 'rgba(200,216,192,0.7)' }}>
+            <p className="font-ui text-[18px] leading-[1.75] mb-8" style={{ color: 'rgba(200,216,192,0.7)' }}>
               Impossible de traiter votre demande de désabonnement.
               Contactez-nous via le formulaire de contact.
             </p>
