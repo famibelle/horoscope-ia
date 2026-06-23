@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { signs } from '@/lib/signs-data';
-import { detectEditionWithNight } from '@/lib/edition';
+import { detectLocalEditionWithNight } from '@/lib/edition';
 import { todayISO } from '@/lib/horoscope-data';
 import { stripMarkdown } from '@/lib/markdown-components';
 
@@ -30,7 +30,7 @@ export default function HoroscopesPreview() {
 
   useEffect(() => {
     let cancelled = false;
-    const edition = detectEditionWithNight();
+    const edition = detectLocalEditionWithNight();
 
     async function loadPreviews() {
       try {
