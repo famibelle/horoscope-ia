@@ -681,7 +681,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
             )}
 
             {/* Fiche culturelle statique, indexée par Google */}
-            <FicheCulturelle signId={sign.id} signName={sign.name} signEmoji={sign.emoji} faune={sign.faune} flore={sign.flore} lieu={sign.lieu} />
+            <FicheCulturelle signId={sign.id} signName={sign.name} signEmoji={sign.emoji} faune={sign.faune} flore={sign.flore} lieu={sign.lieu} mdComponents={mdComponents} />
           </>
         )}
 
@@ -696,7 +696,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
 type FicheData = { symbolique: string; animal_totem: string; plante_sacree: string; lieu_ancestral: string };
 
 function FicheCulturelle({
-  signId, signName, signEmoji, faune, flore, lieu,
+  signId, signName, signEmoji, faune, flore, lieu, mdComponents,
 }: {
   signId: string;
   signName: string;
@@ -704,6 +704,7 @@ function FicheCulturelle({
   faune: { nom_creole: string; nom_commun: string };
   flore: { nom_creole: string; nom_commun: string };
   lieu: string;
+  mdComponents: React.ComponentProps<typeof ReactMarkdown>['components'];
 }) {
   const fiche = (fichesData as Record<string, FicheData>)[signId];
   if (!fiche) return null;
@@ -735,9 +736,9 @@ function FicheCulturelle({
               >
                 {titre}
               </h3>
-              <p className="text-ancestral-cream/70 text-[17px] leading-[1.75]">
-                {corps}
-              </p>
+              <div className="text-ancestral-cream/70 text-[17px] leading-[1.75]">
+                <ReactMarkdown components={mdComponents}>{corps}</ReactMarkdown>
+              </div>
             </div>
           ))}
         </div>
