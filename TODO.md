@@ -26,6 +26,13 @@
 
 ---
 
+## 📖 Fiches culturelles (Traditions & culture)
+
+### 🔲 À faire
+- [ ] Auto-surligner les mots du glossaire créole en doré sans dépendre du balisage `*mot*` — les fiches générées n'entourent pas systématiquement les noms d'animaux/plantes d'astérisques (ex: `kabribo` présent dans le glossaire mais jamais balisé)
+
+---
+
 ## 🎵 TTS / Audio
 
 ### ✅ Fait
@@ -56,3 +63,10 @@
 ### 🔲 À faire
 - [ ] Créer un schéma en étoile si des besoins analytiques émergent (mis de côté)
 - [ ] Script `parse-vaudou-ref.ts` manquant (seule référence sans pipeline automatisé)
+
+---
+
+## ⚙️ Infrastructure / Netlify
+
+### 🔲 À faire
+- [ ] Ajouter `CONTACT_EMAIL=medhi.famibelle@gmail.com` dans les variables d'environnement Netlify (dashboard → Site settings → Environment variables)
