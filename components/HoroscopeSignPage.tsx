@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { Heart, Briefcase, Coins, Users, Sparkles, Eye, Activity } from 'lucide-react';
 import { signs } from '@/lib/signs-data';
 import { detectLocalEditionWithNight, getLocalDynamicEditionLabels } from '@/lib/edition';
@@ -106,6 +106,42 @@ function Skeleton({ gradientFrom }: { gradientFrom: string }) {
 interface Props {
   signId: string;
   prefetchedHoroscope: HoroscopeResponse | null;
+}
+
+function ChiffreSacre({ value }: { value: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-40px' });
+  const [displayed, setDisplayed] = useState<number>(() => Math.floor(Math.random() * 9) + 1);
+
+  useEffect(() => {
+    if (!isInView) return;
+    let count = 0;
+    const flashes = 14;
+    const id = setInterval(() => {
+      count++;
+      if (count >= flashes) {
+        setDisplayed(value);
+        clearInterval(id);
+      } else {
+        setDisplayed(Math.floor(Math.random() * 9) + 1);
+      }
+    }, 70);
+    return () => clearInterval(id);
+  }, [isInView, value]);
+
+  return (
+    <motion.div
+      ref={ref}
+      className="rounded-2xl p-5 flex flex-col items-center justify-center text-center"
+      style={{ background: 'linear-gradient(135deg, rgba(210,105,30,0.12), rgba(255,215,0,0.06))', border: '1px solid rgba(210,105,30,0.22)' }}
+      initial={{ opacity: 0, scale: 0.7 }}
+      animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.7 }}
+      transition={{ duration: 0.5, ease: 'backOut' }}
+    >
+      <p className="text-ancestral-gold/60 text-[12px] uppercase tracking-widest mb-2">Chiffre sacré</p>
+      <span className="font-display text-5xl font-bold text-ancestral-gold">{displayed}</span>
+    </motion.div>
+  );
 }
 
 export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props) {
@@ -579,17 +615,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mb-10">
-                  <motion.div
-                    className="rounded-2xl p-5 flex flex-col items-center justify-center text-center"
-                    style={{ background: 'linear-gradient(135deg, rgba(210,105,30,0.12), rgba(255,215,0,0.06))', border: '1px solid rgba(210,105,30,0.22)' }}
-                    initial={{ opacity: 0, scale: 0.7 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true, margin: '-40px' }}
-                    transition={{ duration: 0.5, ease: 'backOut' }}
-                  >
-                    <p className="text-ancestral-gold/60 text-[12px] uppercase tracking-widest mb-2">Chiffre sacré</p>
-                    <span className="font-display text-5xl font-bold text-ancestral-gold">{ambiance.chiffrePorteBonheur}</span>
-                  </motion.div>
+                  <ChiffreSacre value={ambiance.chiffrePorteBonheur} />
 
                   <motion.div
                     className="rounded-2xl p-5"
