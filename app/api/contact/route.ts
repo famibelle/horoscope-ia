@@ -16,11 +16,11 @@ export async function POST(req: Request) {
 <p>${message.replace(/\n/g, '<br>')}</p>`;
 
     await sendEmailViaBrevo(
-      process.env.EMAIL_FROM || 'medhi.famibelle@gmail.com',
+      process.env.CONTACT_EMAIL || 'medhi.famibelle@gmail.com',
       `[Contact] ${sujet || 'Message'} — ${nom}`,
       html,
       `${nom} (${email}) a envoyé : ${message}`,
-      process.env.EMAIL_FROM || 'medhi.famibelle@gmail.com',
+      process.env.EMAIL_FROM || 'newsletter@zodyak-karukera.com',
       'Zodyak Karukera — Formulaire contact',
     );
 
