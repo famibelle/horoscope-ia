@@ -66,6 +66,13 @@
     Cache-Control = "no-store, max-age=0, must-revalidate"
     Access-Control-Allow-Origin = "*"
 
+# Cache CDN pour les pages horoscope (SSR → servi depuis CDN pour les visiteurs suivants)
+# L'horoscope change 4x/jour max → 1h de cache est safe
+[[headers]]
+  for = "/horoscope/*"
+  [headers.values]
+    Cache-Control = "public, s-maxage=3600, stale-while-revalidate=600"
+
 # Cache normal pour les autres assets statiques
 [[headers]]
   for = "/*.css"
