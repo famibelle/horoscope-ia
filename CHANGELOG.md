@@ -8,7 +8,7 @@
 
 ### UX / Animations
 - **Barres ✦ Énergie de Karukera au scroll** : les barres de score (Amour, Travail…) s'animaient au montage même hors écran ; passage à `whileInView` + `viewport={{ once: true }}` — l'animation ne se déclenche que lorsque la section entre dans le viewport
-- **Chiffre sacré au scroll** : apparition avec scale 0.7 → 1 + fade, déclenchée au scroll (`backOut` easing)
+- **Chiffre sacré au scroll** : effet slot machine — 14 chiffres aléatoires défilent à 70ms/chiffre (~1s) avant de se fixer sur la valeur du jour, déclenché à l'entrée dans le viewport
 - **Totems alliés au scroll** : slide-in depuis la droite + fade, chaque totem en séquence décalée
 
 ### Fiches culturelles (Traditions & culture)
