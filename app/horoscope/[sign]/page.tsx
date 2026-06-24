@@ -5,6 +5,12 @@ import { signs } from '@/lib/signs-data';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
 import HoroscopeSignPage from '@/components/HoroscopeSignPage';
 
+export const revalidate = 900; // ISR : revalidation toutes les 15 min
+
+export async function generateStaticParams() {
+  return signs.map(s => ({ sign: s.id }));
+}
+
 function todayGuadeloupe(): string {
   const now = new Date();
   const gp = new Date(now.getTime() - 4 * 60 * 60 * 1000);

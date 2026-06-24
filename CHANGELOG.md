@@ -1,5 +1,11 @@
 # Changelog
 
+## [2026-06-24] — session 2
+
+### Performance
+- **ISR `/horoscope/[sign]`** : ajout de `revalidate = 900` + `generateStaticParams` — les 12 pages passent de `ƒ` (SSR pur) à `●` (ISR 15 min), plus d'appel Supabase sur chaque requête
+- **Scripts non-bloquants** : AdSense et Google Analytics déplacés de `<head>` vers `next/script strategy="afterInteractive"` — chargés après l'hydratation, améliore LCP et CLS
+
 ## [2026-06-24]
 
 ### Performance
