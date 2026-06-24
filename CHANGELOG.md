@@ -9,6 +9,8 @@
 ### Fixes
 - **Hydration React #418** : suppression du `<head>` manuel dans `layout.tsx` — conflictait avec la gestion interne du head par Next.js App Router ; `<meta google-adsense-account>` déplacée dans `metadata.other`
 - **JSON-LD "Invalid or unexpected token"** : `<Script strategy="afterInteractive">` évaluait le JSON comme du JS (`@context` invalide en JS) ; remplacé par un `<script>` plain rendu côté serveur
+- **Formulaire contact — destinataire incorrect** : l'email de contact partait à `EMAIL_FROM` (expéditeur newsletter) au lieu de l'adresse admin ; ajout de `CONTACT_EMAIL` comme variable de destination, fallback `medhi.famibelle@gmail.com`
+- **Newsletter — sujets trop courts** : `max_tokens: 60` (~40 chars) empêchait Mistral de respecter la contrainte 50-70 chars déjà dans le prompt ; porté à 100
 
 ## [2026-06-24]
 
