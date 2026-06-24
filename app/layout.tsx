@@ -39,6 +39,9 @@ const imFell = IM_Fell_English({
 export const metadata: Metadata = {
   metadataBase: new URL('https://zodyak-karukera.com'),
   title: 'La Voix de nos Ancêtres',
+  other: {
+    'google-adsense-account': 'ca-pub-3159683365493434',
+  },
   description:
     "Écoutez les conseils de Maryse CondAI, inspirés par la sagesse ancestrale et les esprits de Karukera. Horoscopes ancrés dans la culture guadeloupéenne.",
   keywords: [
@@ -115,9 +118,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className="scroll-smooth" data-scroll-behavior="smooth">
-      <head>
-        <meta name="google-adsense-account" content="ca-pub-3159683365493434" />
-      </head>
       <body className={`${cormorant.variable} ${outfit.variable} ${imFell.variable} antialiased`} style={{ paddingBottom: '80px' }}>
         <Script
           id="website-schema"
