@@ -6,6 +6,10 @@
 - **ISR `/horoscope/[sign]`** : ajout de `revalidate = 900` + `generateStaticParams` — les 12 pages passent de `ƒ` (SSR pur) à `●` (ISR 15 min), plus d'appel Supabase sur chaque requête
 - **Scripts non-bloquants** : AdSense et Google Analytics déplacés de `<head>` vers `next/script strategy="afterInteractive"` — chargés après l'hydratation, améliore LCP et CLS
 
+### Fiches culturelles (Traditions & culture)
+- **Rendu ReactMarkdown** : le corps des fiches était rendu en `<p>` brut — les `*mots*` n'étaient pas traités. Passage via `ReactMarkdown + creoleComponents(dict)` pour que les mots créoles balisés deviennent dorés avec tooltip
+- **Mots bannis supprimés** : `*zombis*`, `*dorlis*`, `*djables*` retirés des fiches Gémeaux, Scorpion, Capricorne et Poissons (glissés lors de la génération initiale sans les contraintes du prompt Maryse) ; remplacés par des formulations équivalentes
+
 ### Fixes
 - **Hydration React #418** : suppression du `<head>` manuel dans `layout.tsx` — conflictait avec la gestion interne du head par Next.js App Router ; `<meta google-adsense-account>` déplacée dans `metadata.other`
 - **JSON-LD "Invalid or unexpected token"** : `<Script strategy="afterInteractive">` évaluait le JSON comme du JS (`@context` invalide en JS) ; remplacé par un `<script>` plain rendu côté serveur
