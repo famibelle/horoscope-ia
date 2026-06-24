@@ -493,7 +493,7 @@ async function callMistralSubject(systemPrompt: string, userContent: string): Pr
   const body = JSON.stringify({
     model: 'mistral-large-latest',
     temperature: 0.9,
-    max_tokens: 60,
+    max_tokens: 100,
     messages: [
       { role: 'system', content: systemPrompt },
       { role: 'user', content: userContent },
