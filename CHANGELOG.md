@@ -9,6 +9,7 @@
 ### Fiches culturelles (Traditions & culture)
 - **Rendu ReactMarkdown** : le corps des fiches était rendu en `<p>` brut — les `*mots*` n'étaient pas traités. Passage via `ReactMarkdown + creoleComponents(dict)` pour que les mots créoles balisés deviennent dorés avec tooltip
 - **Mots bannis supprimés** : `*zombis*`, `*dorlis*`, `*djables*` retirés des fiches Gémeaux, Scorpion, Capricorne et Poissons (glissés lors de la génération initiale sans les contraintes du prompt Maryse) ; remplacés par des formulations équivalentes
+- **Élision incorrecte sur "wasou"** : `L'wasou` / `l'wasou` corrigés en `Le wasou` / `le wasou` — `w` est une consonne, pas d'élision en français (3 occurrences dans la fiche Sagittaire)
 
 ### Fixes
 - **Hydration React #418** : suppression du `<head>` manuel dans `layout.tsx` — conflictait avec la gestion interne du head par Next.js App Router ; `<meta google-adsense-account>` déplacée dans `metadata.other`
