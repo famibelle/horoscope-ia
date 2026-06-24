@@ -534,8 +534,9 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
             {ambiance && (
               <motion.section
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.5 }}
               >
                 <p className="text-ancestral-gold/45 text-[12px] uppercase tracking-[0.35em] mb-1">Sagesse du jour</p>
                 <h2 className="font-display text-xl font-bold text-ancestral-cream mb-6">✦ Énergie de Karukera</h2>
@@ -566,8 +567,9 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
                             className="h-full rounded-full"
                             style={{ background: `linear-gradient(90deg, ${color}60, ${color})` }}
                             initial={{ width: 0 }}
-                            animate={{ width: `${score}%` }}
-                            transition={{ duration: 1, delay: 0.3 + i * 0.1, ease: 'easeOut' }}
+                            whileInView={{ width: `${score}%` }}
+                            viewport={{ once: true, margin: '-40px' }}
+                            transition={{ duration: 1, delay: i * 0.1, ease: 'easeOut' }}
                           />
                         </div>
                         <span className="text-ancestral-cream/50 text-[12px] w-9 text-right font-medium">{score}%</span>
