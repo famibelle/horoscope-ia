@@ -4,6 +4,7 @@
 
 ### Performance
 - **Cache CDN Netlify** sur `/horoscope/*` — `s-maxage=3600, stale-while-revalidate=600` : les pages horoscope sont servies depuis le CDN après la première requête, réduisant drastiquement les executions Function
+- **Fonts** : suppression de Cormorant Garamond poids 300 (normal + italic) — poids jamais utilisé dans le code, économise ~2 fichiers woff2 (~70 KB)
 
 ### Dictionnaire & Tooltips
 - **18 termes vaudou/culturels** ajoutés aux tooltips : loa, Legba, Kafou, Ogoun, Ezili Freda, Baron Samedi, La Sirène, peristil, vèvè, pwen, lyannaj, quimbois, soukougnan, gade zafe, mas, chanté mas, ka, lajan — termes curatés manuellement, Supabase faune/flore en priorité
