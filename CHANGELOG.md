@@ -8,6 +8,8 @@
 
 ### UX / Animations
 - **Barres ✦ Énergie de Karukera au scroll** : les barres de score (Amour, Travail…) s'animaient au montage même hors écran ; passage à `whileInView` + `viewport={{ once: true }}` — l'animation ne se déclenche que lorsque la section entre dans le viewport
+- **Chiffre sacré au scroll** : apparition avec scale 0.7 → 1 + fade, déclenchée au scroll (`backOut` easing)
+- **Totems alliés au scroll** : slide-in depuis la droite + fade, chaque totem en séquence décalée
 
 ### Fiches culturelles (Traditions & culture)
 - **Rendu ReactMarkdown** : le corps des fiches était rendu en `<p>` brut — les `*mots*` n'étaient pas traités. Passage via `ReactMarkdown + creoleComponents(dict)` pour que les mots créoles balisés deviennent dorés avec tooltip

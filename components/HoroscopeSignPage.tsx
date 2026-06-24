@@ -579,30 +579,48 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mb-10">
-                  <div className="rounded-2xl p-5 flex flex-col items-center justify-center text-center"
+                  <motion.div
+                    className="rounded-2xl p-5 flex flex-col items-center justify-center text-center"
                     style={{ background: 'linear-gradient(135deg, rgba(210,105,30,0.12), rgba(255,215,0,0.06))', border: '1px solid rgba(210,105,30,0.22)' }}
+                    initial={{ opacity: 0, scale: 0.7 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true, margin: '-40px' }}
+                    transition={{ duration: 0.5, ease: 'backOut' }}
                   >
                     <p className="text-ancestral-gold/60 text-[12px] uppercase tracking-widest mb-2">Chiffre sacré</p>
                     <span className="font-display text-5xl font-bold text-ancestral-gold">{ambiance.chiffrePorteBonheur}</span>
-                  </div>
+                  </motion.div>
 
-                  <div className="rounded-2xl p-5"
+                  <motion.div
+                    className="rounded-2xl p-5"
                     style={{ background: 'linear-gradient(135deg, rgba(228,196,144,0.12), rgba(255,215,0,0.06))', border: '1px solid rgba(228,196,144,0.22)' }}
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: '-40px' }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
                   >
                     <p className="text-ancestral-gold/60 text-[12px] uppercase tracking-widest mb-3">Totems alliés</p>
                     <div className="flex flex-col gap-2.5">
-                      {(Array.isArray(ambiance.compatibilite) ? ambiance.compatibilite : Object.values(ambiance.compatibilite ?? {})).slice(0, 2).map((compId) => {
+                      {(Array.isArray(ambiance.compatibilite) ? ambiance.compatibilite : Object.values(ambiance.compatibilite ?? {})).slice(0, 2).map((compId, i) => {
                         const compSign = signs.find((s) => s.id === compId);
                         if (!compSign) return null;
                         return (
-                          <Link key={compId} href={`/horoscope/${compId}`} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                            <span className="text-xl">{compSign.emoji}</span>
-                            <span className="text-ancestral-cream/65 text-[15px]">{compSign.name}</span>
-                          </Link>
+                          <motion.div
+                            key={compId}
+                            initial={{ opacity: 0, x: 12 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.4, delay: 0.2 + i * 0.1 }}
+                          >
+                            <Link href={`/horoscope/${compId}`} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                              <span className="text-xl">{compSign.emoji}</span>
+                              <span className="text-ancestral-cream/65 text-[15px]">{compSign.name}</span>
+                            </Link>
+                          </motion.div>
                         );
                       })}
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
 
                 <div>
