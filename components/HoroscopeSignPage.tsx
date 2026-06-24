@@ -144,6 +144,70 @@ function ChiffreSacre({ value }: { value: number }) {
   );
 }
 
+function TotemsAllies({ compatibilite }: { compatibilite: string[] | Record<string, string> }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-40px' });
+
+  const finalIds = (Array.isArray(compatibilite) ? compatibilite : Object.values(compatibilite ?? {})).slice(0, 2);
+  const randomSign = () => signs[Math.floor(Math.random() * signs.length)].id;
+  const [displayed, setDisplayed] = useState<string[]>(() => [randomSign(), randomSign()]);
+  const [settled, setSettled] = useState([false, false]);
+
+  useEffect(() => {
+    if (!isInView || finalIds.length === 0) return;
+    const flashes = 14;
+    let count = 0;
+    const id = setInterval(() => {
+      count++;
+      if (count >= flashes + 4) {
+        setDisplayed(finalIds);
+        setSettled([true, true]);
+        clearInterval(id);
+      } else if (count >= flashes) {
+        setDisplayed(prev => [finalIds[0], randomSign()]);
+        setSettled(prev => [true, prev[1]]);
+      } else {
+        setDisplayed([randomSign(), randomSign()]);
+      }
+    }, 70);
+    return () => clearInterval(id);
+  }, [isInView]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return (
+    <motion.div
+      ref={ref}
+      className="rounded-2xl p-5"
+      style={{ background: 'linear-gradient(135deg, rgba(228,196,144,0.12), rgba(255,215,0,0.06))', border: '1px solid rgba(228,196,144,0.22)' }}
+      initial={{ opacity: 0, x: 20 }}
+      animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
+      transition={{ duration: 0.5, delay: 0.1 }}
+    >
+      <p className="text-ancestral-gold/60 text-[12px] uppercase tracking-widest mb-3">Totems alliés</p>
+      <div className="flex flex-col gap-2.5">
+        {displayed.map((signId, i) => {
+          const sign = signs.find((s) => s.id === signId);
+          if (!sign) return null;
+          const isSettled = settled[i];
+          const finalId = finalIds[i];
+          const inner = (
+            <>
+              <span className="text-xl">{sign.emoji}</span>
+              <span className="text-ancestral-cream/65 text-[15px]">{sign.name}</span>
+            </>
+          );
+          return isSettled ? (
+            <Link key={finalId} href={`/horoscope/${finalId}`} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+              {inner}
+            </Link>
+          ) : (
+            <div key={i} className="flex items-center gap-2 opacity-70">{inner}</div>
+          );
+        })}
+      </div>
+    </motion.div>
+  );
+}
+
 export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props) {
   const sign = signs.find((s) => s.id === signId);
 
@@ -617,36 +681,7 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
                 <div className="grid grid-cols-2 gap-4 mb-10">
                   <ChiffreSacre value={ambiance.chiffrePorteBonheur} />
 
-                  <motion.div
-                    className="rounded-2xl p-5"
-                    style={{ background: 'linear-gradient(135deg, rgba(228,196,144,0.12), rgba(255,215,0,0.06))', border: '1px solid rgba(228,196,144,0.22)' }}
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, margin: '-40px' }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
-                  >
-                    <p className="text-ancestral-gold/60 text-[12px] uppercase tracking-widest mb-3">Totems alliés</p>
-                    <div className="flex flex-col gap-2.5">
-                      {(Array.isArray(ambiance.compatibilite) ? ambiance.compatibilite : Object.values(ambiance.compatibilite ?? {})).slice(0, 2).map((compId, i) => {
-                        const compSign = signs.find((s) => s.id === compId);
-                        if (!compSign) return null;
-                        return (
-                          <motion.div
-                            key={compId}
-                            initial={{ opacity: 0, x: 12 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.4, delay: 0.2 + i * 0.1 }}
-                          >
-                            <Link href={`/horoscope/${compId}`} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                              <span className="text-xl">{compSign.emoji}</span>
-                              <span className="text-ancestral-cream/65 text-[15px]">{compSign.name}</span>
-                            </Link>
-                          </motion.div>
-                        );
-                      })}
-                    </div>
-                  </motion.div>
+                  <TotemsAllies compatibilite={ambiance.compatibilite} />
                 </div>
 
                 <div>
