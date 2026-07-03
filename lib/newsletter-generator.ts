@@ -484,11 +484,50 @@ function avoidBlock(recent: string[]): string {
     : '';
 }
 
+// Tente un appel Mistral avec une clé donnée — retourne la réponse brute ou null.
+async function tryMistralKey(
+  apiKey: string,
+  body: string,
+  label: string,
+): Promise<string | null> {
+  const maxAttempts = 3;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const res = await fetch('https://api.mistral.ai/v1/chat/completions', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        body,
+      });
+      if (!res.ok) {
+        const errText = await res.text().catch(() => '');
+        console.warn(`[newsletter-subject] ${label} HTTP ${res.status} (tentative ${attempt}/${maxAttempts}): ${errText.substring(0, 200)}`);
+        if ((res.status === 429 || res.status >= 500) && attempt < maxAttempts) {
+          await new Promise(r => setTimeout(r, 1500 * attempt));
+          continue;
+        }
+        return null;
+      }
+      const data = await res.json();
+      return data.choices?.[0]?.message?.content?.trim() ?? null;
+    } catch (err: any) {
+      console.warn(`[newsletter-subject] ${label} exception (tentative ${attempt}/${maxAttempts}): ${err?.message ?? err}`);
+      if (attempt < maxAttempts) {
+        await new Promise(r => setTimeout(r, 1500 * attempt));
+        continue;
+      }
+      return null;
+    }
+  }
+  return null;
+}
+
 // Appel Mistral-large pour un objet d'email, avec retry/backoff (429/5xx) et nettoyage.
+// Essaie MISTRAL_API_KEY, puis MISTRAL_API_KEY_BOTIRAN en fallback.
 // Retourne null en cas d'échec (l'appelant applique son propre fallback).
 async function callMistralSubject(systemPrompt: string, userContent: string): Promise<string | null> {
-  const apiKey = process.env.MISTRAL_API_KEY;
-  if (!apiKey) return null;
+  const primaryKey = process.env.MISTRAL_API_KEY;
+  const botiranKey = process.env.MISTRAL_API_KEY_BOTIRAN;
+  if (!primaryKey && !botiranKey) return null;
 
   const body = JSON.stringify({
     model: 'mistral-large-latest',
@@ -500,33 +539,25 @@ async function callMistralSubject(systemPrompt: string, userContent: string): Pr
     ],
   });
 
-  const maxAttempts = 3;
-  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    try {
-      const res = await fetch('https://api.mistral.ai/v1/chat/completions', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-        body,
-      });
-      if (!res.ok) {
-        if ((res.status === 429 || res.status >= 500) && attempt < maxAttempts) {
-          await new Promise(r => setTimeout(r, 1500 * attempt));
-          continue;
-        }
-        return null;
-      }
-      const data = await res.json();
-      const generated = cleanSubject(data.choices?.[0]?.message?.content?.trim() ?? '');
-      return generated.length > 10 ? generated : null;
-    } catch {
-      if (attempt < maxAttempts) {
-        await new Promise(r => setTimeout(r, 1500 * attempt));
-        continue;
-      }
-      return null;
-    }
+  let raw: string | null = null;
+
+  if (primaryKey) {
+    raw = await tryMistralKey(primaryKey, body, 'clé principale');
   }
-  return null;
+
+  if (raw === null && botiranKey) {
+    console.log('[newsletter-subject] clé principale échouée — bascule sur BOTIRAN');
+    raw = await tryMistralKey(botiranKey, body, 'BOTIRAN');
+  }
+
+  if (raw === null) return null;
+
+  const generated = cleanSubject(raw);
+  if (generated.length <= 10) {
+    console.warn(`[newsletter-subject] réponse trop courte (${generated.length} chars): "${generated}"`);
+    return null;
+  }
+  return generated;
 }
 
 // Générateur de newsletter pour un signe spécifique
