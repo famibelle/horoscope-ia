@@ -174,7 +174,7 @@ export default async function ArticlePage(
             &ldquo;{content.conclusion}&rdquo;
           </p>
           <p className="text-white/20 text-xs mt-3 text-right">
-           , Maryse CondAI
+           , Fanchette
             {content.generatedAt && (
               <span className="block mt-0.5">
                 Généré le{' '}

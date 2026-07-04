@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'À propos, Horoscope Karukera | Zodyak Karukera',
   description:
-    "Découvrez la mission de Zodyak Karukera : croiser l'astrologie occidentale avec la sagesse ancestrale guadeloupéenne. Karukera, Maryse CondAI, présages naturels, notre démarche éditoriale.",
+    "Découvrez la mission de Zodyak Karukera : croiser l'astrologie occidentale avec la sagesse ancestrale guadeloupéenne. Karukera, Fanchette, présages naturels, notre démarche éditoriale.",
 };
 
 export default function AProposPage() {
@@ -86,22 +86,22 @@ export default function AProposPage() {
               Zodyak Karukera relie ces deux lectures. Chaque horoscope intègre un <strong style={{ color: 'rgba(255,255,255,0.85)' }}>signe du jour</strong> tiré du monde naturel guadeloupéen : un animal (le colibri, le zandoli, la mangouste), une plante (le balisier, le flamboyant, la canne à sucre), un lieu (la Soufrière, la mangrove, la Désirade). Ce signe n'est pas décoratif. Il est une grille de lecture, un présage naturel que les ancêtres décodaient pour comprendre l'énergie du jour.
             </p>
             <p>
-              Chaque horoscope explore sept dimensions de l'existence : la parole des ancêtres, l'amour, le travail, l'argent, le lyannaj (le lien aux autres), le présage ancestral, et le conseil de Maryse. C'est une lecture complète, ancrée dans la réalité quotidienne.
+              Chaque horoscope explore sept dimensions de l'existence : la parole des ancêtres, l'amour, le travail, l'argent, le lyannaj (le lien aux autres), le présage ancestral, et le conseil de Fanchette. C'est une lecture complète, ancrée dans la réalité quotidienne.
             </p>
           </div>
         </section>
 
-        {/* Section 3, Maryse */}
+        {/* Section 3, Fanchette */}
         <section className="mb-12">
           <h2
             className="font-display text-xl font-bold mb-4"
             style={{ color: 'var(--color-gold, #D4AF50)' }}
           >
-            Maryse CondAI, une voix éditoriale
+            Fanchette, une voix éditoriale
           </h2>
           <div className="space-y-4 text-white/65 text-base sm:text-lg leading-[1.75]">
             <p>
-              Maryse CondAI est le nom éditorial de notre voix narrative, un personnage inspiré de la tradition orale créole, de la figure de la <em>dite-bonne-aventure</em> qui, dans les marchés et les cases de Guadeloupe, lisait les signes pour guider ceux qui l'écoutaient.
+              Fanchette est le nom éditorial de notre voix narrative, un personnage inspiré de la tradition orale créole, de la figure de la <em>dite-bonne-aventure</em> qui, dans les marchés et les cases de Guadeloupe, lisait les signes pour guider ceux qui l'écoutaient.
             </p>
             <p>
               Ce personnage éditorial est assisté par l'intelligence artificielle, une technologie que nous utilisons de façon transparente et responsable pour générer des horoscopes quotidiens en volume, tout en maintenant une cohérence culturelle et stylistique forte. Les horoscopes sont produits avec des modèles de langage de dernière génération, guidés par un ensemble de règles éditoriales précises : langue, références culturelles, interdits de formulation (nous bannissons par exemple les pléonasmes créoles comme « tambou ka »), et ancrage dans le calendrier naturel guadeloupéen.

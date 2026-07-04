@@ -34,7 +34,7 @@ const imFell = IM_Fell_English({
 // Pour revenir au thème cosmique, décommentez les titres ci-dessous et commentez ceux ci-dessus
 // export const metadata: Metadata = {
 //   title: 'Horoscope Karukera, Votre énergie cosmique personnalisée',
-//   description: "Découvrez votre horoscope du jour avec Maryse CondAI...",
+//   description: "Découvrez votre horoscope du jour avec Fanchette...",
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://zodyak-karukera.com'),
@@ -43,12 +43,12 @@ export const metadata: Metadata = {
     'google-adsense-account': 'ca-pub-3159683365493434',
   },
   description:
-    "Écoutez les conseils de Maryse CondAI, inspirés par la sagesse ancestrale et les esprits de Karukera. Horoscopes ancrés dans la culture guadeloupéenne.",
+    "Écoutez les conseils de Fanchette, inspirés par la sagesse ancestrale et les esprits de Karukera. Horoscopes ancrés dans la culture guadeloupéenne.",
   keywords: [
     'horoscope',
     'astrologie',
     'horoscope du jour',
-    'Maryse CondAI',
+    'Fanchette',
     'sagesse ancestrale',
     'signes astrologiques',
     'bélier',
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
   authors: [{ name: 'La Voix de nos Ancêtres' }],
   openGraph: {
     title: 'La Voix de nos Ancêtres',
-    description: "Écoutez les conseils de Maryse CondAI, inspirés par les esprits de Karukera et la sagesse guadeloupéenne.",
+    description: "Écoutez les conseils de Fanchette, inspirés par les esprits de Karukera et la sagesse guadeloupéenne.",
     type: 'website',
     locale: 'fr_FR',
     siteName: 'La Voix de nos Ancêtres',
@@ -75,7 +75,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'La Voix de nos Ancêtres',
-    description: "Écoutez les conseils de Maryse CondAI, inspirés par les esprits de Karukera.",
+    description: "Écoutez les conseils de Fanchette, inspirés par les esprits de Karukera.",
   },
   robots: {
     index: true,

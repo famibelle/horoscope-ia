@@ -278,7 +278,7 @@ export default function NewsletterPage() {
             <div className="text-4xl mb-4">🌿</div>
             <h3 className="text-xl font-semibold text-ancestral-cream mb-3">Authentique</h3>
             <p className="text-ancestral-cream/80 text-base">
-              Contenu inspiré des traditions guadeloupéennes et de la sagesse de Maryse CondAI.
+              Contenu inspiré des traditions guadeloupéennes et de la sagesse de Fanchette.
             </p>
           </div>
         </div>
@@ -290,7 +290,7 @@ export default function NewsletterPage() {
           © 2026 Horoscope Karukera. Tous droits réservés.
         </p>
         <p className="text-ancestral-cream/40 text-xs mt-2">
-          Paroles inspirées par Maryse CondAI · pour honorer nos traditions
+          Paroles inspirées par Fanchette · pour honorer nos traditions
         </p>
       </footer>
     </main>

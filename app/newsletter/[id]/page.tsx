@@ -320,7 +320,7 @@ const exampleNewsletters: StoredNewsletter[] = [
         
         <footer class="newsletter-footer">
           <p>© 2026 Horoscope Karukera. Tous droits réservés.</p>
-          <p>Paroles inspirées par Maryse CondAI · pour honorer nos traditions</p>
+          <p>Paroles inspirées par Fanchette · pour honorer nos traditions</p>
         </footer>
       </div>
     `,
@@ -351,7 +351,7 @@ RITUEL DU JOUR
 Allumez une bougie blanche ce matin pour commencer la semaine avec pureté.
 
 © 2026 Horoscope Karukera. Tous droits réservés.
-Paroles inspirées par Maryse CondAI · pour honorer nos traditions
+Paroles inspirées par Fanchette · pour honorer nos traditions
 `,
   },
   {

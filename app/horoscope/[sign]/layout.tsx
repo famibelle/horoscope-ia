@@ -14,7 +14,7 @@ export async function generateMetadata({
   }
 
   const title = `Horoscope ${sign.name} du jour, Zodyak Karukera`;
-  const description = `${sign.spirituel} Horoscope ${sign.name} (${sign.dateRange}) ancré dans la sagesse guadeloupéenne par Maryse CondAI.`;
+  const description = `${sign.spirituel} Horoscope ${sign.name} (${sign.dateRange}) ancré dans la sagesse guadeloupéenne par Fanchette.`;
 
   return {
     title,

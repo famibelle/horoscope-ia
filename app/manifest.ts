@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Zodyak Karukera, Horoscope ancestral',
     short_name: 'Zodyak',
-    description: 'Horoscopes quotidiens ancrés dans la sagesse guadeloupéenne par Maryse CondAI',
+    description: 'Horoscopes quotidiens ancrés dans la sagesse guadeloupéenne par Fanchette',
     start_url: '/',
     display: 'standalone',
     background_color: '#0d0d1a',
