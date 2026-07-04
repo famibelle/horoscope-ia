@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'À propos, Horoscope Karukera | Zodyak Karukera',
   description:
-    "Découvrez la mission de Zodyak Karukera : croiser l'astrologie occidentale avec la sagesse ancestrale guadeloupéenne. Karukera, Fanchette, présages naturels, notre démarche éditoriale.",
+    "Découvrez la mission de Zodyak Karukera, l'astrologie occidentale croisée avec la sagesse ancestrale guadeloupéenne, portée par Fanchette et inspirée par Maryse Condé.",
 };
 
 export default function AProposPage() {
@@ -80,13 +80,13 @@ export default function AProposPage() {
           </h2>
           <div className="space-y-4 text-white/65 text-base sm:text-lg leading-[1.75]">
             <p>
-              L'astrologie occidentale offre un cadre universel, les 12 signes, les planètes, les maisons. Mais un horoscope qui ignore où tu vis, dans quelle lumière tu te lèves, quels arbres te regardent, quelle mer tu entends, cet horoscope ne te parle qu'à moitié.
+              L'astrologie occidentale offre un cadre universel : les 12 signes, les planètes, les maisons. Mais un horoscope qui ignore où tu vis, dans quelle lumière tu te lèves, quels arbres te regardent, quelle mer tu entends, cet horoscope ne te parle qu'à moitié.
             </p>
             <p>
               Zodyak Karukera relie ces deux lectures. Chaque horoscope intègre un <strong style={{ color: 'rgba(255,255,255,0.85)' }}>signe du jour</strong> tiré du monde naturel guadeloupéen : un animal (le colibri, le zandoli, la mangouste), une plante (le balisier, le flamboyant, la canne à sucre), un lieu (la Soufrière, la mangrove, la Désirade). Ce signe n'est pas décoratif. Il est une grille de lecture, un présage naturel que les ancêtres décodaient pour comprendre l'énergie du jour.
             </p>
             <p>
-              Chaque horoscope explore sept dimensions de l'existence : la parole des ancêtres, l'amour, le travail, l'argent, le lyannaj (le lien aux autres), le présage ancestral, et le conseil de Fanchette. C'est une lecture complète, ancrée dans la réalité quotidienne.
+              Chaque horoscope explore sept dimensions de l'existence : la parole des ancêtres, l'amour, le travail, l'argent, le lyannaj (le lien aux autres), le présage ancestral, et le conseil de Fanchette.
             </p>
           </div>
         </section>
@@ -97,14 +97,32 @@ export default function AProposPage() {
             className="font-display text-xl font-bold mb-4"
             style={{ color: 'var(--color-gold, #D4AF50)' }}
           >
-            Fanchette, une voix éditoriale
+            Fanchette, la voix du site
           </h2>
           <div className="space-y-4 text-white/65 text-base sm:text-lg leading-[1.75]">
             <p>
-              Fanchette est le nom éditorial de notre voix narrative, un personnage inspiré de la tradition orale créole, de la figure de la <em>dite-bonne-aventure</em> qui, dans les marchés et les cases de Guadeloupe, lisait les signes pour guider ceux qui l'écoutaient.
+              Fanchette est la voix narrative de Zodyak Karukera. Ce n'est pas un personnage inventé sans lien avec nous : c'est le nom de l'aïeule de Medhi Famibelle, créateur du site, née en 1789 en Afrique, de parents inconnus, et devenue, née libre, la fondatrice de la famille Famibelle en Guadeloupe. Comment elle est arrivée sur l'archipel reste à ce jour partiellement obscur : des recherches généalogiques sont en cours pour éclairer cette histoire, probablement liée à la traite et à l'esclavage colonial.
             </p>
             <p>
-              Ce personnage éditorial est assisté par l'intelligence artificielle, une technologie que nous utilisons de façon transparente et responsable pour générer des horoscopes quotidiens en volume, tout en maintenant une cohérence culturelle et stylistique forte. Les horoscopes sont produits avec des modèles de langage de dernière génération, guidés par un ensemble de règles éditoriales précises : langue, références culturelles, interdits de formulation (nous bannissons par exemple les pléonasmes créoles comme « tambou ka »), et ancrage dans le calendrier naturel guadeloupéen.
+              Donner sa voix à ce site est une manière d'honorer sa mémoire et de la faire dialoguer avec la culture guadeloupéenne d'aujourd'hui.
+            </p>
+            <p>
+              Ce projet doit aussi beaucoup à l'œuvre de Maryse Condé, dont l'écriture a montré qu'on pouvait raconter la Guadeloupe sans folklore de carte postale, avec ses zones d'ombre, sa complexité, sa mémoire vivante. Les textes du site s'en inspirent librement, sans jamais prétendre parler en son nom : un hommage assumé, distinct de la voix de Fanchette.
+            </p>
+          </div>
+        </section>
+
+        {/* Section 4, IA */}
+        <section className="mb-12">
+          <h2
+            className="font-display text-xl font-bold mb-4"
+            style={{ color: 'var(--color-gold, #D4AF50)' }}
+          >
+            Une IA utilisée avec transparence
+          </h2>
+          <div className="space-y-4 text-white/65 text-base sm:text-lg leading-[1.75]">
+            <p>
+              Les horoscopes quotidiens et certains articles sont assistés par l'intelligence artificielle, une technologie que nous utilisons de façon transparente pour produire du contenu en volume, tout en maintenant une cohérence culturelle et éditoriale. Chaque contenu reste relu et validé humainement avant publication.
             </p>
             <p>
               Nous croyons que l'IA peut être un outil de valorisation culturelle, à condition d'être utilisée avec rigueur, respect, et une vraie connaissance du terrain.
@@ -112,7 +130,7 @@ export default function AProposPage() {
           </div>
         </section>
 
-        {/* Section 4, Les présages */}
+        {/* Section 5, Les présages */}
         <section className="mb-12">
           <h2
             className="font-display text-xl font-bold mb-4"
@@ -122,18 +140,15 @@ export default function AProposPage() {
           </h2>
           <div className="space-y-4 text-white/65 text-base sm:text-lg leading-[1.75]">
             <p>
-              Au cœur de Zodyak Karukera se trouve un dictionnaire des présages naturels guadeloupéens, une base de données de la faune et de la flore locale, chaque espèce associée à une signification symbolique héritée des traditions créoles, africaines et kalinago.
+              Au cœur de Zodyak Karukera se trouve un dictionnaire des présages naturels guadeloupéens : une base de la faune et de la flore locale, chaque espèce associée à une signification symbolique héritée des traditions créoles, africaines et kalinago.
             </p>
             <p>
               Le zandoli (le petit lézard vert qu'on voit partout) annonce-t-il la chance ou la vigilance ? Le chant du mâle-coq avant l'aube est-il bon ou mauvais présage ? Quand le balisier fleurit hors saison, que dit-il ? Ces questions, les anciens y répondaient. Nous avons collecté et structuré ces savoirs pour les réintégrer dans une lecture astrologique quotidienne.
             </p>
-            <p>
-              Ce travail de collecte et de structuration est une démarche de préservation culturelle. Nous espérons que ce dictionnaire continuera à grandir, enrichi par les témoignages de la communauté guadeloupéenne.
-            </p>
           </div>
         </section>
 
-        {/* Section 5, Rejoindre */}
+        {/* Section 6, Rejoindre */}
         <section
           className="rounded-2xl p-6 mb-12"
           style={{
@@ -145,7 +160,7 @@ export default function AProposPage() {
             Rejoindre la communauté
           </h2>
           <p className="text-white/65 text-base sm:text-lg leading-[1.75] mb-5">
-            Zodyak Karukera s'adresse à toutes celles et tous ceux qui portent en eux un lien avec la Guadeloupe, qu'ils y vivent, qu'ils en soient originaires, ou qu'ils soient simplement attirés par une astrologie plus proche de la terre et des racines. Abonnez-vous à notre newsletter pour recevoir chaque matin votre horoscope personnalisé selon votre signe, ancré dans l'énergie du jour.
+            Zodyak Karukera s'adresse à toutes celles et tous ceux qui portent en eux un lien avec la Guadeloupe, qu'ils y vivent, qu'ils en soient originaires, ou qu'ils soient simplement attirés par une astrologie plus proche de la terre et des racines.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link

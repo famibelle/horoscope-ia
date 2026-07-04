@@ -190,7 +190,7 @@ function FilledCard({
           className="font-ui"
           style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#D4AF50', fontWeight: 500 }}
         >
-          Maryse vous parle
+          Fanchette vous parle
         </span>
         <span
           className="font-ui"

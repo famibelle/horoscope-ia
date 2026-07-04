@@ -74,7 +74,7 @@ export default function MiniPlayer() {
                   lineHeight: 1.2,
                 }}
               >
-                {track.signe} · Maryse CondAI
+                {track.signe} · Fanchette
               </p>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
                 <p

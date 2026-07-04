@@ -86,7 +86,7 @@ export default function HoroscopesPreview() {
         className="text-center mb-10"
       >
         <p className="text-ancestral-gold/45 text-[12px] uppercase tracking-[0.35em] mb-3">
-          Maryse CondAI
+          Fanchette
         </p>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-ancestral-cream">
           🌿 Les totems de Karukera

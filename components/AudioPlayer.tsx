@@ -26,7 +26,7 @@ interface HoroscopeData {
 type PlayerState = 'idle' | 'generating' | 'ready' | 'playing' | 'paused';
 
 const CALLING_MESSAGES = [
-  "Le téléphone sonne chez Maryse…",
+  "Le téléphone sonne chez Fanchette…",
   "Elle va bientôt décrocher…",
   "Patiente… patiente…",
   "Elle arrive…",
@@ -229,7 +229,7 @@ export default function AudioPlayer({
           La Voix des Ancêtres
         </p>
         <h2 className="font-display" style={{ fontSize: '22px', fontWeight: 700, color: '#C8D8C0' }}>
-          Écoutez Maryse
+          Écoutez Fanchette
         </h2>
         <p style={{ color: 'rgba(200,216,192,0.35)', fontSize: '15px', marginTop: '4px' }}>🎧 Horoscope audio</p>
       </motion.div>
@@ -377,8 +377,8 @@ export default function AudioPlayer({
               ) : (
                 <p style={{ fontSize: '11px', color: 'rgba(200,216,192,0.4)', marginTop: '2px' }}>
                   {hasAudio && duration > 0
-                    ? `Maryse parle · ${formatTime(duration)}`
-                    : 'Votre signe lu par Maryse'}
+                    ? `Fanchette parle · ${formatTime(duration)}`
+                    : 'Votre signe lu par Fanchette'}
                 </p>
               )}
             </AnimatePresence>
