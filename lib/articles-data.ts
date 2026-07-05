@@ -109,7 +109,16 @@ export const ARTICLES: ArticleMeta[] = [
     tagColor: 'from-ancestral-earth to-ancestral-deepBrown',
     readTime: '8 min',
   },
-  // NOTE: l'article `delgres-liberte-1802` sera ajouté ici avec son contenu (Lot 3).
+  {
+    slug: 'delgres-liberte-1802',
+    emoji: '🔥',
+    title: 'Louis Delgrès, 1802, le refus',
+    excerpt:
+      "En mai 1802, plutôt que de se rendre aux troupes venues rétablir l'esclavage, Louis Delgrès et ses compagnons choisissent de mourir libres à Matouba. Ce que les historiens savent de cet épisode.",
+    tag: 'Histoire',
+    tagColor: 'from-ancestral-terracotta to-ancestral-earth',
+    readTime: '8 min',
+  },
 ];
 
 export function getArticle(slug: string): ArticleMeta | undefined {
