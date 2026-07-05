@@ -39,7 +39,7 @@ export default function AProposPage() {
             className="text-xs tracking-[4px] uppercase mb-4"
             style={{ color: 'var(--color-gold, #D4AF50)' }}
           >
-            Notre démarche
+            Ma démarche
           </p>
           <h1 className="font-display text-4xl sm:text-5xl font-bold text-white leading-snug mb-4">
             À propos de<br />Zodyak Karukera
@@ -65,7 +65,7 @@ export default function AProposPage() {
               Karukera est le nom donné à la Guadeloupe par les peuples Kalinago, ses premiers habitants. En langue kalinago, <em>karukera</em> signifie « l'île aux belles eaux ». Avant que les cartes européennes ne la rebaptisent, cette île portait déjà en elle une identité cosmique : entre Atlantique et mer des Caraïbes, baignée de deux océans, elle a toujours été un lieu de passage, de rencontre et de mémoire.
             </p>
             <p>
-              C'est dans cet héritage que s'ancre Zodyak Karukera. Pas l'astrologie des magazines parisiens, générique et déracinée, mais une lecture du ciel enracinée dans la terre guadeloupéenne, dans ses plantes, ses animaux, ses saisons, ses croyances héritées des Kalinago, des Africains déportés, et de toutes les cultures qui ont façonné la Guadeloupe d'aujourd'hui.
+              C'est dans cet héritage que j'ai voulu ancrer Zodyak Karukera. Pas l'astrologie des magazines parisiens, générique et déracinée, mais une lecture du ciel enracinée dans la terre guadeloupéenne, dans ses plantes, ses animaux, ses saisons, ses croyances héritées des Kalinago, des Africains déportés, et de toutes les cultures qui ont façonné la Guadeloupe d'aujourd'hui.
             </p>
           </div>
         </section>
@@ -83,7 +83,7 @@ export default function AProposPage() {
               L'astrologie occidentale offre un cadre universel : les 12 signes, les planètes, les maisons. Mais un horoscope qui ignore où tu vis, dans quelle lumière tu te lèves, quels arbres te regardent, quelle mer tu entends, cet horoscope ne te parle qu'à moitié.
             </p>
             <p>
-              Zodyak Karukera relie ces deux lectures. Chaque horoscope intègre un <strong style={{ color: 'rgba(255,255,255,0.85)' }}>signe du jour</strong> tiré du monde naturel guadeloupéen : un animal (le colibri, le zandoli, la mangouste), une plante (le balisier, le flamboyant, la canne à sucre), un lieu (la Soufrière, la mangrove, la Désirade). Ce signe n'est pas décoratif. Il est une grille de lecture, un présage naturel que les ancêtres décodaient pour comprendre l'énergie du jour.
+              J'ai voulu relier ces deux lectures. Chaque horoscope intègre un <strong style={{ color: 'rgba(255,255,255,0.85)' }}>signe du jour</strong> tiré du monde naturel guadeloupéen : un animal (le colibri, le zandoli, la mangouste), une plante (le balisier, le flamboyant, la canne à sucre), un lieu (la Soufrière, la mangrove, la Désirade). Ce signe n'est pas décoratif. Il est une grille de lecture, un présage naturel que les ancêtres décodaient pour comprendre l'énergie du jour.
             </p>
             <p>
               Chaque horoscope explore sept dimensions de l'existence : la parole des ancêtres, l'amour, le travail, l'argent, le lyannaj (le lien aux autres), le présage ancestral, et le conseil de Fanchette.
@@ -101,13 +101,13 @@ export default function AProposPage() {
           </h2>
           <div className="space-y-4 text-white/65 text-base sm:text-lg leading-[1.75]">
             <p>
-              Fanchette est la voix narrative de Zodyak Karukera. Ce n'est pas un personnage inventé sans lien avec nous : c'est le nom de l'aïeule de Medhi Famibelle, créateur du site, née en 1789 en Afrique, de parents inconnus, et devenue, née libre, la fondatrice de la famille Famibelle en Guadeloupe. Comment elle est arrivée sur l'archipel reste à ce jour partiellement obscur : des recherches généalogiques sont en cours pour éclairer cette histoire, probablement liée à la traite et à l'esclavage colonial.
+              Fanchette est la voix narrative de Zodyak Karukera, et ce n'est pas un personnage inventé sans lien avec moi. Je m'appelle Medhi Famibelle, je suis le créateur de ce site, et Fanchette, c'est le nom de mon aïeule : née en 1789 en Afrique, de parents inconnus, devenue, née libre, la fondatrice de ma famille en Guadeloupe. Comment elle est arrivée sur l'archipel reste à ce jour partiellement obscur ; je mène des recherches généalogiques pour éclairer cette histoire, probablement liée à la traite et à l'esclavage colonial.
             </p>
             <p>
-              Donner sa voix à ce site est une manière d'honorer sa mémoire et de la faire dialoguer avec la culture guadeloupéenne d'aujourd'hui.
+              Donner sa voix à ce site, c'est ma façon d'honorer sa mémoire et de la faire dialoguer avec la culture guadeloupéenne d'aujourd'hui.
             </p>
             <p>
-              Ce projet doit aussi beaucoup à l'œuvre de Maryse Condé, dont l'écriture a montré qu'on pouvait raconter la Guadeloupe sans folklore de carte postale, avec ses zones d'ombre, sa complexité, sa mémoire vivante. Les textes du site s'en inspirent librement, sans jamais prétendre parler en son nom : un hommage assumé, distinct de la voix de Fanchette.
+              Ce projet doit aussi beaucoup à l'œuvre de Maryse Condé, dont l'écriture m'a montré qu'on pouvait raconter la Guadeloupe sans folklore de carte postale, avec ses zones d'ombre, sa complexité, sa mémoire vivante. Mes textes s'en inspirent librement, sans jamais prétendre parler en son nom : un hommage assumé, distinct de la voix de Fanchette.
             </p>
           </div>
         </section>
@@ -122,10 +122,10 @@ export default function AProposPage() {
           </h2>
           <div className="space-y-4 text-white/65 text-base sm:text-lg leading-[1.75]">
             <p>
-              Les horoscopes quotidiens et certains articles sont assistés par l'intelligence artificielle, une technologie que nous utilisons de façon transparente pour produire du contenu en volume, tout en maintenant une cohérence culturelle et éditoriale. Chaque contenu reste relu et validé humainement avant publication.
+              Les horoscopes quotidiens et certains articles sont assistés par l'intelligence artificielle, une technologie que j'utilise de façon transparente pour produire du contenu en volume, tout en maintenant une cohérence culturelle et éditoriale. Je relis et valide chaque contenu avant publication.
             </p>
             <p>
-              Nous croyons que l'IA peut être un outil de valorisation culturelle, à condition d'être utilisée avec rigueur, respect, et une vraie connaissance du terrain.
+              Je crois que l'IA peut être un outil de valorisation culturelle, à condition d'être utilisée avec rigueur, respect, et une vraie connaissance du terrain.
             </p>
           </div>
         </section>
@@ -143,7 +143,7 @@ export default function AProposPage() {
               Au cœur de Zodyak Karukera se trouve un dictionnaire des présages naturels guadeloupéens : une base de la faune et de la flore locale, chaque espèce associée à une signification symbolique héritée des traditions créoles, africaines et kalinago.
             </p>
             <p>
-              Le zandoli (le petit lézard vert qu'on voit partout) annonce-t-il la chance ou la vigilance ? Le chant du mâle-coq avant l'aube est-il bon ou mauvais présage ? Quand le balisier fleurit hors saison, que dit-il ? Ces questions, les anciens y répondaient. Nous avons collecté et structuré ces savoirs pour les réintégrer dans une lecture astrologique quotidienne.
+              Le zandoli (le petit lézard vert qu'on voit partout) annonce-t-il la chance ou la vigilance ? Le chant du mâle-coq avant l'aube est-il bon ou mauvais présage ? Quand le balisier fleurit hors saison, que dit-il ? Ces questions, les anciens y répondaient. J'ai collecté et structuré ces savoirs pour les réintégrer dans une lecture astrologique quotidienne.
             </p>
           </div>
         </section>
@@ -177,7 +177,7 @@ export default function AProposPage() {
               href="/contact"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-white/60 hover:text-white/90 transition-colors border border-white/10 hover:border-white/20"
             >
-              Nous contacter
+              Me contacter
             </Link>
           </div>
         </section>
