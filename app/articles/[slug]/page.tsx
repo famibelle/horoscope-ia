@@ -10,10 +10,19 @@ interface Section {
   corps: string;
 }
 
+interface Source {
+  auteur: string;
+  titre: string;
+  editeur?: string;
+  annee: string;
+  url?: string;
+}
+
 interface ArticleContent {
   introduction: string;
   sections: Section[];
   conclusion: string;
+  sources?: Source[];
   generatedAt?: string;
 }
 
@@ -62,6 +71,15 @@ export default async function ArticlePage(
     },
     url: `https://zodyak-karukera.com/articles/${slug}`,
     mainEntityOfPage: `https://zodyak-karukera.com/articles/${slug}`,
+    ...(content.sources?.length && {
+      citation: content.sources.map((s) => ({
+        '@type': 'CreativeWork',
+        name: s.titre,
+        author: s.auteur,
+        datePublished: s.annee,
+        ...(s.url && { url: s.url }),
+      })),
+    }),
   };
 
   return (
@@ -187,6 +205,36 @@ export default async function ArticlePage(
             )}
           </p>
         </div>
+
+        {/* Sources */}
+        {content.sources && content.sources.length > 0 && (
+          <section className="mt-12">
+            <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-white/40 mb-4">
+              Sources
+            </h2>
+            <ul className="space-y-2 border-l border-white/10 pl-4">
+              {content.sources.map((source, i) => (
+                <li key={i} className="text-white/45 text-sm leading-relaxed">
+                  {source.auteur},{' '}
+                  {source.url ? (
+                    <a
+                      href={source.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-violet-300/70 hover:text-violet-200 underline underline-offset-2 transition-colors"
+                    >
+                      <em>{source.titre}</em>
+                    </a>
+                  ) : (
+                    <em>{source.titre}</em>
+                  )}
+                  {source.editeur && <>, {source.editeur}</>}
+                  , {source.annee}.
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {/* Back to home */}
         <div className="text-center mt-16">
