@@ -1,8 +1,11 @@
 name: Régénérer les articles mensuels
 
 on:
-  schedule:
-    - cron: '0 4 1 * *'   # 1er du mois à 4h UTC (minuit Guadeloupe)
+  # Désactivé : régénération automatique risquait de réintroduire des citations
+  # inventées / faits erronés déjà corrigés manuellement dans articles-content.json.
+  # Réactiver seulement après avoir ajouté des garde-fous au prompt de génération.
+  # schedule:
+  #   - cron: '0 4 1 * *'   # 1er du mois à 4h UTC (minuit Guadeloupe)
   workflow_dispatch:
     inputs:
       mode:
