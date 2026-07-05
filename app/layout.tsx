@@ -123,11 +123,6 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
-        <Script
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3159683365493434"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
         {process.env.NEXT_PUBLIC_GA_ID && (
           <>
             <Script

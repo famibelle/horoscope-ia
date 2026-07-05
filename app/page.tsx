@@ -9,6 +9,7 @@ import ShareButtons from '@/components/ShareButtons';
 import NewsletterSubscribeForm from '@/components/NewsletterSubscribeForm';
 import HoroscopesPreview from '@/components/HoroscopesPreview';
 import AdSpace from '@/components/AdSpace';
+import Script from 'next/script';
 import Articles from '@/components/Articles';
 import { EditionProvider } from '@/contexts/EditionContext';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
@@ -56,6 +57,11 @@ export default async function Home() {
 
   return (
     <main className="relative min-h-screen overflow-x-hidden">
+      <Script
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3159683365493434"
+        crossOrigin="anonymous"
+        strategy="afterInteractive"
+      />
       <StarField />
 
       {/* Ambient background glows - Thème ancestral */}
