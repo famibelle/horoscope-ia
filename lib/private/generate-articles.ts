@@ -1,8 +1,14 @@
 #!/usr/bin/env npx tsx
 /**
- * Génère les 6 articles en voix Maryse Condé via Mistral Large.
- * Lance avec : npx tsx scripts/generate-articles.ts
+ * Génère des articles en voix Maryse Condé via Mistral Large.
+ * Lance avec : npx tsx lib/private/generate-articles.ts
  * Résultat dans lib/articles-content.json (versionné, aucun appel runtime).
+ *
+ * PROTECTION : les articles déjà réécrits à la main avec un champ `sources`
+ * (contenu vérifié, sourcé) sont considérés comme définitivement curatés et
+ * ne sont JAMAIS régénérés par ce script, même en lançant --slugs=<leur-slug>,
+ * sauf si l'on passe explicitement --overwrite-sourced. Perdre ce contenu
+ * effacerait aussi son sourçage : ne passer ce flag qu'en connaissance de cause.
  */
 
 import { writeFileSync } from 'fs';
@@ -51,17 +57,9 @@ Sujet : la Soufrière de Guadeloupe gronde en permanence depuis des siècles —
 
 Sujet : Cancer, Scorpion, Poissons sont des signes d'eau — ils vivent dans l'entre-deux, dans les zones où les frontières ne tiennent pas. La mangrove de Guadeloupe (notamment autour du Grand Cul-de-Sac Marin) est exactement cet espace : ni tout à fait mer, ni tout à fait terre, passage entre les mondes, refuge des alevins et des crabes de terre. Explore les qualités de ces trois signes (intuition, profondeur, mémoire émotionnelle) à travers le prisme de la mangrove. Parle du palétuvrier, des racines aériennes, du silence particulier de ce milieu. Évoque aussi la menace que fait peser le changement climatique sur ces espaces — et sur la capacité des signes d'eau à préserver leur monde intérieur.`,
 
-  'venus-en-caraibe': `Rédige un article intitulé "Vénus en Caraïbe — amour, corps, liberté".
-
-Sujet : Vénus dans la tradition astrologique occidentale est souvent réduite à la séduction, aux roses et à la douceur. En Caraïbe, l'amour a une autre texture — il porte la mémoire de l'esclavage, la séparation des familles, les corps qui ont appartenu à d'autres. Et pourtant il y a une joie de vivre, une sensualité, une liberté dans le rapport au corps et à l'amour qui est proprement caribéenne. Explore Vénus à travers le prisme guadeloupéen : le gwo ka comme rituel amoureux collectif, les femmes de Maryse Condé qui aiment sans demander la permission, la liberté affective comme acte politique. Parle aussi de Vénus en Lion, en Scorpion, en Poissons — avec des images caribéennes.`,
-
   'mercure-et-creole': `Rédige un article intitulé "Mercure et la langue créole — parler pour guérir".
 
 Sujet : Mercure gouverne la parole, les mots, la communication, les échanges. Le créole guadeloupéen est une langue qui a survécu à l'interdit — pendant des siècles on a voulu l'effacer, lui préférer le français, la langue du maître. Et pourtant le créole a résisté, s'est transformé, a absorbé, a inventé. Cette résistance par la langue est mercurienne dans son essence. Explore Mercure comme planète de l'intelligence adaptative et de la communication. Parle du créole comme langue de guérison (les proverbes, les chants de travail, le conteur — le majò djò — qui tient la nuit entière). Évoque Mercure rétrograde comme moment de retour à la langue maternelle, au mot juste qu'on avait oublié. Développe chaque section sur 300 mots minimum avec des exemples précis de mots créoles, leur étymologie, leur usage dans la vie quotidienne.`,
-
-  'careme-et-gemeaux': `Rédige un article intitulé "Le carême et l'énergie des Gémeaux — le vent du changement".
-
-Sujet : En Guadeloupe, le carême désigne la saison sèche de janvier à juillet, portée par l'alizé — ce vent du nord-est qui balaie tout, dessèche la végétation, calme la mer et change les humeurs. C'est le contraire du Carême catholique : ici, c'est la saison du mouvement, des projets qui prennent forme, des routes qui s'ouvrent. Les Gémeaux (signe d'Air, gouverné par Mercure) vivent dans ce vent-là : mobilité, dualité, curiosité insatiable. Développe les 5 sections suivantes : (1) Le carême guadeloupéen, ses manifestations météo, les plantes qui fleurissent hors saison, le comportement de la mer à Grand Bourg ; (2) L'alizé comme force cosmique — ce que les anciens lui attribuaient, les légendes des pêcheurs de Sainte-Rose ; (3) Les Gémeaux vus depuis la Caraïbe — la dualité créole entre la mémoire de l'esclavage et l'élan vers le futur, entre Basse-Terre et Grande-Terre ; (4) Mercure en carême — comment les mois secs favorisent les négociations, les échanges, les décisions rapides ; (5) Ce que le carême enseigne aux autres signes. Inclus des détails climatiques précis et des expressions créoles. 1 400 mots minimum.`,
 
   'fete-cuisinieres-cancer': `Rédige un article intitulé "La fête des cuisinières et les énergies de Cancer".
 
@@ -83,81 +81,12 @@ Sujet : Le colibri falle-vert (Eulampis holosericeus) est l'oiseau emblématique
 
 Sujet : La canne à sucre a façonné la Guadeloupe dans sa chair, son économie et sa mémoire. Elle a justifié la traite négrière, nourri l'Europe pendant des siècles, fait fortune pour les colons et la misère pour les esclaves. Aujourd'hui, la canne produit le rhum agricole — l'un des spiritueux les plus reconnus au monde, la seule AOC des DOM. Le Capricorne, signe de Terre gouverné par Saturne, est le signe du temps long, de la discipline, de la montée en puissance, du labeur qui finit par payer. Développe les 5 sections : (1) Histoire de la canne en Guadeloupe — son arrivée avec Christophe Colomb, le système des grandes habitations, les révoltes, l'abolition de 1848 et la continuité économique ; (2) Le rhum agricole guadeloupéen — Bielle, Damoiseau, Longueteau, Bologne, ce qui le différencie du rhum industriel, l'AOC depuis 2021 ; (3) Saturne et le temps long — pourquoi les Capricornes réussissent souvent tard, mais durablement, la patience comme stratégie et non comme résignation ; (4) La coupe de la canne — un travail physique extrême, les coupeurs de canne d'hier et d'aujourd'hui, les machines qui ont remplacé les bras, ce qu'on a perdu et ce qu'on a gagné ; (5) Ce que la canne enseigne : rien de précieux ne vient facilement, et les racines les plus profondes survivent aux tempêtes. 1 400 mots minimum.`,
 
-  'legba-les-chemins': `Rédige un article intitulé "Papa Legba, gardien des chemins et des seuils".
-
-Sujet : Dans le vaudou guadeloupéen, Papa Legba est le premier invoqué dans toute cérémonie — sans lui, aucun loa ne peut être contacté. Gardien des carrefours (*kawoubouyé* en créole), il ouvre et ferme les portes entre le monde des vivants et celui des esprits. Sa correspondance africaine est Eshu (Yoruba). Ses couleurs sont le rouge et le noir. Ses offrandes : rhum, tabac, canne à sucre. Ses symboles : canne de vieillard, chapeau de paille. Il a une variante — Legba Ati — lié aux chemins secrets et à la magie cachée. En astrologie, il résonne avec l'énergie des Gémeaux : dualité, communication entre mondes, mobilité, carrefours mentaux.
-
-Développe les 5 sections suivantes (chacune 280-380 mots) :
-(1) Legba et la géographie sacrée de Guadeloupe — les carrefours dans la culture populaire guadeloupéenne, ce qu'on y fait (pièce lancée, crachat par terre, prière murmurée), les lieux précis où la présence des esprits est reconnue (les quatre-chemins de Gosier, de Sainte-Rose, de Capesterre), comment les anciens guidaient leurs enfants dans ces espaces ;
-(2) Eshu, Legba, Exu — le même loa sous trois noms — la trajectoire de cet esprit depuis l'Afrique yoruba jusqu'à la Caraïbe en passant par le Brésil (Candomblé, Umbanda), ce que la Middle Passage a fait subir à cette figure, comment elle a survécu sous les traits de saint Lazare dans le catholicisme colonial ;
-(3) Les cérémonies vaudou et le protocole de l'ouverture — pourquoi Legba est toujours le premier, le chant d'ouverture (Atibón Legba, ouvri barrière pou mwen), ce que signifie "ouvrir le chemin" dans la pratique concrète des hougan et manbo de Guadeloupe, les objets rituels (vèvè du carrefour tracé en poudre blanche, rhum versé aux quatre coins) ;
-(4) Legba et les Gémeaux en astrologie — la dualité commune (vieux et jeune à la fois, doux et fort, passeur entre deux états), Mercure comme planète des seuils et des échanges, comment les natifs Gémeaux vivent instinctivement cette énergie du passage, du message, de l'entre-deux ;
-(5) Legba aujourd'hui en Guadeloupe — entre tradition et modernité, comment la figure du vieux gardien des chemins survit dans les expressions créoles ("pa koupé wout mwen"), dans les pratiques de protection des maisons, dans les offrandes discrètes déposées aux croisées de route à l'aube. Ce qui reste quand on ne croit plus mais qu'on fait quand même par prudence.
-1 400 mots minimum.`,
-
-  'ezili-freda-amour': `Rédige un article intitulé "Ezili Freda — la déesse de l'amour qui n'appartient à personne".
-
-Sujet : Ezili Freda est la loa de l'amour, de la beauté et de la prospérité dans le vaudou guadeloupéen. Sa correspondance africaine est Oshun (Yoruba). Ses couleurs : rose, blanc, bleu. Elle est synchrétisée avec la Vierge Marie — Notre-Dame de la Salette particulièrement. Ses symboles : miroirs, peignes en or, bijoux. Ses offrandes : parfums, champagne, poulets blancs, fleurs. Elle a une forme sombre — Ezili Je Wouj (Ezili aux Yeux Rouges) — liée à la colère et à la jalousie, invoquée pour la vengeance amoureuse. Ses plantes : jasmin (Ti-jasmin, Jasminum sambac), rose. En astrologie, elle résonne avec Vénus, le Lion et la maison 5 : passion créatrice, séduction, refus d'être possédée.
-
-Développe les 5 sections suivantes (chacune 280-380 mots) :
-(1) Ezili Freda dans la tradition guadeloupéenne — comment cette déesse est vécue dans la pratique populaire, les autels qui lui sont dressés dans les maisons de Pointe-à-Pitre et du Gosier, les femmes qui lui font des dons pour l'amour ou la fertilité, la confusion féconde avec la Vierge Marie dans un contexte catholique colonial, la fête du 16 juillet (Notre-Dame du Carmel) comme moment où les deux images se superposent ;
-(2) La beauté comme pouvoir et comme danger — Ezili Freda n'est pas douce, elle est exigeante, capricieuse, capable de posséder ses initiés et de les faire pleurer sans raison apparente, le paradoxe d'un loa de l'amour qui porte aussi les blessures de l'amour, le mythe de la femme trop belle qu'aucun homme ne peut retenir, la figure de la femme libre dans la littérature guadeloupéenne (les personnages de Maryse Condé, de Simone Schwarz-Bart) ;
-(3) Ezili Je Wouj — la face sombre — comment la même déesse peut devenir vengeresse, les rituels de rupture amoureuse, les bains de désenvoutement amoureux (bain d'amour, bain de chance), les pratiques de quimbois autour de la relation, pourquoi on ne joue pas avec Ezili et ce qui arrive quand on la déçoit ;
-(4) Oshun, Aphrodite, Ezili — la même énergie sous trois latitudes — la permanence de l'archétype de la déesse de l'amour, ce qu'Oshun dit du Niger et Ezili de la Caraïbe, Vénus en astrologie comme planète des désirs, comment les natifs Lion, Taureau et Libra portent cette énergie dans leur rapport à l'amour et à la beauté ;
-(5) Ezili Freda aujourd'hui — les femmes guadeloupéennes et la figure de la déesse libre, comment on porte des bijoux en son honneur sans le savoir, les parfums et les miroirs comme objets chargés, l'idée que l'amour vrai commence toujours par se plaire à soi-même avant de plaire aux autres — une leçon caribéenne que l'Occident apprend lentement.
-1 400 mots minimum.`,
-
-  'baron-samedi-mort-renaissance': `Rédige un article intitulé "Baron Samedi, maître de la mort et du rire".
-
-Sujet : Baron Samedi est le loa de la mort et de la résurrection dans le vaudou guadeloupéen. Famille Pétro (née en Caraïbe, énergie forte). Couleurs : noir, violet, blanc. Offrandes : rhum noir, piments forts, poulets noirs. Symboles : squelettes, canne à pommeau, chapeau haut-de-forme, lunettes noires à un verre. Il parle avec un langage grossier mais protecteur. Gardien des cimetières — si tu es gravement malade et qu'il refuse de creuser ta tombe, tu survivras. Son arbre sacré : le bois-cochon (Xylosma buxifolium), dont les branches entourent les cimetières créoles. Variante proche : Baron Kriminel (forme noire absolue). En astrologie, il résonne avec le Scorpion (transformation, mort et renaissance, 8e maison) et Pluton.
-
-Développe les 5 sections suivantes (chacune 280-380 mots) :
-(1) Baron Samedi dans la culture guadeloupéenne — les cimetières comme lieux de pouvoir (cimetière de Morne-à-l'Eau avec ses tombes en carrelage noir et blanc, le cimetière de la Toussaint à Pointe-à-Pitre), les pratiques nocturnes, les offrandes déposées au pied des croix, la figure du Baron comme premier mort enterré dans chaque cimetière — et donc maître de tous ceux qui suivent ;
-(2) Le rire de la mort — pourquoi Baron Samedi est obscène, blasphématoire et comique, comment l'humour noir est une stratégie de survie dans une culture qui a connu l'esclavage et ses violences, le lien entre le carnaval guadeloupéen (masques, déguisements, renversement de l'ordre) et l'énergie du Baron, les mas a pié, les mas doubout, le rire comme résistance ;
-(3) Mort et renaissance dans le vaudou caribéen — la mort n'est pas une fin mais une transformation, les rituels funéraires créoles (la veillée mortuaire, le neuvaine, les chants de l'âme), ce que la famille Pétro dit que la Rada ne dit pas — la mort violente, arrachée, celle de l'esclavage et de la traversée, comment Baron Samedi est le loa qui a absorbé toute cette douleur-là ;
-(4) Scorpion, Pluton et Baron Samedi — les trois maîtres de la transformation — pourquoi le Scorpion est le seul signe à avoir deux symboles (le scorpion et l'aigle, mort et résurrection), Pluton comme planète des ruptures nécessaires, comment les natifs Scorpion reconnaissent intuitivement la nécessité de mourir à soi-même pour renaître, le parallèle avec le rite de passage caribéen ;
-(5) Baron Samedi aujourd'hui — la récupération pop culturelle (James Bond, Pirates des Caraïbes, Halloween) versus la réalité du loa dans les pratiques vivantes, ce qui se perd quand on déguise en carnaval ce qui était sacré, et ce qui résiste malgré tout — les offrandes discrètes, les familles qui connaissent les règles sans jamais les avoir apprises dans un livre.
-1 400 mots minimum.`,
-
-  'damballa-serpent-sagesse': `Rédige un article intitulé "Damballa, le grand serpent arc-en-ciel".
-
-Sujet : Damballa (Damballa-Wedo) est le serpent cosmique du vaudou guadeloupéen, symbole de sagesse, de paix et de fertilité. Famille Rada. Correspondance africaine : Oshumare (Yoruba). Couleurs : blanc et vert. Associé aux arcs-en-ciel et aux sources d'eau pure. Offrandes : œufs blancs, lait, maïs. Rituel distinctif : tracer des serpents en poudre blanche (*pwen*) sur le sol. Animal associé : le serpent-boa (Boa constrictor). Plante associée : herbe-serpent (Aristolochia trilobata), utilisée pour neutraliser les venins. En astrologie, il résonne avec les Poissons (intuition, profondeur, dissolution des frontières) et Neptune (l'informe, l'ancien, l'inconscient collectif).
-
-Développe les 5 sections suivantes (chacune 280-380 mots) :
-(1) Damballa et le serpent en Guadeloupe — la place du serpent dans la culture créole (le boa de Guadeloupe, Boa constrictor, espèce protégée), les croyances populaires autour du serpent (signe de pluie prochaine, messager des ancêtres, gardien des sources), le paradoxe d'un animal à la fois redouté et sacré, la forêt de la Basse-Terre comme espace où Damballa est ressenti, les rivières du Parc National (Rivière des Vieux-Habitants, Rivière Sens) comme lieux sacrés ;
-(2) Oshumare, Damballa, le serpent arc-en-ciel — la migration de cet archétype depuis l'Afrique yoruba jusqu'à la Caraïbe et au-delà (le serpent arc-en-ciel chez les Kalinagos, les Amérindiens d'Amazonie), ce que le serpent cosmique dit des civilisations qui l'ont vénéré, pourquoi l'arc-en-ciel (*lakansyèl* en créole) est regardé avec une attention particulière après la pluie dans la Guadeloupe traditionnelle ;
-(3) Le silence de Damballa — contrairement aux autres loas, Damballa ne parle pas, il siffle, il se meut, il serpente, les initiés possédés par lui rampent au sol et refusent la nourriture ordinaire, ce que ce silence dit de la sagesse la plus ancienne — celle d'avant les mots, d'avant les catégories, d'avant la distinction entre le vivant et le mort, entre l'eau et la terre ;
-(4) Guérison et serpent — l'herbe-serpent (Aristolochia trilobata) dans la pharmacopée créole guadeloupéenne, son utilisation contre les morsures de serpent et dans les bains purifiants, la médecine traditionnelle créole (*doktè fey*) comme héritière d'un savoir africain et kalinago combiné, comment Damballa est invoqué dans les rituels de guérison profonde (pas les maladies ordinaires, mais les crises existentielles, les ruptures d'identité), le lien avec Neptune et les Poissons en astrologie (médecine psychosomatique, dissolution de l'ego) ;
-(5) Damballa dans le monde moderne — la mue comme métaphore de la transformation nécessaire (le serpent quitte sa peau pour grandir), comment cette image parle aux générations guadeloupéennes actuelles tiraillées entre l'héritage culturel et la modernité française, le retour discret mais réel des pratiques vaudou dans la jeunesse créole, ce que signifie honorer Damballa sans se déguiser en mystique.
-1 400 mots minimum.`,
-
-  'trois-familles-vaudou': `Rédige un article intitulé "Rada, Pétro, Congo — les trois familles du vaudou guadeloupéen".
-
-Sujet : Le vaudou guadeloupéen est structuré en trois familles (Nations) qui correspondent à trois lignées d'esprits avec des énergies, des origines et des pratiques distinctes :
-- **Rada** : 18 loas, origines africaines (Dahomey, Yoruba), énergie douce et bienveillante. Loas : Papa Legba, Ezili Freda, Damballa, Ogoun, Ayizan, Loko. Couleurs dominantes : blanc, bleu, or. Cérémonies diurnes, chants lents.
-- **Pétro** : 18 loas, nés en Caraïbe (créés dans la douleur de l'esclavage), énergie forte et imprévisible. Loas : Baron Samedi, Kalfu, Marinette, Baron Kriminel. Couleurs : rouge, noir. Cérémonies nocturnes, rythmes violents, feu, piment.
-- **Congo** : énergies terrestres et ancestrales, loa principal Azaka (agriculture, récoltes, peuple). Plus proche du quotidien, moins spectaculaire mais fondamental.
-En astrologie, ces trois familles correspondent à trois types d'énergie : Rada = planètes de jour (Soleil, Jupiter, Vénus), Pétro = planètes de nuit et de transformation (Mars, Pluton, Saturne), Congo = planètes de la Terre et du corps (Lune, Cérès, Vesta).
-
-Développe les 5 sections suivantes (chacune 280-380 mots) :
-(1) Rada — la mémoire africaine intacte — d'où viennent ces esprits (le royaume de Dahomey, les ports de traite, les esclaves qui ont emporté leurs dieux dans la traversée), comment la Nation Rada représente la tentative de conserver ce qui existait avant, les cérémonies blanches et bleues, la voix de Damballa qui ne parle pas et d'Ezili qui pleure toujours, le lien avec les signes astrologiques diurnes — ceux qui cherchent la lumière ;
-(2) Pétro — les loas nés de la résistance — comment des esprits entièrement nouveaux ont émergé dans la Caraïbe au XVIIe et XVIIIe siècles, forgés par la violence de l'esclavage, le manque, la séparation des familles, Baron Samedi qui garde les cimetières là où les esclaves enterraient leurs morts sans nom, Marinette qui hurle dans la forêt de nuit, Kalfu qui contrôle les carrefours dangereux — les mêmes carrefours que Legba, mais la nuit, et avec l'intention de nuire ou de protéger à tout prix ;
-(3) Congo — les esprits de la terre et du peuple — Azaka, loa de l'agriculture (Taureau/Congo dans les mappings astrologiques), chapeau de paille et sacoche de paysan, invoqué pour les récoltes, la pluie, la stabilité du foyer, comment la Nation Congo représente le quotidien spirituel — pas le grand rituel exceptionnel mais la prière ordinaire du dimanche, le jardin créole comme espace sacré ;
-(4) Les cérémonies et les différences rituelles — un ounfo (temple vaudou) ne ressemble pas à une église, mais il a ses règles aussi strictes, les tambours différents selon la famille (manman, seconde, bula pour Rada — kata, boula, assotor pour Pétro), les chants d'ouverture qui nomment chaque famille, comment un guérisseur (*hougan* ou *manbo*) navigue entre les trois, ce qu'on ne fait jamais mélanger ;
-(5) Trois familles, un seul peuple — comment cette structure tripartite reflète l'histoire guadeloupéenne elle-même (africaine, créole, paysanne), le parallèle avec la trinité astrologique (feu/air/eau/terre), ce que comprendre les trois familles dit de la psychologie caribéenne — la capacité à tenir ensemble des énergies contradictoires, à ne pas choisir entre l'ancien monde et le nouveau, entre la douceur et la force.
-1 400 mots minimum.`,
-
-  'ogoun-mars-guerrier': `Rédige un article intitulé "Ogoun et Mars — l'énergie du guerrier qui protège".
-
-Sujet : Ogoun est le loa de la guerre, du travail et de la justice dans le vaudou guadeloupéen. Famille Rada. Correspondance africaine : Ogun (Yoruba). Couleurs : vert et rouge. Symboles : épées, clous, machettes, outils en fer. Offrandes : rhum flambé, viande crue, piments. Protecteur des forgerons, des chasseurs, des travailleurs. Sa plante : plante-ogoun (Petiveria alliacea, *herbe-à-pisser* en créole), utilisée pour purifier le sang et soigner les plaies. Animal associé : coq rouge (sacrifié dans les cérémonies). En astrologie, il correspond à Mars et au Bélier — énergie initiatrice, combative, protectrice, force brute mise au service de la justice.
-
-Développe les 5 sections suivantes (chacune 280-380 mots) :
-(1) Ogoun et les travailleurs guadeloupéens — la machette (*kouto-manchèt*) comme outil universel de Guadeloupe (canne à sucre, forêt, cuisine), le travail manuel comme acte sacré dans la tradition créole, les coupeurs de canne qui invoquaient Ogoun pour tenir jusqu'au soir, les grèves de 1952 à Pointe-à-Pitre et la violence des forces de l'ordre contre les ouvriers agricoles — comment Ogoun est le loa des luttes sociales et pas seulement des guerres militaires ;
-(2) Ogun en Afrique, Ogoun en Caraïbe — la trajectoire de cet esprit depuis le peuple Yoruba du Nigeria jusqu'aux plantations de Guadeloupe, comment il a survécu en changeant de visage (saint Jacques Majeur dans le catholicisme colonial), ce que signifie être le loa du fer dans une société où le fer a servi à enchaîner avant de servir à libérer, la machette comme objet chargé des deux côtés ;
-(3) Mars en astrologie — force, courage, initiation — pourquoi Mars n'est pas la planète de la violence mais de l'énergie nécessaire pour commencer, pour défendre, pour ne pas céder, les natifs Mars en Bélier qui foncent sans calculer, Mars en Scorpion qui attend le bon moment, Mars en Cancer qui se bat pour sa famille — comment chaque position de Mars dans le thème natal dit quelque chose de la façon dont on mobilise sa force intérieure ;
-(4) Plante-ogoun et médecine créole — la Petiveria alliacea (*herbe-à-pisser*, *guinea hen weed*) dans la pharmacopée traditionnelle guadeloupéenne, ses propriétés antiseptiques et anti-inflammatoires reconnues depuis des siècles par les *doktè fey*, la façon de la préparer (bain de feuilles, décoction, frottement), le lien entre soigner les plaies physiques et soigner les blessures de l'âme — Ogoun comme loa de la guérison par le fer, pas seulement de la guerre ;
-(5) L'énergie guerrière aujourd'hui — ce que signifie invoquer Ogoun en 2026 en Guadeloupe, les jeunes qui se battent pour la reconnaissance culturelle, les artistes de gwoka qui continuent de frapper leurs tambours dans la même énergie que les résistants d'avant, la différence entre la violence subie et la force assumée, comment Mars en astrologie et Ogoun en vaudou disent la même chose : sans le courage de se lever, rien ne change jamais.
-1 400 mots minimum.`,
+  // NOTE: les prompts pour legba-les-chemins, ezili-freda-amour,
+  // baron-samedi-mort-renaissance, damballa-serpent-sagesse,
+  // trois-familles-vaudou et ogoun-mars-guerrier ont été retirés : ces
+  // slugs sont supprimés de lib/articles-data.ts (contenu fondé sur le
+  // vodou haïtien mal étiqueté « guadeloupéen », voir refonte /articles).
+  // Ne pas les recréer sans un travail éditorial dédié et sourcé.
 };
 
 async function generateArticle(
@@ -215,12 +144,21 @@ async function main() {
     existing = JSON.parse(require('fs').readFileSync(outPath, 'utf-8'));
   } catch { /* premier run */ }
 
+  const allowOverwriteSourced = process.argv.includes('--overwrite-sourced');
   const slugs = requestedSlugs ?? Object.keys(PROMPTS);
   const result: Record<string, unknown> = { ...existing };
 
-  console.log(`\n🖊️  Génération de ${slugs.length} articles en voix Maryse Condé…\n`);
+  console.log(`\n🖊️  Génération de ${slugs.length} article(s) demandé(s)…\n`);
 
   for (const slug of slugs) {
+    const existingArticle = existing[slug] as { sources?: unknown[] } | undefined;
+    const isCurated = Array.isArray(existingArticle?.sources) && existingArticle.sources.length > 0;
+
+    if (isCurated && !allowOverwriteSourced) {
+      console.log(`  ⏭️  ${slug} : déjà réécrit et sourcé à la main, ignoré (utiliser --overwrite-sourced pour forcer)`);
+      continue;
+    }
+
     try {
       result[slug] = await generateArticle(slug, apiKey);
       console.log(`  ✓ ${slug}`);

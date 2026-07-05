@@ -18,6 +18,10 @@ on:
         - verbose
         - force
         - force-verbose
+      confirm:
+        description: 'Tapez exactement JE CONFIRME pour lancer (protection contre un clic accidentel)'
+        required: true
+        type: string
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -29,6 +33,13 @@ jobs:
       contents: write
 
     steps:
+      - name: Vérifier la confirmation explicite
+        run: |
+          if [ "${{ inputs.confirm }}" != "JE CONFIRME" ]; then
+            echo "::error::Confirmation manquante ou incorrecte. lib/private/generate-articles.ts régénère du contenu et pourrait affecter les articles ; le champ 'confirm' doit contenir exactement JE CONFIRME pour continuer. Notez par ailleurs que le script protège déjà de son côté tout article portant un champ 'sources' (contenu réécrit à la main) : il ne sera pas régénéré sauf --overwrite-sourced explicite."
+            exit 1
+          fi
+
       - name: Configurer SSH pour le sous-module privé
         uses: webfactory/ssh-agent@v0.9.0
         with:
