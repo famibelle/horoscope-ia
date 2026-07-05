@@ -189,10 +189,10 @@ export default async function ArticlePage(
           }}
         >
           <p className="text-violet-300/80 text-base sm:text-lg leading-[1.75] italic font-display">
-            &ldquo;{content.conclusion}&rdquo;
+            {content.conclusion}
           </p>
           <p className="text-white/20 text-xs mt-3 text-right">
-           , Fanchette
+            — Fanchette
             {content.generatedAt && (
               <span className="block mt-0.5">
                 Généré le{' '}
