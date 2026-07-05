@@ -191,19 +191,16 @@ export default async function ArticlePage(
           <p className="text-violet-300/80 text-base sm:text-lg leading-[1.75] italic font-display">
             {content.conclusion}
           </p>
-          <p className="text-white/20 text-xs mt-3 text-right">
-            — Fanchette
-            {content.generatedAt && (
-              <span className="block mt-0.5">
-                Généré le{' '}
-                {new Date(content.generatedAt).toLocaleDateString('fr-FR', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })}
-              </span>
-            )}
-          </p>
+          {content.generatedAt && (
+            <p className="text-white/20 text-xs mt-3 text-right">
+              Généré le{' '}
+              {new Date(content.generatedAt).toLocaleDateString('fr-FR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })}
+            </p>
+          )}
         </div>
 
         {/* Sources */}
