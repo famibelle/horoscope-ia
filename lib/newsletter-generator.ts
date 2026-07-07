@@ -469,9 +469,11 @@ async function fetchRecentSubjects(limit = 12): Promise<string[]> {
   }
 }
 
-// Nettoyage post-génération : retire guillemets entourants et ponctuation finale.
+// Nettoyage post-génération : retire markdown résiduel, guillemets entourants et ponctuation finale.
 function cleanSubject(raw: string): string {
   return raw
+    .replace(/\*\*?([^*]+)\*\*?/g, '$1')
+    .replace(/__?([^_]+)__?/g, '$1')
     .replace(/^["'«»\s]+|["'«»\s]+$/g, '')
     .replace(/[.;:]+$/, '')
     .trim();

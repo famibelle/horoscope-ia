@@ -275,7 +275,7 @@ Tu rédiges UNIQUEMENT le signe du jour — une plante, un arbre ou un animal de
 // Règles communes aux deux variantes (format + variété + anti-répétition).
 const TITRE_MAIL_REGLES = `Contraintes :
 - Une seule ligne, entre 50 et 70 caractères (cible idéale pour l'aperçu mail). Évite les objets trop courts qui passent inaperçus.
-- Au plus UN mot ou expression créole, balisé *ainsi*. Le reste en français. Jamais un objet 100% créole.
+- Au plus UN mot ou expression créole, en texte brut, SANS astérisque ni guillemet autour (l'objet du mail ne supporte aucun formatage). Le reste en français. Jamais un objet 100% créole.
 - Pas de guillemets, pas de ponctuation finale, pas d'emoji.
 
 Variété (anti-formules) :
