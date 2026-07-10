@@ -1,8 +1,6 @@
 name: 🎙️ Génération TTS (Supabase Storage)
 
 on:
-  schedule:
-    - cron: '0 5 * * *'   # 05h00 UTC — après les horoscopes (03h45) + newsletter (04h30)
   workflow_dispatch:
     inputs:
       date:

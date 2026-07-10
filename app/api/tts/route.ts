@@ -5,6 +5,7 @@ import { buildTTSPrompt, getEditionFromDate } from '@/lib/private/tts-prompt';
 import { todayGuadeloupe } from '@/lib/edition';
 import { signs } from '@/lib/signs-data';
 import type { Edition } from '@/lib/private/maryse-prompt';
+import { logMistralUsage, usageFromMistralResponse } from '@/lib/mistral-usage';
 
 const TTS_URL = 'https://api.mistral.ai/v1/audio/speech';
 const TTS_MODEL = 'voxtral-mini-tts-2603';
@@ -73,10 +74,18 @@ async function optimizeTextForTTS(
 
   if (!res.ok) {
     console.error('[TTS] LLM failed:', res.status);
+    logMistralUsage({ source: 'api:tts:optimize', model: LLM_MODEL, success: false, httpStatus: res.status });
     return null;
   }
 
   const data = await res.json();
+  logMistralUsage({
+    source: 'api:tts:optimize',
+    model: LLM_MODEL,
+    success: true,
+    httpStatus: res.status,
+    ...usageFromMistralResponse(data),
+  });
   const content = data.choices?.[0]?.message?.content?.trim();
 
   if (!content) {
@@ -129,7 +138,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Clé de cache pour le MP3
-  const cacheKey = `tts|${userDate}|${signName.toLowerCase()}|${edition}|${userHour}`;
+  const cacheKey = `tts|${userDate}|${signName.toLowerCase()}|${edition}`;
 
   // 1. Vérifier Supabase Storage (MP3 pré-générés par GitHub Actions)
   const supabaseUrl = process.env.SUPABASE_URL;
@@ -195,8 +204,10 @@ export async function POST(req: NextRequest) {
   if (!ttsRes.ok) {
     const err = await ttsRes.text();
     console.error('[TTS] TTS synthesis error:', ttsRes.status, err);
+    logMistralUsage({ source: 'api:tts:audio', model: TTS_MODEL, endpoint: 'audio', success: false, httpStatus: ttsRes.status });
     return NextResponse.json({ error: 'Génération audio échouée' }, { status: 502 });
   }
+  logMistralUsage({ source: 'api:tts:audio', model: TTS_MODEL, endpoint: 'audio', success: true, httpStatus: ttsRes.status });
 
   const ttsData = await ttsRes.json() as { audio_data?: string };
   if (!ttsData.audio_data) {
