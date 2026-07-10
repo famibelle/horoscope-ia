@@ -12,6 +12,7 @@ config({ path: '.env.local', override: true });
 
 import * as fs from 'fs/promises';
 import * as path from 'path';
+import { logMistralUsage, usageFromMistralResponse } from '../lib/mistral-usage';
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 
@@ -86,8 +87,18 @@ async function callMistral(prompt: string): Promise<string> {
       ],
     }),
   });
-  if (!res.ok) throw new Error(`Mistral ${res.status}: ${await res.text()}`);
+  if (!res.ok) {
+    logMistralUsage({ source: 'quality-newsletter', model: 'mistral-small-latest', success: false, httpStatus: res.status });
+    throw new Error(`Mistral ${res.status}: ${await res.text()}`);
+  }
   const data = await res.json();
+  logMistralUsage({
+    source: 'quality-newsletter',
+    model: 'mistral-small-latest',
+    success: true,
+    httpStatus: res.status,
+    ...usageFromMistralResponse(data),
+  });
   return data.choices?.[0]?.message?.content ?? '';
 }
 

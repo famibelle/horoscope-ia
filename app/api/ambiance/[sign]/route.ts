@@ -15,6 +15,7 @@ import type { WeatherData } from '@/app/api/weather/route';
 import type { Edition } from '@/lib/private/maryse-prompt';
 import { loadAmbianceData } from '@/lib/private/horoscope-file-cache';
 import { applySafetyFiltersToObject } from '@/lib/private/safety-filter';
+import { logMistralUsage, usageFromMistralResponse } from '@/lib/mistral-usage';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
@@ -262,9 +263,20 @@ Sans markdown dans les valeurs JSON.`;
     }),
   });
 
-  if (!res.ok) { console.error(`🤖 [MISTRAL] ❌ Erreur ambiance: ${res.status}`); return NextResponse.json({ error: 'Mistral error' }, { status: 500 }); }
+  if (!res.ok) {
+    console.error(`🤖 [MISTRAL] ❌ Erreur ambiance: ${res.status}`);
+    logMistralUsage({ source: 'api:ambiance', model: 'mistral-small-latest', success: false, httpStatus: res.status });
+    return NextResponse.json({ error: 'Mistral error' }, { status: 500 });
+  }
 
   const mistralData = await res.json();
+  logMistralUsage({
+    source: 'api:ambiance',
+    model: 'mistral-small-latest',
+    success: true,
+    httpStatus: res.status,
+    ...usageFromMistralResponse(mistralData),
+  });
   const content = mistralData.choices?.[0]?.message?.content ?? '{}';
 
   try {

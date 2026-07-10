@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { logMistralUsage, usageFromMistralResponse } from '@/lib/mistral-usage';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
@@ -141,10 +142,18 @@ export async function applyContentGuard(
 
   if (!res.ok) {
     console.warn(`[content-guard] Mistral ${res.status} — guard ignoré`);
+    logMistralUsage({ source: 'content-guard', model: 'mistral-small-latest', success: false, httpStatus: res.status });
     return { modified: false, fields, issues: [] };
   }
 
-  const data = await res.json() as { choices: Array<{ message: { content: string } }> };
+  const data = await res.json() as { choices: Array<{ message: { content: string } }>; usage?: unknown };
+  logMistralUsage({
+    source: 'content-guard',
+    model: 'mistral-small-latest',
+    success: true,
+    httpStatus: res.status,
+    ...usageFromMistralResponse(data),
+  });
   const raw = data.choices[0]?.message?.content ?? '{}';
 
   try {

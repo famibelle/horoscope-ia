@@ -18,6 +18,7 @@ import type { WeatherData } from '@/app/api/weather/route';
 import type { Edition } from '@/lib/private/maryse-prompt';
 // Import vaudou compatibility
 import { getVaudouCompatibility, mergeCompatibilities } from '@/lib/private/vaudou-compatibility';
+import { logMistralUsage, usageFromMistralResponse } from '@/lib/mistral-usage';
 import { getVaudouContextForSign, SIGN_TO_LOA, SIGN_TO_VAUDOU_CONTEXT } from '@/lib/private/vaudou-mappings';
 import {
   animauxData,
@@ -365,10 +366,19 @@ Sans bloc de code markdown ni titre dans les valeurs JSON. Seule exception : les
   if (!res.ok) {
     console.log(`❌ Mistral échoué: ${res.status}`);
     logError('Échec appel Mistral', { status: res.status });
+    logMistralUsage({ source: 'generate-ambiances', model: 'mistral-small-latest', success: false, httpStatus: res.status });
     return null;
   }
 
   const data = await res.json();
+  logMistralUsage({
+    source: 'generate-ambiances',
+    model: 'mistral-small-latest',
+    success: true,
+    httpStatus: res.status,
+    durationMs: Date.now() - startTime,
+    ...usageFromMistralResponse(data),
+  });
   const content = data.choices?.[0]?.message?.content ?? '{}';
 
   try {

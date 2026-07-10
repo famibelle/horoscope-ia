@@ -12,6 +12,7 @@ import { SIGN_TO_LOA, SIGN_TO_VAUDOU_CONTEXT, getVaudouContextForSign } from '@/
 import { loasData } from '@/lib/private/vaudou-data';
 import * as fs from 'fs/promises';
 import * as path from 'path';
+import { logMistralUsage, usageFromMistralResponse } from '@/lib/mistral-usage';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
@@ -93,8 +94,18 @@ Rédige la "Dimension spirituelle" en français dans la voix de Maryse CondAI.`;
     }),
   });
 
-  if (!res.ok) throw new Error(`Mistral error: ${res.status}`);
+  if (!res.ok) {
+    logMistralUsage({ source: 'generate-spirituel', model: 'mistral-large-latest', success: false, httpStatus: res.status });
+    throw new Error(`Mistral error: ${res.status}`);
+  }
   const data = await res.json();
+  logMistralUsage({
+    source: 'generate-spirituel',
+    model: 'mistral-large-latest',
+    success: true,
+    httpStatus: res.status,
+    ...usageFromMistralResponse(data),
+  });
   return data.choices?.[0]?.message?.content?.trim() ?? '';
 }
 

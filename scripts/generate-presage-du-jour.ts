@@ -6,6 +6,7 @@ const PRESAGE_SYSTEM = `Tu es Maryse, conteuse guadeloupéenne. Tu réponds UNIQ
 INTERDIT : suggérer d'allumer une bougie, une flamme ou un feu — même symboliquement. Le présage reste une observation de la nature, pas un rituel.
 VOCABULAIRE : le tambour guadeloupéen s'appelle "ka" — jamais "tambour".`;
 import signeData from '@/lib/private/presage-du-jour-data.json';
+import { logMistralUsage, usageFromMistralResponse } from '@/lib/mistral-usage';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
@@ -192,12 +193,20 @@ async function generatePhrase(
 
   if (!res.ok) {
     logError(`Mistral échoué: ${res.status}`);
+    logMistralUsage({ source: 'generate-presage-du-jour', model: 'mistral-small-latest', success: false, httpStatus: res.status });
     return null;
   }
 
   const data = await res.json();
+  logMistralUsage({
+    source: 'generate-presage-du-jour',
+    model: 'mistral-small-latest',
+    success: true,
+    httpStatus: res.status,
+    ...usageFromMistralResponse(data),
+  });
   const content = data.choices?.[0]?.message?.content ?? '{}';
-  
+
   await logRawData('generate-presage-du-jour', prompt, content);
   
   return content.trim() || null;

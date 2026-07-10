@@ -15,6 +15,7 @@ import type { Edition } from '@/lib/private/maryse-prompt';
 import type { HoroscopeResponse } from '@/lib/horoscope-data';
 import { loadHoroscopeData, saveSingleHoroscope } from '@/lib/private/horoscope-file-cache';
 import { applySafetyFiltersToObject } from '@/lib/private/safety-filter';
+import { logMistralUsage, usageFromMistralResponse } from '@/lib/mistral-usage';
 
 const HOROSCOPE_API = 'https://freehoroscopeapi.com/api/v1/get-horoscope/daily';
 const MISTRAL_URL   = 'https://api.mistral.ai/v1/chat/completions';
@@ -170,8 +171,19 @@ async function generateTeaser(
       ],
     }),
   });
-  if (!res.ok) { console.error(`🤖 [MISTRAL] ❌ Erreur teaser: ${res.status}`); return ''; }
+  if (!res.ok) {
+    console.error(`🤖 [MISTRAL] ❌ Erreur teaser: ${res.status}`);
+    logMistralUsage({ source: 'api:horoscope:teaser', model: 'mistral-small-latest', success: false, httpStatus: res.status });
+    return '';
+  }
   const data = await res.json();
+  logMistralUsage({
+    source: 'api:horoscope:teaser',
+    model: 'mistral-small-latest',
+    success: true,
+    httpStatus: res.status,
+    ...usageFromMistralResponse(data),
+  });
   console.log(`🤖 [MISTRAL] ✅ Teaser généré pour ${signName}`);
   return data.choices?.[0]?.message?.content?.trim() ?? '';
 }
@@ -295,8 +307,19 @@ async function rewriteWithMistral(
       ],
     }),
   });
-  if (!res.ok) { console.error(`🤖 [MISTRAL] ❌ Erreur rewrite: ${res.status}`); return null; }
+  if (!res.ok) {
+    console.error(`🤖 [MISTRAL] ❌ Erreur rewrite: ${res.status}`);
+    logMistralUsage({ source: 'api:horoscope:rewrite', model: 'mistral-large-latest', success: false, httpStatus: res.status });
+    return null;
+  }
   const data = await res.json();
+  logMistralUsage({
+    source: 'api:horoscope:rewrite',
+    model: 'mistral-large-latest',
+    success: true,
+    httpStatus: res.status,
+    ...usageFromMistralResponse(data),
+  });
   const content: string = data.choices?.[0]?.message?.content ?? '';
   try {
     const parsed = JSON.parse(content);

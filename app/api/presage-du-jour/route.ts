@@ -4,6 +4,7 @@ import { detectEdition, todayGuadeloupe, getGuadeloupeHour } from '@/lib/edition
 import type { Edition } from '@/lib/private/maryse-prompt';
 import signeData from '@/lib/private/presage-du-jour-data.json';
 import { loadSigneDuJourData } from '@/lib/private/horoscope-file-cache';
+import { logMistralUsage, usageFromMistralResponse } from '@/lib/mistral-usage';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
@@ -149,8 +150,18 @@ async function generatePhrase(
     }),
   });
 
-  if (!res.ok) return null;
+  if (!res.ok) {
+    logMistralUsage({ source: 'api:presage-du-jour', model: 'mistral-small-latest', success: false, httpStatus: res.status });
+    return null;
+  }
   const data = await res.json();
+  logMistralUsage({
+    source: 'api:presage-du-jour',
+    model: 'mistral-small-latest',
+    success: true,
+    httpStatus: res.status,
+    ...usageFromMistralResponse(data),
+  });
   const content: string = data.choices?.[0]?.message?.content ?? '';
   return content.trim() || null;
 }

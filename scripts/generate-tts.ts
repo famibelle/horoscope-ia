@@ -6,6 +6,7 @@ import { buildTTSPrompt } from '@/lib/private/tts-prompt';
 import { MARYSE_AME } from '@/lib/private/maryse-prompt';
 import { normalizeForTTS } from '@/lib/tts-utils';
 import type { Edition } from '@/lib/private/maryse-prompt';
+import { logMistralUsage, usageFromMistralResponse } from '@/lib/mistral-usage';
 
 const EDITIONS: Edition[] = ['nuit', 'matin', 'midi', 'soir'];
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
@@ -102,8 +103,18 @@ async function optimizeText(sign: (typeof allSigns)[0], horoscope: any, date: st
       ],
     }),
   });
-  if (!res.ok) return null;
+  if (!res.ok) {
+    logMistralUsage({ source: 'generate-tts:optimize', model: LLM_MODEL, success: false, httpStatus: res.status });
+    return null;
+  }
   const data = await res.json();
+  logMistralUsage({
+    source: 'generate-tts:optimize',
+    model: LLM_MODEL,
+    success: true,
+    httpStatus: res.status,
+    ...usageFromMistralResponse(data),
+  });
   const content = data.choices?.[0]?.message?.content?.trim();
   return content ? normalizeForTTS(content) : null;
 }
@@ -116,8 +127,12 @@ async function generateMp3(text: string): Promise<Buffer | null> {
     headers: { Authorization: `Bearer ${MISTRAL_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ input: text, model: TTS_MODEL, response_format: 'mp3', voice_id: TTS_VOICE }),
   });
-  if (!res.ok) return null;
+  if (!res.ok) {
+    logMistralUsage({ source: 'generate-tts:audio', model: TTS_MODEL, endpoint: 'audio', success: false, httpStatus: res.status });
+    return null;
+  }
   const data = await res.json() as { audio_data?: string };
+  logMistralUsage({ source: 'generate-tts:audio', model: TTS_MODEL, endpoint: 'audio', success: !!data.audio_data, httpStatus: res.status });
   if (!data.audio_data) return null;
   return Buffer.from(data.audio_data, 'base64');
 }

@@ -14,6 +14,7 @@ import { lieuxData } from './private/lieux-data';
 import { kreyolData } from './private/kreyol-data';
 import { histoireData } from './private/histoire-data';
 import { MARYSE_TITRE_SYSTEM, MARYSE_TITRE_QUOTIDIEN_SYSTEM } from './private/maryse-prompt';
+import { logMistralUsage, usageFromMistralResponse } from './mistral-usage';
 
 // Charger le présage du jour depuis Supabase
 async function fetchPresageFromSupabase(date: string): Promise<PresageData | null> {
@@ -507,9 +508,17 @@ async function tryMistralKey(
           await new Promise(r => setTimeout(r, 1500 * attempt));
           continue;
         }
+        logMistralUsage({ source: 'newsletter:subject', model: 'mistral-large-latest', success: false, httpStatus: res.status });
         return null;
       }
       const data = await res.json();
+      logMistralUsage({
+        source: 'newsletter:subject',
+        model: 'mistral-large-latest',
+        success: true,
+        httpStatus: res.status,
+        ...usageFromMistralResponse(data),
+      });
       return data.choices?.[0]?.message?.content?.trim() ?? null;
     } catch (err: any) {
       console.warn(`[newsletter-subject] ${label} exception (tentative ${attempt}/${maxAttempts}): ${err?.message ?? err}`);

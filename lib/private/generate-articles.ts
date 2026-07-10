@@ -13,6 +13,7 @@
 
 import { writeFileSync } from 'fs';
 import { resolve } from 'path';
+import { logMistralUsage, usageFromMistralResponse } from '@/lib/mistral-usage';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
@@ -118,10 +119,18 @@ async function generateArticle(
 
   if (!res.ok) {
     const err = await res.text();
+    logMistralUsage({ source: 'generate-articles', model: 'mistral-large-latest', success: false, httpStatus: res.status });
     throw new Error(`Mistral ${res.status}: ${err}`);
   }
 
-  const data = await res.json() as { choices: { message: { content: string } }[] };
+  const data = await res.json() as { choices: { message: { content: string } }[]; usage?: unknown };
+  logMistralUsage({
+    source: 'generate-articles',
+    model: 'mistral-large-latest',
+    success: true,
+    httpStatus: res.status,
+    ...usageFromMistralResponse(data),
+  });
   const content = data.choices?.[0]?.message?.content ?? '';
   return JSON.parse(content) as Record<string, unknown>;
 }

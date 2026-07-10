@@ -10,6 +10,7 @@ import * as path from 'path';
 import { marked } from 'marked';
 import { sendEmailViaBrevo } from '../lib/brevo-api';
 import { signs } from '../lib/signs-data';
+import { logMistralUsage, usageFromMistralResponse } from '../lib/mistral-usage';
 
 // Lexique créole canonique (noms officiels du projet) — fourni à l'analyseur
 // sémantique pour qu'il ne les signale PAS comme fautes d'orthographe (ex. "Bèf a Bos").
@@ -125,8 +126,18 @@ async function callMistral(prompt: string): Promise<string> {
       ],
     }),
   });
-  if (!res.ok) throw new Error(`Mistral ${res.status}: ${await res.text()}`);
+  if (!res.ok) {
+    logMistralUsage({ source: 'quality-report', model: 'mistral-small-latest', success: false, httpStatus: res.status });
+    throw new Error(`Mistral ${res.status}: ${await res.text()}`);
+  }
   const data = await res.json();
+  logMistralUsage({
+    source: 'quality-report',
+    model: 'mistral-small-latest',
+    success: true,
+    httpStatus: res.status,
+    ...usageFromMistralResponse(data),
+  });
   return data.choices?.[0]?.message?.content ?? '';
 }
 

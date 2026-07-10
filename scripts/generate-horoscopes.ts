@@ -22,6 +22,9 @@ import { initDictionnaireCache, recordUsage, flushDictionnaireToSupabase } from 
 // Importer le garde-contenu (tournures involontairement suggestives)
 import { applyContentGuard } from '@/lib/private/content-guard';
 
+// Suivi de la consommation Mistral
+import { logMistralUsage, usageFromMistralResponse } from '@/lib/mistral-usage';
+
 // Parser les arguments en ligne de commande
 const args = process.argv.slice(2);
 const options = {
@@ -488,6 +491,15 @@ async function generateWithMistral(
           usage: data.usage
         });
 
+        logMistralUsage({
+          source: 'generate-horoscopes:horoscope',
+          model: 'mistral-large-latest',
+          success: true,
+          httpStatus: res.status,
+          durationMs: Date.now() - startTime,
+          ...usageFromMistralResponse(data),
+        });
+
         const content: string = data.choices?.[0]?.message?.content ?? '';
         logVerbose(`Contenu brut reçu: ${content.substring(0, 200)}${content.length > 200 ? '...' : ''}`);
         
@@ -509,6 +521,11 @@ async function generateWithMistral(
     // Tous les retries ont échoué
     console.log(`❌ Échec définitif pour ${signId} (${edition}) après ${maxAttempts} tentatives`);
     logVerboseError(`Dernière erreur: ${lastError?.message || 'Erreur inconnue'}`);
+    logMistralUsage({
+      source: 'generate-horoscopes:horoscope',
+      model: 'mistral-large-latest',
+      success: false,
+    });
     return null;
   }
 
@@ -569,6 +586,14 @@ async function generateTeaser(
   // fetchWithRetry garantit que res.ok est true
 
   const data = await res.json();
+  logMistralUsage({
+    source: 'generate-horoscopes:teaser',
+    model: 'mistral-small-latest',
+    success: true,
+    httpStatus: res.status,
+    durationMs: Date.now() - startTime,
+    ...usageFromMistralResponse(data),
+  });
   let teaser = data.choices?.[0]?.message?.content?.trim() ?? '';
   
   // ==========================================
