@@ -53,6 +53,11 @@ jobs:
           npm ci || npm install
           sudo apt-get install -y jq
 
+      - name: 🔑 Préflight Mistral (clé / quota)
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+        run: npx tsx scripts/check-mistral.ts
+
       - name: 🚀 Génération des Ambiances
         id: generate
         env:

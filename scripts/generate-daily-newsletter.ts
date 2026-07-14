@@ -99,6 +99,15 @@ async function main() {
   const date = todayGuadeloupe();
   console.log('🌅 Génération de la newsletter du jour...\n');
 
+  // GARDE-FOU : ne jamais envoyer une newsletter sans les horoscopes du jour
+  // (sinon les abonnés reçoivent du contenu générique hors persona).
+  const horoscopesDuJour = await fetchHoroscopesFromSupabase(date, 'matin');
+  if (horoscopesDuJour.length < signs.length) {
+    console.error(`❌ Horoscopes du ${date} incomplets (${horoscopesDuJour.length}/${signs.length} signes en base).`);
+    console.error('   → Envoi annulé. Vérifier le workflow de génération (clé/quota Mistral ?) puis relancer.');
+    process.exit(1);
+  }
+
   const existingToday = await getTodaysNewsletter();
 
   if (existingToday) {

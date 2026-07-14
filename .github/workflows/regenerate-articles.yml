@@ -56,6 +56,11 @@ jobs:
 
       - run: npm ci
 
+      - name: 🔑 Préflight Mistral (clé / quota)
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+        run: npx tsx scripts/check-mistral.ts
+
       - name: Régénérer les articles via Mistral
         env:
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}

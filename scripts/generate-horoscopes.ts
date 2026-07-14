@@ -86,6 +86,10 @@ import { todayGuadeloupe } from '@/lib/edition';
 
 const MISTRAL_URL = 'https://api.mistral.ai/v1/chat/completions';
 
+// Passe à true dès qu'un appel Mistral renvoie 401/403 (clé invalide ou quota
+// mensuel épuisé) : plus aucun retry ne peut réussir, on interrompt le run.
+let mistralUnavailable = false;
+
 const SIGN_EN: Record<string, string> = {
   belier: 'aries',
   taureau: 'taurus',
@@ -233,6 +237,11 @@ async function retry<T>(
       return await operation();
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
+      const status = (error as { status?: number }).status;
+      if (status === 401 || status === 403) {
+        // Clé invalide ou quota épuisé : aucun retry ne peut réussir
+        throw lastError;
+      }
       const delayMs = baseDelay * Math.pow(2, attempt - 1);
       logVerboseError(`⚠️  Tentative ${attempt}/${maxRetries} échouée pour ${operationName}: ${lastError.message}. Retry dans ${delayMs}ms...`);
       await delay(delayMs);
@@ -253,7 +262,9 @@ async function fetchWithRetry(
     async () => {
       const res = await fetch(url, options);
       if (!res.ok) {
-        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        const err: Error & { status?: number } = new Error(`HTTP ${res.status}: ${res.statusText}`);
+        err.status = res.status;
+        throw err;
       }
       return res;
     },
@@ -508,8 +519,20 @@ async function generateWithMistral(
         return cleaned;
       } catch (fetchError) {
         lastError = fetchError instanceof Error ? fetchError : new Error(String(fetchError));
+        const status = (fetchError as { status?: number }).status;
+        if (status === 401 || status === 403) {
+          mistralUnavailable = true;
+          console.log(`🛑 Mistral HTTP ${status} pour ${signId} (${edition}) — clé invalide ou quota épuisé, abandon sans retry`);
+          logMistralUsage({
+            source: 'generate-horoscopes:horoscope',
+            model: 'mistral-large-latest',
+            success: false,
+            httpStatus: status,
+          });
+          return null;
+        }
         logVerboseError(`⚠️  Échec fetch Mistral (tentative ${attempt}/${maxAttempts}): ${lastError.message}`);
-        
+
         if (attempt < maxAttempts) {
           const retryDelay = 5000 * attempt;
           logVerbose(`Retry dans ${retryDelay}ms...`);
@@ -525,6 +548,7 @@ async function generateWithMistral(
       source: 'generate-horoscopes:horoscope',
       model: 'mistral-large-latest',
       success: false,
+      httpStatus: (lastError as (Error & { status?: number }) | undefined)?.status ?? null,
     });
     return null;
   }
@@ -558,28 +582,43 @@ async function generateTeaser(
   logVerbose(`Modèle: mistral-small-latest, Temp: 0.8, Max tokens: 120`);
 
   const startTime = Date.now();
-  const res = await fetchWithRetry(
-    MISTRAL_URL,
-    {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'mistral-small-latest',
-        temperature: 0.8,
-        max_tokens: 120,
-        messages: [
-          {
-            role: 'system',
-            content:
-              `Tu es Maryse CondAI. Rédige une accroche de 2 phrases maximum à partir de l'horoscope du ${signName}, en voix directe et sensuelle, qui donne envie de lire la suite sans tout révéler. Ancre-toi dans les symboles propres à ce signe — pas dans des images génériques (mer, vent, danse, racines). Pas de titre, pas de ponctuation finale superflue.`,
-          },
-          { role: 'user', content: fullText },
-        ],
-      }),
-    },
-    3,
-    `Mistral-small teaser pour ${signName}`
-  );
+  let res: Response;
+  try {
+    res = await fetchWithRetry(
+      MISTRAL_URL,
+      {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'mistral-small-latest',
+          temperature: 0.8,
+          max_tokens: 120,
+          messages: [
+            {
+              role: 'system',
+              content:
+                `Tu es Maryse CondAI. Rédige une accroche de 2 phrases maximum à partir de l'horoscope du ${signName}, en voix directe et sensuelle, qui donne envie de lire la suite sans tout révéler. Ancre-toi dans les symboles propres à ce signe — pas dans des images génériques (mer, vent, danse, racines). Pas de titre, pas de ponctuation finale superflue.`,
+            },
+            { role: 'user', content: fullText },
+          ],
+        }),
+      },
+      3,
+      `Mistral-small teaser pour ${signName}`
+    );
+  } catch (err) {
+    // Le teaser est optionnel : un échec ne doit pas faire perdre l'horoscope
+    const status = (err as { status?: number }).status;
+    if (status === 401 || status === 403) mistralUnavailable = true;
+    logMistralUsage({
+      source: 'generate-horoscopes:teaser',
+      model: 'mistral-small-latest',
+      success: false,
+      httpStatus: status ?? null,
+    });
+    console.log(`   ⚠️ Teaser indisponible (${err instanceof Error ? err.message : err}) — horoscope publié sans teaser`);
+    return '';
+  }
 
   logVerbose(`Réponse Mistral small: ${res.status} ${res.statusText} (${Date.now() - startTime}ms)`);
 
@@ -845,6 +884,9 @@ export async function generateAllHoroscopes() {
         const structured = await generateWithMistral(sign.id, rawText, weather, edition);
         
         if (!structured) {
+          if (mistralUnavailable) {
+            throw new Error('Clé Mistral invalide ou quota mensuel épuisé (HTTP 401/403) — génération interrompue');
+          }
           console.log(`❌ [${generated + skipped + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Pas de réponse\n`);
           continue;
         }
@@ -935,11 +977,20 @@ export async function generateAllHoroscopes() {
       successRate: `${((generated / total) * 100).toFixed(1)}%`
     });
     
+    await writeRunSummary([
+      `- Générés : ${generated}/${total} (Netlify Blobs)`,
+      `- Déjà en cache : ${skipped}/${total}`,
+    ]);
+
     // VALIDATION: Vérifier que tous les horoscopes ont été générés
     if (generated + skipped < total) {
       throw new Error(`❌ VALIDATION ÉCHOUÉE: Seulement ${generated + skipped}/${total} horoscopes générés`);
     }
   } catch (error) {
+    // Si la clé Mistral est morte, inutile de basculer en mode local : mêmes appels, même 401
+    if (mistralUnavailable) {
+      throw error instanceof Error ? error : new Error(String(error));
+    }
 
     logVerbose('Netlify Blobs non disponible, bascule en mode local', {
       error: error instanceof Error ? error.message : String(error)
@@ -993,6 +1044,9 @@ export async function generateAllHoroscopes() {
         const structured = await generateWithMistral(sign.id, rawText, weather, edition);
         
         if (!structured) {
+          if (mistralUnavailable) {
+            throw new Error('Clé Mistral invalide ou quota mensuel épuisé (HTTP 401/403) — génération interrompue');
+          }
           console.log(`❌ [${generated + 1}/${total}] ${sign.id} (${edition}) - ÉCHEC: Pas de réponse\n`);
           continue;
         }
@@ -1071,6 +1125,10 @@ export async function generateAllHoroscopes() {
       successRate: `${((Object.keys(results).length / total) * 100).toFixed(1)}%`
     });
     
+    await writeRunSummary([
+      `- Générés : ${Object.keys(results).length}/${total} (mode local)`,
+    ]);
+
     // VALIDATION: Vérifier que tous les horoscopes ont été générés
     if (Object.keys(results).length < total) {
       throw new Error(`❌ VALIDATION ÉCHOUÉE: Seulement ${Object.keys(results).length}/${total} horoscopes générés`);
@@ -1080,12 +1138,31 @@ export async function generateAllHoroscopes() {
   await flushDictionnaireToSupabase();
 }
 
+// Résumé d'exécution repris dans l'artifact du workflow (HORO_REPORT.md)
+async function writeRunSummary(lines: string[]): Promise<void> {
+  try {
+    const fs = await import('fs/promises');
+    await fs.mkdir('logs', { recursive: true });
+    await fs.writeFile('logs/HORO_SUMMARY.md', ['# Résumé génération horoscopes', ...lines, ''].join('\n'));
+  } catch {
+    // best-effort
+  }
+}
+
 // Exécuter
 generateAllHoroscopes()
   .then(() => {
     logVerbose('🎉 Script terminé avec succès');
   })
-  .catch((error) => {
+  .catch(async (error) => {
     logVerboseError('❌ Erreur fatale dans le script', error instanceof Error ? error.message : error);
     console.error(error);
+    await writeRunSummary([
+      `- 🛑 Run en échec : ${error instanceof Error ? error.message : String(error)}`,
+      ...(mistralUnavailable
+        ? ['- Cause : clé Mistral refusée (401/403) — clé invalide ou quota mensuel épuisé']
+        : []),
+    ]);
+    // Exit non-zéro pour que le workflow GitHub Actions passe en échec (et notifie)
+    process.exitCode = 1;
   });

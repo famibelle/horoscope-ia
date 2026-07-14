@@ -46,6 +46,11 @@ jobs:
 
       - run: npm ci
 
+      - name: 🔑 Préflight Mistral (clé / quota)
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+        run: npx tsx scripts/check-mistral.ts
+
       - name: 🎙️ Génération des MP3
         env:
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}

@@ -367,6 +367,10 @@ Sans bloc de code markdown ni titre dans les valeurs JSON. Seule exception : les
     console.log(`❌ Mistral échoué: ${res.status}`);
     logError('Échec appel Mistral', { status: res.status });
     logMistralUsage({ source: 'generate-ambiances', model: 'mistral-small-latest', success: false, httpStatus: res.status });
+    if (res.status === 401 || res.status === 403) {
+      // Clé invalide ou quota mensuel épuisé : inutile de tenter les signes suivants
+      throw new Error(`Mistral HTTP ${res.status} — clé invalide ou quota mensuel épuisé, génération interrompue`);
+    }
     return null;
   }
 
@@ -527,6 +531,11 @@ async function generateAllAmbiances() {
     successRate: `${((generated / total) * 100).toFixed(1)}%`
   });
   await flushGlossaryToSupabase();
+
+  // VALIDATION: un échec partiel doit faire échouer le workflow (visibilité)
+  if (failed > 0) {
+    throw new Error(`❌ VALIDATION ÉCHOUÉE: ${failed}/${total} ambiances en échec`);
+  }
 }
 
 // Exécuter
@@ -537,4 +546,6 @@ generateAllAmbiances()
   .catch((error) => {
     logError('❌ Erreur fatale dans le script', error instanceof Error ? error.message : error);
     console.error(error);
+    // Exit non-zéro pour que le workflow GitHub Actions passe en échec (et notifie)
+    process.exitCode = 1;
   });

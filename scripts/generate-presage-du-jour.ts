@@ -194,6 +194,10 @@ async function generatePhrase(
   if (!res.ok) {
     logError(`Mistral échoué: ${res.status}`);
     logMistralUsage({ source: 'generate-presage-du-jour', model: 'mistral-small-latest', success: false, httpStatus: res.status });
+    if (res.status === 401 || res.status === 403) {
+      // Clé invalide ou quota mensuel épuisé : échec franc plutôt qu'un présage sans phrase
+      throw new Error(`Mistral HTTP ${res.status} — clé invalide ou quota mensuel épuisé, génération interrompue`);
+    }
     return null;
   }
 
@@ -319,4 +323,6 @@ generatePresageDuJour()
   .catch((error) => {
     logError('❌ Erreur fatale dans le script', error instanceof Error ? error.message : error);
     console.error(error);
+    // Exit non-zéro pour que le workflow GitHub Actions passe en échec (et notifie)
+    process.exitCode = 1;
   });

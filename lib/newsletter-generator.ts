@@ -668,24 +668,12 @@ export async function generateDailyNewsletter(
     text += `"${presage.presage_naturel}"\n`;
   }
 
-  const allSignsData: SignHoroscope[] = horoscopes.length > 0
-    ? horoscopes
-    : signs.map(sign => ({
-        sign,
-        horoscope: {
-          ouverture:  `Les esprits de Karukera accompagnent les natifs du ${sign.name} aujourd'hui.`,
-          amour:      'Le cœur sait où aller, laissez-le guider.',
-          travail:    'Votre persévérance porte ses fruits.',
-          argent:     'Gérez avec sagesse ce qui vous est confié.',
-          amitie:     'Le lyannaj est votre force ce jour.',
-          prediction: 'Un présage favorable se dessine à l\'horizon.',
-          conseil:    'Écoutez la voix des ancêtres en vous.',
-          signFr:     sign.name,
-          weather:    '',
-          edition:    'matin',
-          source:     'fallback',
-        } as HoroscopeResponse,
-      }));
+  // Pas d'horoscopes du jour → on refuse de fabriquer du contenu générique
+  // hors persona (l'appelant décide : annuler l'envoi, alerter, réessayer).
+  if (horoscopes.length === 0) {
+    throw new Error(`Aucun horoscope Supabase pour ${date} — newsletter annulée (pas de contenu générique envoyé).`);
+  }
+  const allSignsData: SignHoroscope[] = horoscopes;
 
   // Index cliquable : permet d'aller directement à son signe
   htmlBody += getIndexTemplate(allSignsData);

@@ -451,6 +451,19 @@ const NO_CACHE_HEADERS = {
   'Cache-Control': 'no-store, max-age=30',
 };
 
+// Fallback J-1 : cache court pour que le contenu du jour prenne la place
+// dès qu'il est généré, sans pin CDN de 8h
+const PREVIOUS_DAY_HEADERS = {
+  'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=900',
+  'netlify-vary': 'query=edition|date|userHour|userDate',
+};
+
+function previousDayISO(date: string): string {
+  const d = new Date(`${date}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() - 1);
+  return d.toISOString().split('T')[0];
+}
+
 /* ── Route ─────────────────────────────────────────────────────────────────── */
 
 export async function GET(
@@ -631,13 +644,11 @@ export async function GET(
   console.log(`\n[API HOROSCOPE] ÉTAPE 4/4: Fallback`);
   
   const weather = await fetchWeather(date);
-  
-  // 🔹 Si la génération en arrière-plan est activée, lancer la génération
-  // mais retourner une réponse immédiate
+
+  // 🔹 Si la génération en arrière-plan est activée, la lancer (fire-and-forget)
   if (ENABLE_BACKGROUND_GENERATION && ENABLE_ON_DEMAND_GENERATION) {
     console.log(`[API HOROSCOPE] 🔄 Lancement de la génération en arrière-plan...`);
-    
-    // Lancer la génération sans attendre (fire-and-forget)
+
     generateHoroscopeWithMistral(signId, date, edition)
       .then(async (structured) => {
         if (structured) {
@@ -650,8 +661,38 @@ export async function GET(
       .catch((err) => {
         console.error(`[API HOROSCOPE] ❌ Génération en arrière-plan échouée:`, err);
       });
-    
-    // Retourner une réponse de "génération en cours"
+  }
+
+  // 🔹 Fallback J-1 : servir l'horoscope de la veille (vrai contenu Maryse)
+  // plutôt qu'un message générique quand la génération du jour a échoué
+  try {
+    const { supabase } = await import('@/lib/supabase');
+    const prevDate = previousDayISO(date);
+    const { data: prevRow } = await supabase
+      .from('horoscopes')
+      .select('*')
+      .eq('date', prevDate)
+      .eq('sign_id', signId)
+      .eq('edition', edition)
+      .single();
+    if (prevRow) {
+      console.log(`[API HOROSCOPE] ✅ FALLBACK J-1: ${prevDate}|${signId}|${edition}`);
+      const payload = {
+        ouverture: prevRow.ouverture, amour: prevRow.amour, travail: prevRow.travail,
+        argent: prevRow.argent, amitie: prevRow.amitie, prediction: prevRow.prediction,
+        conseil: prevRow.conseil, teaser: prevRow.teaser,
+        signFr: prevRow.sign_fr, weather: prevRow.weather, edition: prevRow.edition,
+        source: 'previous-day',
+        spirituelMensuel,
+      };
+      return NextResponse.json(payload, { headers: PREVIOUS_DAY_HEADERS });
+    }
+  } catch (err) {
+    console.error(`[API HOROSCOPE] ❌ FALLBACK J-1 ERROR:`, err instanceof Error ? err.message : err);
+  }
+
+  // 🔹 Réponse "génération en cours" si une génération arrière-plan a été lancée
+  if (ENABLE_BACKGROUND_GENERATION && ENABLE_ON_DEMAND_GENERATION) {
     const generatingResponse = buildGeneratingResponse(sign, date, edition, weather);
 
     console.log(`[API HOROSCOPE] ⏳ RETOUR: Génération en cours`);
