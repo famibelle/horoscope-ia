@@ -1,0 +1,68 @@
+name: 🧹 Purge MP3 TTS (rétention 48 h)
+
+# Exécution quotidienne avec une rétention de 48 h : aucun MP3 ne dépasse
+# jamais 48 h en stockage. (Un cron toutes les 48 h laisserait les fichiers
+# atteindre 96 h avant leur suppression.)
+on:
+  schedule:
+    - cron: '30 5 * * *'   # 05:30 UTC = 01:30 Guadeloupe, après toutes les générations
+  workflow_dispatch:
+    inputs:
+      retention_hours:
+        description: 'Rétention en heures (défaut : 48)'
+        required: false
+        default: '48'
+      dry_run:
+        description: 'Simulation : lister sans supprimer'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  purge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛡️ Audit de Sécurité & Préparation
+        run: |
+          if [ "${{ github.ref_name }}" != "vaudou" ]; then
+            echo "❌ ERREUR: Branche vaudou requise."
+            exit 1
+          fi
+          if [ -z "${{ secrets.SUPABASE_URL }}" ] || [ -z "${{ secrets.SUPABASE_SERVICE_KEY }}" ]; then
+            echo "❌ ERREUR: Secrets Supabase manquants."
+            exit 1
+          fi
+
+      - name: Configurer SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SUBMODULE_DEPLOY_KEY }}
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📦 Installation Dépendances
+        run: npm ci || npm install
+
+      - name: 🧹 Purge du bucket tts-audio
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          RETENTION="${{ inputs.retention_hours || '48' }}"
+          DRY_RUN=""
+          if [ "${{ inputs.dry_run }}" == "true" ]; then
+            DRY_RUN="--dry-run"
+          fi
+          npx tsx scripts/purge-tts-storage.ts --retention-hours="$RETENTION" $DRY_RUN

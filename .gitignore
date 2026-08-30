@@ -38,3 +38,7 @@ data/*
 TODO.md
 TODO-*.md
 CLAUDE.md
+
+# Captures d'écran de debug (Playwright MCP, vérifications visuelles)
+/*.png
+.playwright-mcp/

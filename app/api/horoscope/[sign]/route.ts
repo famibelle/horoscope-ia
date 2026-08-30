@@ -705,5 +705,7 @@ export async function GET(
 
   const fallbackResponse = buildFallbackResponse(sign, weather, edition);
 
-  return NextResponse.json({ ...fallbackResponse, spirituelMensuel }, { headers: CACHE_HEADERS });
+  // Jamais mis en cache : un repli dégradé épinglé 8 h au CDN survivrait au
+  // rétablissement des données et continuerait d'être servi aux visiteurs.
+  return NextResponse.json({ ...fallbackResponse, spirituelMensuel }, { headers: NO_CACHE_HEADERS });
 }

@@ -22,7 +22,8 @@
     "test-brevo-connection": "npx tsx scripts/send-brevo-test.ts --test-connection",
     "generate-daily-newsletter": "npx tsx scripts/generate-daily-newsletter.ts",
     "fix-newsletter-previews": "npx tsx scripts/fix-newsletter-previews.ts",
-    "mistral-usage-report": "npx tsx scripts/mistral-usage-report.ts"
+    "mistral-usage-report": "npx tsx scripts/mistral-usage-report.ts",
+    "purge-tts": "npx tsx scripts/purge-tts-storage.ts"
   },
   "dependencies": {
     "@netlify/blobs": "^10.7.4",

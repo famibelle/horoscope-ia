@@ -140,21 +140,7 @@ export async function POST(req: NextRequest) {
   // Clé de cache pour le MP3
   const cacheKey = `tts|${userDate}|${signName.toLowerCase()}|${edition}`;
 
-  // 1. Vérifier Supabase Storage (MP3 pré-générés par GitHub Actions)
-  const supabaseUrl = process.env.SUPABASE_URL;
-  if (supabaseUrl) {
-    const storagePath = `${userDate}/${signName.toLowerCase()}/${edition}.mp3`;
-    const storagePublicUrl = `${supabaseUrl}/storage/v1/object/public/tts-audio/${storagePath}`;
-    try {
-      const head = await fetch(storagePublicUrl, { method: 'HEAD' });
-      if (head.ok) {
-        console.log('[TTS] Supabase Storage hit:', storagePath);
-        return NextResponse.redirect(storagePublicUrl, { status: 302 });
-      }
-    } catch { /* fall through */ }
-  }
-
-  // 2. Vérifier le cache TTS (MP3)
+  // 1. Vérifier le cache TTS (MP3)
   const cached = await getTtsCached(cacheKey);
   if (cached?.audio) {
     console.log('[TTS] Cache hit pour:', cacheKey, '-> texte:', cached.text);
