@@ -49,17 +49,26 @@ function buildCreoleIndex(): void {
  * Charge toutes les entrées depuis Supabase dans le cache mémoire.
  */
 export async function initDictionnaireCache(): Promise<void> {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/dictionnaire?select=*`, {
-    headers: {
-      'Authorization': `Bearer ${SUPABASE_KEY}`,
-      'apikey': SUPABASE_KEY,
-    },
-  });
-  if (!res.ok) {
-    console.warn('[DICTIONNAIRE] Impossible de charger depuis Supabase, cache vide.');
+  let rows: any[];
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/dictionnaire?select=*`, {
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'apikey': SUPABASE_KEY,
+      },
+    });
+    if (!res.ok) {
+      console.warn('[DICTIONNAIRE] Impossible de charger depuis Supabase, cache vide.');
+      return;
+    }
+    rows = await res.json();
+  } catch (err) {
+    // Enrichissement optionnel : une panne réseau/DNS Supabase ne doit pas
+    // interrompre la génération avant le moindre appel Mistral.
+    console.warn('[DICTIONNAIRE] ⚠️ Supabase injoignable — cache vide, la génération continue :',
+      err instanceof Error ? err.message : err);
     return;
   }
-  const rows: any[] = await res.json();
   _cache = {};
   for (const row of rows) {
     _cache[row.id] = {
@@ -131,23 +140,30 @@ export async function flushDictionnaireToSupabase(): Promise<void> {
     updated_at: new Date().toISOString(),
   }));
 
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/dictionnaire?on_conflict=id`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${SUPABASE_KEY}`,
-      'apikey': SUPABASE_KEY,
-      'Prefer': 'resolution=merge-duplicates,return=minimal',
-    },
-    body: JSON.stringify(rows),
-  });
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/dictionnaire?on_conflict=id`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'apikey': SUPABASE_KEY,
+        'Prefer': 'resolution=merge-duplicates,return=minimal',
+      },
+      body: JSON.stringify(rows),
+    });
 
-  if (!res.ok) {
-    const text = await res.text();
-    console.error(`[DICTIONNAIRE] ❌ Erreur flush Supabase: ${res.status} ${text}`);
-  } else {
-    console.log(`[DICTIONNAIRE] ✅ ${rows.length} entrées mises à jour dans Supabase`);
-    _dirty = false;
+    if (!res.ok) {
+      const text = await res.text();
+      console.error(`[DICTIONNAIRE] ❌ Erreur flush Supabase: ${res.status} ${text}`);
+    } else {
+      console.log(`[DICTIONNAIRE] ✅ ${rows.length} entrées mises à jour dans Supabase`);
+      _dirty = false;
+    }
+  } catch (err) {
+    // Appelé en fin de run : perdre les compteurs d'usage ne doit pas
+    // invalider des horoscopes déjà générés et sauvegardés.
+    console.error('[DICTIONNAIRE] ❌ Flush Supabase impossible, compteurs perdus :',
+      err instanceof Error ? err.message : err);
   }
 }
 

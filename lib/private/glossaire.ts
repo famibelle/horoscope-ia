@@ -29,17 +29,26 @@ let _dirty = false;
  * Charge tous les termes depuis Supabase dans le cache mémoire.
  */
 export async function initGlossaryCache(): Promise<void> {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/glossaire?select=*`, {
-    headers: {
-      'Authorization': `Bearer ${SUPABASE_KEY}`,
-      'apikey': SUPABASE_KEY,
-    },
-  });
-  if (!res.ok) {
-    console.warn('[GLOSSAIRE] Impossible de charger depuis Supabase, cache vide.');
+  let rows: any[];
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/glossaire?select=*`, {
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'apikey': SUPABASE_KEY,
+      },
+    });
+    if (!res.ok) {
+      console.warn('[GLOSSAIRE] Impossible de charger depuis Supabase, cache vide.');
+      return;
+    }
+    rows = await res.json();
+  } catch (err) {
+    // Le glossaire n'est qu'un enrichissement : une panne réseau/DNS Supabase
+    // ne doit pas interrompre la génération avant le moindre appel Mistral.
+    console.warn('[GLOSSAIRE] ⚠️ Supabase injoignable — cache vide, la génération continue :',
+      err instanceof Error ? err.message : err);
     return;
   }
-  const rows: any[] = await res.json();
   _cache = {};
   for (const row of rows) {
     _cache[row.terme] = {
@@ -71,22 +80,29 @@ export async function flushGlossaryToSupabase(): Promise<void> {
     synonyms: v.synonyms ?? null,
     vaudou: v.vaudou ?? false,
   }));
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/glossaire?on_conflict=terme`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${SUPABASE_KEY}`,
-      'apikey': SUPABASE_KEY,
-      'Prefer': 'resolution=merge-duplicates,return=minimal',
-    },
-    body: JSON.stringify(rows),
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    console.error(`[GLOSSAIRE] ❌ Erreur flush Supabase: ${res.status} ${text}`);
-  } else {
-    console.log(`[GLOSSAIRE] ✅ ${rows.length} termes sauvegardés dans Supabase`);
-    _dirty = false;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/glossaire?on_conflict=terme`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'apikey': SUPABASE_KEY,
+        'Prefer': 'resolution=merge-duplicates,return=minimal',
+      },
+      body: JSON.stringify(rows),
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      console.error(`[GLOSSAIRE] ❌ Erreur flush Supabase: ${res.status} ${text}`);
+    } else {
+      console.log(`[GLOSSAIRE] ✅ ${rows.length} termes sauvegardés dans Supabase`);
+      _dirty = false;
+    }
+  } catch (err) {
+    // Appelé en fin de run : perdre les enrichissements du glossaire ne doit
+    // pas invalider des horoscopes déjà générés et sauvegardés.
+    console.error('[GLOSSAIRE] ❌ Flush Supabase impossible, termes perdus :',
+      err instanceof Error ? err.message : err);
   }
 }
 
