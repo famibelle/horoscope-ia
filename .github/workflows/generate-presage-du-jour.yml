@@ -96,3 +96,11 @@ jobs:
       - name: ✅ Vérification Supabase
         if: success()
         run: echo "✅ Présage du jour écrit dans Supabase — pas de commit git nécessaire."
+
+      - name: 🚨 Alerte en cas d'échec
+        if: failure()
+        uses: ./.github/actions/notify-failure
+        with:
+          brevo_api_key: ${{ secrets.BREVO_API_KEY }}
+          email_from: ${{ secrets.EMAIL_FROM }}
+          alert_email: ${{ secrets.ALERT_EMAIL }}

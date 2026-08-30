@@ -66,3 +66,11 @@ jobs:
             DRY_RUN="--dry-run"
           fi
           npx tsx scripts/purge-tts-storage.ts --retention-hours="$RETENTION" $DRY_RUN
+
+      - name: 🚨 Alerte en cas d'échec
+        if: failure()
+        uses: ./.github/actions/notify-failure
+        with:
+          brevo_api_key: ${{ secrets.BREVO_API_KEY }}
+          email_from: ${{ secrets.EMAIL_FROM }}
+          alert_email: ${{ secrets.ALERT_EMAIL }}

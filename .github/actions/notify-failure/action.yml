@@ -1,0 +1,78 @@
+name: Alerte échec
+description: >
+  Envoie un email Brevo quand un job planifié échoue. En curl pur, sans npm ni
+  node : l'alerte part même si c'est l'installation des dépendances qui a cassé.
+  Limite connue : nécessite que actions/checkout ait déjà tourné, donc un échec
+  survenu avant le checkout ne déclenche pas d'alerte.
+
+inputs:
+  brevo_api_key:
+    description: Clé API Brevo
+    required: true
+  email_from:
+    description: "Adresse expéditrice (sert aussi de destinataire par défaut)"
+    required: true
+  alert_email:
+    description: "Destinataire de l'alerte (défaut : email_from)"
+    required: false
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        BREVO_API_KEY: ${{ inputs.brevo_api_key }}
+        EMAIL_FROM: ${{ inputs.email_from }}
+        ALERT_EMAIL: ${{ inputs.alert_email }}
+        WF: ${{ github.workflow }}
+        RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        BRANCH: ${{ github.ref_name }}
+        SHA: ${{ github.sha }}
+        EVENT: ${{ github.event_name }}
+      run: |
+        set -uo pipefail
+
+        if [ -z "${BREVO_API_KEY}" ]; then
+          echo "::warning::BREVO_API_KEY absent — alerte non envoyée."
+          exit 0
+        fi
+
+        TO="${ALERT_EMAIL:-}"
+        [ -z "$TO" ] && TO="${EMAIL_FROM}"
+        if [ -z "$TO" ]; then
+          echo "::warning::Aucun destinataire (ALERT_EMAIL et EMAIL_FROM vides) — alerte non envoyée."
+          exit 0
+        fi
+
+        WHEN=$(TZ=America/Guadeloupe date '+%Y-%m-%d %H:%M')
+        SUBJECT="[Zodyak] Échec — ${WF}"
+
+        HTML=$(cat <<HTMLEOF
+        <p><strong>${WF}</strong> a échoué.</p>
+        <ul>
+          <li>Quand : ${WHEN} (Guadeloupe)</li>
+          <li>Branche : ${BRANCH}</li>
+          <li>Déclencheur : ${EVENT}</li>
+          <li>Commit : ${SHA}</li>
+        </ul>
+        <p><a href="${RUN_URL}">Ouvrir les logs du run</a></p>
+        HTMLEOF
+        )
+        TEXT="${WF} a échoué le ${WHEN} (Guadeloupe) — branche ${BRANCH}, déclencheur ${EVENT}. Logs : ${RUN_URL}"
+
+        BODY=$(jq -n \
+          --arg from "$EMAIL_FROM" --arg to "$TO" --arg subject "$SUBJECT" \
+          --arg html "$HTML" --arg text "$TEXT" \
+          '{sender:{email:$from,name:"Zodyak CI"},to:[{email:$to}],subject:$subject,htmlContent:$html,textContent:$text}')
+
+        CODE=$(curl -s -o /tmp/brevo-alert.txt -w '%{http_code}' --max-time 30 \
+          -X POST https://api.brevo.com/v3/smtp/email \
+          -H "api-key: ${BREVO_API_KEY}" -H 'Content-Type: application/json' \
+          -d "$BODY")
+
+        if [ "$CODE" = "201" ] || [ "$CODE" = "202" ]; then
+          echo "✅ Alerte envoyée à ${TO}"
+        else
+          echo "::warning::Envoi de l'alerte échoué (HTTP ${CODE}) : $(head -c 300 /tmp/brevo-alert.txt)"
+        fi
