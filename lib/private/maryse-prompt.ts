@@ -267,10 +267,29 @@ ${INSTRUCTIONS_GENERALES}
 
 Tu rédiges UNIQUEMENT le signe du jour — une plante, un arbre ou un animal de la Caraïbe. Commence OBLIGATOIREMENT par une variation de "Si tu croises" suivie du nom créole. PAS de description physique. UNE SEULE phrase courte — s'arrêter après le premier point. Pas de titre, pas de formule introductive.`;
 
+/* ── Ambiances (lune, scores, compatibilité) ─────────────────────────── */
+// Tâche courte et cadrée : le schéma JSON complet est fourni dans le prompt
+// utilisateur. On assemble IDENTITE + INSTRUCTIONS_GENERALES sans MARYSE_AME
+// ni la queue horoscope de MARYSE_SYSTEM — la biographie et le contrat à
+// 7 clés n'ont aucune prise sur des conseils de 2 phrases, et pesaient
+// ~2 600 tokens d'entrée à chaque appel.
+
+export const MARYSE_AMBIANCE_SYSTEM = `${MARYSE_IDENTITE}
+
+${INSTRUCTIONS_GENERALES}
+
+Tu rédiges les ambiances du jour — scores d'énergie, conseils de lune et compatibilités. Réponds UNIQUEMENT avec un objet JSON valide respectant exactement le schéma fourni dans le message suivant : mêmes clés, même imbrication, aucune clé en plus.
+
+Chaque valeur textuelle fait 2 phrases maximum. Va droit au geste concret, sans préambule ni formule d'ouverture.
+
+Sans bloc de code markdown ni commentaire, juste le JSON brut. Seule exception dans les valeurs : les astérisques simples autour des mots créoles (*mo kreyol*).`;
+
 /* ── Objet d'email - Newsletter ──────────────────────────────────────── */
-// Blocs de tâche dédiés à l'objet du mail. Assemblés avec les briques de la
-// persona (AME + IDENTITE + INSTRUCTIONS_GENERALES) SANS la queue JSON de
-// MARYSE_SYSTEM, qui forcerait une sortie à 7 clés au lieu d'un titre unique.
+// Blocs de tâche dédiés à l'objet du mail. Assemblés avec IDENTITE +
+// INSTRUCTIONS_GENERALES SANS la queue JSON de MARYSE_SYSTEM, qui forcerait
+// une sortie à 7 clés au lieu d'un titre unique, et SANS MARYSE_AME : une
+// ligne de 70 caractères ne tire rien de la biographie, qui coûtait
+// ~1 950 tokens d'entrée par signe et par jour.
 
 // Règles communes aux deux variantes (format + variété + anti-répétition).
 const TITRE_MAIL_REGLES = `Contraintes :
@@ -305,17 +324,13 @@ Ancre-toi dans le signe du jour fourni et ce qu'il évoque. Ne t'adresse PAS à 
 
 ${TITRE_MAIL_REGLES}`;
 
-export const MARYSE_TITRE_SYSTEM = `${MARYSE_AME}
-
-${MARYSE_IDENTITE}
+export const MARYSE_TITRE_SYSTEM = `${MARYSE_IDENTITE}
 
 ${INSTRUCTIONS_GENERALES}
 
 ${PROMPT_TITRE_MAIL}`;
 
-export const MARYSE_TITRE_QUOTIDIEN_SYSTEM = `${MARYSE_AME}
-
-${MARYSE_IDENTITE}
+export const MARYSE_TITRE_QUOTIDIEN_SYSTEM = `${MARYSE_IDENTITE}
 
 ${INSTRUCTIONS_GENERALES}
 

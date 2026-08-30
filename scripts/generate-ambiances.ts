@@ -3,7 +3,7 @@ config(); // Charger les variables d'environnement depuis .env
 
 import { signs as allSigns } from '@/lib/signs-data';
 import { todayGuadeloupe } from '@/lib/edition';
-import { MARYSE_SYSTEM } from '@/lib/private/maryse-prompt';
+import { MARYSE_AMBIANCE_SYSTEM } from '@/lib/private/maryse-prompt';
 import { applySafetyFiltersToObject } from '@/lib/private/safety-filter';
 import {
   getCulturalContext,
@@ -355,7 +355,7 @@ Sans bloc de code markdown ni titre dans les valeurs JSON. Seule exception : les
       max_tokens: 900,
       response_format: { type: 'json_object' },
       messages: [
-        { role: 'system', content: MARYSE_SYSTEM },
+        { role: 'system', content: MARYSE_AMBIANCE_SYSTEM },
         { role: 'user', content: prompt },
       ],
     }),

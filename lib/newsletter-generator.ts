@@ -487,6 +487,10 @@ function avoidBlock(recent: string[]): string {
     : '';
 }
 
+// Un objet de mail fait une ligne de 70 caractères : mistral-small suffit, et
+// évite de payer le tarif large douze fois par jour pour 100 tokens de sortie.
+const SUBJECT_MODEL = 'mistral-small-latest';
+
 // Tente un appel Mistral avec une clé donnée — retourne la réponse brute ou null.
 async function tryMistralKey(
   apiKey: string,
@@ -508,13 +512,13 @@ async function tryMistralKey(
           await new Promise(r => setTimeout(r, 1500 * attempt));
           continue;
         }
-        logMistralUsage({ source: 'newsletter:subject', model: 'mistral-large-latest', success: false, httpStatus: res.status });
+        logMistralUsage({ source: 'newsletter:subject', model: SUBJECT_MODEL, success: false, httpStatus: res.status });
         return null;
       }
       const data = await res.json();
       logMistralUsage({
         source: 'newsletter:subject',
-        model: 'mistral-large-latest',
+        model: SUBJECT_MODEL,
         success: true,
         httpStatus: res.status,
         ...usageFromMistralResponse(data),
@@ -532,7 +536,7 @@ async function tryMistralKey(
   return null;
 }
 
-// Appel Mistral-large pour un objet d'email, avec retry/backoff (429/5xx) et nettoyage.
+// Appel Mistral pour un objet d'email, avec retry/backoff (429/5xx) et nettoyage.
 // Essaie MISTRAL_API_KEY, puis MISTRAL_API_KEY_BOTIRAN en fallback.
 // Retourne null en cas d'échec (l'appelant applique son propre fallback).
 async function callMistralSubject(systemPrompt: string, userContent: string): Promise<string | null> {
@@ -541,7 +545,7 @@ async function callMistralSubject(systemPrompt: string, userContent: string): Pr
   if (!primaryKey && !botiranKey) return null;
 
   const body = JSON.stringify({
-    model: 'mistral-large-latest',
+    model: SUBJECT_MODEL,
     temperature: 0.9,
     max_tokens: 100,
     messages: [
