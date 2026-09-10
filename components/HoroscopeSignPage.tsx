@@ -242,8 +242,11 @@ export default function HoroscopeSignPage({ signId, prefetchedHoroscope }: Props
 
     const controller = new AbortController();
     const { signal } = controller;
-    const date = new Date().toISOString().split('T')[0];
-    const hour = new Date().getHours();
+    // Utiliser la même logique de date que l'API pour cohérence
+    const now = new Date();
+    const guadeloupeTime = now.getTime() - (4 * 60 * 60 * 1000);
+    const date = new Date(guadeloupeTime).toISOString().split('T')[0];
+    const hour = new Date(guadeloupeTime).getHours();
 
     if (horoscope?.edition === edition) {
       // Horoscope déjà correct, charger uniquement l'ambiance si absente
