@@ -2,7 +2,7 @@ name: ✨ Génération Présage du Jour (Sécurisée)
 
 on:
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '05 4 * * *'  # 04:05 UTC = 00:05 heure Guadeloupe (après minuit)
   workflow_dispatch:
     inputs:
       date:

@@ -2,7 +2,7 @@ name: Générer la newsletter quotidienne
 
 on:
   schedule:
-    - cron: '30 4 * * *'  # Tous les jours à 4h30 UTC = 00:30 heure Guadeloupe (après les horoscopes)
+    - cron: '40 4 * * *'  # Tous les jours à 4h40 UTC = 00:40 heure Guadeloupe (après tous les générateurs)
   workflow_dispatch:
     inputs:
       force_send:

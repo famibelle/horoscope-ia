@@ -2,7 +2,7 @@ name: 🪐 Génération Horoscopes (Sécurisée)
 
 on:
   schedule:
-    - cron: '45 3 * * *'
+    - cron: '35 4 * * *'  # 04:35 UTC = 00:35 heure Guadeloupe (après minuit, avant la newsletter)
   workflow_dispatch:
     inputs:
       date:
