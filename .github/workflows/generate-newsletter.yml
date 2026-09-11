@@ -1,8 +1,10 @@
 name: Générer la newsletter quotidienne
 
 on:
-  schedule:
-    - cron: '40 4 * * *'  # Tous les jours à 4h40 UTC = 00:40 heure Guadeloupe (après tous les générateurs)
+  workflow_run:
+    workflows: ['🪐 Génération Horoscopes (Sécurisée)']
+    types: [success]
+    branches: [vaudou]
   workflow_dispatch:
     inputs:
       force_send:

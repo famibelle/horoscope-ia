@@ -471,14 +471,31 @@ async function generateAllAmbiances() {
       const path = await import('path');
       const existingFilePath = path.join(process.cwd(), 'public', filePath);
       await fs.access(existingFilePath);
-      console.log(`\n⏭️  Les ambiances pour le ${today} existent déjà (${filePath})`);
-      console.log('   → Pas de régénération nécessaire.\n');
-      console.log('   Pour forcer: passez --force ou -f\n');
-      logVerbose('Fichier existant détecté, génération annulée');
-      return;
+      
+      // Lire le fichier existant et vérifier s'il contient tous les signes
+      const existingData = JSON.parse(await fs.readFile(existingFilePath, 'utf-8'));
+      const allEditionsForCheck: Edition[] = ['nuit', 'matin', 'midi', 'soir'];
+      const expectedKeys = signs.map(s => 
+        allEditionsForCheck.map(e => `${today}|${s.id}|${e}`)
+      ).flat();
+      const existingKeys = Object.keys(existingData);
+      
+      const missingKeys = expectedKeys.filter(k => !existingKeys.includes(k));
+      
+      if (missingKeys.length === 0) {
+        console.log(`\n✅ Les ambiances pour le ${today} existent déjà et sont COMPLÈTES (${filePath})`);
+        console.log('   → Pas de régénération nécessaire.\n');
+        logVerbose('Fichier existant détecté et complet, génération annulée');
+        return;
+      } else {
+        console.log(`\n⚠️  Les ambiances pour le ${today} existent mais sont INCOMPLÈTES (${filePath})`);
+        console.log(`   → Manquant: ${missingKeys.length} entrées`);
+        console.log(`   → Régénération nécessaire pour compléter\n`);
+        logVerbose(`Fichier existant incomplet, manque ${missingKeys.length} entrées`, { missingKeys });
+      }
     } catch {
-      // Fichier n'existe pas, continuer la génération
-      logVerbose('Aucun fichier existant trouvé, génération nécessaire');
+      // Fichier n'existe pas ou illisible, continuer la génération
+      logVerbose('Aucun fichier existant trouvé ou illisible, génération nécessaire');
     }
   } else if (options.verbose) {
     console.log(`\n⚡ Mode force: régénération des ambiances pour ${today}...\n`);
